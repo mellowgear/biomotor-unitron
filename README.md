@@ -16,10 +16,13 @@ The original ROM is expected at `baserom.ngp` (not included).
 
 | Path | What it is |
 |---|---|
-| `src/main.s` | Top level: includes every piece in ROM order |
+| `src/main.s` | Top level (48 lines): constants, RAM names, then every code and data file |
+| `src/constants/` | hardware registers, struct fields, joypad buttons, event flags, item ids |
+| `src/ram/wram.s` | Work RAM names (generated from `ram.txt`) |
+| `src/gfx/gfx.s`, `src/data/tables.s`, `src/text/banks.s`, `src/data/unknown.s` | Where each graphic, table, text bank and unidentified data block sits in the ROM |
 | `src/home/` | Cartridge header |
 | `src/audio/` | Sound engine (main-CPU code), Z80 driver, song table, song data (still raw) |
-| `src/engine/` | Game code, one file per contiguous code region |
+| `src/engine/` | Game code by subsystem (battle, dungeon, arena, events, menus/{title,town,shop,works}, scenes, gfx, text, tables, player); `evidence/filing.md` says why each routine is in its file |
 | `src/gfx/tiles/` | 149 compressed tile sheets as indexed PNGs (pieces of pictures; maps arrange them) |
 | `src/gfx/monsters/` | 93 monster images in colour, named after their enemy; the PNG palette is the monster palette |
 | `src/gfx/parts/` | 235 robot-part images (grey shades + transparency; the robot's palette colours them) |

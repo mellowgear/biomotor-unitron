@@ -1,4 +1,59 @@
-; engine/gfx/graphics: 23 routines (each keeps its ROM address with .org)
+; engine/gfx/graphics: 35 routines (each keeps its ROM address with .org)
+
+.org 0x20659B
+
+sub_20659B:
+    PUSH      XIX                                [1]
+    PUSH      XIY                                [1]
+    LD        XHL,0x5A86                         [5]
+    LD        XDE,0x8900                         [5]
+    LD        BC,(0x5A82)                        [4]
+    SUB       BC,HL                              [2]
+    JR        Z,.skip                            [2]
+    SRL       2,BC                               [3]
+.loop:
+    LD        XWA,(XHL+)                         [3]
+    LD{1}     (-XDE),XWA                         [3]
+    DJNZ      BC,.loop                           [3]
+.skip:
+    LD        BC,0x5B86                          [3]
+    SUB       BC,(0x5A82)                        [4]
+    JR        Z,.skip2                           [2]
+    SRL       2,BC                               [3]
+    LD        XWA,0                              [2]
+.loop2:
+    LD{1}     (-XDE),XWA                         [3]
+    DJNZ      BC,.loop2                          [3]
+.skip2:
+    CPB       (wColorFlags),0x10                 [5]
+    JR        C,.skip4                           [2]
+    LD        XHL,0x5B86                         [5]
+    LD        XDE,0x8C40                         [5]
+    LD        BC,(0x5A84)                        [4]
+    SUB       BC,HL                              [2]
+    JR        Z,.skip3                           [2]
+.loop3:
+    LD        A,(XHL+)                           [3]
+    LD        (-XDE),A                           [3]
+    DJNZ      BC,.loop3                          [3]
+.skip3:
+    LD        A,(wFadeLevel)                     [4]
+    CP        A,(0x585C)                         [4]
+    LD        (0x585C),A                         [4]
+    CALL      NZ,FadePalettes                    [5]
+    JR        .skip5                             [2]
+.skip4:
+    LD        A,(wFadeLevel)                     [4]
+    CP        A,(0x585C)                         [4]
+    LD        (0x585C),A                         [4]
+    CALL      NZ,sub_2066DE                      [5]
+    JR        .skip5                             [2]
+.skip5:
+    LDW       (0x5A82),0x5A86                    [6]
+    LDW       (0x5A84),0x5B86                    [6]
+    POP       XIY                                [1]
+    POP       XIX                                [1]
+    RET                                          [1]
 
 .org 0x206626
 
@@ -12,7 +67,7 @@ FadePalettes:
     LD        XIX,0x8200                         [5]
     LD        QHL,0x100                          [5]
     LD        HL,0                               [2]
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     OR        A,A                                [2]
     JRL       Z,.skip                            [3]
     CP        A,0x7F                             [3]
@@ -84,6 +139,72 @@ FadePalettes:
     POP       XIX                                [1]
     RET                                          [1]
 
+.org 0x2066DE
+
+sub_2066DE:
+    CPB       (wColorFlags),0x10                 [5]
+    RET       NC                                 [2]
+    PUSH      XIX                                [1]
+    PUSH      XIY                                [1]
+    LD        XIY,wMonoPalShadow                 [5]
+    LD        XIX,0x8100                         [5]
+    LD        QHL,0x19                           [5]
+    LD        HL,0                               [2]
+    LD        A,(wFadeLevel)                     [4]
+    OR        A,A                                [2]
+    JR        Z,.skip                            [2]
+    CP        A,0x7F                             [3]
+    RCF                                          [1]
+    JR        Z,.skip2                           [2]
+    CP        A,0x81                             [3]
+    SCF                                          [1]
+    JR        Z,.skip2                           [2]
+    LD        L,A                                [2]
+    SLL       1,L                                [3]
+    CPL       L                                  [2]
+    JR        C,.loop2                           [2]
+.loop:
+    LD        A,(XIY+)                           [3]
+    AND       WA,7                               [4]
+    MUL       XWA,HL                             [2]
+    AND       W,7                                [3]
+    OR        W,0x80                             [3]
+    LD        (XIX+),W                           [3]
+    DJNZ      QHL,.loop                          [4]
+    POP       XIY                                [1]
+    POP       XIX                                [1]
+    RET                                          [1]
+.loop2:
+    LD        A,(XIY+)                           [3]
+    AND       WA,7                               [4]
+    LD        C,A                                [2]
+    XOR       A,7                                [3]
+    MUL       XWA,HL                             [2]
+    ADD       W,C                                [2]
+    AND       W,7                                [3]
+    OR        W,0x80                             [3]
+    LD        (XIX+),W                           [3]
+    DJNZ      QHL,.loop2                         [4]
+    POP       XIY                                [1]
+    POP       XIX                                [1]
+    RET                                          [1]
+.skip:
+    LD        BC,QHL                             [3]
+    LDIR      (XIX+),(XIY+)                      [2]
+    POP       XIY                                [1]
+    POP       XIX                                [1]
+    RET                                          [1]
+.skip2:
+    SBC       W,W                                [2]
+    AND       W,7                                [3]
+    OR        W,0x80                             [3]
+.loop3:
+    LD        (XIX+),W                           [3]
+    DJNZ      QHL,.loop3                         [4]
+    POP       XIY                                [1]
+    POP       XIX                                [1]
+    RET                                          [1]
+
 .org 0x20692B
 
 ; XHL = u16 count + tiles, WA = first tile
@@ -95,6 +216,47 @@ LoadRawTiles:
     EXTZ      XDE                                [2]
     ADD       XDE,0xA000                         [6]
     LDIRW     (XDE+),(XHL+)                      [2]
+    RET                                          [1]
+
+.org 0x206941
+
+swp_206941:
+    LD        C,(XDE+)                           [3]
+    MUL       BC,(XDE+)                          [3]
+    SLL       4,WA                               [3]
+    ADD       WA,0xA000                          [4]
+    LD        QBC,WA                             [3]
+    INC       2,XHL                              [2]
+.loop:
+    PUSH      XHL                                [1]
+    LD        WA,(XDE+)                          [3]
+    OR        WA,WA                              [2]
+    JR        NZ,.skip                           [2]
+    LD        XWA,0                              [2]
+    LD        XHL,0                              [2]
+    LD        HL,QBC                             [3]
+    LD{1}     (XHL+),XWA                         [3]
+    LD{1}     (XHL+),XWA                         [3]
+    LD{1}     (XHL+),XWA                         [3]
+    LD{1}     (XHL+),XWA                         [3]
+    LD        QBC,HL                             [3]
+    JR        .skip2                             [2]
+.skip:
+    DEC       1,WA                               [2]
+    SLL       4,WA                               [3]
+    LDA       XHL,XHL+WA                         [5]
+    PUSH      BC                                 [1]
+    PUSH      XDE                                [1]
+    LD        BC,8                               [3]
+    LD        XDE,0                              [2]
+    LD        DE,QBC                             [3]
+    LDIRW     (XDE+),(XHL+)                      [2]
+    LD        QBC,DE                             [3]
+    POP       XDE                                [1]
+    POP       BC                                 [1]
+.skip2:
+    POP       XHL                                [1]
+    DJNZ      BC,.loop                           [3]
     RET                                          [1]
 
 .org 0x206993
@@ -119,6 +281,78 @@ FillTiles:
     EXTZ      XWA                                [2]
     LD{1}     (XWA+),XDE                         [3]
     DJNZ      BC,0x2069C1                        [3]
+    RET                                          [1]
+
+.org 0x2069C8
+
+dyn_2069C8:
+    CP        DE,0x98                            [4]
+    RET       GE                                 [2]
+    CP        BC,0xA0                            [4]
+    RET       GE                                 [2]
+    DEC       1,WA                               [2]
+    OR        W,0x18                             [3]
+    PUSH      WA                                 [1]
+    PUSH      DE                                 [1]
+    PUSH      BC                                 [1]
+    LD        A,(XHL+)                           [3]
+    LD        QC,A                               [3]
+    LD        W,0                                [2]
+    SLL       3,WA                               [3]
+    ADD       WA,BC                              [2]
+    JRL       MI,0x206A78                        [3]
+    LD        A,(XHL+)                           [3]
+    LD        QB,A                               [3]
+    LD        W,0                                [2]
+    SLL       3,WA                               [3]
+    ADD       WA,DE                              [2]
+    JR        MI,0x206A78                        [2]
+    LD        BC,0                               [2]
+    LD        XDE,0                              [2]
+    CPW       (0x5A82),0x5B86                    [6]
+    JR        NC,0x206A78                        [2]
+    LD        WA,(XHL)                           [2]
+    AND       WA,0x1FF                           [4]
+    JR        Z,0x206A66                         [2]
+    LD{1}     A,B                                [2]
+    LD        W,0                                [2]
+    SLL       3,WA                               [3]
+    ADD       WA,(XSP+2)                         [3]
+    CP        WA,0xFFF8                          [4]
+    JR        LE,0x206A66                        [2]
+    CP        WA,0xA0                            [4]
+    JR        GE,0x206A78                        [2]
+    LD        QW,A                               [3]
+    LD{1}     A,C                                [2]
+    LD        W,0                                [2]
+    SLL       3,WA                               [3]
+    ADD       WA,(XSP)                           [2]
+    CP        WA,0xFFF8                          [4]
+    JR        LE,0x206A66                        [2]
+    CP        WA,0xA8                            [4]
+    JR        GE,0x206A66                        [2]
+    LD        QA,A                               [3]
+    LD        WA,(XHL)                           [2]
+    AND       W,0xE1                             [3]
+    ADD       WA,(XSP+4)                         [3]
+    LD        DE,(0x5A82)                        [4]
+    LD{1}     (XDE+),XWA                         [3]
+    LD        (0x5A82),DE                        [4]
+    LD        WA,(XHL)                           [2]
+    SRL       1,W                                [3]
+    AND       W,0xF                              [3]
+    LD        DE,(0x5A84)                        [4]
+    LD        (XDE+),W                           [3]
+    LD        (0x5A84),DE                        [4]
+    INC       2,XHL                              [2]
+    INC       1,C                                [2]
+    CP        C,QC                               [3]
+    JR        C,0x2069FF                         [2]
+    LD        C,0                                [2]
+    INC       1,B                                [2]
+    CP        B,QB                               [3]
+    JR        C,0x2069FF                         [2]
+    INC       6,XSP                              [2]
     RET                                          [1]
 
 .org 0x206B37
@@ -219,6 +453,57 @@ DrawTilemapAt:
     INC       6,XSP                              [2]
     RET                                          [1]
 
+.org 0x206D30
+
+sub_206D30:
+    CPL       B                                  [2]
+    CPL       D                                  [2]
+    OR        B,B                                [2]
+    JR        Z,.skip3                           [2]
+    OR        D,D                                [2]
+    JR        Z,.skip3                           [2]
+    LD        WA,0xA0                            [3]
+    CP        B,0xFF                             [3]
+    JR        Z,.skip                            [2]
+    LD        L,C                                [2]
+    MUL       HL,B                               [2]
+    DIV{1}    HL,0xFF                            [3]
+    LD{1}     W,C                                [2]
+    SUB       W,L                                [2]
+    LD        L,0xA0                             [2]
+    SUB       L,C                                [2]
+    MUL       HL,B                               [2]
+    DIV{1}    HL,0xFF                            [3]
+    LD{1}     A,L                                [2]
+    ADD       A,C                                [2]
+    SUB       A,W                                [2]
+.skip:
+    LD        (GE_WBA_H),W                       [4]
+    LD        (GE_WSI_H),A                       [4]
+    LD        WA,0x98                            [3]
+    CP        D,0xFF                             [3]
+    JR        Z,.skip2                           [2]
+    LD        L,E                                [2]
+    MUL       HL,D                               [2]
+    DIV{1}    HL,0xFF                            [3]
+    LD{1}     W,E                                [2]
+    SUB       W,L                                [2]
+    LD        L,0x98                             [2]
+    SUB       L,E                                [2]
+    MUL       HL,D                               [2]
+    DIV{1}    HL,0xFF                            [3]
+    LD{1}     A,L                                [2]
+    ADD       A,E                                [2]
+    SUB       A,W                                [2]
+.skip2:
+    LD        (GE_WBA_V),W                       [4]
+    LD        (GE_WSI_V),A                       [4]
+    RET                                          [1]
+.skip3:
+    LDW       (GE_WBA_H),0xFF00                  [6]
+    LDW       (GE_WSI_H),0                       [6]
+    RET                                          [1]
+
 .org 0x206D9E
 
 ; A = first slot, C = count, XHL = data (4 colours each)
@@ -239,7 +524,7 @@ LoadPalettes:
     LD        B,0                                [2]
     SLL       2,BC                               [3]
     LDIRW     (XDE+),(XHL+)                      [2]
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     CPL       A                                  [2]
     LD        (0x585C),A                         [4]
     RET                                          [1]
@@ -264,12 +549,12 @@ LoadMonoPalettes:
     LD        B,0                                [2]
     SLL       2,BC                               [3]
     LDIR      (XDE+),(XHL+)                      [2]
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     CPL       A                                  [2]
     LD        (0x585C),A                         [4]
     RET                                          [1]
-    .db 00 02 04 06 00 00 03 07 00 02 04 06 00 00 03 07
-    .db 00 02 04 06 00 00 03 07
+    .db 0x00, 0x02, 0x04, 0x06, 0x00, 0x00, 0x03, 0x07, 0x00, 0x02, 0x04, 0x06, 0x00, 0x00, 0x03, 0x07
+    .db 0x00, 0x02, 0x04, 0x06, 0x00, 0x00, 0x03, 0x07
 
 .org 0x2070C7
 
@@ -467,6 +752,77 @@ DecompressTiles:
     POP       XIX                                [1]
     RET                                          [1]
 
+.org 0x207293
+
+dyn_207293:
+    LD        WA,(XIZ+)                          [3]
+    LD        QIY,WA                             [3]
+    SRL       4,QIYH                             [4]
+    AND       W,0xF                              [3]
+    INC       3,W                                [2]
+    LD        QW,W                               [3]
+    LD        XDE,wTextBuffer                    [5]
+    LD        A,(XDE+QIY)                        [5]
+    MINC1     0x400,QIY                          [5]
+    LD        (XDE+QIX),A                        [5]
+    LD        (XHL+),A                           [3]
+    MINC1     0x400,QIX                          [5]
+    DEC       1,IY                               [2]
+    OR        IY,IY                              [2]
+    JR        Z,0x20728F                         [2]
+    DJNZ      QW,0x2072A5                        [4]
+    JR        0x20725B                           [2]
+
+.org 0x2072CD
+
+sub_2072CD:
+    LD        WA,1                               [2]
+    LD        XHL,0x2C8569                       [5]
+    CALL      LoadRawTiles                       [4]
+    LD        A,1                                [2]
+    LD        C,1                                [2]
+    LD        XHL,MonoPal_21F018                 [5]
+    CALL      LoadMonoPalettes                   [4]
+    LD        A,3                                [2]
+    LD        C,1                                [2]
+    LD        XHL,MonoPal_21F018                 [5]
+    CALL      LoadMonoPalettes                   [4]
+    LD        A,5                                [2]
+    LD        C,1                                [2]
+    LD        XHL,MonoPal_21F018                 [5]
+    CALL      LoadMonoPalettes                   [4]
+    LD        A,0xF                              [2]
+    LD        C,1                                [2]
+    LD        XHL,Pal_21F010                     [5]
+    CALL      LoadPalettes                       [4]
+    LD        A,0x1F                             [2]
+    LD        C,1                                [2]
+    LD        XHL,Pal_21F010                     [5]
+    CALL      LoadPalettes                       [4]
+    LD        A,0x2F                             [2]
+    LD        C,1                                [2]
+    LD        XHL,Pal_21F010                     [5]
+    CALL      LoadPalettes                       [4]
+    LD        A,8                                [2]
+    LD        XHL,wTextBoxes                     [5]
+    LD        XDE,0                              [2]
+.loop:
+    LDW       (XHL+0),0x200                      [5]
+    LDB       (XHL+2),0x20                       [4]
+    LDB       (XHL+3),0x20                       [4]
+    LD        (XHL+4),E                          [3]
+    LD        (XHL+5),E                          [3]
+    LD        (XHL+6),E                          [3]
+    LD        (XHL+7),E                          [3]
+    LD        (XHL+8),XDE                        [3]
+    LD        (XHL+0xC),XDE                      [3]
+    LDB       (XHL+0x10),(wOptionMessageSpeed)   [5]
+    LD        (XHL+0x11),E                       [3]
+    LD        (XHL+0x12),E                       [3]
+    ADD       HL,0x13                            [4]
+    DJNZ      A,.loop                            [3]
+    RET                                          [1]
+
 .org 0x207DC9
 
 ; [code+play] wDrawRightArm image from group 15 (gfx/parts/arm_r), drawn behind the body
@@ -497,6 +853,11 @@ DrawLeftArmPart:
     POP       XIX                                [1]
     RET                                          [1]
 
+.org 0x21037F
+
+swp_21037F:
+    RET                                          [1]
+
 .org 0x210380
 
 DrawPortraitAt:
@@ -507,6 +868,31 @@ DrawPortraitAt:
     CP        HL,0x15                            [4]
     JR        GE,dyn_210390                      [2]
     JR        0x2103B4                           [2]
+
+.org 0x210390
+
+dyn_210390:
+    CP        HL,0x22                            [4]
+    JR        LE,dyn_210398                      [2]
+    JR        0x2103B4                           [2]
+
+.org 0x210398
+
+dyn_210398:
+    SUB       HL,0xA                             [4]
+    EXTZ      XHL                                [2]
+    SLL       1,XHL                              [3]
+    ADD       XHL,0x227419                       [6]
+    LD        A,(XHL)                            [2]
+    EXTZ      WA                                 [2]
+    ADD       BC,WA                              [2]
+    LD        A,(XHL+1)                          [3]
+    EXTZ      WA                                 [2]
+    ADD       DE,WA                              [2]
+    POP       HL                                 [1]
+    POP       WA                                 [1]
+    CALR      DrawPortrait                       [3]
+    RET                                          [1]
 
 .org 0x2103BA
 
@@ -759,8 +1145,65 @@ DrawArenaParticipants:
     POP       XHL                                [1]
     RET                                          [1]
 
+.org 0x216849
+
+dyn_216849:
+    LD        WA,0x13C                           [3]
+    RET                                          [1]
+
 .org 0x21684D
 
 swp_21684D:
     LD        WA,0x46                            [3]
+    RET                                          [1]
+
+.org 0x216851
+
+sub_216851:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        E,C                                [2]
+    LD        B,A                                [2]
+.loop:
+    SRL       1,XHL                              [3]
+    RR        1,A                                [3]
+    SRL       1,XHL                              [3]
+    RR        1,A                                [3]
+    SRL       1,XHL                              [3]
+    RR        1,A                                [3]
+    SRL       1,XHL                              [3]
+    RR        1,A                                [3]
+    SRL       4,A                                [3]
+    PUSH      A                                  [1]
+    DJNZ      C,.loop                            [3]
+    LD        W,0xA                              [2]
+    LD{1}     C,E                                [2]
+.loop2:
+    POP       A                                  [1]
+    CP        A,0                                [2]
+    JR        NZ,.skip                           [2]
+    CP        C,1                                [2]
+    JR        NZ,.skip2                          [2]
+.skip:
+    LD        W,0                                [2]
+.skip2:
+    ADD       A,W                                [2]
+    PUSH      BC                                 [1]
+    PUSH      W                                  [2]
+    EXTZ      WA                                 [2]
+    EXTZ      XWA                                [2]
+    MUL       XWA,2                              [4]
+    LD        XHL,0x24A1FC                       [5]
+    ADD       XHL,XWA                            [2]
+    LD{1}     A,B                                [2]
+    CALL      dyn_2076F3                         [4]
+    POP       W                                  [2]
+    POP       BC                                 [1]
+    DJNZ      C,.loop2                           [3]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
     RET                                          [1]

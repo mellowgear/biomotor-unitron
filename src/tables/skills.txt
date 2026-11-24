@@ -2,11 +2,15 @@
 # Accessors 0x2083BF / 0x2083CE / 0x2083DD / 0x2083EC (id 1-based).
 # Taught by Helmut (HelmutSkillOffer 0x215F1E): race r = (wPlayerRace - 1) / 2 (0 Human ..
 # 4 Lizardman) gets skills 4r+1..4r+4; at level 20 a choice of 4r+1 / 4r+2, at level 30 of
-# 4r+3 / 4r+4 (event flags 0x30-0x33 = learned). (Play: Human Rod got Nova/Burst, Ragnok/Giga.)
+# 4r+3 / 4r+4 (event flags 0x30-0x33 = learned). (Play: Human Rod got Nova/Burst, Ragnok/Giga;
+# Mariner Zappa was offered Edge/Maze at L22 and Wall/Aqua at L30, Edge -> wSkill1 9, Aqua -> 12.)
 # effect: battle handler for effect 5-11 (CheckCanAttack 0x209E9E -> SkillEffects 0x209F95):
 # 5 stats up, 6 enemy stats down, 7 full heal, 8 time stop, 9 Recvr (auto-revive at 0 HP),
-# 10 Airbag (damage halved for s04 turns), 11 Full charge (EP costs 0 for s04 turns);
+# 10 Airbag (enemy damage halved), 11 Full charge (EP costs 0), both for the rest of the battle
+# (s04 is stored in wAirbagActive / wFullChargeActive but never counted down; play: Vapor, Breath);
 # 0 = an attack (power s04).
+# (Play, Mariner: Aqua shows "Recvr activated!!" and sets wRecvrActive; at 0 HP "Your HP are
+# fully restored!!", HP = max HP, wRecvrActive -> 0.)
 # Edited text must fit its slot: name 6, desc 18 characters.
 # id  name      desc                   s00   s02  s04  s06  s08  s0A  s0C  s0E  effect  d
    1  "Nova"    "Flame attack"           0     0  200    0    0    0   30    1       0  03656992ffffffff

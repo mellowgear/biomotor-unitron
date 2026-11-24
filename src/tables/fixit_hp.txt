@@ -1,0 +1,9 @@
+# fixit_hp: 4 entries, one line per id (keep the order and count).
+# HP restored by FixIt1-FixIt4 (items 38-41; line = item id - 37) when used from Camp
+# (CampUseHealItem 0x212192), capped at max HP. (Play: FixIt1 30, FixIt2 50.)
+#
+# id   hp
+   1   30
+   2   50
+   3  100
+   4  150

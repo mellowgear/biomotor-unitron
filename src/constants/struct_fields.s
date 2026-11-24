@@ -31,3 +31,30 @@
 .equ SLOT_AFFINITY 0x6
 .equ SLOT_PCT 0x7
 .equ SLOT_EFFECTS 0x9
+
+; task struct (RunTasks 0x206286): +0 prev, +2 next, +4 parent, +7 flags (bit 7 ended),
+; +8 function (32-bit; +0xA = its high word), +0xC children still running, +0xE argument
+.equ TASK_FUNC 0x8
+.equ TASK_FUNC_HI 0xA
+.equ TASK_CHILDREN 0xC
+.equ TASK_ARG 0xE
+
+; dungeon task (block 0x52B0; the Crystal Mine uses 0x52DE): same fields as wGameMode..
+.equ DUNGEON_MODE 0xF
+.equ DUNGEON_ID 0x10
+.equ DUNGEON_FLOOR 0x11
+.equ DUNGEON_X 0x13
+.equ DUNGEON_Y 0x14
+.equ DUNGEON_FACING 0x15
+.equ DUNGEON_FLOOR_COUNT 0x16
+.equ DUNGEON_FLOOR_MAPS 0x17
+.equ DUNGEON_STEPS 0x2B
+
+; wChestTable: per floor 6 chests x 5 bytes (content, x, y, attr u16)
+.equ CHESTS_PER_FLOOR 6
+.equ CHEST_SIZE 5
+.equ CHEST_FLOOR_SIZE 0x1E
+
+; DungeonMaps 0x249424: per map id, +0 map pointer, +4 chest position list
+.equ DUNGEON_MAP_SIZE 8
+.equ DUNGEON_MAP_CHESTS 4

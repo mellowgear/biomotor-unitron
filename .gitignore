@@ -5,3 +5,7 @@ __pycache__/
 *.pyc
 # TLCS-900 manual page scans: reference only, not needed to build
 tlcs900/manual_pages/
+
+# third-party reference docs (not ours; never commit)
+tlcs900/tlcs-900-report.pdf
+tlcs900/tlcs-900-report.txt

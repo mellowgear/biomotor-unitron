@@ -10,7 +10,8 @@
 #   tool bonus (0x21BA1F): Tool1 5, Tool2 10, Tool3 15, Tool4 20, Myster 100.
 #   DevelopRoll 0x21A9A9 takes the arm, material and tool, then succeeds if a random
 #   0-99 is below that %. (Play: 88/85/88 % for BtFist+Steel+Tool1 at RenaB levels 1/7/12,
-#   60/62 % at 49/50; failures lose all three.)
+#   60/62 % at 49/50; failures lose all three. Mariner run: 127 develops, Shera levels 34-50,
+#   every shown % matches the formula, every result matches `result`.)
 # result: the new arm (arm number as above). dev_exp: taken off the engineer's EXP to next
 # level (wEngineerExp) below level 50; see dev_level_exp.txt. (Play: Hammer 5, Pliers 10.)
 #

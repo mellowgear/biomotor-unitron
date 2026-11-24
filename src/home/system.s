@@ -1,4 +1,4 @@
-; home/system: 13 routines (each keeps its ROM address with .org)
+; home/system: 31 routines (each keeps its ROM address with .org)
 
 .org 0x205FA3
 
@@ -45,7 +45,7 @@ Reset:
     CALL      InitTaskList                       [4]
     CALL      sub_206FEA                         [4]
     CALL      sub_206E12                         [4]
-    LDB       (0x5280),3                         [5]
+    LDB       (wOptionMessageSpeed),3            [5]
     CALL      sub_2072CD                         [4]
     LD        XHL,dyn_21D5C5                     [5]
     CALL      sub_2062F5                         [4]
@@ -100,6 +100,14 @@ VBlankHandler:
     POP       XWA                                [1]
     RETI                                         [1]
 
+.org 0x2060BE
+
+sub_2060BE:
+    LD        (wRandomSeeds),WA                  [4]
+    LD        (0x5002),BC                        [4]
+    LD        (0x5004),DE                        [4]
+    RET                                          [1]
+
 .org 0x2060CB
 
 ; -> WA: Wichmann-Hill (seeds wRandomSeeds; 171/30269, 172/30307, 170/30323)
@@ -135,6 +143,34 @@ Random:
     POP       XBC                                [1]
     RET                                          [1]
 
+.org 0x20612E
+
+; [code] HL = flag: set bit (HL & 15) of wEventFlags[HL >> 4]
+SetEventFlag:
+    LD        H,0                                [2]
+    EXTZ      XHL                                [2]
+    LD{1}     A,L                                [2]
+    SRL       4,HL                               [3]
+    SLL       1,HL                               [3]
+    LD        BC,1                               [2]
+    RLC       A,BC                               [2]
+    OR        (XHL+0x5060),BC                    [5]
+    RET                                          [1]
+
+.org 0x206144
+
+; [code] HL = flag: clear it
+ClearEventFlag:
+    LD        H,0                                [2]
+    EXTZ      XHL                                [2]
+    LD{1}     A,L                                [2]
+    SRL       4,HL                               [3]
+    SLL       1,HL                               [3]
+    LD        BC,0xFFFE                          [3]
+    RLC       A,BC                               [2]
+    AND       (XHL+0x5060),BC                    [5]
+    RET                                          [1]
+
 .org 0x20615B
 
 ; HL = flag -> NZ if bit (HL & 15) of wEventFlags[HL >> 4] is set
@@ -153,6 +189,42 @@ CheckEventFlag:
     SCC       NZ,HL                              [2]
     POP       BC                                 [1]
     POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x206197
+
+; [code] WA = item id: count + 1 (max 9), bit 7 set; C if already 9
+AddItem:
+    LD        XHL,wItemCounts                    [5]
+    LD        C,(XHL+WA)                         [5]
+    AND       C,0xF                              [3]
+    CP        C,9                                [3]
+    CCF                                          [1]
+    RET       C                                  [2]
+    INC       1,C                                [2]
+    OR        C,0x80                             [3]
+    LD        (XHL+WA),C                         [5]
+    RCF                                          [1]
+    RET                                          [1]
+
+.org 0x2061B6
+
+swp_2061B6:
+    INC       1,W                                [2]
+
+.org 0x2061B8
+
+; [code+play] WA = item id: count - 1, bit 7 (seen) kept; C if none held
+RemoveItem:
+    LD        XHL,wItemCounts                    [5]
+    LD        C,(XHL+WA)                         [5]
+    AND       C,0xF                              [3]
+    SCF                                          [1]
+    RET       Z                                  [2]
+    DEC       1,C                                [2]
+    OR        C,0x80                             [3]
+    LD        (XHL+WA),C                         [5]
+    RCF                                          [1]
     RET                                          [1]
 
 .org 0x206250
@@ -187,7 +259,7 @@ RunTasks:
     BIT       7,(XIZ+7)                          [3]
     JR        NZ,.skip3                          [2]
     RES       6,(XIZ+7)                          [3]
-    LD        XHL,(XIZ+8)                        [3]
+    LD        XHL,(XIZ+TASK_FUNC)                [3]
     LD        XIY,0                              [2]
     LD        IY,(XIZ+4)                         [3]
     PUSH      IY                                 [1]
@@ -229,6 +301,71 @@ RunTasks:
 .done:
     RET                                          [1]
 
+.org 0x2062F5
+
+sub_2062F5:
+    INCB      1,(wTaskCount)                     [4]
+    LD{1}     XDE,XHL                            [2]
+    CALL      sub_206350                         [4]
+    RET       C                                  [2]
+    LD        XWA,0                              [2]
+    LD        WA,(0x5846)                        [4]
+    LD        (XWA+2),HL                         [3]
+    LD        (0x5846),HL                        [4]
+    LD        (XHL+0),WA                         [3]
+    LDW       (XHL+2),0x5846                     [5]
+    LD        (XHL+8),XDE                        [3]
+    LDW       (XHL+4),0                          [5]
+    LDW       (XHL+0xC),0                        [5]
+    RET                                          [1]
+
+.org 0x206324
+
+; [code] XHL = function -> XHL = new task after the current one; the current task waits for it (+0xC)
+StartChildTask:
+    INCB      1,(wTaskCount)                     [4]
+    LD{1}     XDE,XHL                            [2]
+    CALL      sub_206350                         [4]
+    RET       C                                  [2]
+    LD        XWA,0                              [2]
+    LD        WA,(XIZ+2)                         [3]
+    LD        (XWA+0),HL                         [3]
+    LD        (XIZ+2),HL                         [3]
+    LD        (XHL+0),IZ                         [3]
+    LD        (XHL+2),WA                         [3]
+    LD        (XHL+8),XDE                        [3]
+    LD        (XHL+4),IZ                         [3]
+    LDW       (XHL+0xC),0                        [5]
+    INCW      1,(XIZ+TASK_CHILDREN)              [3]
+    RET                                          [1]
+
+.org 0x206350
+
+sub_206350:
+    LD        XHL,wTasks                         [5]
+.loop:
+    CPB       (XHL+0),0                          [4]
+    RET       Z                                  [2]
+    ADD       HL,0x2E                            [4]
+    CP        HL,0x5842                          [4]
+    JR        C,.loop                            [2]
+    LD        XHL,0                              [2]
+    SCF                                          [1]
+    RET                                          [1]
+
+.org 0x206369
+
+; [code] marks the current task finished (bit 7 of +7); RunTasks unlinks it and wakes the parent
+EndTask:
+    SET       7,(XIZ+7)                          [3]
+    RET                                          [1]
+
+.org 0x20636D
+
+dyn_20636D:
+    SET       6,(XIZ+7)                          [3]
+    RET                                          [1]
+
 .org 0x207014
 
 ; per frame: wJoyHistory, wJoyHeld / wJoyPressed / wJoyReleased
@@ -263,6 +400,23 @@ ReadJoypad:
     INCB      1,(wJoyHistoryIndex)               [4]
     RET                                          [1]
 
+.org 0x208134
+
+swp_208134:
+    CALL      sub_208146                         [4]
+    DEC       1,A                                [2]
+    MUL{1}    WA,0xA                             [3]
+    PUSH      WA                                 [1]
+    CALL      sub_208146                         [4]
+    ADD       WA,(XSP+)                          [3]
+    RET                                          [1]
+
+.org 0x208146
+
+sub_208146:
+    LD        WA,0xA                             [3]
+    JP        RandomRange                        [4]
+
 .org 0x20814D
 
 ; WA = n -> 1..n
@@ -276,6 +430,50 @@ RandomRange:
     POP       BC                                 [1]
     LD        WA,QWA                             [3]
     INC       1,WA                               [2]
+    RET                                          [1]
+
+.org 0x219807
+
+sub_219807:
+    LD        WA,0                               [2]
+    LD        C,0                                [2]
+    LD        E,0                                [2]
+    LD        B,0xC                              [2]
+    LD        D,0xE                              [2]
+    CALL      swp_206781                         [4]
+    LD        WA,0x126                           [3]
+    LD        QA,0                               [3]
+    LD        BC,0xA8                            [3]
+    CALL      FillTiles                          [4]
+    RET                                          [1]
+
+.org 0x219823
+
+; [code] A = flag -> C if set
+CheckEventFlagA:
+    LD        L,A                                [2]
+    EXTZ      HL                                 [2]
+    CALL      CheckEventFlag                     [4]
+    OR        HL,HL                              [2]
+    RET       Z                                  [2]
+    SCF                                          [1]
+    RET                                          [1]
+
+.org 0x219831
+
+; [code] A = flag -> SetEventFlag
+SetEventFlagA:
+    LD        L,A                                [2]
+    EXTZ      HL                                 [2]
+    CALL      SetEventFlag                       [4]
+    RET                                          [1]
+
+.org 0x21983A
+
+swp_21983A:
+    LD        L,A                                [2]
+    EXTZ      HL                                 [2]
+    CALL      ClearEventFlag                     [4]
     RET                                          [1]
 
 .org 0x219864
@@ -326,6 +524,32 @@ WaitForButton:
 .skip2:
     LD        XHL,(0x61ED)                       [4]
     JP        (XHL)                              [2]
+
+.org 0x21D9B9
+
+sub_21D9B9:
+    CPB       (SYS_OS_VERSION),0x10              [5]
+    JR        NZ,.done                           [2]
+    CPB       (0x6C59),0                         [5]
+    JR        Z,.done                            [2]
+    CPB       (0x6C5B),1                         [5]
+    JR        Z,.done                            [2]
+    PUSH      WA                                 [1]
+    LD        A,(0xB0)                           [3]
+    LD        W,(0x9FFFFE)                       [5]
+    CPL       W                                  [2]
+    OR        A,W                                [2]
+    EX        (0x6E97),A                         [4]
+    LD{1}     W,A                                [2]
+    XOR       A,(0x6E97)                         [4]
+    AND       W,A                                [2]
+    CPL       A                                  [2]
+    AND       A,(0x6E97)                         [4]
+    OR        A,W                                [2]
+    OR        (SYS_JOYPAD),A                     [4]
+    POP       WA                                 [1]
+.done:
+    RET                                          [1]
 
 .org 0x21D9F5
 

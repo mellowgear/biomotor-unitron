@@ -1,4 +1,71 @@
-; engine/scenes: 29 routines (each keeps its ROM address with .org)
+; engine/scenes: 47 routines (each keeps its ROM address with .org)
+
+.org 0x20E141
+
+swp_20E141:
+    LD        C,(0x5DF7)                         [4]
+    DEC       1,C                                [2]
+    MUL{1}    BC,0x20                            [3]
+    ADD       BC,0x58                            [4]
+    LD        DE,0x44                            [3]
+    LD        WA,0x3E04                          [3]
+    LD        QB,1                               [3]
+    LD        QD,2                               [3]
+    CALL      dyn_206BFF                         [4]
+    LD        A,(wJoyPressed)                    [4]
+    BIT       BIT_D_LEFT,A                       [3]
+    JR        NZ,.skip                           [2]
+    BIT       3,A                                [3]
+    JR        NZ,.skip2                          [2]
+    BIT       4,A                                [3]
+    JR        NZ,.skip3                          [2]
+    BIT       5,A                                [3]
+    JR        NZ,.skip4                          [2]
+    RET                                          [1]
+.skip:
+    CPB       (0x5DF7),1                         [5]
+    RET       Z                                  [2]
+    LD        WA,0x80                            [3]
+    CALL      SoundCommand                       [4]
+    LDB       (0x5DF7),1                         [5]
+    RET                                          [1]
+.skip2:
+    CPB       (0x5DF7),2                         [5]
+    RET       Z                                  [2]
+    LD        WA,0x80                            [3]
+    CALL      SoundCommand                       [4]
+    LDB       (0x5DF7),2                         [5]
+    RET                                          [1]
+.skip3:
+    LD        WA,0x81                            [3]
+    CALL      SoundCommand                       [4]
+    CALL      EndTask                            [4]
+    RET                                          [1]
+.skip4:
+    LD        WA,0x82                            [3]
+    CALL      SoundCommand                       [4]
+    LDB       (0x5DF7),0                         [5]
+    CALL      EndTask                            [4]
+    RET                                          [1]
+
+.org 0x20E1BC
+
+swp_20E1BC:
+    LDW       (XIZ+0x12),0x1E                    [5]
+    LDW       (XIZ+TASK_FUNC),0xE1CB             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    DECW      1,(XIZ+0x12)                       [3]
+    JP        Z,EndTask                          [5]
+    RET                                          [1]
+
+.org 0x20E1D4
+
+dyn_20E1D4:
+    CPW       (XIZ+4),0                          [5]
+    JP        Z,EndTask                          [5]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
+    JP        Z,EndTask                          [5]
+    RET                                          [1]
 
 .org 0x20E1E7
 
@@ -13,7 +80,7 @@ dyn_20E1E7:
     LD        XDE,0x8200                         [5]
     ADD       XDE,XWA                            [2]
     LDIRW     (XDE+),(XHL+)                      [2]
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     LD        (0x585C),A                         [4]
     POP       XHL                                [1]
     POP       XDE                                [1]
@@ -32,10 +99,40 @@ dyn_20E209:
     LD        XDE,0x8100                         [5]
     ADD       XDE,XWA                            [2]
     LDIR      (XDE+),(XHL+)                      [2]
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     LD        (0x585C),A                         [4]
     POP       XHL                                [1]
     POP       XDE                                [1]
+    RET                                          [1]
+
+.org 0x20E22B
+
+dyn_20E22B:
+    LDW       (XIZ+0x16),0                       [5]
+    LD        A,(XIZ+0x14)                       [3]
+    SUB       A,(XIZ+0x12)                       [3]
+    EXTS      WA                                 [2]
+    LD        (XIZ+0x1A),WA                      [3]
+    LDW       (XIZ+TASK_FUNC),0xE245             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        WA,(XIZ+0x1A)                      [3]
+    MULS      WA,(XIZ+0x16)                      [3]
+    DIVS      WA,(XIZ+TASK_ARG)                  [3]
+    ADD       A,(XIZ+0x12)                       [3]
+    LD        (wFadeLevel),A                     [4]
+    INCW      1,(XIZ+0x16)                       [3]
+    LD        WA,(XIZ+0x16)                      [3]
+    CP        WA,(XIZ+TASK_ARG)                  [3]
+    JP        GT,EndTask                         [5]
+    RET                                          [1]
+
+.org 0x20E264
+
+dyn_20E264:
+    LD        XHL,IntroSequence                  [5]
+    CALL      StartChildTask                     [4]
+    LDW       (XIZ+TASK_FUNC),0xE278             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     RET                                          [1]
 
 .org 0x20E278
@@ -44,8 +141,25 @@ dyn_20E278:
     LD        A,(wJoyPressed)                    [4]
     AND       A,A_BUTTON                         [3]
     JR        NZ,dyn_20E28C                      [2]
-    CPW       (XIZ+0xC),0                        [5]
+    CPW       (XIZ+TASK_CHILDREN),0              [5]
     JP        Z,EndTask                          [5]
+    RET                                          [1]
+
+.org 0x20E28C
+
+dyn_20E28C:
+    CALL      dyn_20636D                         [4]
+    CPW       (XIZ+TASK_CHILDREN),0              [5]
+    JP        Z,EndTask                          [5]
+    RET                                          [1]
+
+.org 0x20E29B
+
+dyn_20E29B:
+    LDW       (XIZ+TASK_ARG),0x258               [5]
+    LDW       (XIY+0xE),0                        [5]
+    LDW       (XIZ+TASK_FUNC),0xE2B0             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     RET                                          [1]
 
 .org 0x20E3AF
@@ -57,7 +171,7 @@ IntroBackground:
     LDB       (0x584D),0                         [5]
     LDB       (0x5853),0                         [5]
     LDB       (0x5855),0                         [5]
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     CALR      dyn_20EC49                         [3]
     CALR      dyn_20EC58                         [3]
     LD        XHL,dyn_20E264                     [5]
@@ -91,7 +205,7 @@ IntroBackground:
     LD        XHL,dyn_20E29B                     [5]
     CALL      StartChildTask                     [4]
     task_wait
-    CPW       (XIZ+0xE),0                        [5]
+    CPW       (XIZ+TASK_ARG),0                   [5]
     JRL       Z,IntroBackground                  [3]
     LDB       (0x5CE2),1                         [5]
     LDB       (0x584B),0                         [5]
@@ -118,7 +232,7 @@ IntroSequence:
     CALL      StartChildTask                     [4]
     LDW       (XHL+0xE),0x14                     [5]
     task_wait
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     LD        WA,0x31                            [3]
     CALL      SoundCommand                       [4]
     LD        XHL,Intro199YearsAgo               [5]
@@ -199,14 +313,14 @@ IntroSequence:
 
 ; [play] intro_199_years_ago
 Intro199YearsAgo:
-    LDB       (0x585B),0x7F                      [5]
+    LDB       (wFadeLevel),0x7F                  [5]
     LDB       (0x584B),0                         [5]
     LDB       (0x584D),0                         [5]
     LDB       (0x5853),0                         [5]
     LDB       (0x5855),0                         [5]
     CALR      dyn_20EC49                         [3]
     CALR      dyn_20EC58                         [3]
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     LD        A,0x10                             [2]
     LD        C,1                                [2]
     LD        XHL,Pal_2DE017                     [5]
@@ -223,17 +337,17 @@ Intro199YearsAgo:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawTilemapScr1                    [4]
-    LDW       (XIZ+0xE),0x168                    [5]
-    LDW       (XIZ+8),0xE753                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
-    LDB       (0x585B),0                         [5]
+    LDW       (XIZ+TASK_ARG),0x168               [5]
+    LDW       (XIZ+TASK_FUNC),0xE753             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LDB       (wFadeLevel),0                     [5]
     RET                                          [1]
 
 .org 0x20E753
 
 swp_20E753:
-    DECW      1,(XIZ+0xE)                        [3]
-    CPW       (XIZ+0xE),0xB4                     [5]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),0xB4                [5]
     JR        Z,.skip                            [2]
     RET                                          [1]
 .skip:
@@ -242,13 +356,13 @@ swp_20E753:
     LD        BC,0                               [2]
     LD        DE,9                               [3]
     CALL      DrawTilemapScr1                    [4]
-    LDW       (XIZ+8),0xE779                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
-    DECW      1,(XIZ+0xE)                        [3]
+    LDW       (XIZ+TASK_FUNC),0xE779             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
     JR        Z,.skip2                           [2]
     RET                                          [1]
 .skip2:
-    LDB       (0x585B),0x81                      [5]
+    LDB       (wFadeLevel),0x81                  [5]
     CALL      EndTask                            [4]
     RET                                          [1]
 
@@ -280,14 +394,14 @@ dyn_20E789:
 
 ; [play] intro_title_reveal
 IntroTitleScene:
-    LDB       (0x585B),0x7F                      [5]
+    LDB       (wFadeLevel),0x7F                  [5]
     LDB       (0x584B),0                         [5]
     LDB       (0x584D),0                         [5]
     LDB       (0x5853),0                         [5]
     LDB       (0x5855),0                         [5]
     CALR      dyn_20EC49                         [3]
     CALR      dyn_20EC58                         [3]
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     LD        A,0                                [2]
     LD        C,9                                [2]
     LD        XHL,Pal_2E3F68                     [5]
@@ -328,14 +442,14 @@ IntroTitleScene:
 .org 0x20E89B
 
 dyn_20E89B:
-    LDB       (0x585B),0                         [5]
-    LDW       (XIZ+0xE),0xFFEC                   [5]
+    LDB       (wFadeLevel),0                     [5]
+    LDW       (XIZ+TASK_ARG),0xFFEC              [5]
     LDW       (XIZ+0x10),0x14                    [5]
-    LDW       (XIZ+8),0xE8B4                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xE8B4             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        WA,0xC                             [3]
     LD        XHL,Map_2E3FB8                     [5]
-    LD        BC,(XIZ+0xE)                       [3]
+    LD        BC,(XIZ+TASK_ARG)                  [3]
     LD        DE,1                               [2]
     CALL      DrawTilemapScr1                    [4]
     LD        WA,0xC                             [3]
@@ -344,21 +458,21 @@ dyn_20E89B:
     LD        DE,0xD                             [3]
     CALL      DrawTilemapScr1                    [4]
     DECW      1,(XIZ+0x10)                       [3]
-    INCW      1,(XIZ+0xE)                        [3]
-    CPW       (XIZ+0xE),1                        [5]
+    INCW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),1                   [5]
     JP        GE,EndTask                         [5]
     RET                                          [1]
 
 .org 0x20E8E8
 
 dyn_20E8E8:
-    LDW       (XIZ+0xE),0xFFEC                   [5]
+    LDW       (XIZ+TASK_ARG),0xFFEC              [5]
     LDW       (XIZ+0x10),0x14                    [5]
-    LDW       (XIZ+8),0xE8FC                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xE8FC             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        WA,0xC                             [3]
     LD        XHL,Map_2E40FC                     [5]
-    LD        BC,(XIZ+0xE)                       [3]
+    LD        BC,(XIZ+TASK_ARG)                  [3]
     LD        DE,5                               [2]
     CALL      DrawTilemapScr1                    [4]
     LD        WA,0xC                             [3]
@@ -367,8 +481,8 @@ dyn_20E8E8:
     LD        DE,9                               [3]
     CALL      DrawTilemapScr1                    [4]
     DECW      1,(XIZ+0x10)                       [3]
-    INCW      1,(XIZ+0xE)                        [3]
-    CPW       (XIZ+0xE),1                        [5]
+    INCW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),1                   [5]
     JP        GE,EndTask                         [5]
     RET                                          [1]
 
@@ -376,7 +490,7 @@ dyn_20E8E8:
 
 ; [play] ran on yumekobo_logo, intro_199_years_ago
 IntroLogoScene:
-    LDB       (0x585B),0x7F                      [5]
+    LDB       (wFadeLevel),0x7F                  [5]
     CALR      dyn_20EC49                         [3]
     CALR      dyn_20EC58                         [3]
     LD        XHL,dyn_20E1D4                     [5]
@@ -413,8 +527,8 @@ IntroLogoScene:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawTilemapScr2                    [4]
-    LDW       (XIZ+0xE),0xFFE8                   [5]
-    LDB       (0x585B),0x7F                      [5]
+    LDW       (XIZ+TASK_ARG),0xFFE8              [5]
+    LDB       (wFadeLevel),0x7F                  [5]
     LD        XHL,dyn_20E22B                     [5]
     CALL      StartChildTask                     [4]
     LDW       (XHL+0xE),0x20                     [5]
@@ -425,15 +539,15 @@ IntroLogoScene:
     CALL      StartChildTask                     [4]
     LDW       (XHL+0xE),0x28                     [5]
     task_wait
-    LDW       (XIZ+8),0xEA46                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xEA46             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        WA,0xC                             [3]
     LD        XHL,Map_2DD565                     [5]
-    LD        BC,(XIZ+0xE)                       [3]
+    LD        BC,(XIZ+TASK_ARG)                  [3]
     LD        DE,3                               [2]
     CALL      DrawTilemapScr1                    [4]
-    INCW      1,(XIZ+0xE)                        [3]
-    CPW       (XIZ+0xE),0x14                     [5]
+    INCW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),0x14                [5]
     RET       NZ                                 [2]
     LD        XHL,dyn_20E1D4                     [5]
     CALL      StartChildTask                     [4]
@@ -451,12 +565,12 @@ IntroLogoScene:
 .org 0x20EAA6
 
 swp_20EAA6:
-    LDW       (XIZ+0xE),0                        [5]
+    LDW       (XIZ+TASK_ARG),0                   [5]
     LDW       (XIZ+0x10),0                       [5]
     LDW       (XIZ+0x12),0x3C                    [5]
     LDW       (XIZ+0x18),0                       [5]
-    LDW       (XIZ+8),0xEAC4                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xEAC4             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        WA,(XIZ+0x18)                      [3]
     CP        WA,7                               [2]
     JR        NZ,.skip                           [2]
@@ -519,20 +633,20 @@ sub_20EB17:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawTilemapScr1                    [4]
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     RET                                          [1]
 
 .org 0x20EB87
 
 swp_20EB87:
-    LDW       (XIZ+0xE),0xA0                     [5]
+    LDW       (XIZ+TASK_ARG),0xA0                [5]
     LDW       (XIZ+0x10),0x18                    [5]
     LDW       (XIZ+0x12),0x78                    [5]
     LDW       (XIZ+0x14),1                       [5]
     LDW       (XIZ+0x16),2                       [5]
     LDW       (XIZ+0x18),0                       [5]
-    LDW       (XIZ+8),0xEBAF                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xEBAF             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        WA,0xC                             [3]
     LD        HL,(XIZ+0x18)                      [3]
     SRL       1,HL                               [3]
@@ -541,7 +655,7 @@ swp_20EB87:
     EXTZ      XHL                                [2]
     ADD       XHL,0x226B59                       [6]
     LD        XHL,(XHL)                          [2]
-    LD        BC,(XIZ+0xE)                       [3]
+    LD        BC,(XIZ+TASK_ARG)                  [3]
     LD        DE,(XIZ+0x10)                      [3]
     INCW      1,(XIZ+0x18)                       [3]
     DECW      1,(XIZ+0x12)                       [3]
@@ -550,7 +664,7 @@ swp_20EB87:
     DECW      1,(XIZ+0x14)                       [3]
     JR        NZ,.skip                           [2]
     LDW       (XIZ+0x14),1                       [5]
-    DECW      1,(XIZ+0xE)                        [3]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
 .skip:
     DECW      1,(XIZ+0x16)                       [3]
     JR        NZ,.done                           [2]
@@ -562,16 +676,53 @@ swp_20EB87:
 .org 0x20EBF9
 
 swp_20EBF9:
-    LDW       (XIZ+0xE),0x14                     [5]
+    LDW       (XIZ+TASK_ARG),0x14                [5]
     LD        WA,0x17C                           [3]
     LD        XHL,Map_2E3616                     [5]
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawTilemapScr2                    [4]
-    LDW       (XIZ+8),0xEC18                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
-    DECW      1,(XIZ+0xE)                        [3]
+    LDW       (XIZ+TASK_FUNC),0xEC18             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
     JP        Z,EndTask                          [5]
+    RET                                          [1]
+
+.org 0x20EC21
+
+swp_20EC21:
+    LDW       (XIZ+TASK_ARG),0x14                [5]
+    LD        WA,0x17C                           [3]
+    LD        XHL,Map_2E3910                     [5]
+    LD        BC,0                               [2]
+    LD        DE,0                               [2]
+    CALL      DrawTilemapScr2                    [4]
+    LDW       (XIZ+TASK_FUNC),0xEC40             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
+    JP        Z,EndTask                          [5]
+    RET                                          [1]
+
+.org 0x20EC49
+
+dyn_20EC49:
+    LD        WA,0                               [2]
+    LD        C,0                                [2]
+    LD        E,0                                [2]
+    LD        B,0x20                             [2]
+    LD        D,0x20                             [2]
+    CALL      dyn_206768                         [4]
+    RET                                          [1]
+
+.org 0x20EC58
+
+dyn_20EC58:
+    LD        WA,0                               [2]
+    LD        C,0                                [2]
+    LD        E,0x20                             [2]
+    LD        B,0x20                             [2]
+    LD        D,0x20                             [2]
+    CALL      dyn_206768                         [4]
     RET                                          [1]
 
 .org 0x20EC67
@@ -601,33 +752,33 @@ IntroCockpitScene:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawTilemapScr1                    [4]
-    LDW       (XIZ+0xE),0                        [5]
+    LDW       (XIZ+TASK_ARG),0                   [5]
     LDW       (XIZ+0x10),0                       [5]
-    LDB       (0x585B),0                         [5]
-    LDW       (XIZ+8),0xECCB                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDB       (wFadeLevel),0                     [5]
+    LDW       (XIZ+TASK_FUNC),0xECCB             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     RET                                          [1]
 
 .org 0x20ECCB
 
 swp_20ECCB:
-    LD        WA,(XIZ+0xE)                       [3]
+    LD        WA,(XIZ+TASK_ARG)                  [3]
     SRL       1,WA                               [3]
     LD        (0x584B),A                         [4]
     LDB       (0x584D),(XIZ+0x10)                [5]
-    INCW      1,(XIZ+0xE)                        [3]
-    CPW       (XIZ+0xE),0xC0                     [5]
+    INCW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),0xC0                [5]
     JP        Z,EndTask                          [5]
     RET                                          [1]
 
 .org 0x20ECE8
 
 swp_20ECE8:
-    LDW       (XIZ+0xE),0                        [5]
+    LDW       (XIZ+TASK_ARG),0                   [5]
     LDW       (XIZ+0x10),0                       [5]
-    LDW       (XIZ+8),0xECFC                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
-    LD        HL,(XIZ+0xE)                       [3]
+    LDW       (XIZ+TASK_FUNC),0xECFC             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        HL,(XIZ+TASK_ARG)                  [3]
     SLL       2,HL                               [3]
     EXTZ      XHL                                [2]
     LD        A,(wColorFlags)                    [4]
@@ -647,8 +798,8 @@ swp_20ECE8:
     CPW       (XIZ+0x10),4                       [5]
     JR        NZ,.done                           [2]
     LDW       (XIZ+0x10),0                       [5]
-    INCW      1,(XIZ+0xE)                        [3]
-    CPW       (XIZ+0xE),4                        [5]
+    INCW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),4                   [5]
     JP        Z,EndTask                          [5]
 .done:
     RET                                          [1]
@@ -686,7 +837,7 @@ sub_20ED46:
     LD        WA,0x17C                           [3]
     LD        XHL,Gfx_2E3C0A                     [5]
     CALL      LoadCompressedTiles                [4]
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     RET                                          [1]
 
 .org 0x20EDB2
@@ -708,16 +859,86 @@ IntroBioLetters:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawTilemapScr1                    [4]
-    LDW       (XIZ+0xE),0                        [5]
+    LDW       (XIZ+TASK_ARG),0                   [5]
     LDW       (XIZ+0x10),0                       [5]
-    LDW       (XIZ+8),0xEDF8                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
-    LD        WA,(XIZ+0xE)                       [3]
+    LDW       (XIZ+TASK_FUNC),0xEDF8             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        WA,(XIZ+TASK_ARG)                  [3]
     SRL       1,WA                               [3]
     LD        (0x584B),A                         [4]
     LDB       (0x584D),(XIZ+0x10)                [5]
-    DECW      1,(XIZ+0xE)                        [3]
-    CPW       (XIZ+0xE),0xFF88                   [5]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),0xFF88              [5]
+    JR        Z,.skip                            [2]
+    RET                                          [1]
+.skip:
+    CALR      dyn_20EC49                         [3]
+    CALL      EndTask                            [4]
+    RET                                          [1]
+
+.org 0x20EE1A
+
+swp_20EE1A:
+    CALR      dyn_20EC58                         [3]
+    CALR      dyn_20EC49                         [3]
+    LD        WA,0xC                             [3]
+    LD        XHL,Gfx_2E2E82                     [5]
+    CALL      LoadCompressedTiles                [4]
+    LD        WA,0x12C                           [3]
+    LD        XHL,Map_2DF96E                     [5]
+    LD        BC,0                               [2]
+    LD        DE,0                               [2]
+    CALL      DrawTilemapScr2                    [4]
+    LD        WA,0xC                             [3]
+    LD        XHL,Map_2E2B88                     [5]
+    LD        BC,0                               [2]
+    LD        DE,0                               [2]
+    CALL      DrawTilemapScr1                    [4]
+    LDW       (XIZ+TASK_ARG),0                   [5]
+    LDW       (XIZ+0x10),0                       [5]
+    LDW       (XIZ+TASK_FUNC),0xEE60             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        WA,(XIZ+TASK_ARG)                  [3]
+    SRL       1,WA                               [3]
+    LD        (0x584B),A                         [4]
+    LDB       (0x584D),(XIZ+0x10)                [5]
+    INCW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),0x30                [5]
+    JR        Z,.skip                            [2]
+    RET                                          [1]
+.skip:
+    CALR      dyn_20EC49                         [3]
+    CALL      EndTask                            [4]
+    RET                                          [1]
+
+.org 0x20EE82
+
+swp_20EE82:
+    CALR      dyn_20EC58                         [3]
+    CALR      dyn_20EC49                         [3]
+    LD        WA,0xC                             [3]
+    LD        XHL,Gfx_2E1302                     [5]
+    CALL      LoadCompressedTiles                [4]
+    LD        WA,0x12C                           [3]
+    LD        XHL,Map_2DFC68                     [5]
+    LD        BC,0                               [2]
+    LD        DE,0                               [2]
+    CALL      DrawTilemapScr2                    [4]
+    LD        WA,0xC                             [3]
+    LD        XHL,Map_2E1008                     [5]
+    LD        BC,0                               [2]
+    LD        DE,0                               [2]
+    CALL      DrawTilemapScr1                    [4]
+    LDW       (XIZ+TASK_ARG),0                   [5]
+    LDW       (XIZ+0x10),0                       [5]
+    LDW       (XIZ+TASK_FUNC),0xEEC8             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        WA,(XIZ+TASK_ARG)                  [3]
+    SRL       1,WA                               [3]
+    LD        (0x584B),A                         [4]
+    LDB       (0x584D),(XIZ+0x10)                [5]
+    DECW      1,(XIZ+TASK_ARG)                   [3]
+    CPW       (XIZ+TASK_ARG),0xFFD0              [5]
     JR        Z,.skip                            [2]
     RET                                          [1]
 .skip:
@@ -744,13 +965,13 @@ IntroMotorUnitronLetters:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawTilemapScr1                    [4]
-    LDW       (XIZ+0xE),0                        [5]
+    LDW       (XIZ+TASK_ARG),0                   [5]
     LDW       (XIZ+0x10),0xFF4C                  [5]
     LD        XHL,swp_20EF65                     [5]
     CALL      StartChildTask                     [4]
-    LDW       (XIZ+8),0xEF39                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
-    LDB       (0x584B),(XIZ+0xE)                 [5]
+    LDW       (XIZ+TASK_FUNC),0xEF39             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LDB       (0x584B),(XIZ+TASK_ARG)            [5]
     LD        WA,(XIZ+0x10)                      [3]
     SRL       1,WA                               [3]
     LD        (0x584D),A                         [4]
@@ -771,8 +992,8 @@ swp_20EF65:
     LDW       (XIZ+0x14),0                       [5]
     LDW       (XIZ+0x16),0x14                    [5]
     LDW       (XIZ+0x18),0                       [5]
-    LDW       (XIZ+8),0xEF7E                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xEF7E             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     CPW       (XIZ+4),0                          [5]
     JP        Z,EndTask                          [5]
     LD        HL,(XIZ+0x18)                      [3]
@@ -822,8 +1043,8 @@ StorySceneUnitice:
     LD        C,1                                [2]
     LD        XHL,MonoPal_225C45                 [5]
     CALL      LoadMonoPalettes                   [4]
-    LDB       (0x585B),0                         [5]
-    LD        XHL,dyn_20F628                     [5]
+    LDB       (wFadeLevel),0                     [5]
+    LD        XHL,CreditsTask                    [5]
     CALL      StartChildTask                     [4]
     LD        XDE,ItAllBeganWithText             [5]
     LD        (XHL+0xE),XDE                      [3]
@@ -869,7 +1090,7 @@ StorySceneUnitice:
     LD        C,1                                [2]
     LD        XHL,MonoPal_225C45                 [5]
     CALR      dyn_20E209                         [3]
-    LD        XHL,dyn_20F628                     [5]
+    LD        XHL,CreditsTask                    [5]
     CALL      StartChildTask                     [4]
     LD        XDE,TheseCrystalsCalledUniText     [5]
     LD        (XHL+0xE),XDE                      [3]
@@ -889,9 +1110,24 @@ StorySceneUnitice:
     LDB       (0x584D),0                         [5]
     LDB       (0x5853),0                         [5]
     LDB       (0x5855),0                         [5]
-    LD        HL,0                               [2]
+    LD        HL,EVENT_STAGE_TOWN                [2]
     CALL      SetEventFlag                       [4]
     CALL      EndTask                            [4]
+    RET                                          [1]
+
+.org 0x20F179
+
+swp_20F179:
+    LDB       (wFadeLevel),0x81                  [5]
+    LDB       (0x5CE2),0                         [5]
+    CALR      dyn_20EC49                         [3]
+    CALR      dyn_20EC58                         [3]
+    LD        XWA,0x12                           [5]
+    CALL      PlayMusic                          [4]
+    LD        WA,0x33                            [3]
+    CALL      SoundCommand                       [4]
+    LDW       (XIZ+TASK_FUNC),0xF1A4             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     RET                                          [1]
 
 .org 0x20F1A4
@@ -943,7 +1179,7 @@ StorySceneDestruction:
     LD        C,1                                [2]
     LD        XHL,MonoPal_225C45                 [5]
     CALR      dyn_20E209                         [3]
-    LD        XHL,dyn_20F628                     [5]
+    LD        XHL,CreditsTask                    [5]
     CALL      StartChildTask                     [4]
     LD        XDE,WithTheDestructionOfText       [5]
     LD        (XHL+0xE),XDE                      [3]
@@ -960,8 +1196,8 @@ StorySceneDestruction:
     LDB       (XHL+0x14),0x81                    [4]
     task_wait
     CALR      dyn_20EC49                         [3]
-    LDW       (XIZ+8),0xF2C1                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xF2C1             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     RET                                          [1]
 
 .org 0x20F2C1
@@ -1012,7 +1248,7 @@ StorySceneSunBegan:
     LD        C,1                                [2]
     LD        XHL,MonoPal_225C45                 [5]
     CALR      dyn_20E209                         [3]
-    LD        XHL,dyn_20F628                     [5]
+    LD        XHL,CreditsTask                    [5]
     CALL      StartChildTask                     [4]
     LD        XDE,TheSunBeganToText              [5]
     LD        (XHL+0xE),XDE                      [3]
@@ -1032,9 +1268,9 @@ StorySceneSunBegan:
     CALL      StartChildTask                     [4]
     LDW       (XHL+0xE),0x3C                     [5]
     task_wait
-    LDB       (0x585B),0x81                      [5]
-    LDW       (XIZ+8),0xF3E6                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDB       (wFadeLevel),0x81                  [5]
+    LDW       (XIZ+TASK_FUNC),0xF3E6             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     RET                                          [1]
 
 .org 0x20F3E6
@@ -1059,36 +1295,36 @@ CreditsScreen:
     LD        C,1                                [2]
     LD        XHL,MonoPal_225C45                 [5]
     CALL      LoadMonoPalettes                   [4]
-    LDB       (0x585B),0                         [5]
-    LD        XHL,dyn_20F628                     [5]
+    LDB       (wFadeLevel),0                     [5]
+    LD        XHL,CreditsTask                    [5]
     CALL      StartChildTask                     [4]
     LD        XDE,BIOMOTORUNITRONPLANNINGText    [5]
     LD        (XHL+0xE),XDE                      [3]
     task_wait
-    LD        XHL,dyn_20F628                     [5]
+    LD        XHL,CreditsTask                    [5]
     CALL      StartChildTask                     [4]
     LD        XDE,TOBECONTINUEDText              [5]
     LD        (XHL+0xE),XDE                      [3]
     task_wait
-    LD        HL,0xA                             [3]
+    LD        HL,EVENT_STAGE_ENDING              [3]
     CALL      SetEventFlag                       [4]
-    LD        HL,9                               [3]
+    LD        HL,EVENT_STAGE_LILY                [3]
     CALL      ClearEventFlag                     [4]
     CALL      sub_21691A                         [4]
-    LD        HL,0x20                            [3]
+    LD        HL,EVENT_CYRIUS_TRADED             [3]
     CALL      CheckEventFlag                     [4]
     JR        Z,.skip                            [2]
-    LD        HL,0x60                            [3]
+    LD        HL,EVENT_BEAT_ENT                  [3]
     CALL      ClearEventFlag                     [4]
-    LD        HL,0x61                            [3]
+    LD        HL,EVENT_BEAT_KRAKEN               [3]
     CALL      ClearEventFlag                     [4]
-    LD        HL,0x62                            [3]
+    LD        HL,EVENT_BEAT_ROC                  [3]
     CALL      ClearEventFlag                     [4]
-    LD        HL,0x63                            [3]
+    LD        HL,EVENT_BEAT_BEHEMOTH             [3]
     CALL      ClearEventFlag                     [4]
 .skip:
-    LDW       (XIZ+8),0xF4A5                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xF4A5             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        A,(wJoyPressed)                    [4]
     AND       A,A_BUTTON|B_BUTTON                [3]
     RET       Z                                  [2]
@@ -1112,7 +1348,7 @@ CreditsScreen:
 
 ; [code] "It was the end..."
 StorySceneTheEnd:
-    LDB       (0x585B),0x81                      [5]
+    LDB       (wFadeLevel),0x81                  [5]
     LDB       (0x5CE2),0                         [5]
     CALR      dyn_20EC49                         [3]
     CALR      dyn_20EC58                         [3]
@@ -1125,7 +1361,7 @@ StorySceneTheEnd:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
     CALL      DrawPortrait                       [4]
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     LD        A,0x20                             [2]
     LD        C,1                                [2]
     LD        XHL,Pal_225C3D                     [5]
@@ -1134,13 +1370,13 @@ StorySceneTheEnd:
     LD        C,1                                [2]
     LD        XHL,MonoPal_225C45                 [5]
     CALL      LoadMonoPalettes                   [4]
-    LD        XHL,dyn_20F628                     [5]
+    LD        XHL,CreditsTask                    [5]
     CALL      StartChildTask                     [4]
     LD        XDE,ItWasTheEndText                [5]
     LD        (XHL+0xE),XDE                      [3]
     task_wait
-    LDW       (XIZ+8),0xF56C                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xF56C             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        A,(wJoyPressed)                    [4]
     AND       A,A_BUTTON|B_BUTTON                [3]
     RET       Z                                  [2]
@@ -1158,7 +1394,7 @@ StorySceneTheEnd:
 
 ; [code] GAME OVER
 GameOverScreen:
-    LDB       (0x585B),0                         [5]
+    LDB       (wFadeLevel),0                     [5]
     CALL      sub_2067E1                         [4]
     CALL      sub_2072CD                         [4]
     LD        A,0x2F                             [2]
@@ -1186,11 +1422,128 @@ GameOverScreen:
     LDB       (XWA+0x10),0x14                    [4]
     LD        XHL,GAMEOVERText                   [5]
     LD        (XWA+8),XHL                        [3]
-    LDW       (XIZ+8),0xF5FF                     [5]
-    LDW       (XIZ+0xA),0x20                     [5]
+    LDW       (XIZ+TASK_FUNC),0xF5FF             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
     LD        A,0                                [2]
     CALL      GetTextBox                         [4]
     LD        XHL,(XWA+8)                        [3]
     CP{2}     XHL,0                              [6]
     JR        Z,loc_20F61B                       [2]
     RET                                          [1]
+
+.org 0x20F611
+
+swp_20F611:
+    LDW       (XIZ+TASK_FUNC),0xF61B             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+
+.org 0x20F61B
+
+loc_20F61B:
+    LD        A,(wJoyPressed)                    [4]
+    AND       A,B_BUTTON                         [3]
+    JP        NZ,EndTask                         [5]
+    RET                                          [1]
+
+.org 0x20F628
+
+; [play] staff credits (credits_* screens)
+CreditsTask:
+    CALR      dyn_20EC58                         [3]
+    LDB       (0x5855),0                         [5]
+    LD        XDE,wPlayerName                    [5]
+    LD        B,6                                [2]
+    LD        WA,0x16C                           [3]
+    LD        L,(XDE)                            [2]
+    PUSH      B                                  [2]
+    PUSH      XDE                                [1]
+    PUSH      WA                                 [1]
+    CALL      dyn_207093                         [4]
+    POP       WA                                 [1]
+    POP       XDE                                [1]
+    POP       B                                  [2]
+    INC       1,XDE                              [2]
+    INC       2,WA                               [2]
+    DJNZ      B,0x20F63A                         [3]
+    LD        XDE,wPartnerName                   [5]
+    LD        B,6                                [2]
+    LD        WA,0x173                           [3]
+    LD        L,(XDE)                            [2]
+    PUSH      B                                  [2]
+    PUSH      XDE                                [1]
+    PUSH      WA                                 [1]
+    CALL      dyn_207093                         [4]
+    POP       WA                                 [1]
+    POP       XDE                                [1]
+    POP       B                                  [2]
+    INC       1,XDE                              [2]
+    INC       2,WA                               [2]
+    DJNZ      B,0x20F659                         [3]
+    LD        WA,0x186                           [3]
+    LD        (XIZ+0x18),WA                      [3]
+    LDB       (XIZ+0x12),0                       [4]
+    LDW       (XIZ+0x14),5                       [5]
+    LD        WA,(XIZ+0x14)                      [3]
+    LD        (XIZ+0x16),WA                      [3]
+    LD        XHL,dyn_20F6E0                     [5]
+    CALL      StartChildTask                     [4]
+    LDW       (XIZ+TASK_FUNC),0xF6AB             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        XDE,0x5DF8                         [5]
+    LD        BC,0x100                           [3]
+    EXTZ      XBC                                [2]
+    LDW{1}    (XDE+),0xFFFF                      [5]
+    DEC       1,BC                               [2]
+    CP        BC,0                               [2]
+    JR        NZ,0x20F6A0                        [2]
+    CPW       (XIZ+TASK_CHILDREN),0              [5]
+    JP        Z,EndTask                          [5]
+    LD        A,(wJoyPressed)                    [4]
+    AND       A,B_BUTTON                         [3]
+    JR        Z,dyn_20F6CA                       [2]
+    CALR      dyn_20EC58                         [3]
+    CALL      dyn_20636D                         [4]
+    CALL      EndTask                            [4]
+    RET                                          [1]
+
+.org 0x20F6CA
+
+dyn_20F6CA:
+    DECW      1,(XIZ+0x16)                       [3]
+    RET       NZ                                 [2]
+    LD        WA,(XIZ+0x14)                      [3]
+    LD        (XIZ+0x16),WA                      [3]
+    LD        A,(XIZ+0x12)                       [3]
+    LD        (0x5855),A                         [4]
+    INCB      1,(XIZ+0x12)                       [3]
+    RET                                          [1]
+
+.org 0x20F6E0
+
+dyn_20F6E0:
+    LD        WA,(XIY+0x14)                      [3]
+    CP        (XIY+0x16),WA                      [3]
+    RET       NZ                                 [2]
+    LDW       (XIZ+TASK_ARG),0                   [5]
+    LD        A,(XIY+0x12)                       [3]
+    AND       A,7                                [3]
+    RET       NZ                                 [2]
+    LD        XWA,0                              [2]
+    LD        A,(XIY+0x12)                       [3]
+    SRL       3,A                                [3]
+    ADD       A,0x13                             [3]
+    AND       A,0x1F                             [3]
+    SLL       6,XWA                              [3]
+    ADD       XWA,0x9800                         [6]
+    LDW       (XIZ+TASK_ARG),0                   [5]
+    LD        XHL,(XIY+0xE)                      [3]
+    LD        C,(XHL)                            [2]
+    CP        C,0xFE                             [3]
+    JR        Z,0x20F754                         [2]
+    CP        C,0xFF                             [3]
+    JRL       Z,loc_20F7A8                       [3]
+    CP        C,0xFC                             [3]
+    JR        NZ,dyn_20F730                      [2]
+    LD        DE,0x16C                           [3]
+    LD        XBC,wPlayerName                    [5]
+    JR        loc_20F73D                         [2]

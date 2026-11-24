@@ -1,6 +1,7 @@
 # dev_partner_bonus: 10 entries, one line per id (keep the order and count).
 # Develop success bonus by partner race/gender (wPartnerRace, 1-10 as wPlayerRace);
-# see recipes.txt. (Play: RenaB = 2, bonus 2.)
+# see recipes.txt. (Play: RenaB = 2, bonus 2; Shera 6 -> 2; Leaf 4 -> 5 (Hook+Steel 86 = 80+1+5);
+# Shilfe 8 -> 3 (84 at engineer 1); Pinky 10 -> 1.)
 #
 # id  bonus
    1      3

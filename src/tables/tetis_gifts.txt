@@ -1,0 +1,17 @@
+# tetis_gifts: 11 entries, one line per id (keep the order and count).
+# Tetis's post-game thank-you gift (TetisGift 0x216649), picked by tetis_gift_index.txt; value as
+# cyrius_trades (item id, or 0x100 + part id); message 0x54 + line - 1. The autographs are then
+# removed. (Play: Human with 6 autographs got GrvHmr, the other runs with 7 got Crsadr.)
+#
+# id  gift
+   1    37  # Proplr
+   2    36  # AutoRp
+   3    56  # Myster
+   4   405  # DvlClw
+   5   395  # Sthrn+
+   6   445  # Agni
+   7   444  # Indra
+   8   373  # GrvHmr
+   9   375  # 3DDvr
+  10   385  # Crsadr
+  11   430  # GodHnd

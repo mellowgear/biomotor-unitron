@@ -1,4 +1,4 @@
-; engine/player: 8 routines (each keeps its ROM address with .org)
+; engine/player: 23 routines (each keeps its ROM address with .org)
 
 .org 0x2061D4
 
@@ -11,6 +11,26 @@ dyn_2061D4:
     AND       A,0xF                              [3]
     SLL       1,W                                [3]
     CCF                                          [1]
+    RET                                          [1]
+
+.org 0x2061EC
+
+sub_2061EC:
+    PUSH      XDE                                [1]
+    PUSH      BC                                 [1]
+    LD        C,8                                [2]
+.loop:
+    SRL       4,XDE                              [3]
+    EXTZ      XWA                                [2]
+    DIV       XWA,0xA                            [4]
+    SLL       4,QA                               [4]
+    LD        B,QD                               [3]
+    OR        B,QA                               [3]
+    LD        QD,B                               [3]
+    DJNZ      C,.loop                            [3]
+    LD{1}     XWA,XDE                            [2]
+    POP       BC                                 [1]
+    POP       XDE                                [1]
     RET                                          [1]
 
 .org 0x20620E
@@ -32,6 +52,84 @@ sub_20620E:
     POP       XBC                                [1]
     RET                                          [1]
 
+.org 0x20622F
+
+sub_20622F:
+    PUSH      XBC                                [1]
+    SUB       A,C                                [2]
+    DAA       A                                  [2]
+    SBC       W,B                                [2]
+    DAA       W                                  [2]
+    LD        C,QA                               [3]
+    SBC       C,QC                               [3]
+    DAA       C                                  [2]
+    LD        QA,C                               [3]
+    LD        C,QW                               [3]
+    SBC       C,QB                               [3]
+    DAA       C                                  [2]
+    LD        QW,C                               [3]
+    POP       XBC                                [1]
+    RET                                          [1]
+
+.org 0x207ADB
+
+swp_207ADB:
+    RET                                          [1]
+
+.org 0x207ADC
+
+swp_207ADC:
+    ADDB      (wCritChance),5                    [5]
+    RET                                          [1]
+
+.org 0x207AE2
+
+swp_207AE2:
+    ADDB      (wCritChance),8                    [5]
+    RET                                          [1]
+
+.org 0x207AE8
+
+swp_207AE8:
+    ADDB      (wCritChance),0xA                  [5]
+    RET                                          [1]
+
+.org 0x207AEE
+
+swp_207AEE:
+    ADDB      (0x5D91),0xF6                      [5]
+    RET                                          [1]
+
+.org 0x207AF4
+
+swp_207AF4:
+    ADDB      (0x5D91),0xEC                      [5]
+    RET                                          [1]
+
+.org 0x207AFA
+
+swp_207AFA:
+    ADDB      (0x5D91),0xE2                      [5]
+    RET                                          [1]
+
+.org 0x207B00
+
+swp_207B00:
+    ADDB      (0x5D92),0xF                       [5]
+    RET                                          [1]
+
+.org 0x207B06
+
+swp_207B06:
+    ADDB      (0x5D92),0x1E                      [5]
+    RET                                          [1]
+
+.org 0x207B0C
+
+swp_207B0C:
+    ADDB      (0x5D92),0x32                      [5]
+    RET                                          [1]
+
 .org 0x207B12
 
 ; if wExpToNext <= 0: next level, stat gains; CF = levelled up
@@ -40,6 +138,14 @@ TryLevelUp:
     CP        B,0x32                             [3]
     JR        C,dyn_207B23                       [2]
     LDW       (wExpToNext),0                     [6]
+    RCF                                          [1]
+    RET                                          [1]
+
+.org 0x207B23
+
+dyn_207B23:
+    CPW       (wExpToNext),0                     [6]
+    JR        LE,LevelUpStatGains                [2]
     RCF                                          [1]
     RET                                          [1]
 
@@ -296,6 +402,47 @@ AddGP:
     LD        (wGP),XWA                          [4]
     RET                                          [1]
 
+.org 0x208B0C
+
+swp_208B0C:
+    LD        A,(XIZ+0x12)                       [3]
+    LD        (XIZ+0x14),A                       [3]
+    LDW       (XIZ+TASK_FUNC),0x8B1C             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        A,0xFF                             [2]
+    MUL       WA,(XIZ+0x14)                      [3]
+    DIV       WA,(XIZ+0x12)                      [3]
+    CPL       A                                  [2]
+    LD        B,A                                [2]
+    LD        D,A                                [2]
+    LD        C,(XIZ+TASK_ARG)                   [3]
+    LD        E,(XIZ+0x10)                       [3]
+    CALL      sub_206D30                         [4]
+    CPB       (XIZ+0x14),0                       [4]
+    JP        Z,EndTask                          [5]
+    DECB      1,(XIZ+0x14)                       [3]
+    RET                                          [1]
+
+.org 0x208B41
+
+swp_208B41:
+    LD        A,(XIZ+0x12)                       [3]
+    LD        (XIZ+0x14),A                       [3]
+    LDW       (XIZ+TASK_FUNC),0x8B51             [5]
+    LDW       (XIZ+TASK_FUNC_HI),0x20            [5]
+    LD        A,0xFF                             [2]
+    MUL       WA,(XIZ+0x14)                      [3]
+    DIV       WA,(XIZ+0x12)                      [3]
+    LD        B,A                                [2]
+    LD        D,A                                [2]
+    LD        C,(XIZ+TASK_ARG)                   [3]
+    LD        E,(XIZ+0x10)                       [3]
+    CALL      sub_206D30                         [4]
+    CPB       (XIZ+0x14),0                       [4]
+    JP        Z,EndTask                          [5]
+    DECB      1,(XIZ+0x14)                       [3]
+    RET                                          [1]
+
 .org 0x21D647
 
 ; [code] clear stats, level 0 -> 1, CalcUnitStats
@@ -330,7 +477,7 @@ NewGameSetup:
     DEC       1,A                                [2]
     SRL       1,A                                [3]
     MUL{1}    WA,6                               [3]
-    LD        XHL,0x271864                       [5]
+    LD        XHL,StartingEquipment              [5]
     LDA       XHL,XHL+WA                         [5]
     LD        XDE,wEquipCore                     [5]
     LD        BC,6                               [2]
@@ -354,5 +501,5 @@ NewGameSetup:
     CALL      StartChildTask                     [4]
     task_wait
     LD        XHL,dyn_21D800                     [5]
-    LD        (XIZ+8),XHL                        [3]
+    LD        (XIZ+TASK_FUNC),XHL                [3]
     RET                                          [1]

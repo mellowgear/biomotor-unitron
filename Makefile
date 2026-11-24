@@ -9,7 +9,7 @@ TOOLS  := tlcs900
 ROM    := baserom.ngp
 SHA1   := $(shell command -v sha1sum >/dev/null 2>&1 && echo sha1sum || echo "shasum -a 1")
 ASSETS := $(shell find src/gfx/tiles src/gfx/monsters src/gfx/parts src/gfx/pal src/gfx/maps src/text src/tables -type f 2>/dev/null)
-CODE   := $(shell find src -name '*.s' -o -name '*.bin' 2>/dev/null)
+CODE   := $(shell find src -name '*.s' -o -name '*.bin' -o -name '*.bst' -o -name '*.blk' 2>/dev/null)
 
 all: biomotor.ngp
 	@$(SHA1) -c roms.sha1 || echo "(differs from the original ROM -- expected if you edited something)"

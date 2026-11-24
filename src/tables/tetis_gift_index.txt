@@ -1,0 +1,12 @@
+# tetis_gift_index: 7 entries, one line per id (keep the order and count).
+# Line = number of Tetis autographs (item 0xFF count, wTetisAutographs); value = tetis_gifts
+# line - 1, by gender (IsPlayerMale 0x216B0C: odd wPlayerRace = male). Female column not seen in play.
+#
+# id  male  female
+   1     0       0  # Proplr / Proplr
+   2     1       1  # AutoRp / AutoRp
+   3     2       2  # Myster / Myster
+   4     3       4  # DvlClw / Sthrn+
+   5     5       6  # Agni / Indra
+   6     7       8  # GrvHmr / 3DDvr
+   7     9      10  # Crsadr / GodHnd

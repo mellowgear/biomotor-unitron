@@ -5,7 +5,8 @@
 # (0x208309-0x2083A3) take a category-relative id. Moving the boundaries means editing those.
 # LoadEnemy adds hp, ep, p04-p0A of the equipped parts to the same battle stats as the
 # enemy record; the body's affinity replaces the robot's. CalcUnitStats 0x20868B: robot
-# AP/SP/RP/MP = pilot stats + each part's ap..mp; max HP/EP = body + core hp/ep.
+# AP/SP/RP/MP = pilot stats + each part's ap..mp; max HP/EP = the sum of the hp/ep of all six
+# equipped parts (CalcUnitStats; accessories are added after).
 # image: picture within the part's slot group (0 = none); sub_208489 reads it for the
 # equipped Body, Arms (left and right image sets), Legs and Back. Cores are not drawn.
 # See PART_GROUPS in tools/tables.py; gfx/parts/<slot>/ is named after these parts.
@@ -14,6 +15,8 @@
 # status: what an arm's hit can inflict on the enemy (battle.s after the hit roll: a random
 # roll against wStatusChance, then the message from 0x225BBE): 1 paralyzed, 2 rusted, 3 leaking
 # energy, 4 confused; 0 none. Sets bit 7 of wEnemyParalyzed + status - 1.
+# (Play, Mariner: GrvHmr -> "Bulby is paralyzed!!", 0x5DC3 0x80, then 0x81-0x84 with
+# "Bulby can't attack!!", then 0 by itself.)
 # Edited text must fit its slot: name 6, desc 18 characters.
 # id  name      desc                   hp   ep   ap   sp   rp   mp  ep_cost  affinity  status  image  p13   price
    1  "Body1"   "H's Basic body"       15    0    5    0    0    0        0         1       0      1   16       0

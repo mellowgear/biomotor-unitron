@@ -5,9 +5,12 @@
 # items, 52-56 tools, 57-71 materials (play: Works item list categories).
 # Code (BattleStatusEffects 0x20C604, the only way to BattleDefeat): at 0 HP, Recvr
 # (wRecvrActive) revives with 9999 HP; otherwise an equipped AutoRp (36) is used up (its slot
-# cleared) and revives with max HP / 2; both clear all four statuses. With EP below the arm's
+# cleared; A1 checked before A2) and revives with max HP / 2; both clear all four statuses. With EP below the arm's
 # cost, an equipped Proplr (37) is used up and refills EP. Descriptions say "Cures Paralysis"
-# / "Cures EP shortage". Not yet seen in play (test requested 2026-11-24).
+# / "Cures EP shortage".
+# (Play, Mariner: AutoRp in A1, HP 0 -> "You gained 270 HP!!" = max 540 / 2, slot -> 0; Proplr in
+# A1, EP 5 below the cheapest command cost 15 at the end of a turn -> "Your EP are fully
+# restored!!", EP = max, slot -> 0. Recvr from the Aqua skill: HP = max HP, not 9999.)
 # Edited text must fit its slot: name 6, desc 18 characters.
 # id  name      desc                   price
    1  "FlrCt"   "Body▶Fire affin."      4800

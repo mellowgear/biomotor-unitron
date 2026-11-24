@@ -1,4 +1,153 @@
-; engine/dungeon: 139 routines (each keeps its ROM address with .org)
+; engine/dungeon: 213 routines (each keeps its ROM address with .org)
+
+.org 0x206E12
+
+sub_206E12:
+    LD        WA,0                               [2]
+    LD        (0x5BC7),WA                        [4]
+    LD        (0x5BC9),WA                        [4]
+    LD        (0x5BCB),WA                        [4]
+    LD        (0x5BCD),WA                        [4]
+    RET                                          [1]
+
+.org 0x206E25
+
+sub_206E25:
+    LD        WA,(0x5BCD)                        [4]
+    OR        WA,WA                              [2]
+    JR        PL,.skip                           [2]
+    NEG       WA                                 [2]
+.skip:
+    CP        WA,0x10                            [4]
+    JP        NC,loc_206FC1                      [5]
+    LD        WA,(0x5BCB)                        [4]
+    OR        WA,WA                              [2]
+    JR        PL,.skip2                          [2]
+    NEG       WA                                 [2]
+.skip2:
+    CP        WA,0x10                            [4]
+    JP        NC,loc_206FC1                      [5]
+    LD        DE,(0x5BCD)                        [4]
+    OR        DE,DE                              [2]
+    JR        Z,.skip4                           [2]
+    LD        WA,(0x5BC9)                        [4]
+    ADD       DE,WA                              [2]
+    LD        (0x5BC9),DE                        [4]
+    LD        (0x584D),E                         [4]
+    SRA       4,DE                               [3]
+    SRA       4,WA                               [3]
+    CP        DE,WA                              [2]
+    JR        Z,.skip4                           [2]
+    JR        C,.skip3                           [2]
+    ADD       DE,0xC                             [4]
+.skip3:
+    LD        BC,(0x5BC7)                        [4]
+    SRA       4,BC                               [3]
+    DEC       2,BC                               [2]
+    DEC       2,DE                               [2]
+    CALL      sub_206F8D                         [4]
+.skip4:
+    LD        BC,(0x5BCB)                        [4]
+    OR        BC,BC                              [2]
+    JR        Z,.done                            [2]
+    LD        WA,(0x5BC7)                        [4]
+    ADD       BC,WA                              [2]
+    LD        (0x5BC7),BC                        [4]
+    LD        (0x584B),C                         [4]
+    SRA       4,BC                               [3]
+    SRA       4,WA                               [3]
+    CP        BC,WA                              [2]
+    JR        Z,.done                            [2]
+    JR        C,.skip5                           [2]
+    ADD       BC,0xD                             [4]
+.skip5:
+    LD        DE,(0x5BC9)                        [4]
+    SRA       4,DE                               [3]
+    DEC       2,BC                               [2]
+    DEC       2,DE                               [2]
+    CALL      sub_206F9E                         [4]
+.done:
+    RET                                          [1]
+
+.org 0x206EB6
+
+sub_206EB6:
+    LD        XWA,(wMapPtr)                      [4]
+    EXTS      XBC                                [2]
+    DIVS      XBC,(XWA)                          [2]
+    LD        BC,QBC                             [3]
+    OR        BC,BC                              [2]
+    JR        PL,.skip                           [2]
+    ADD       BC,(XWA)                           [2]
+.skip:
+    EXTS      XDE                                [2]
+    DIVS      XDE,(XWA+2)                        [3]
+    LD        DE,QDE                             [3]
+    OR        DE,DE                              [2]
+    JR        PL,.skip2                          [2]
+    ADD       DE,(XWA+2)                         [3]
+.skip2:
+    LD        HL,(XWA)                           [2]
+    MUL       XHL,DE                             [2]
+    ADD       HL,BC                              [2]
+    SLL       1,HL                               [3]
+    INC       4,XHL                              [2]
+    ADD       XHL,XWA                            [2]
+    LD        HL,(XHL)                           [2]
+    RET                                          [1]
+
+.org 0x206EE6
+
+sub_206EE6:
+    LD        XDE,0                              [2]
+    LD{1}     DE,HL                              [2]
+    SLL       3,DE                               [3]
+    ADD       XDE,(0x5BD5)                       [4]
+    AND       HL,0xE000                          [4]
+    BIT       6,H                                [3]
+    JR        Z,.skip                            [2]
+    LD        XBC,(XDE+4)                        [3]
+    LD        XDE,(XDE)                          [2]
+    JR        .skip2                             [2]
+.skip:
+    LD        XBC,(XDE)                          [2]
+    LD        XDE,(XDE+4)                        [3]
+.skip2:
+    BIT       7,H                                [3]
+    JR        Z,.skip3                           [2]
+    EX        BC,QBC                             [3]
+    EX        DE,QDE                             [3]
+.skip3:
+    LD        QHL,HL                             [3]
+    XOR       XBC,XHL                            [2]
+    XOR       XDE,XHL                            [2]
+    LD        HL,(0x5BCF)                        [4]
+    DEC       1,HL                               [2]
+    LD{1}     WA,BC                              [2]
+    AND       WA,0x1FF                           [4]
+    JR        Z,.skip4                           [2]
+    ADD       BC,HL                              [2]
+.skip4:
+    LD        WA,QBC                             [3]
+    AND       WA,0x1FF                           [4]
+    JR        Z,.skip5                           [2]
+    LD        WA,QBC                             [3]
+    ADD       WA,HL                              [2]
+    LD        QBC,WA                             [3]
+.skip5:
+    LD{1}     WA,DE                              [2]
+    AND       WA,0x1FF                           [4]
+    JR        Z,.skip6                           [2]
+    ADD       DE,HL                              [2]
+.skip6:
+    LD        WA,QDE                             [3]
+    AND       WA,0x1FF                           [4]
+    JR        Z,.done                            [2]
+    LD        WA,QDE                             [3]
+    ADD       WA,HL                              [2]
+    LD        QDE,WA                             [3]
+.done:
+    RET                                          [1]
 
 .org 0x206F55
 
@@ -9,6 +158,211 @@ swp_206F55:
     EXTZ      XHL                                [2]
     ADD       XHL,(wMetatileAttrPtr)             [4]
     LD        HL,(XHL)                           [2]
+    RET                                          [1]
+
+.org 0x206F69
+
+sub_206F69:
+    LD        XWA,0                              [2]
+    LD{1}     A,C                                [2]
+    LD{1}     W,E                                [2]
+    AND       WA,0xF0F                           [4]
+    SLL       3,A                                [3]
+    SRL       1,WA                               [3]
+    ADD       WA,0x9000                          [4]
+    PUSH      XWA                                [1]
+    CALL      sub_206EB6                         [4]
+    CALL      sub_206EE6                         [4]
+    POP       XWA                                [1]
+    LD        (XWA),XBC                          [2]
+    LD        (XWA+0x40),XDE                     [3]
+    RET                                          [1]
+
+.org 0x206F8D
+
+sub_206F8D:
+    LD        A,0xE                              [2]
+.loop:
+    PUSH      A                                  [1]
+    PUSH      BC                                 [1]
+    PUSH      DE                                 [1]
+    CALR      sub_206F69                         [3]
+    POP       DE                                 [1]
+    POP       BC                                 [1]
+    POP       A                                  [1]
+    INC       1,BC                               [2]
+    DJNZ      A,.loop                            [3]
+    RET                                          [1]
+
+.org 0x206F9E
+
+sub_206F9E:
+    LD        A,0xD                              [2]
+.loop:
+    PUSH      A                                  [1]
+    PUSH      BC                                 [1]
+    PUSH      DE                                 [1]
+    CALR      sub_206F69                         [3]
+    POP       DE                                 [1]
+    POP       BC                                 [1]
+    POP       A                                  [1]
+    INC       1,DE                               [2]
+    DJNZ      A,.loop                            [3]
+    RET                                          [1]
+
+.org 0x206FAF
+
+sub_206FAF:
+    LD        A,0xD                              [2]
+.loop:
+    PUSH      A                                  [1]
+    PUSH      BC                                 [1]
+    PUSH      DE                                 [1]
+    CALL      sub_206F8D                         [4]
+    POP       DE                                 [1]
+    POP       BC                                 [1]
+    POP       A                                  [1]
+    INC       1,DE                               [2]
+    DJNZ      A,.loop                            [3]
+    RET                                          [1]
+
+.org 0x206FC1
+
+loc_206FC1:
+    LD        WA,0                               [2]
+    LD        (0x5BCB),WA                        [4]
+    LD        (0x5BCD),WA                        [4]
+    LD        BC,(0x5BC7)                        [4]
+    LD        (0x584B),C                         [4]
+    SRA       4,BC                               [3]
+    LD        DE,(0x5BC9)                        [4]
+    LD        (0x584D),E                         [4]
+    SRA       4,DE                               [3]
+    DEC       2,BC                               [2]
+    DEC       2,DE                               [2]
+    CALL      sub_206FAF                         [4]
+    RET                                          [1]
+
+.org 0x206FEA
+
+sub_206FEA:
+    LD        XWA,0                              [2]
+    LD        (wJoyHistoryIndex),A               [4]
+    LD        (wJoyHeld),A                       [4]
+    LD        (wJoyPressed),A                    [4]
+    LD        (wJoyReleased),A                   [4]
+    LD        (wJoyResetCombo),A                 [4]
+    LD        XHL,wJoyHistory                    [5]
+    LD        C,0x40                             [2]
+.loop:
+    LD{1}     (XHL+),XWA                         [3]
+    DJNZ      C,.loop                            [3]
+    LDB       (0x5CDD),(SYS_JOYPAD)              [6]
+    RET                                          [1]
+
+.org 0x210423
+
+dyn_210423:
+    LD        WA,(XSP+4)                         [3]
+    PUSH      XHL                                [1]
+    LD        XHL,(XHL+4)                        [3]
+    CALL      LoadCompressedTiles                [4]
+    POP       XHL                                [1]
+    LD        XHL,(XHL+8)                        [3]
+    LD        DE,(XSP)                           [2]
+    LD        BC,(XSP+2)                         [3]
+    LD        WA,(XSP+4)                         [3]
+    CALL      DrawTilemap                        [4]
+    POP       DE                                 [1]
+    POP       BC                                 [1]
+    POP       WA                                 [1]
+    RET                                          [1]
+
+.org 0x210442
+
+swp_210442:
+    RET                                          [1]
+
+.org 0x210443
+
+swp_210443:
+    LD        A,0                                [2]
+    LD        (wFadeLevel),A                     [4]
+    LD        A,1                                [2]
+    LD        (XIZ+TASK_ARG),A                   [3]
+    LD        A,0                                [2]
+    LD        (XIZ+DUNGEON_ID),A                 [3]
+    LD        A,0xFF                             [2]
+    LD        (0x5FF8),A                         [4]
+    LD        A,0xFF                             [2]
+    LD        (XIZ+0x23),A                       [3]
+    LD        XWA,swp_210485                     [5]
+    LD        (XIZ+TASK_FUNC),XWA                [3]
+    RET                                          [1]
+
+.org 0x210467
+
+swp_210467:
+    LD        A,3                                [2]
+    LD        (XIZ+TASK_ARG),A                   [3]
+    LD        A,5                                [2]
+    LD        (XIZ+DUNGEON_ID),A                 [3]
+    LD        A,0xFF                             [2]
+    LD        (0x5FF9),A                         [4]
+    LD        A,0xFF                             [2]
+    LD        (XIZ+0x23),A                       [3]
+    LD        XWA,swp_210485                     [5]
+    LD        (XIZ+TASK_FUNC),XWA                [3]
+    RET                                          [1]
+
+.org 0x210485
+
+swp_210485:
+    LD        A,(XIZ+TASK_ARG)                   [3]
+    CP        A,5                                [2]
+    JR        Z,.skip4                           [2]
+    CP        A,1                                [2]
+    JR        NZ,.skip                           [2]
+    CALL      sub_2106CB                         [4]
+    LD        A,2                                [2]
+    LD        (XIZ+TASK_ARG),A                   [3]
+    JR        .done                              [2]
+.skip:
+    CP        A,2                                [2]
+    JR        NZ,.skip2                          [2]
+    CALL      sub_210C4E                         [4]
+    JR        .done                              [2]
+.skip2:
+    CP        A,3                                [2]
+    JR        NZ,.skip3                          [2]
+    CALL      sub_210D34                         [4]
+    LD        A,4                                [2]
+    LD        (XIZ+TASK_ARG),A                   [3]
+    JR        .done                              [2]
+.skip3:
+    CP        A,4                                [2]
+    JR        NZ,.skip4                          [2]
+    CALL      DungeonStep                        [4]
+    JR        .done                              [2]
+.skip4:
+    LD        A,1                                [2]
+    LD        (XIZ+TASK_ARG),A                   [3]
+    LD        A,0                                [2]
+    LD        (0x584B),A                         [4]
+    LD        (0x584D),A                         [4]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
+    CP        A,5                                [2]
+    JR        Z,.skip5                           [2]
+    LD        A,(XIZ+DUNGEON_MODE)               [3]
+    LD        (0x5FF8),A                         [4]
+    CALL      EndTask                            [4]
+    JR        .done                              [2]
+.skip5:
+    LD        A,(XIZ+DUNGEON_MODE)               [3]
+    LD        (0x5FF9),A                         [4]
+    CALL      EndTask                            [4]
+    JR        .done                              [2]
+.done:
     RET                                          [1]
 
 .org 0x2104EF
@@ -27,7 +381,7 @@ swp_2104EF:
     JR        .skip2                             [2]
 .skip:
     LD        WA,0                               [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     SUB       A,1                                [3]
     LD        HL,0x30                            [3]
     ADD       HL,WA                              [2]
@@ -36,6 +390,49 @@ swp_2104EF:
     LD        DE,0                               [2]
 .skip2:
     CALL      DrawPortrait                       [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x210520
+
+swp_210520:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        HL,0x10                            [3]
+    LD        A,1                                [2]
+    LD        C,0xA                              [2]
+    LD        E,3                                [2]
+    CALL      dyn_207494                         [4]
+    LD        XWA,0                              [2]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
+    SLL       2,A                                [3]
+    LD        XHL,0x2274D7                       [5]
+    ADD       XHL,XWA                            [2]
+    LD        XHL,(XHL)                          [2]
+    LD        A,1                                [2]
+    CALL      dyn_2076F3                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x21054D
+
+swp_21054D:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        A,1                                [2]
+    LD        C,1                                [2]
+    LD        E,0x21                             [2]
+    CALL      dyn_2074C0                         [4]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -178,6 +575,378 @@ sub_2105F1:
     POP       XHL                                [1]
     RET                                          [1]
 
+.org 0x210600
+
+sub_210600:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        XHL,Gfx_2C8691                     [5]
+    LD        WA,0x10                            [3]
+    CALL      LoadCompressedTiles                [4]
+    LD        XHL,Pal_2C865D                     [5]
+    LD        A,1                                [2]
+    LD        C,1                                [2]
+    CALL      LoadPalettes                       [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x210622
+
+sub_210622:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    PUSH      A                                  [1]
+    EXTZ      WA                                 [2]
+    EXTZ      XWA                                [2]
+    SLL       2,XWA                              [3]
+    LD        XHL,0x2275A1                       [5]
+    ADD       XHL,XWA                            [2]
+    LD        BC,(XHL)                           [2]
+    INC       2,XHL                              [2]
+    LD        DE,(XHL)                           [2]
+    SUB       BC,8                               [4]
+    SUB       DE,0xC                             [4]
+    POP       A                                  [1]
+    LD        W,(XIZ+0x2D)                       [3]
+    SRA       3,W                                [3]
+    ADD       A,W                                [2]
+    AND       A,3                                [3]
+    EXTZ      WA                                 [2]
+    SLL       2,WA                               [3]
+    ADD       WA,0x10                            [4]
+    LD        HL,0                               [2]
+    SLL       13,HL                              [3]
+    OR        WA,HL                              [2]
+    LD        HL,1                               [2]
+    SLL       9,HL                               [3]
+    OR        WA,HL                              [2]
+    LD        QB,2                               [3]
+    LD        QD,2                               [3]
+    CALL      dyn_206BFF                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x210675
+
+sub_210675:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        HL,0x60                            [3]
+    LD        C,4                                [2]
+.loop:
+    PUSH      C                                  [2]
+    PUSH      HL                                 [1]
+    CALL      CheckEventFlag                     [4]
+    CP        L,0                                [2]
+    JR        Z,.skip                            [2]
+    POP       HL                                 [1]
+    PUSH      HL                                 [1]
+    SUB       HL,0x60                            [4]
+    LD{1}     A,L                                [2]
+    CALR      sub_210622                         [3]
+.skip:
+    POP       HL                                 [1]
+    POP       C                                  [2]
+    INC       1,HL                               [2]
+    DJNZ      C,.loop                            [3]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x2106A1
+
+sub_2106A1:
+    PUSH      XHL                                [1]
+    PUSH      XWA                                [1]
+    LD        XWA,0                              [2]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
+    SLL       2,XWA                              [3]
+    LD        XHL,0x227473                       [5]
+    ADD       XHL,XWA                            [2]
+    LD        BC,(XHL)                           [2]
+    INC       2,XHL                              [2]
+    LD        DE,(XHL)                           [2]
+    POP       XWA                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x2106BB
+
+sub_2106BB:
+    PUSH      XHL                                [1]
+    PUSH      XWA                                [1]
+    LD        WA,(XIZ+TASK_CHILDREN)             [3]
+    CP        WA,0                               [2]
+    JR        Z,.skip                            [2]
+    CALL      dyn_20636D                         [4]
+.skip:
+    POP       XWA                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x2106CB
+
+sub_2106CB:
+    LD        A,1                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    RET                                          [1]
+
+.org 0x2106D1
+
+swp_2106D1:
+    PUSH      A                                  [1]
+    LD        A,1                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    LD        A,0                                [2]
+    LD        (XIZ+DUNGEON_ID),A                 [3]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x2106DE
+
+sub_2106DE:
+    CALL      dyn_206803                         [4]
+    CALL      dyn_206825                         [4]
+    CALL      dyn_216EDE                         [4]
+    CALL      dyn_216FB1                         [4]
+    CALL      dyn_216F8E                         [4]
+    LD        A,1                                [2]
+    CALR      swp_2104EF                         [3]
+    LD        A,1                                [2]
+    LD        (XIZ+DUNGEON_FACING),A             [3]
+    CALR      sub_210600                         [3]
+    LD        A,0                                [2]
+    LD        (XIZ+0x2D),A                       [3]
+    LD        A,2                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    LD        XWA,0x14                           [5]
+    CALL      PlayMusic                          [4]
+    LD        WA,0x35                            [3]
+    CALL      SoundCommand                       [4]
+    RET                                          [1]
+
+.org 0x21071A
+
+sub_21071A:
+    CALL      dyn_216FC3                         [4]
+    CP        A,1                                [2]
+    JR        Z,.done                            [2]
+    LD        A,0                                [2]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
+    LD        A,3                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+.done:
+    RET                                          [1]
+
+.org 0x21072D
+
+sub_21072D:
+    LD        A,(wJoyPressed)                    [4]
+    BIT       BIT_A_BUTTON,A                     [3]
+    JR        Z,.skip                            [2]
+    JR        .skip3                             [2]
+.skip:
+    BIT       5,A                                [3]
+    JR        Z,.skip2                           [2]
+    PUSH      WA                                 [1]
+    LD        WA,0x82                            [3]
+    CALL      SoundCommand                       [4]
+    POP       WA                                 [1]
+    CALR      sub_210838                         [3]
+    JR        .done                              [2]
+.skip2:
+    LD        A,(XIZ+DUNGEON_STEPS)              [3]
+    INC       1,A                                [2]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
+    CP        A,0x2D                             [3]
+    JR        C,.done                            [2]
+.skip3:
+    LD        A,4                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+.done:
+    RET                                          [1]
+
+.org 0x21075E
+
+sub_21075E:
+    LD        A,(wJoyPressed)                    [4]
+    BIT       BIT_A_BUTTON,A                     [3]
+    JR        Z,.skip2                           [2]
+    PUSH      WA                                 [1]
+    LD        WA,0x81                            [3]
+    CALL      SoundCommand                       [4]
+    POP       WA                                 [1]
+    CALR      sub_2106BB                         [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
+    CP        A,0                                [2]
+    JR        Z,.skip                            [2]
+    CALR      sub_21081D                         [3]
+    JR        .done                              [2]
+.skip:
+    CALR      sub_210838                         [3]
+    JR        .done                              [2]
+.skip2:
+    BIT       5,A                                [3]
+    JR        Z,.skip3                           [2]
+    PUSH      WA                                 [1]
+    LD        WA,0x82                            [3]
+    CALL      SoundCommand                       [4]
+    POP       WA                                 [1]
+    CALR      sub_2106BB                         [3]
+    CALR      sub_210838                         [3]
+    JR        .done                              [2]
+.skip3:
+    AND       A,0xF                              [3]
+    JR        Z,.done                            [2]
+    CP        A,1                                [2]
+    JR        NZ,.skip4                          [2]
+    LD        A,0                                [2]
+    JR        .skip12                            [2]
+.skip4:
+    CP        A,2                                [2]
+    JR        NZ,.skip5                          [2]
+    LD        A,1                                [2]
+    JR        .skip12                            [2]
+.skip5:
+    CP        A,4                                [2]
+    JR        NZ,.skip6                          [2]
+    LD        A,2                                [2]
+    JR        .skip12                            [2]
+.skip6:
+    CP        A,8                                [3]
+    JR        NZ,.skip7                          [2]
+    LD        A,3                                [2]
+    JR        .skip12                            [2]
+.skip7:
+    CP        A,9                                [3]
+    JR        NZ,.skip8                          [2]
+    LD        A,4                                [2]
+    JR        .skip12                            [2]
+.skip8:
+    CP        A,0xA                              [3]
+    JR        NZ,.skip9                          [2]
+    LD        A,5                                [2]
+    JR        .skip12                            [2]
+.skip9:
+    CP        A,6                                [2]
+    JR        NZ,.skip10                         [2]
+    LD        A,6                                [2]
+    JR        .skip12                            [2]
+.skip10:
+    CP        A,5                                [2]
+    JR        NZ,.skip11                         [2]
+    LD        A,7                                [2]
+    JR        .skip12                            [2]
+.skip11:
+    JR        .done                              [2]
+.skip12:
+    CALR      sub_2107F9                         [3]
+    CP        A,0xFF                             [3]
+    JR        Z,.done                            [2]
+    PUSH      WA                                 [1]
+    LD        WA,0x80                            [3]
+    CALL      SoundCommand                       [4]
+    POP       WA                                 [1]
+    CALR      sub_2106BB                         [3]
+.done:
+    RET                                          [1]
+
+.org 0x2107F9
+
+sub_2107F9:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    LD        L,A                                [2]
+    LD        XWA,0                              [2]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
+    MUL{1}    WA,8                               [3]
+    ADD       A,L                                [2]
+    LD        XHL,0x22744B                       [5]
+    ADD       XHL,XWA                            [2]
+    LD        A,(XHL)                            [2]
+    CP        A,0xFF                             [3]
+    JR        Z,.skip                            [2]
+    LD        (XIZ+DUNGEON_ID),A                 [3]
+.skip:
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x21081D
+
+sub_21081D:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        A,1                                [2]
+    LD        (XIZ+0x12),A                       [3]
+    CALL      dyn_216EDE                         [4]
+    CALL      swp_216FBA                         [4]
+    LD        A,5                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x210838
+
+sub_210838:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        A,3                                [2]
+    LD        (XIZ+0x12),A                       [3]
+    CALL      dyn_216EDE                         [4]
+    CALL      swp_216FBA                         [4]
+    LD        A,5                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x210853
+
+sub_210853:
+    CALL      dyn_216FC3                         [4]
+    CP        A,1                                [2]
+    JR        Z,.done                            [2]
+    LD        A,(XIZ+0x12)                       [3]
+    CP        A,3                                [2]
+    JR        Z,.skip                            [2]
+    CALR      sub_210877                         [3]
+    JR        .done                              [2]
+.skip:
+    LD        A,1                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    LD        A,5                                [2]
+    LD        (XIZ+TASK_ARG),A                   [3]
+    LD        A,0                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+.done:
+    RET                                          [1]
+
 .org 0x210877
 
 sub_210877:
@@ -194,7 +963,7 @@ sub_210877:
     LD        A,2                                [2]
     CALL      dyn_2076F3                         [4]
     LD        XWA,0                              [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     SLL       2,A                                [3]
     LD        XHL,0x2274D7                       [5]
     ADD       XHL,XWA                            [2]
@@ -211,7 +980,7 @@ sub_210877:
     CALL      swp_216F62                         [4]
     CALL      dyn_216FB1                         [4]
     LD        A,6                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -225,9 +994,9 @@ sub_2108D0:
     CP        A,1                                [2]
     JR        Z,.done                            [2]
     LD        A,0                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     LD        A,7                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .done:
     RET                                          [1]
 
@@ -248,24 +1017,110 @@ sub_2108E3:
     CALR      sub_210BF3                         [3]
     JR        .done                              [2]
 .skip2:
-    LD        A,(XIZ+0x2B)                       [3]
+    LD        A,(XIZ+DUNGEON_STEPS)              [3]
     INC       1,A                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     CP        A,0x5A                             [3]
     JR        C,.done                            [2]
 .skip3:
     LD        A,2                                [2]
     CALL      dyn_2075CC                         [4]
     LD        A,0                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     LD        A,0                                [2]
     LD        (XIZ+0x25),A                       [3]
     LD        A,0                                [2]
     LD        (XIZ+0x26),A                       [3]
     LD        A,8                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .done:
     RET                                          [1]
+
+.org 0x210929
+
+swp_210929:
+    LD        A,(wJoyPressed)                    [4]
+    BIT       BIT_B_BUTTON,A                     [3]
+    JR        Z,.skip                            [2]
+    PUSH      WA                                 [1]
+    LD        WA,0x82                            [3]
+    CALL      SoundCommand                       [4]
+    POP       WA                                 [1]
+    CALR      sub_210BF3                         [3]
+    JRL       loc_2109F3                         [3]
+.skip:
+    LD        A,(XIZ+0x26)                       [3]
+    CP        A,0                                [2]
+    JR        Z,.skip3                           [2]
+    LD        A,(wJoyPressed)                    [4]
+    BIT       BIT_A_BUTTON,A                     [3]
+    JR        Z,.skip2                           [2]
+    LD        A,0                                [2]
+    LD        (XIZ+0x26),A                       [3]
+    LD        A,(XIZ+0x25)                       [3]
+    CP        A,1                                [2]
+    JRL       Z,.skip8                           [3]
+.skip2:
+    JRL       loc_2109F3                         [3]
+.skip3:
+    LD        A,2                                [2]
+    CALL      GetTextBox                         [4]
+    LD        XHL,(XWA+8)                        [3]
+    CP{2}     XHL,0                              [6]
+    JR        Z,.skip5                           [2]
+    LD        A,(wJoyPressed)                    [4]
+    AND       A,A_BUTTON|B_BUTTON                [3]
+    JR        Z,.skip4                           [2]
+    LD        A,2                                [2]
+    CALL      GetTextBox                         [4]
+    LD        C,(XWA+0x10)                       [3]
+    LD        (XIZ+0x23),C                       [3]
+    LD        C,0                                [2]
+    LD        (XWA+0x10),C                       [3]
+.skip4:
+    JR        loc_2109F3                         [2]
+.skip5:
+    LD        C,(XIZ+0x23)                       [3]
+    CP        C,0xFF                             [3]
+    JR        Z,.skip6                           [2]
+    LD        A,2                                [2]
+    CALL      GetTextBox                         [4]
+    LD        (XWA+0x10),C                       [3]
+    LD        A,0xFF                             [2]
+    LD        (XIZ+0x23),A                       [3]
+.skip6:
+    LD        A,(XIZ+0x25)                       [3]
+    CP        A,2                                [2]
+    JR        NZ,.skip7                          [2]
+    LD        A,1                                [2]
+    LD        (XIZ+0x25),A                       [3]
+    LD        A,1                                [2]
+    LD        (XIZ+0x26),A                       [3]
+    LD        A,2                                [2]
+    CALL      swp_211DDE                         [4]
+    JR        loc_2109F3                         [2]
+.skip7:
+    LD        XWA,0                              [2]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
+    SUB       A,1                                [3]
+    SLL       2,A                                [3]
+    LD        XHL,0x227580                       [5]
+    ADD       XHL,XWA                            [2]
+    LD        XHL,(XHL)                          [2]
+    LD        A,2                                [2]
+    CALL      GetTextBox                         [4]
+    LD        (XWA+8),XHL                        [3]
+    LD        A,2                                [2]
+    LD        (XIZ+0x25),A                       [3]
+    LD        A,(XIZ+DUNGEON_STEPS)              [3]
+    INC       1,A                                [2]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
+    JR        loc_2109F3                         [2]
+.skip8:
+    LD        A,0                                [2]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
+    LD        A,9                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 
 .org 0x2109F3
 
@@ -391,7 +1246,7 @@ sub_210AA4:
     AND       A,A_BUTTON|B_BUTTON                [3]
     JR        Z,.skip4                           [2]
     LD        A,0                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
 .skip4:
     LD        A,(XIZ+0x27)                       [3]
     AND       A,A                                [2]
@@ -413,7 +1268,7 @@ sub_210AA4:
     JR        .done                              [2]
 .skip6:
     LD        A,(XIZ+0x27)                       [3]
-    LD        W,(XIZ+0x2B)                       [3]
+    LD        W,(XIZ+DUNGEON_STEPS)              [3]
     CP        A,W                                [2]
     JR        Z,.skip7                           [2]
     JR        NC,.skip7                          [2]
@@ -428,7 +1283,7 @@ sub_210AA4:
     LD        A,4                                [2]
     CALL      dyn_2075CC                         [4]
     LD        XWA,0                              [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     SUB       A,1                                [3]
     SLL       2,A                                [3]
     LD        XHL,0x227580                       [5]
@@ -439,16 +1294,16 @@ sub_210AA4:
     LD        A,2                                [2]
     LD        (XIZ+0x25),A                       [3]
     LD        A,6                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     LD        A,0                                [2]
     LD        (XIZ+0x27),A                       [3]
     LD        (XIZ+0x2C),A                       [3]
     JR        .done                              [2]
 .skip10:
     LD        A,0                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     LD        A,9                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .done:
     RET                                          [1]
 
@@ -457,9 +1312,9 @@ sub_210AA4:
 sub_210B72:
     CALR      sub_2105DE                         [3]
     LD        A,0                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     LD        A,0xA                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     RET                                          [1]
 
 .org 0x210B80
@@ -520,6 +1375,25 @@ sub_210B80:
 .done:
     RET                                          [1]
 
+.org 0x210BF3
+
+sub_210BF3:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        A,0                                [2]
+    LD        (XIZ+0x12),A                       [3]
+    CALL      dyn_216EDE                         [4]
+    CALL      swp_216FBA                         [4]
+    LD        A,0xB                              [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x210C0E
 
 sub_210C0E:
@@ -532,7 +1406,7 @@ sub_210C0E:
     CALL      dyn_216EDE                         [4]
     CALL      swp_216FBA                         [4]
     LD        A,0xB                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -557,8 +1431,129 @@ sub_210C29:
 .skip:
     LD        A,0xC                              [2]
 .skip2:
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .done:
+    RET                                          [1]
+
+.org 0x210C4E
+
+sub_210C4E:
+    LD        A,(XIZ+DUNGEON_MODE)               [3]
+    CP        A,1                                [2]
+    JR        NZ,.skip                           [2]
+    CALR      sub_2106DE                         [3]
+    JR        .skip13                            [2]
+.skip:
+    CP        A,2                                [2]
+    JR        NZ,.skip2                          [2]
+    CALR      sub_21071A                         [3]
+    JR        .skip13                            [2]
+.skip2:
+    CP        A,3                                [2]
+    JR        NZ,.skip3                          [2]
+    CALR      sub_21072D                         [3]
+    JR        .skip13                            [2]
+.skip3:
+    CP        A,4                                [2]
+    JR        NZ,.skip4                          [2]
+    CALR      sub_21075E                         [3]
+    JR        .skip13                            [2]
+.skip4:
+    CP        A,5                                [2]
+    JR        NZ,.skip5                          [2]
+    CALR      sub_210853                         [3]
+    JR        .skip13                            [2]
+.skip5:
+    CP        A,6                                [2]
+    JR        NZ,.skip6                          [2]
+    CALR      sub_2108D0                         [3]
+    JR        .skip13                            [2]
+.skip6:
+    CP        A,7                                [2]
+    JR        NZ,.skip7                          [2]
+    CALR      sub_2108E3                         [3]
+    JR        .skip13                            [2]
+.skip7:
+    CP        A,8                                [3]
+    JR        NZ,.skip8                          [2]
+    CALR      sub_210AA4                         [3]
+    JR        .skip13                            [2]
+.skip8:
+    CP        A,9                                [3]
+    JR        NZ,.skip9                          [2]
+    CALR      sub_210B72                         [3]
+    JR        .skip13                            [2]
+.skip9:
+    CP        A,0xA                              [3]
+    JR        NZ,.skip10                         [2]
+    CALR      sub_210B80                         [3]
+    JR        .skip13                            [2]
+.skip10:
+    CP        A,0xB                              [3]
+    JR        NZ,.skip11                         [2]
+    CALR      sub_210C29                         [3]
+    JR        .skip13                            [2]
+.skip11:
+    CP        A,0xC                              [3]
+    JR        NZ,.skip12                         [2]
+    LD        A,3                                [2]
+    LD        (XIZ+TASK_ARG),A                   [3]
+    JR        .done                              [2]
+.skip12:
+    LD        A,1                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+.skip13:
+    LD        A,(XIZ+DUNGEON_MODE)               [3]
+    CP        A,4                                [2]
+    JR        C,.skip14                          [2]
+    CP        A,6                                [2]
+    JR        NC,.skip14                         [2]
+    CALL      LoadDungeonPalettes                [4]
+    CALR      sub_2106A1                         [3]
+    CALL      sub_211D92                         [4]
+    CALR      sub_210675                         [3]
+    LD        A,(XIZ+DUNGEON_MODE)               [3]
+    CP        A,4                                [2]
+    JR        NZ,.skip14                         [2]
+    LD        WA,(XIZ+TASK_CHILDREN)             [3]
+    CP        WA,0                               [2]
+    JR        NZ,.skip14                         [2]
+    LD        XHL,PlayBattleEffect               [5]
+    CALL      StartChildTask                     [4]
+    LD        WA,0                               [2]
+    LD        (XHL+0x1E),WA                      [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
+    EXTZ      WA                                 [2]
+    ADD       WA,0xCF                            [4]
+    LD        (XHL+0x20),WA                      [3]
+    JR        .skip17                            [2]
+.skip14:
+    CP        A,0xA                              [3]
+    JR        NZ,.skip17                         [2]
+    LD        XWA,0                              [2]
+    LD        A,(XIZ+0x20)                       [3]
+    AND       A,A                                [2]
+    JR        NZ,.skip15                         [2]
+    LD        BC,0x58                            [3]
+    JR        .skip16                            [2]
+.skip15:
+    LD        BC,0x78                            [3]
+.skip16:
+    LD        DE,0x44                            [3]
+    CALL      dyn_211DBD                         [4]
+    JR        .skip17                            [2]
+.skip17:
+    LD        A,(XIZ+0x2D)                       [3]
+    INC       1,A                                [2]
+    LD        (XIZ+0x2D),A                       [3]
+.done:
+    RET                                          [1]
+
+.org 0x210D34
+
+sub_210D34:
+    LD        A,1                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     RET                                          [1]
 
 .org 0x210D3A
@@ -566,7 +1561,7 @@ sub_210C29:
 sub_210D3A:
     CALL      RollFloorMaps                      [4]
     LD        A,1                                [2]
-    LD        W,(XIZ+0x10)                       [3]
+    LD        W,(XIZ+DUNGEON_ID)                 [3]
     CP        W,5                                [2]
     JR        Z,.skip                            [2]
     LD        W,(wJoyHeld)                       [4]
@@ -592,12 +1587,12 @@ sub_210D3A:
     JR        Z,.skip                            [2]
     LD        A,1                                [2]
 .skip:
-    LD        W,(XIZ+0x16)                       [3]
+    LD        W,(XIZ+DUNGEON_FLOOR_COUNT)        [3]
     CP        A,W                                [2]
     JR        C,.skip2                           [2]
-    LD        A,(XIZ+0x16)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR_COUNT)        [3]
 .skip2:
-    LD        (XIZ+0x11),A                       [3]
+    LD        (XIZ+DUNGEON_FLOOR),A              [3]
     LD        A,1                                [2]
     LD        (XIZ+0x12),A                       [3]
     CALL      sub_210EBD                         [4]
@@ -618,9 +1613,9 @@ sub_210D95:
     LD        A,0                                [2]
     LD        (XIZ+0x2D),A                       [3]
     LD        A,1                                [2]
-    LD        (XIZ+0x15),A                       [3]
+    LD        (XIZ+DUNGEON_FACING),A             [3]
     LD        A,0                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     CALL      dyn_216EDE                         [4]
     CALL      dyn_216FB1                         [4]
     CALL      dyn_216F8E                         [4]
@@ -642,7 +1637,7 @@ sub_210DD4:
     XOR       A,A                                [2]
     LD        (XIZ+0x2C),A                       [3]
     LD        A,3                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     CALL      sub_212A1E                         [4]
 .done:
     RET                                          [1]
@@ -659,7 +1654,7 @@ sub_210DEB:
     LD        WA,0x85                            [3]
     CALL      SoundCommand                       [4]
     LD        A,4                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -678,7 +1673,7 @@ sub_210E08:
     CALL      dyn_216EDE                         [4]
     CALL      swp_216FBA                         [4]
     LD        A,4                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -696,53 +1691,53 @@ sub_210E23:
     CP        A,3                                [2]
     JR        NZ,.skip                           [2]
     LD        A,0                                [2]
-    LD        (XIZ+0x11),A                       [3]
+    LD        (XIZ+DUNGEON_FLOOR),A              [3]
     JR        .skip4                             [2]
 .skip:
     CP        A,2                                [2]
     JR        NZ,.skip2                          [2]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     SUB       A,1                                [3]
     JR        C,.skip4                           [2]
-    LD        (XIZ+0x11),A                       [3]
+    LD        (XIZ+DUNGEON_FLOOR),A              [3]
     JR        .skip4                             [2]
 .skip2:
     CP        A,1                                [2]
     JR        NZ,.skip3                          [2]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     INC       1,A                                [2]
-    LD        W,(XIZ+0x16)                       [3]
+    LD        W,(XIZ+DUNGEON_FLOOR_COUNT)        [3]
     CP        W,A                                [2]
     JR        C,.skip4                           [2]
-    LD        (XIZ+0x11),A                       [3]
+    LD        (XIZ+DUNGEON_FLOOR),A              [3]
     JR        .skip4                             [2]
 .skip3:
     LD        A,0                                [2]
     LD        (XIZ+0x12),A                       [3]
 .skip4:
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     AND       A,A                                [2]
     JR        NZ,.skip6                          [2]
     LD        A,0                                [2]
     LD        (0x584B),A                         [4]
     LD        (0x584D),A                         [4]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        Z,.skip5                           [2]
     LD        A,1                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     JR        .done                              [2]
 .skip5:
     LD        A,5                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     LD        A,0                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     CALL      dyn_216E3A                         [4]
     JR        .done                              [2]
 .skip6:
     CALR      sub_210D95                         [3]
     LD        A,2                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .done:
     RET                                          [1]
 
@@ -771,13 +1766,13 @@ sub_210EBD:
     PUSH      XDE                                [1]
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     DEC       1,A                                [2]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
     ADD       XWA,5                              [6]
     CALL      PlayMusic                          [4]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     DEC       1,A                                [2]
     EXTZ      WA                                 [2]
     ADD       WA,0x25                            [4]
@@ -797,9 +1792,9 @@ sub_210F39:
     CP        A,3                                [2]
     JR        NZ,.skip                           [2]
     LD        A,5                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     LD        A,2                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JR        .done                              [2]
 .skip:
     CALR      sub_210F56                         [3]
@@ -812,14 +1807,14 @@ sub_210F56:
     PUSH      A                                  [1]
     CALL      sub_212B9F                         [4]
     LD        A,8                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       A                                  [1]
     RET                                          [1]
 
 .org 0x210F62
 
 sub_210F62:
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     CP        A,0x7F                             [3]
     JR        NZ,.skip                           [2]
     CALL      sub_210EA0                         [4]
@@ -831,7 +1826,7 @@ sub_210F62:
     LD        A,0                                [2]
     LD        (XIZ+0x2C),A                       [3]
     LD        A,3                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .done:
     RET                                          [1]
 
@@ -844,7 +1839,7 @@ sub_210F86:
     PUSH      XWA                                [1]
     CALL      sub_212A69                         [4]
     LD        A,9                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -855,7 +1850,7 @@ sub_210F86:
 
 sub_210F98:
     LD        A,0xA                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     CALL      sub_21255D                         [4]
     RET                                          [1]
 
@@ -873,7 +1868,7 @@ swp_210FA7:
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
     LD        A,0xB                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -886,7 +1881,7 @@ sub_210FB5:
     XOR       A,A                                [2]
     LD        (XIZ+0x2C),A                       [3]
     LD        A,3                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     RET                                          [1]
 
 .org 0x210FC0
@@ -898,7 +1893,7 @@ sub_210FC0:
     PUSH      XWA                                [1]
     CALL      sub_212A69                         [4]
     LD        A,0xC                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     CALL      sub_21266E                         [4]
     POP       XWA                                [1]
     POP       XBC                                [1]
@@ -912,6 +1907,23 @@ sub_210FD6:
     CALL      OpenChest                          [4]
     RET                                          [1]
 
+.org 0x210FDB
+
+swp_210FDB:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    XOR       A,A                                [2]
+    LD        (XIZ+0x2C),A                       [3]
+    LD        A,3                                [2]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x210FEE
 
 sub_210FEE:
@@ -921,7 +1933,7 @@ sub_210FEE:
     PUSH      XWA                                [1]
     CALL      sub_212A69                         [4]
     LD        A,0xD                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     CALL      swp_212CAF                         [4]
     POP       XWA                                [1]
     POP       XBC                                [1]
@@ -945,7 +1957,7 @@ swp_211009:
     XOR       A,A                                [2]
     LD        (XIZ+0x2C),A                       [3]
     LD        A,3                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -983,9 +1995,9 @@ sub_21101C:
 .skip5:
     LD        BC,0                               [2]
     LD        DE,0                               [2]
-    LD        C,(XIZ+0x13)                       [3]
+    LD        C,(XIZ+DUNGEON_X)                  [3]
     ADD       C,L                                [2]
-    LD        E,(XIZ+0x14)                       [3]
+    LD        E,(XIZ+DUNGEON_Y)                  [3]
     ADD       E,H                                [2]
     PUSH      WA                                 [1]
     PUSH      BC                                 [1]
@@ -1178,7 +2190,7 @@ sub_2111A2:
     JR        Z,.skip                            [2]
     LD        (wUnitHP),WA                       [4]
     LD        A,3                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JR        .skip2                             [2]
 .skip:
     CALL      sub_212A69                         [4]
@@ -1190,11 +2202,11 @@ sub_2111A2:
     LD        A,6                                [2]
     CALL      GetTextBox                         [4]
     LD        (XWA+8),XHL                        [3]
-    LD        A,(XIZ+0x15)                       [3]
+    LD        A,(XIZ+DUNGEON_FACING)             [3]
     SLA       4,A                                [3]
     LD        (XIZ+0x2D),A                       [3]
     LD        A,0xF                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .skip2:
     POP       XWA                                [1]
     POP       XBC                                [1]
@@ -1216,9 +2228,9 @@ CheckEncounter:
     LD        (0x5BCB),WA                        [4]
     LD        (0x5BCD),WA                        [4]
     LD        A,(XIZ+0x1E)                       [3]
-    LD        (XIZ+0x13),A                       [3]
+    LD        (XIZ+DUNGEON_X),A                  [3]
     LD        A,(XIZ+0x1F)                       [3]
-    LD        (XIZ+0x14),A                       [3]
+    LD        (XIZ+DUNGEON_Y),A                  [3]
     LD        A,0xFF                             [2]
     CALR      sub_211060                         [3]
     LD{1}     DE,HL                              [2]
@@ -1243,12 +2255,12 @@ CheckEncounter:
     CALR      sub_210FEE                         [3]
     JRL       .done                              [3]
 .skip3:
-    LD        A,(XIZ+0x2B)                       [3]
+    LD        A,(XIZ+DUNGEON_STEPS)              [3]
     INC       1,A                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     LD        XHL,EncounterChance                [5]
     LD        XWA,0                              [2]
-    LD        A,(XIZ+0x2B)                       [3]
+    LD        A,(XIZ+DUNGEON_STEPS)              [3]
     SUB       XWA,1                              [6]
     ADD       XHL,XWA                            [2]
     LD        W,(XHL)                            [2]
@@ -1263,9 +2275,9 @@ CheckEncounter:
     CALL      sub_212A69                         [4]
     CALL      sub_212B14                         [4]
     LD        A,0                                [2]
-    LD        (XIZ+0x2B),A                       [3]
+    LD        (XIZ+DUNGEON_STEPS),A              [3]
     LD        A,5                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JRL       .done                              [3]
 .skip4:
     LD        A,(wStatusRust)                    [4]
@@ -1275,7 +2287,7 @@ CheckEncounter:
     CALL      StartChildTask                     [4]
     LDW       (XHL+0xE),0xF                      [5]
     LD        A,0xE                              [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JRL       .done                              [3]
 .skip5:
     LD        A,(wJoyHeld)                       [4]
@@ -1316,12 +2328,12 @@ CheckEncounter:
     CP        A,1                                [2]
     JR        NZ,.skip9                          [2]
     LD        A,0                                [2]
-    LD        (XIZ+0x15),A                       [3]
+    LD        (XIZ+DUNGEON_FACING),A             [3]
     JRL       .skip28                            [3]
 .skip9:
     CP        A,9                                [3]
     JR        NZ,.skip13                         [2]
-    LD        A,(XIZ+0x15)                       [3]
+    LD        A,(XIZ+DUNGEON_FACING)             [3]
     CP        A,0                                [2]
     JR        NZ,.skip10                         [2]
     LD        A,3                                [2]
@@ -1342,12 +2354,12 @@ CheckEncounter:
     CP        A,8                                [3]
     JR        NZ,.skip14                         [2]
     LD        A,3                                [2]
-    LD        (XIZ+0x15),A                       [3]
+    LD        (XIZ+DUNGEON_FACING),A             [3]
     JR        .skip28                            [2]
 .skip14:
     CP        A,0xA                              [3]
     JR        NZ,.skip18                         [2]
-    LD        A,(XIZ+0x15)                       [3]
+    LD        A,(XIZ+DUNGEON_FACING)             [3]
     CP        A,1                                [2]
     JR        NZ,.skip15                         [2]
     LD        A,3                                [2]
@@ -1368,12 +2380,12 @@ CheckEncounter:
     CP        A,2                                [2]
     JR        NZ,.skip19                         [2]
     LD        A,1                                [2]
-    LD        (XIZ+0x15),A                       [3]
+    LD        (XIZ+DUNGEON_FACING),A             [3]
     JR        .skip28                            [2]
 .skip19:
     CP        A,6                                [2]
     JR        NZ,.skip23                         [2]
-    LD        A,(XIZ+0x15)                       [3]
+    LD        A,(XIZ+DUNGEON_FACING)             [3]
     CP        A,1                                [2]
     JR        NZ,.skip20                         [2]
     LD        A,2                                [2]
@@ -1394,12 +2406,12 @@ CheckEncounter:
     CP        A,4                                [2]
     JR        NZ,.skip24                         [2]
     LD        A,2                                [2]
-    LD        (XIZ+0x15),A                       [3]
+    LD        (XIZ+DUNGEON_FACING),A             [3]
     JR        .skip28                            [2]
 .skip24:
     CP        A,5                                [2]
     JR        NZ,.skip28                         [2]
-    LD        A,(XIZ+0x15)                       [3]
+    LD        A,(XIZ+DUNGEON_FACING)             [3]
     CP        A,0                                [2]
     JR        NZ,.skip25                         [2]
     LD        A,2                                [2]
@@ -1431,16 +2443,16 @@ CheckEncounter:
     CALL      SoundCommand                       [4]
     JR        .done                              [2]
 .skip30:
-    LD        (XIZ+0x15),A                       [3]
+    LD        (XIZ+DUNGEON_FACING),A             [3]
     LD        (XIZ+0x1E),C                       [3]
     LD        (XIZ+0x1F),E                       [3]
     XOR       WA,WA                              [2]
-    LD        A,(XIZ+0x13)                       [3]
+    LD        A,(XIZ+DUNGEON_X)                  [3]
     SUB       WA,BC                              [2]
     NEG       WA                                 [2]
     LD        (0x5BCB),WA                        [4]
     XOR       WA,WA                              [2]
-    LD        A,(XIZ+0x14)                       [3]
+    LD        A,(XIZ+DUNGEON_Y)                  [3]
     SUB       WA,DE                              [2]
     NEG       WA                                 [2]
     LD        (0x5BCD),WA                        [4]
@@ -1453,12 +2465,12 @@ CheckEncounter:
 
 ; [code+play] CheckEncounter after a step; ran into every battle_encounter_*
 DungeonStep:
-    LD        A,(XIZ+0xF)                        [3]
+    LD        A,(XIZ+DUNGEON_MODE)               [3]
     CP        A,1                                [2]
     JR        NZ,.skip                           [2]
     CALR      sub_210D3A                         [3]
     LD        A,2                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JRL       .skip17                            [3]
 .skip:
     CP        A,2                                [2]
@@ -1523,7 +2535,7 @@ DungeonStep:
 .skip13:
     CP        A,0xE                              [3]
     JR        NZ,.skip14                         [2]
-    LD        WA,(XIZ+0xC)                       [3]
+    LD        WA,(XIZ+TASK_CHILDREN)             [3]
     CP        WA,0                               [2]
     JR        NZ,.skip17                         [2]
     CALR      sub_2111A2                         [3]
@@ -1538,7 +2550,7 @@ DungeonStep:
     CP        C,2                                [2]
     JR        NZ,.skip17                         [2]
     LD        A,0x10                             [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JR        .skip17                            [2]
 .skip15:
     CP        A,0x10                             [3]
@@ -1547,15 +2559,15 @@ DungeonStep:
     AND       A,A_BUTTON|B_BUTTON                [3]
     JR        Z,.skip17                          [2]
     LD        A,5                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     LD        A,2                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JR        .skip17                            [2]
 .skip16:
     LD        A,1                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
 .skip17:
-    LD        A,(XIZ+0xF)                        [3]
+    LD        A,(XIZ+DUNGEON_MODE)               [3]
     CP        A,7                                [2]
     JR        Z,.done                            [2]
     CP        A,0xD                              [3]
@@ -1595,6 +2607,25 @@ DungeonStep:
 .done:
     RET                                          [1]
 
+.org 0x21154F
+
+swp_21154F:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    XOR       WA,WA                              [2]
+    LD        (0x5BC7),WA                        [4]
+    LD        (0x5BC9),WA                        [4]
+    LD        (0x5BCB),WA                        [4]
+    LD        (0x5BCD),WA                        [4]
+    CALL      loc_206FC1                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x21156E
 
 sub_21156E:
@@ -1602,10 +2633,10 @@ sub_21156E:
     PUSH      XDE                                [1]
     PUSH      XBC                                [1]
     PUSH      W                                  [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        Z,.skip                            [2]
-    LD        W,(XIZ+0x11)                       [3]
+    LD        W,(XIZ+DUNGEON_FLOOR)              [3]
     CP        W,7                                [2]
     JR        C,.skip3                           [2]
 .skip:
@@ -1619,7 +2650,7 @@ sub_21156E:
     LD{1}     A,L                                [2]
     JR        .skip4                             [2]
 .skip2:
-    LD        HL,0xA                             [3]
+    LD        HL,EVENT_STAGE_ENDING              [3]
     CALL      CheckEventFlag                     [4]
     LD{1}     A,L                                [2]
     JR        .skip4                             [2]
@@ -1767,7 +2798,7 @@ PickWorldChest:
     PUSH      XDE                                [1]
     PUSH      XBC                                [1]
     LD        XWA,0                              [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     SUB       A,1                                [3]
     MUL       XWA,7                              [4]
     LD        XDE,XWA                            [2]
@@ -1836,21 +2867,21 @@ SetMineChests:
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
     LD{1}     XHL,XIZ                            [2]
-    ADD       XHL,0x17                           [6]
+    ADD       XHL,DUNGEON_FLOOR_MAPS             [6]
     LD{1}     XDE,XHL                            [2]
     ADD       XDE,XWA                            [2]
     LD        XWA,0                              [2]
     LD        A,(XDE)                            [2]
-    MUL{1}    WA,8                               [3]
+    MUL{1}    WA,DUNGEON_MAP_SIZE                [3]
     LD        XDE,DungeonMaps                    [5]
     ADD       XDE,XWA                            [2]
-    ADD       XDE,4                              [6]
+    ADD       XDE,DUNGEON_MAP_CHESTS             [6]
     LD        XDE,(XDE)                          [2]
     LD        A,(XIZ+0x22)                       [3]
     PUSH      XWA                                [1]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
-    MUL       XWA,0x1E                           [4]
+    MUL       XWA,CHEST_FLOOR_SIZE               [4]
     LD        XHL,wChestTable                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -1922,7 +2953,7 @@ RollFloorChests:
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
     LD        (XIZ+0x22),A                       [3]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        NZ,.skip                           [2]
     CALR      SetMineChests                      [3]
@@ -1932,21 +2963,21 @@ RollFloorChests:
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
     LD{1}     XHL,XIZ                            [2]
-    ADD       XHL,0x17                           [6]
+    ADD       XHL,DUNGEON_FLOOR_MAPS             [6]
     LD{1}     XDE,XHL                            [2]
     ADD       XDE,XWA                            [2]
     LD        XWA,0                              [2]
     LD        A,(XDE)                            [2]
-    MUL{1}    WA,8                               [3]
+    MUL{1}    WA,DUNGEON_MAP_SIZE                [3]
     LD        XDE,DungeonMaps                    [5]
     ADD       XDE,XWA                            [2]
-    ADD       XDE,4                              [6]
+    ADD       XDE,DUNGEON_MAP_CHESTS             [6]
     LD        XDE,(XDE)                          [2]
     LD        A,(XIZ+0x22)                       [3]
     PUSH      XWA                                [1]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
-    MUL       XWA,0x1E                           [4]
+    MUL       XWA,CHEST_FLOOR_SIZE               [4]
     LD        XHL,wChestTable                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -2014,7 +3045,7 @@ RollAllChests:
     PUSH      XDE                                [1]
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
-    LD        C,(XIZ+0x16)                       [3]
+    LD        C,(XIZ+DUNGEON_FLOOR_COUNT)        [3]
     LD        A,0                                [2]
 .loop:
     CALR      RollFloorChests                    [3]
@@ -2034,12 +3065,12 @@ sub_2118B2:
     PUSH      XBC                                [1]
     PUSH      A                                  [1]
     PUSH      A                                  [1]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     DEC       1,A                                [2]
     PUSH      XWA                                [1]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
-    MUL       XWA,0x1E                           [4]
+    MUL       XWA,CHEST_FLOOR_SIZE               [4]
     LD        XHL,wChestTable                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -2075,12 +3106,12 @@ sub_2118F4:
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
     PUSH      A                                  [1]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     DEC       1,A                                [2]
     PUSH      XWA                                [1]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
-    MUL       XWA,0x1E                           [4]
+    MUL       XWA,CHEST_FLOOR_SIZE               [4]
     LD        XHL,wChestTable                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -2093,7 +3124,7 @@ sub_2118F4:
     CP        W,0xFE                             [3]
     JR        NZ,.skip                           [2]
     LD        XWA,0                              [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     DEC       1,XWA                              [2]
     MUL       XWA,0x42                           [4]
     LD        XDE,0x2276C9                       [5]
@@ -2134,12 +3165,12 @@ sub_211966:
     PUSH      XBC                                [1]
     LD{1}     BC,HL                              [2]
     PUSH      A                                  [1]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     DEC       1,A                                [2]
     PUSH      XWA                                [1]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
-    MUL       XWA,0x1E                           [4]
+    MUL       XWA,CHEST_FLOOR_SIZE               [4]
     LD        XHL,wChestTable                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -2167,12 +3198,12 @@ sub_211999:
     PUSH      XBC                                [1]
     PUSH      W                                  [2]
     PUSH      A                                  [1]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     DEC       1,A                                [2]
     PUSH      XWA                                [1]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
-    MUL       XWA,0x1E                           [4]
+    MUL       XWA,CHEST_FLOOR_SIZE               [4]
     LD        XHL,wChestTable                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -2208,6 +3239,67 @@ sub_2119C8:
     POP       XHL                                [1]
     RET                                          [1]
 
+.org 0x2119DE
+
+; [code] chest code -> WA = item id, or part CoreX (72) / Grav (73)
+GetChestContent:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    CP        A,0x48                             [3]
+    JR        NZ,.skip                           [2]
+    LD        WA,0x119                           [3]
+    JR        .skip3                             [2]
+.skip:
+    CP        A,0x49                             [3]
+    JR        NZ,.skip2                          [2]
+    LD        WA,0x159                           [3]
+    JR        .skip3                             [2]
+.skip2:
+    EXTZ      WA                                 [2]
+.skip3:
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x2119FB
+
+; [code] gold code 74-89 -> WA = ChestGold
+GetChestGold:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    SUB       A,0x4A                             [3]
+    EXTZ      WA                                 [2]
+    EXTZ      XWA                                [2]
+    SLL       1,XWA                              [3]
+    LD        XHL,ChestGold                      [5]
+    ADD       XHL,XWA                            [2]
+    LD        WA,(XHL)                           [2]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x211A15
+
+; [code] gold code 74-89 -> XHL = ChestGoldText
+GetChestGoldText:
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    SUB       A,0x4A                             [3]
+    EXTZ      WA                                 [2]
+    EXTZ      XWA                                [2]
+    MUL       XWA,6                              [4]
+    LD        XHL,ChestGoldText                  [5]
+    ADD       XHL,XWA                            [2]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    RET                                          [1]
+
 .org 0x211A2E
 
 sub_211A2E:
@@ -2216,12 +3308,12 @@ sub_211A2E:
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
     PUSH      A                                  [1]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     DEC       1,A                                [2]
     PUSH      XWA                                [1]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
-    MUL       XWA,0x1E                           [4]
+    MUL       XWA,CHEST_FLOOR_SIZE               [4]
     LD        XHL,wChestTable                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -2232,10 +3324,10 @@ sub_211A2E:
     ADD       XHL,XWA                            [2]
     LD        A,0xFD                             [2]
     LD        (XHL+0),A                          [3]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        NZ,.skip                           [2]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     DEC       1,A                                [2]
     EXTZ      WA                                 [2]
     MUL{1}    WA,7                               [3]
@@ -2260,13 +3352,13 @@ RollFloorMaps:
     PUSH      XDE                                [1]
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        Z,.skip2                           [2]
     LD        A,7                                [2]
-    LD        (XIZ+0x16),A                       [3]
+    LD        (XIZ+DUNGEON_FLOOR_COUNT),A        [3]
     LD{1}     XHL,XIZ                            [2]
-    ADD       XHL,0x17                           [6]
+    ADD       XHL,DUNGEON_FLOOR_MAPS             [6]
     LD        C,6                                [2]
 .loop:
     PUSH      W                                  [2]
@@ -2292,9 +3384,9 @@ RollFloorMaps:
     LD        A,0xC                              [2]
     LD        (XIZ+0x1D),A                       [3]
     LD{1}     XHL,XIZ                            [2]
-    ADD       XHL,0x17                           [6]
+    ADD       XHL,DUNGEON_FLOOR_MAPS             [6]
     LD        DE,0                               [2]
-    LD        E,(XIZ+0x10)                       [3]
+    LD        E,(XIZ+DUNGEON_ID)                 [3]
     SUB       E,1                                [3]
     MUL{1}    DE,0xD                             [3]
     LD        C,7                                [2]
@@ -2307,9 +3399,9 @@ RollFloorMaps:
     JR        .skip3                             [2]
 .skip2:
     LD        A,5                                [2]
-    LD        (XIZ+0x16),A                       [3]
+    LD        (XIZ+DUNGEON_FLOOR_COUNT),A        [3]
     LD        A,0x34                             [2]
-    LD        (XIZ+0x17),A                       [3]
+    LD        (XIZ+DUNGEON_FLOOR_MAPS),A         [3]
     INC       1,A                                [2]
     LD        (XIZ+0x18),A                       [3]
     INC       1,A                                [2]
@@ -2332,14 +3424,14 @@ RollFloorMaps:
 swp_211B13:
     PUSH      XWA                                [1]
     XOR       XWA,XWA                            [2]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     DEC       1,A                                [2]
     LD{1}     XHL,XIZ                            [2]
-    ADD       XHL,0x17                           [6]
+    ADD       XHL,DUNGEON_FLOOR_MAPS             [6]
     ADD       XHL,XWA                            [2]
     XOR       XWA,XWA                            [2]
     LD        A,(XHL)                            [2]
-    MUL{1}    WA,8                               [3]
+    MUL{1}    WA,DUNGEON_MAP_SIZE                [3]
     LD        XHL,DungeonMaps                    [5]
     ADD       XHL,XWA                            [2]
     POP       XWA                                [1]
@@ -2352,7 +3444,7 @@ sub_211B35:
     PUSH      XDE                                [1]
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     SUB       A,1                                [3]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
@@ -2363,7 +3455,7 @@ sub_211B35:
     LD        C,0xF                              [2]
     LD        A,0x10                             [2]
     CALL      LoadPalettes                       [4]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     SUB       A,1                                [3]
     EXTZ      WA                                 [2]
     EXTZ      XWA                                [2]
@@ -2374,7 +3466,7 @@ sub_211B35:
     LD        C,1                                [2]
     LD        A,2                                [2]
     CALL      LoadMonoPalettes                   [4]
-    LD        XHL,0x2493EC                       [5]
+    LD        XHL,DungeonData                    [5]
     LD        XWA,(XHL)                          [2]
     LD        (0x5BD5),XWA                       [4]
     ADD       XHL,4                              [6]
@@ -2407,7 +3499,7 @@ sub_211B35:
 .org 0x211BD2
 
 sub_211BD2:
-    LD        XHL,0x2493EC                       [5]
+    LD        XHL,DungeonData                    [5]
     ADD       XHL,4                              [6]
     LD        XHL,(XHL)                          [2]
     RET                                          [1]
@@ -2473,8 +3565,8 @@ swp_211BE0:
     CP        E,W                                [2]
     JR        C,.loop2                           [2]
 .skip3:
-    LD        (XIZ+0x13),C                       [3]
-    LD        (XIZ+0x14),E                       [3]
+    LD        (XIZ+DUNGEON_X),C                  [3]
+    LD        (XIZ+DUNGEON_Y),E                  [3]
     POP       XWA                                [1]
     POP       BC                                 [1]
     POP       XDE                                [1]
@@ -2486,13 +3578,13 @@ swp_211BE0:
 swp_211C52:
     PUSH      XWA                                [1]
     XOR       WA,WA                              [2]
-    LD        A,(XIZ+0x13)                       [3]
+    LD        A,(XIZ+DUNGEON_X)                  [3]
     SUB       A,5                                [3]
     MUL{1}    WA,0x10                            [3]
     ADD       WA,8                               [4]
     LD        (0x5BC7),WA                        [4]
     XOR       WA,WA                              [2]
-    LD        A,(XIZ+0x14)                       [3]
+    LD        A,(XIZ+DUNGEON_Y)                  [3]
     SUB       A,5                                [3]
     MUL{1}    WA,0x10                            [3]
     ADD       WA,0xC                             [4]
@@ -2568,6 +3660,51 @@ sub_211D80:
     LD        BC,0x50                            [3]
     LD        DE,0x50                            [3]
     CALR      sub_211D92                         [3]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x211D92
+
+sub_211D92:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    SUB       BC,8                               [4]
+    SUB       DE,0xC                             [4]
+    LD        WA,0                               [2]
+    SLL       13,WA                              [3]
+    LD        HL,0                               [2]
+    SLL       9,HL                               [3]
+    OR        WA,HL                              [2]
+    OR        WA,0xC                             [4]
+    LD        QB,2                               [3]
+    LD        QD,2                               [3]
+    CALL      dyn_206BFF                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x211DBD
+
+dyn_211DBD:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        A,(XIZ+0x2D)                       [3]
+    SRL       5,A                                [3]
+    JR        C,0x211DD9                         [2]
+    LD        QB,1                               [3]
+    LD        QD,2                               [3]
+    LD        WA,4                               [2]
+    OR        WA,0x3E00                          [4]
+    CALL      dyn_206BFF                         [4]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -2764,6 +3901,22 @@ sub_211F20:
     POP       XHL                                [1]
     RET                                          [1]
 
+.org 0x211F37
+
+swp_211F37:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    CALL      dyn_2167F9                         [4]
+    LD        A,4                                [2]
+    CALL      dyn_207598                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x211F4A
 
 sub_211F4A:
@@ -2836,27 +3989,6 @@ sub_211FE8:
     POP       WA                                 [1]
     INC       1,WA                               [2]
     DJNZ      C,.loop                            [3]
-    RET                                          [1]
-
-.org 0x21206C
-
-sub_21206C:
-    PUSH      XHL                                [1]
-    PUSH      XWA                                [1]
-    LD        A,(XIZ+0x20)                       [3]
-    EXTZ      WA                                 [2]
-    ADD       WA,0x26                            [4]
-    CALL      0x2061D6                           [4]
-    JR        C,.skip                            [2]
-    LD        A,(XIZ+0x20)                       [3]
-    EXTZ      WA                                 [2]
-    ADD       WA,0x26                            [4]
-    CALL      sub_216BC9                         [4]
-    LD        A,1                                [2]
-    CALL      dyn_2076F3                         [4]
-.skip:
-    POP       XWA                                [1]
-    POP       XHL                                [1]
     RET                                          [1]
 
 .org 0x212093
@@ -2951,7 +4083,7 @@ CampItemUseMenu:
     CALL      RemoveItem                         [4]
     LD        A,(XIZ+0x22)                       [3]
     EXTZ      WA                                 [2]
-    CALR      sub_212192                         [3]
+    CALR      CampUseHealItem                    [3]
     CALR      sub_211FE8                         [3]
     CALR      DrawStatusLabel                    [3]
     CALL      dyn_2166EB                         [4]
@@ -2977,7 +4109,8 @@ CampItemUseMenu:
 
 .org 0x212192
 
-sub_212192:
+; [code+play] FixIt1-4 add FixItHP (30/50/100/150, capped at max HP), FullFx heals fully, Clear cures status
+CampUseHealItem:
     PUSH      XHL                                [1]
     PUSH      XWA                                [1]
     SUB       WA,0x26                            [4]
@@ -2989,7 +4122,7 @@ sub_212192:
     LD        WA,0x98                            [3]
     CALL      SoundCommand                       [4]
     POP       WA                                 [1]
-    LD        XHL,0x2497CB                       [5]
+    LD        XHL,FixItHP                        [5]
     EXTZ      XWA                                [2]
     ADD       XHL,XWA                            [2]
     LD        L,(XHL)                            [2]
@@ -3241,7 +4374,8 @@ CampLeave:
 
 .org 0x2123C2
 
-sub_2123C2:
+; [code+play] Camp > Leave "Leave OK?" (camp_leave_ok_prompt, mine floor 5)
+CampLeavePrompt:
     LD        A,(wJoyPressed)                    [4]
     BIT       BIT_A_BUTTON,A                     [3]
     JR        Z,.skip                            [2]
@@ -3475,23 +4609,23 @@ sub_212563:
 .skip4:
     CP        A,5                                [2]
     JR        NZ,.skip5                          [2]
-    CALR      sub_2123C2                         [3]
+    CALR      CampLeavePrompt                    [3]
     JR        .done                              [2]
 .skip5:
     CP        A,6                                [2]
     JR        NZ,.skip6                          [2]
-    LD        WA,(XIZ+0xC)                       [3]
+    LD        WA,(XIZ+TASK_CHILDREN)             [3]
     CP        WA,0                               [2]
     JR        NZ,.done                           [2]
     LD        A,0x7F                             [2]
-    LD        (0x585B),A                         [4]
+    LD        (wFadeLevel),A                     [4]
     LD        A,9                                [2]
     LD        (XIZ+0x2A),A                       [3]
     JR        .done                              [2]
 .skip6:
     CP        A,7                                [2]
     JR        NZ,.skip7                          [2]
-    LD        WA,(XIZ+0xC)                       [3]
+    LD        WA,(XIZ+TASK_CHILDREN)             [3]
     CP        WA,0                               [2]
     JR        NZ,.done                           [2]
     CALL      sub_210EA0                         [4]
@@ -3516,7 +4650,7 @@ sub_212563:
     CALR      swp_211E12                         [3]
     CALL      sub_2129E9                         [4]
     LD        A,0                                [2]
-    LD        (0x585B),A                         [4]
+    LD        (wFadeLevel),A                     [4]
     LD        A,3                                [2]
     LD        (XIZ+0x2A),A                       [3]
     JR        .done                              [2]
@@ -3524,6 +4658,19 @@ sub_212563:
     LD        A,1                                [2]
     LD        (XIZ+0x2A),A                       [3]
 .done:
+    RET                                          [1]
+
+.org 0x212619
+
+swp_212619:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
     RET                                          [1]
 
 .org 0x212622
@@ -3561,6 +4708,21 @@ sub_21264C:
     LD        C,2                                [2]
     LD        E,0x2C                             [2]
     CALL      dyn_2074C0                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x21265F
+
+sub_21265F:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        A,5                                [2]
+    CALL      dyn_207598                         [4]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -3741,6 +4903,95 @@ OpenChest:
     LD        (XIZ+0x2A),A                       [3]
     JR        loc_2127FC                         [2]
 
+.org 0x2127F3
+
+swp_2127F3:
+    JR        loc_212844                         [2]
+
+.org 0x2127F5
+
+loc_2127F5:
+    LD        A,7                                [2]
+    LD        (XIZ+0x2A),A                       [3]
+    JR        loc_212844                         [2]
+
+.org 0x2127FC
+
+loc_2127FC:
+    CP        A,5                                [2]
+    JR        NZ,.skip                           [2]
+    CALR      sub_21264C                         [3]
+    LD        A,5                                [2]
+    CALL      swp_211DDE                         [4]
+    LD        A,6                                [2]
+    LD        (XIZ+0x2A),A                       [3]
+    JR        loc_212844                         [2]
+.skip:
+    CP        A,6                                [2]
+    JR        NZ,.skip4                          [2]
+    LD        A,(wJoyPressed)                    [4]
+    BIT       BIT_A_BUTTON,A                     [3]
+    JR        Z,.skip2                           [2]
+    LD        A,7                                [2]
+    LD        (XIZ+0x2A),A                       [3]
+    JR        loc_212844                         [2]
+.skip2:
+    BIT       5,A                                [3]
+    JR        Z,.skip3                           [2]
+    LD        A,7                                [2]
+    LD        (XIZ+0x2A),A                       [3]
+    JR        loc_212844                         [2]
+.skip3:
+    JR        loc_212844                         [2]
+.skip4:
+    CP        A,7                                [2]
+    JR        NZ,.skip5                          [2]
+    CALR      sub_21265F                         [3]
+    CALL      swp_210FDB                         [4]
+    JR        loc_212844                         [2]
+.skip5:
+    LD        A,1                                [2]
+    LD        (XIZ+0x2A),A                       [3]
+
+.org 0x212844
+
+loc_212844:
+    LD        A,(XIZ+0x2A)                       [3]
+    CP        A,3                                [2]
+    JR        NZ,.skip                           [2]
+    LD        XWA,0                              [2]
+    LD        A,(XIZ+0x20)                       [3]
+    MUL{1}    WA,0x28                            [3]
+    ADD       WA,0x28                            [4]
+    LD        BC,WA                              [2]
+    LD        DE,0x74                            [3]
+    CALL      dyn_211DBD                         [4]
+    JR        .skip                              [2]
+.skip:
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x212867
+
+swp_212867:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        HL,0x14                            [3]
+    LD        A,1                                [2]
+    LD        C,7                                [2]
+    LD        E,3                                [2]
+    CALL      dyn_207494                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x21287D
 
 sub_21287D:
@@ -3766,7 +5017,7 @@ sub_212890:
     PUSH      XBC                                [1]
     PUSH      XWA                                [1]
     LD        XWA,0                              [2]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     SLL       2,A                                [3]
     LD        XHL,0x249903                       [5]
     ADD       XHL,XWA                            [2]
@@ -3788,6 +5039,24 @@ sub_2128B0:
     PUSH      XWA                                [1]
     LD        A,1                                [2]
     CALL      dyn_207598                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x2128BF
+
+sub_2128BF:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        HL,0x19                            [3]
+    LD        A,2                                [2]
+    LD        C,0xC                              [2]
+    LD        E,5                                [2]
+    CALL      dyn_207494                         [4]
     POP       XWA                                [1]
     POP       XBC                                [1]
     POP       XDE                                [1]
@@ -3919,6 +5188,13 @@ sub_2129D2:
     POP       XBC                                [1]
     POP       XDE                                [1]
     POP       XHL                                [1]
+    RET                                          [1]
+
+.org 0x2129E1
+
+swp_2129E1:
+    CALR      swp_212867                         [3]
+    CALL      sub_2128BF                         [4]
     RET                                          [1]
 
 .org 0x2129E9
@@ -4134,6 +5410,27 @@ sub_212B14:
     POP       XHL                                [1]
     RET                                          [1]
 
+.org 0x212B80
+
+sub_212B80:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    LD        WA,0x10                            [3]
+    LD        BC,0                               [2]
+    LD        C,(XIZ+0x2C)                       [3]
+    CALL      sub_216DCD                         [4]
+    LD        C,(XIZ+0x2C)                       [3]
+    INC       1,C                                [2]
+    LD        (XIZ+0x2C),C                       [3]
+    CP        A,1                                [2]
+    JR        Z,.skip                            [2]
+.skip:
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x212B9F
 
 sub_212B9F:
@@ -4200,6 +5497,21 @@ sub_212C23:
     POP       XHL                                [1]
     RET                                          [1]
 
+.org 0x212C32
+
+swp_212C32:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    PUSH      XWA                                [1]
+    LD        A,6                                [2]
+    CALL      dyn_2075CC                         [4]
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x212C41
 
 sub_212C41:
@@ -4212,7 +5524,7 @@ sub_212C41:
     LD        C,0x12                             [2]
     LD        E,3                                [2]
     CALL      dyn_207494                         [4]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        NZ,.skip                           [2]
     LD        XHL,0x249A44                       [5]
@@ -4267,10 +5579,10 @@ sub_212C92:
     PUSH      XDE                                [1]
     PUSH      XBC                                [1]
     PUSH      W                                  [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        NZ,.skip                           [2]
-    LD        W,(XIZ+0x11)                       [3]
+    LD        W,(XIZ+DUNGEON_FLOOR)              [3]
     SUB       W,1                                [3]
     ADD       A,W                                [2]
 .skip:
@@ -4396,6 +5708,22 @@ sub_212CD5:
     LD        (XIZ+0x25),A                       [3]
     JR        loc_212D96                         [2]
 
+.org 0x212D8F
+
+swp_212D8F:
+    LD        A,1                                [2]
+    LD        (XIZ+0x25),A                       [3]
+    JR        loc_212D96                         [2]
+
+.org 0x212D96
+
+loc_212D96:
+    POP       XWA                                [1]
+    POP       XBC                                [1]
+    POP       XDE                                [1]
+    POP       XHL                                [1]
+    RET                                          [1]
+
 .org 0x212D9B
 
 sub_212D9B:
@@ -4454,8 +5782,8 @@ BossEncounter:
     LD        A,(XIZ+0x25)                       [3]
     CP        A,1                                [2]
     JRL       NZ,.skip37                         [3]
-    LD        W,(XIZ+0x16)                       [3]
-    LD        A,(XIZ+0x11)                       [3]
+    LD        W,(XIZ+DUNGEON_FLOOR_COUNT)        [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
     CP        A,W                                [2]
     JR        NC,.skip3                          [2]
     CALR      sub_212C23                         [3]
@@ -4540,16 +5868,16 @@ BossEncounter:
     CP        A,1                                [2]
     JRL       NZ,.skip37                         [3]
     CALR      sub_212C23                         [3]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        Z,.skip14                          [2]
     CALR      sub_212D9B                         [3]
     JRL       .skip37                            [3]
 .skip14:
     LD        A,5                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     LD        A,5                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JRL       .done                              [3]
 .skip15:
     CP        A,5                                [2]
@@ -4559,7 +5887,7 @@ BossEncounter:
     CP        A,1                                [2]
     JRL       NZ,.skip37                         [3]
     CALR      sub_212C23                         [3]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        Z,.skip16                          [2]
     CALL      sub_210E08                         [4]
@@ -4582,10 +5910,10 @@ BossEncounter:
     ADD       XHL,XWA                            [2]
     LD        A,(XHL)                            [2]
     LD        XHL,0                              [2]
-    LD        W,(XIZ+0x10)                       [3]
+    LD        W,(XIZ+DUNGEON_ID)                 [3]
     CP        W,5                                [2]
     JR        Z,.skip18                          [2]
-    LD        W,(XIZ+0x11)                       [3]
+    LD        W,(XIZ+DUNGEON_FLOOR)              [3]
     JR        .skip19                            [2]
 .skip18:
     LD        W,8                                [2]
@@ -4605,23 +5933,23 @@ BossEncounter:
     JRL       Z,.skip37                          [3]
     CP        A,3                                [2]
     JR        NZ,.skip22                         [2]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        NZ,.skip21                         [2]
-    LD        A,(XIZ+0x11)                       [3]
-    LD        W,(XIZ+0x16)                       [3]
+    LD        A,(XIZ+DUNGEON_FLOOR)              [3]
+    LD        W,(XIZ+DUNGEON_FLOOR_COUNT)        [3]
     CP        A,W                                [2]
     JR        C,.skip21                          [2]
     LD        A,5                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     LD        A,5                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JRL       .done                              [3]
 .skip21:
     LD        A,5                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     LD        A,2                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JRL       .done                              [3]
 .skip22:
     CALL      sub_212B9F                         [4]
@@ -4631,7 +5959,7 @@ BossEncounter:
 .skip23:
     CP        A,0xA                              [3]
     JR        NZ,.skip28                         [2]
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     CP        A,0x7F                             [3]
     JR        NZ,.skip26                         [2]
     CALL      sub_212C92                         [4]
@@ -4689,7 +6017,7 @@ BossEncounter:
     LD        HL,0x60                            [3]
     ADD       HL,WA                              [2]
     CALL      SetEventFlag                       [4]
-    LD        A,(XIZ+0x10)                       [3]
+    LD        A,(XIZ+DUNGEON_ID)                 [3]
     CP        A,5                                [2]
     JR        Z,.skip30                          [2]
     SUB       A,1                                [3]
@@ -4723,21 +6051,21 @@ BossEncounter:
     JR        NZ,.skip36                         [2]
     LD        A,6                                [2]
     LD        (0x5A7F),A                         [4]
-    LD        A,(0x585B)                         [4]
+    LD        A,(wFadeLevel)                     [4]
     ADD       A,1                                [3]
     CP        A,0x7F                             [3]
     JR        C,.skip35                          [2]
     LD        A,0x7F                             [2]
 .skip35:
-    LD        (0x585B),A                         [4]
-    LD        WA,(XIZ+0xC)                       [3]
+    LD        (wFadeLevel),A                     [4]
+    LD        WA,(XIZ+TASK_CHILDREN)             [3]
     CP        WA,0                               [2]
     JR        NZ,.skip37                         [2]
     CALR      sub_212C23                         [3]
     LD        A,5                                [2]
-    LD        (XIZ+0xE),A                        [3]
+    LD        (XIZ+TASK_ARG),A                   [3]
     LD        A,4                                [2]
-    LD        (XIZ+0xF),A                        [3]
+    LD        (XIZ+DUNGEON_MODE),A               [3]
     JR        .skip37                            [2]
 .skip36:
     LD        A,1                                [2]
@@ -4760,13 +6088,173 @@ BossEncounter:
 .done:
     RET                                          [1]
 
+.org 0x216E31
+
+dyn_216E31:
+    PUSH      A                                  [1]
+    LD        A,0                                [2]
+    LD        (wFadeLevel),A                     [4]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216E3A
+
+dyn_216E3A:
+    PUSH      A                                  [1]
+    LD        A,0x81                             [2]
+    LD        (wFadeLevel),A                     [4]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216E43
+
+dyn_216E43:
+    PUSH      W                                  [2]
+    LD        W,(wFadeLevel)                     [4]
+    ADD       W,A                                [2]
+    CP        W,0                                [2]
+    JR        Z,dyn_216E5C                       [2]
+    BIT       7,W                                [3]
+    JR        Z,dyn_216E5C                       [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,1                                [2]
+    JR        0x216E64                           [2]
+
+.org 0x216E5C
+
+dyn_216E5C:
+    LD        W,0                                [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,0                                [2]
+    POP       W                                  [2]
+    RET                                          [1]
+
+.org 0x216E67
+
+dyn_216E67:
+    PUSH      W                                  [2]
+    LD        W,(wFadeLevel)                     [4]
+    SUB       W,A                                [2]
+    CP        W,0x81                             [3]
+    JR        Z,dyn_216E81                       [2]
+    BIT       7,W                                [3]
+    JR        Z,dyn_216E81                       [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,1                                [2]
+    JR        0x216E89                           [2]
+
+.org 0x216E81
+
+dyn_216E81:
+    LD        W,0x81                             [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,0                                [2]
+    POP       W                                  [2]
+    RET                                          [1]
+
 .org 0x216E8C
 
 swp_216E8C:
     PUSH      A                                  [1]
     LD        A,0x7F                             [2]
-    LD        (0x585B),A                         [4]
+    LD        (wFadeLevel),A                     [4]
     POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216E95
+
+sub_216E95:
+    PUSH      W                                  [2]
+    LD        W,(wFadeLevel)                     [4]
+    SUB       W,A                                [2]
+    CP        W,0                                [2]
+    JR        Z,.skip                            [2]
+    BIT       7,W                                [3]
+    JR        NZ,.skip                           [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,1                                [2]
+    JR        .skip2                             [2]
+.skip:
+    LD        W,0                                [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,0                                [2]
+.skip2:
+    POP       W                                  [2]
+    RET                                          [1]
+
+.org 0x216EB9
+
+sub_216EB9:
+    PUSH      W                                  [2]
+    LD        W,(wFadeLevel)                     [4]
+    ADD       W,A                                [2]
+    CP        W,0x7F                             [3]
+    JR        Z,.skip                            [2]
+    BIT       7,W                                [3]
+    JR        NZ,.skip                           [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,1                                [2]
+    JR        .skip2                             [2]
+.skip:
+    LD        W,0x7F                             [2]
+    LD        (wFadeLevel),W                     [4]
+    LD        A,0                                [2]
+.skip2:
+    POP       W                                  [2]
+    RET                                          [1]
+
+.org 0x216EDE
+
+dyn_216EDE:
+    PUSH      A                                  [1]
+    LD        A,0                                [2]
+    LD        (0x60F1),A                         [4]
+    ADD       A,0x50                             [3]
+    LD        (0x60F5),A                         [4]
+    LD        A,0xA0                             [2]
+    LD        (0x60F3),A                         [4]
+    XOR       A,A                                [2]
+    LD        (0x60F7),A                         [4]
+    LD        A,0                                [2]
+    LD        (0x60F2),A                         [4]
+    ADD       A,0x4C                             [3]
+    LD        (0x60F6),A                         [4]
+    LD        A,0x98                             [2]
+    LD        (0x60F4),A                         [4]
+    XOR       A,A                                [2]
+    LD        (0x60F8),A                         [4]
+    LD        A,0                                [2]
+    LD        (0x60FD),A                         [4]
+    LD        A,2                                [2]
+    LD        (0x60F9),A                         [4]
+    LD        (0x60FA),A                         [4]
+    LD        A,0xFC                             [2]
+    LD        (0x60FB),A                         [4]
+    LD        (0x60FC),A                         [4]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216F2D
+
+swp_216F2D:
+    PUSH      WA                                 [1]
+    LD        A,(0x60F5)                         [4]
+    LD        W,(0x60F1)                         [4]
+    SUB       A,W                                [2]
+    ADD       A,0x28                             [3]
+    SUB       A,1                                [3]
+    XOR       W,W                                [2]
+    DIV{1}    WA,0x28                            [3]
+    LD        (0x60F9),A                         [4]
+    LD        A,(0x60F6)                         [4]
+    LD        W,(0x60F2)                         [4]
+    SUB       A,W                                [2]
+    ADD       A,0x28                             [3]
+    SUB       A,1                                [3]
+    XOR       W,W                                [2]
+    DIV{1}    WA,0x28                            [3]
+    LD        (0x60FA),A                         [4]
+    POP       WA                                 [1]
     RET                                          [1]
 
 .org 0x216F62
@@ -4775,6 +6263,123 @@ swp_216F62:
     LD        (0x60F5),L                         [4]
     LD        (0x60F6),H                         [4]
     RET                                          [1]
+
+.org 0x216F6B
+
+dyn_216F6B:
+    PUSH      A                                  [1]
+    LD        A,(0x60F1)                         [4]
+    LD        (GE_WBA_H),A                       [4]
+    LD        A,(0x60F2)                         [4]
+    LD        (GE_WBA_V),A                       [4]
+    LD        A,(0x60F3)                         [4]
+    LD        (GE_WSI_H),A                       [4]
+    LD        A,(0x60F4)                         [4]
+    LD        (GE_WSI_V),A                       [4]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216F8E
+
+dyn_216F8E:
+    PUSH      A                                  [1]
+    LD        A,(0x60F5)                         [4]
+    LD        (GE_WBA_H),A                       [4]
+    LD        A,(0x60F6)                         [4]
+    LD        (GE_WBA_V),A                       [4]
+    LD        A,(0x60F7)                         [4]
+    LD        (GE_WSI_H),A                       [4]
+    LD        A,(0x60F8)                         [4]
+    LD        (GE_WSI_V),A                       [4]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216FB1
+
+dyn_216FB1:
+    PUSH      A                                  [1]
+    LD        A,1                                [2]
+    LD        (0x60FD),A                         [4]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216FBA
+
+swp_216FBA:
+    PUSH      A                                  [1]
+    LD        A,2                                [2]
+    LD        (0x60FD),A                         [4]
+    POP       A                                  [1]
+    RET                                          [1]
+
+.org 0x216FC3
+
+dyn_216FC3:
+    PUSH      XHL                                [1]
+    PUSH      XDE                                [1]
+    PUSH      XBC                                [1]
+    LD        A,(0x60FD)                         [4]
+    CP        A,0                                [2]
+    JR        NZ,dyn_216FD3                      [2]
+    LD        A,0                                [2]
+    JRL       0x2170E0                           [3]
+
+.org 0x216FD3
+
+dyn_216FD3:
+    CP        A,1                                [2]
+    JR        NZ,loc_217054                      [2]
+    LD        A,0                                [2]
+    LD        B,(GE_WBA_H)                       [4]
+    LD        C,(0x60F1)                         [4]
+    CP        B,C                                [2]
+    JR        Z,0x216FF7                         [2]
+    JR        C,.skip                            [2]
+    SUB       B,(0x60F9)                         [4]
+    JR        .skip2                             [2]
+.skip:
+    ADD       B,(0x60F9)                         [4]
+.skip2:
+    LD        (GE_WBA_H),B                       [4]
+    LD        A,1                                [2]
+    LD        B,(GE_WBA_V)                       [4]
+    LD        C,(0x60F2)                         [4]
+    CP        B,C                                [2]
+    JR        Z,0x217015                         [2]
+    JR        C,.skip3                           [2]
+    SUB       B,(0x60FA)                         [4]
+    JR        0x21700F                           [2]
+.skip3:
+    ADD       B,(0x60FA)                         [4]
+    LD        (GE_WBA_V),B                       [4]
+    LD        A,1                                [2]
+    LD        B,(GE_WSI_H)                       [4]
+    LD        C,(0x60F3)                         [4]
+    CP        B,C                                [2]
+    JR        Z,0x217033                         [2]
+    JR        C,.skip4                           [2]
+    ADD       B,(0x60FB)                         [4]
+    JR        .skip5                             [2]
+.skip4:
+    SUB       B,(0x60FB)                         [4]
+.skip5:
+    LD        (GE_WSI_H),B                       [4]
+    LD        A,1                                [2]
+    LD        B,(GE_WSI_V)                       [4]
+    LD        C,(0x60F4)                         [4]
+    CP        B,C                                [2]
+    JR        Z,0x217051                         [2]
+    JR        C,dyn_217047                       [2]
+    ADD       B,(0x60FC)                         [4]
+    JR        0x21704B                           [2]
+
+.org 0x217047
+
+dyn_217047:
+    SUB       B,(0x60FC)                         [4]
+    LD        (GE_WSI_V),B                       [4]
+    LD        A,1                                [2]
+    JRL       0x2170D6                           [3]
 
 .org 0x217402
 
@@ -4791,6 +6396,15 @@ swp_21741B:
     JP        Z,loc_217427                       [5]
     CALL      swp_21B9D0                         [4]
     RET                                          [1]
+
+.org 0x218FA6
+
+loc_218FA6:
+    NOP                                          [1]
+    LD        E,0xE                              [2]
+    RETI                                         [1]
+    .db 0x5A, 0xFF, 0x2C, 0x05, 0x16, 0xFF, 0x2E, 0x18, 0x14, 0xFF, 0x59, 0x59, 0x59, 0x59, 0x59, 0x59
+    .db 0xFF, 0x00, 0x04, 0xAC, 0x8F, 0x21, 0x00
 
 .org 0x218FC1
 
@@ -4879,9 +6493,9 @@ loc_21905B:
     LD        WA,0x302                           [3]
     CALL      swp_21746E                         [4]
     RET                                          [1]
-    .db 59 59 59 59 59 59 FF 61 0E 0F 0E 05 63 FF 21 12
-    .db 0D FF 2D 01 14 05 5A FF 34 0F 0F 0C FF 00 00 F9
-    .db 90 21 00 00 03 FD 90 21 00 00 06 03 91 21 00
+    .db 0x59, 0x59, 0x59, 0x59, 0x59, 0x59, 0xFF, 0x61, 0x0E, 0x0F, 0x0E, 0x05, 0x63, 0xFF, 0x21, 0x12
+    .db 0x0D, 0xFF, 0x2D, 0x01, 0x14, 0x05, 0x5A, 0xFF, 0x34, 0x0F, 0x0F, 0x0C, 0xFF, 0x00, 0x00, 0xF9
+    .db 0x90, 0x21, 0x00, 0x00, 0x03, 0xFD, 0x90, 0x21, 0x00, 0x00, 0x06, 0x03, 0x91, 0x21, 0x00
 
 .org 0x21B9C2
 
