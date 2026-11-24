@@ -240,13 +240,12 @@
    "227555": "BuriedDeepInTheText"
   }
  },
- "24974F": {
+ "249757": {
   "kind": "text",
-  "file": "text/yoljec.s",
-  "size": 50,
-  "strings": 7,
+  "file": "text/camp.s",
+  "size": 42,
+  "strings": 6,
   "labels": {
-   "24974F": "YoljecText",
    "249757": "CampText",
    "24975E": "ItemText",
    "249765": "StatsText",

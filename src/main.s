@@ -41,14 +41,19 @@
 .equ wPilotRP 0x502B
 .equ wPilotMP 0x502D
 .equ wPartnerName 0x502F
+.equ wPartnerRace 0x503D
 .equ wEngineerLevel 0x503E
 .equ wEngineerExp 0x503F
 .equ wGP 0x5041
 .equ wArenaRank 0x5045
 .equ wEquipCore 0x5046
 .equ wEquipBody 0x5047
-.equ wEquipLeftArm 0x5048
-.equ wEquipRightArm 0x5049
+.equ wEquipRightArm 0x5048
+.equ wEquipLeftArm 0x5049
+.equ wEquipLegs 0x504A
+.equ wEquipBack 0x504B
+.equ wEquipAcc1 0x504C
+.equ wEquipAcc2 0x504D
 .equ wUnitAP 0x504E
 .equ wUnitSP 0x5050
 .equ wUnitRP 0x5052
@@ -60,6 +65,8 @@
 .equ wUnitMaxEP 0x505E
 .equ wEventFlags 0x5060
 .equ wNpcTalked 0x5068
+.equ wEmblems 0x506C
+.equ wBodyUpgrades 0x5074
 .equ wItemCounts 0x507F
 .equ wTetisAutographs 0x517E
 .equ wPartCounts 0x517F
@@ -73,9 +80,11 @@
 .equ wFloorCount 0x52C6
 .equ wFloorMaps 0x52C7
 .equ wDungeonMenuScratch 0x52D0
+.equ wCollaOffer 0x52D8
 .equ wStepsSinceBattle 0x52DB
 .equ wHelpPage 0x542E
 .equ wTaskList 0x5842
+.equ wTaskCount 0x584A
 .equ wMonoPalShadow 0x585D
 .equ wPalShadow 0x5876
 .equ wColorFlags 0x5BC6
@@ -89,16 +98,22 @@
 .equ wJoyResetCombo 0x5CE1
 .equ wTextBoxes 0x5CE3
 .equ wDrawBody 0x5D7B
-.equ wDrawLeftArm 0x5D7C
-.equ wDrawRightArm 0x5D7D
+.equ wDrawRightArm 0x5D7C
+.equ wDrawLeftArm 0x5D7D
 .equ wDrawLegs 0x5D7E
 .equ wDrawBack 0x5D7F
 .equ wPlayerSPBuff 0x5D8B
 .equ wPlayerRPBuff 0x5D8C
+.equ wCritChance 0x5D8E
+.equ wFleeChance 0x5D8F
+.equ wStatusChance 0x5D90
 .equ wStatusParalyzed 0x5D93
 .equ wStatusRust 0x5D94
 .equ wStatusEPLeak 0x5D95
 .equ wStatusConfused 0x5D96
+.equ wAirbagTurns 0x5D9F
+.equ wFullChargeTurns 0x5DA0
+.equ wRecvrActive 0x5DA1
 .equ wEnemyId 0x5DA2
 .equ wEnemyImage 0x5DA3
 .equ wEnemyMaxHP 0x5DA5
@@ -114,13 +129,29 @@
 .equ wEnemyLevel 0x5DB9
 .equ wEnemyAPBuff 0x5DBA
 .equ wEnemyRPBuff 0x5DBC
+.equ wEnemyCritChance 0x5DBE
+.equ wEnemyStatusChance 0x5DC0
 .equ wEnemyEPCostBuff 0x5DC1
+.equ wEnemyParalyzed 0x5DC3
+.equ wEnemyRusted 0x5DC4
+.equ wEnemyEPLeak 0x5DC5
+.equ wEnemyConfused 0x5DC6
 .equ wEnemyParts 0x5DD1
 .equ wEnemyScaled 0x5DD7
 .equ wAreaLevel 0x5DDB
 .equ wEnemyAttackSlot 0x5DDC
+.equ wInflictStatus 0x5DE8
+.equ wCritHit 0x5DE9
 .equ wEnemyAttackStatus 0x5DEF
 .equ wChestTable 0x5FFA
+.equ wDevelopArm 0x618D
+.equ wDevelopMaterial 0x618E
+.equ wDevelopTool 0x618F
+.equ wDevelopChance 0x6190
+.equ wDevelopResult 0x6191
+.equ wDevelopExp 0x6192
+.equ wWorksPartnerRace 0x61DF
+.equ wWorksEngineerLevel 0x61E0
 .equ SYS_BATTERY 0x6F80
 .equ SYS_JOYPAD 0x6F82
 .equ SYS_LANGUAGE 0x6F87
@@ -169,11 +200,46 @@
 .equ CHAR_RAM 0xA000
 
 .charmap "text/charmap.txt"
+.include "macros/macros.s"
+.include "constants/struct_fields.s"
+.include "constants/joypad.s"
 
+.include "audio/sound.s"
+.include "audio/sound_engine.s"
+.include "engine/arena.s"
+.include "engine/battle.s"
+.include "engine/dungeon.s"
+.include "engine/gfx/graphics.s"
+.include "engine/gfx/robot.s"
+.include "engine/menus/shop.s"
+.include "engine/menus/title.s"
+.include "engine/menus/town.s"
+.include "engine/menus/works.s"
+.include "engine/player.s"
+.include "engine/scenes.s"
+.include "engine/tables.s"
+.include "engine/text.s"
+.include "engine/unsorted/code_205FA3.s"
+.include "engine/unsorted/code_207ADB.s"
+.include "engine/unsorted/code_2085D5.s"
+.include "engine/unsorted/code_208926.s"
+.include "engine/unsorted/code_20CED8.s"
+.include "engine/unsorted/code_20D404.s"
+.include "engine/unsorted/code_20D59E.s"
+.include "engine/unsorted/code_20E012.s"
+.include "engine/unsorted/code_217C44.s"
+.include "engine/unsorted/code_217DD3.s"
+.include "engine/unsorted/code_218236.s"
+.include "engine/unsorted/code_218488.s"
+.include "engine/unsorted/code_218743.s"
+.include "engine/unsorted/code_218AD8.s"
+.include "engine/unsorted/code_218D61.s"
+.include "engine/unsorted/code_219238.s"
+.include "engine/unsorted/code_21D192.s"
+.include "home/system.s"
 .org 0x200000
 Header:
 .incbin "home/header.bin"
-.include "audio/sound_engine.s"
 .org 0x2003B2
 Z80Driver:
 .incbin "audio/z80_driver.bin"
@@ -186,75 +252,57 @@ SongTable:
 .org 0x200EDE
 SongData:
 .incbin "audio/song_data.bin"
-.include "engine/code_205FA3.s"
 .org 0x207A43
 Data_207A43:
 .incbin "data/207A43.bin"
-.include "engine/code_207ADB.s"
 .org 0x208541
 MessagePlaceholders:
 .incbin "data/208541.bin"
-.include "engine/code_2085D5.s"
 .org 0x20888E
 Data_20888E:
 .incbin "data/20888E.bin"
-.include "engine/code_208926.s"
 .org 0x20CE3F
 Data_20CE3F:
 .incbin "data/20CE3F.bin"
-.include "engine/code_20CED8.s"
 .org 0x20D333
 Data_20D333:
 .incbin "data/20D333.bin"
-.include "engine/code_20D404.s"
 .org 0x20D544
 Data_20D544:
 .incbin "data/20D544.bin"
-.include "engine/code_20D59E.s"
 .org 0x20DFD2
 Data_20DFD2:
 .incbin "data/20DFD2.bin"
-.include "engine/code_20E012.s"
 .org 0x217BCF
 Data_217BCF:
 .incbin "data/217BCF.bin"
-.include "engine/code_217C44.s"
 .org 0x217D1B
 Data_217D1B:
 .incbin "data/217D1B.bin"
-.include "engine/code_217D60.s"
 .org 0x217D8B
 Data_217D8B:
 .incbin "data/217D8B.bin"
-.include "engine/code_217DD3.s"
 .org 0x2181D8
 Data_2181D8:
 .incbin "data/2181D8.bin"
-.include "engine/code_218236.s"
 .org 0x2183EE
 Data_2183EE:
 .incbin "data/2183EE.bin"
-.include "engine/code_218488.s"
 .org 0x2186D4
 Data_2186D4:
 .incbin "data/2186D4.bin"
-.include "engine/code_218743.s"
 .org 0x218A70
 Data_218A70:
 .incbin "data/218A70.bin"
-.include "engine/code_218AD8.s"
 .org 0x218CC9
 Data_218CC9:
 .incbin "data/218CC9.bin"
-.include "engine/code_218D61.s"
 .org 0x2191AF
 Data_2191AF:
 .incbin "data/2191AF.bin"
-.include "engine/code_219238.s"
 .org 0x21BA31
-Data_21BA31:
-.incbin "data/21BA31.bin"
-.include "engine/code_21D192.s"
+Recipes:
+.incbin "../build/tables/recipes.Recipes.bin"
 .org 0x21DA1D
 Data_21DA1D:
 .incbin "data/21DA1D.bin"
@@ -308,14 +356,32 @@ AttackNames:
 EnemyAttacks:
 .incbin "../build/tables/enemy_attacks.EnemyAttacks.bin"
 .org 0x22426F
-Data_22426F:
-.incbin "data/22426F.bin"
+ArmEffects:
+.incbin "../build/tables/arm_effects.ArmEffects.bin"
+.org 0x224612
+BattleItemEffects:
+.incbin "../build/tables/battle_item_effects.BattleItemEffects.bin"
+.org 0x22464A
+AffinityTable:
+.incbin "../build/tables/affinity.AffinityTable.bin"
 .org 0x2246EC
 EnemyScaling:
 .incbin "../build/tables/enemy_scaling.EnemyScaling.bin"
 .org 0x2247CC
-Data_2247CC:
-.incbin "data/2247CC.bin"
+DamageTable:
+.incbin "../build/tables/damage.DamageTable.bin"
+.org 0x224FB0
+LevelGapCrit:
+.incbin "../build/tables/level_gap_chances.LevelGapCrit.bin"
+.org 0x224FC7
+LevelGapStatus:
+.incbin "../build/tables/level_gap_chances.LevelGapStatus.bin"
+.org 0x224FDE
+LevelGapFlee:
+.incbin "../build/tables/level_gap_chances.LevelGapFlee.bin"
+.org 0x224FF5
+Data_224FF5:
+.incbin "data/224FF5.bin"
 .org 0x225009
 ExpCurve1:
 .incbin "../build/tables/exp_curves.ExpCurve1.bin"
@@ -341,14 +407,20 @@ LevelGainsEven:
 LevelBonus:
 .incbin "../build/tables/level_bonus.LevelBonus.bin"
 .org 0x2253BD
-Data_2253BD:
-.incbin "data/2253BD.bin"
+LevelRolls:
+.incbin "../build/tables/level_rolls.LevelRolls.bin"
 .org 0x2253D3
 ExpLevelDiff:
 .incbin "../build/tables/exp_level_diff.ExpLevelDiff.bin"
 .org 0x2253DE
 Data_2253DE:
 .incbin "data/2253DE.bin"
+.org 0x2253F5
+StatusRecovery:
+.incbin "../build/tables/status_recovery.StatusRecovery.bin"
+.org 0x22540B
+Data_22540B:
+.incbin "data/22540B.bin"
 .org 0x225423
 .include "text/attack_item_charge.s"
 .org 0x225446
@@ -369,6 +441,9 @@ Data_225A7A:
 .org 0x225BAA
 Data_225BAA:
 .incbin "data/225BAA.bin"
+.org 0x225BBE
+StatusInflictedTexts:
+.incbin "data/225BBE.bin"
 .org 0x225BE2
 .include "text/where_do_you_go.s"
 .org 0x225C3D
@@ -407,14 +482,56 @@ Data_2274D7:
 .org 0x227580
 Data_227580:
 .incbin "data/227580.bin"
+.org 0x2275C0
+EncounterChance:
+.incbin "../build/tables/encounter_chance.EncounterChance.bin"
+.org 0x2275D9
+Data_2275D9:
+.incbin "data/2275D9.bin"
+.org 0x228649
+Pal_228649:
+.incbin "../build/gfx/pal/228649.pal.bin"
+.org 0x2286C1
+MonoPal_2286C1:
+.incbin "../build/gfx/pal/2286C1.pal4.bin"
+.org 0x2286C5
+Pal_2286C5:
+.incbin "../build/gfx/pal/2286C5.pal.bin"
+.org 0x22873D
+MonoPal_22873D:
+.incbin "../build/gfx/pal/22873D.pal4.bin"
+.org 0x228741
+Data_228741:
+.incbin "data/228741.bin"
 .org 0x2493F8
-Pal_2493F8:
-.incbin "../build/gfx/pal/2493F8.pal.bin"
-.org 0x249470
-Data_249470:
-.incbin "data/249470.bin"
-.org 0x24974F
-.include "text/yoljec.s"
+DungeonPalettes:
+.incbin "data/2493F8.bin"
+.org 0x24940C
+DungeonMonoPalettes:
+.incbin "data/24940C.bin"
+.org 0x249424
+DungeonMaps:
+.incbin "data/249424.bin"
+.org 0x2495EC
+WorldChests:
+.incbin "../build/tables/chests.WorldChests.bin"
+.org 0x2496B0
+MineChests:
+.incbin "../build/tables/mine_chests.MineChests.bin"
+.org 0x2496CE
+ChestGold:
+.incbin "../build/tables/chest_gold.ChestGold.bin"
+.org 0x2496EE
+ChestGoldText:
+.incbin "../build/tables/chest_gold.ChestGoldText.bin"
+.org 0x24974E
+ChestOdds:
+.incbin "../build/tables/chest_odds.ChestOdds.bin"
+.org 0x249755
+Data_249755:
+.incbin "data/249755.bin"
+.org 0x249757
+.include "text/camp.s"
 .org 0x249781
 Data_249781:
 .incbin "data/249781.bin"
@@ -458,6 +575,21 @@ Data_249F66:
 .org 0x24A080
 Data_24A080:
 .incbin "data/24A080.bin"
+.org 0x24A1DC
+StageStatBonus:
+.incbin "../build/tables/stage_stat_bonus.StageStatBonus.bin"
+.org 0x24A1FC
+Data_24A1FC:
+.incbin "data/24A1FC.bin"
+.org 0x24A212
+StageArenaRank:
+.incbin "../build/tables/stage_arena_rank.StageArenaRank.bin"
+.org 0x24A21E
+StageFlags:
+.incbin "../build/tables/stage_flags.StageFlags.bin"
+.org 0x24A228
+Data_24A228:
+.incbin "data/24A228.bin"
 .org 0x24A348
 .include "text/abc_i_am_ent.s"
 .org 0x24B37A
@@ -588,6 +720,12 @@ Data_25AD17:
 .org 0x25B00C
 Data_25B00C:
 .incbin "data/25B00C.bin"
+.org 0x25B4DF
+ItemPrices:
+.incbin "../build/tables/items.ItemPrices.bin"
+.org 0x25B5FB
+Data_25B5FB:
+.incbin "data/25B5FB.bin"
 .org 0x25B6FC
 .include "text/birdan.s"
 .org 0x25B733
@@ -703,6 +841,24 @@ Data_25E478:
 .org 0x25E4B9
 Data_25E4B9:
 .incbin "data/25E4B9.bin"
+.org 0x25E5E3
+DevLevelBonusMale:
+.incbin "../build/tables/dev_level_bonus.DevLevelBonusMale.bin"
+.org 0x25E616
+DevLevelBonusFemale:
+.incbin "../build/tables/dev_level_bonus.DevLevelBonusFemale.bin"
+.org 0x25E649
+DevLevelExpMale:
+.incbin "../build/tables/dev_level_exp.DevLevelExpMale.bin"
+.org 0x25E67B
+DevLevelExpFemale:
+.incbin "../build/tables/dev_level_exp.DevLevelExpFemale.bin"
+.org 0x25E6AD
+DevPartnerBonus:
+.incbin "../build/tables/dev_partner_bonus.DevPartnerBonus.bin"
+.org 0x25E6B7
+Data_25E6B7:
+.incbin "data/25E6B7.bin"
 .org 0x25E6DF
 .include "text/unitron_status_hp_hit.s"
 .org 0x25E795
@@ -906,485 +1062,485 @@ Part_LegsFlier2:
 Part_LegsFlier1:
 .incbin "../build/gfx/parts/legs/flier1.png.bin"
 .org 0x2652A5
-Part_ArmLBtfist:
-.incbin "../build/gfx/parts/arm_l/btfist.png.bin"
-.org 0x265305
 Part_ArmRBtfist:
 .incbin "../build/gfx/parts/arm_r/btfist.png.bin"
+.org 0x265305
+Part_ArmLBtfist:
+.incbin "../build/gfx/parts/arm_l/btfist.png.bin"
 .org 0x26538C
-Part_ArmLSlkhnd:
-.incbin "../build/gfx/parts/arm_l/slkhnd.png.bin"
-.org 0x265402
 Part_ArmRSlkhnd:
 .incbin "../build/gfx/parts/arm_r/slkhnd.png.bin"
+.org 0x265402
+Part_ArmLSlkhnd:
+.incbin "../build/gfx/parts/arm_l/slkhnd.png.bin"
 .org 0x265471
-Part_ArmLHGun:
-.incbin "../build/gfx/parts/arm_l/h_gun.png.bin"
-.org 0x265511
 Part_ArmRHGun:
 .incbin "../build/gfx/parts/arm_r/h_gun.png.bin"
+.org 0x265511
+Part_ArmLHGun:
+.incbin "../build/gfx/parts/arm_l/h_gun.png.bin"
 .org 0x2655CD
-Part_ArmLHawk:
-.incbin "../build/gfx/parts/arm_l/hawk.png.bin"
-.org 0x26568D
 Part_ArmRHawk:
 .incbin "../build/gfx/parts/arm_r/hawk.png.bin"
+.org 0x26568D
+Part_ArmLHawk:
+.incbin "../build/gfx/parts/arm_l/hawk.png.bin"
 .org 0x265777
-Part_ArmLOgre:
-.incbin "../build/gfx/parts/arm_l/ogre.png.bin"
-.org 0x265880
 Part_ArmROgre:
 .incbin "../build/gfx/parts/arm_r/ogre.png.bin"
+.org 0x265880
+Part_ArmLOgre:
+.incbin "../build/gfx/parts/arm_l/ogre.png.bin"
 .org 0x2659C8
-Part_ArmLLancer:
-.incbin "../build/gfx/parts/arm_l/lancer.png.bin"
-.org 0x265A8D
 Part_ArmRLancer:
 .incbin "../build/gfx/parts/arm_r/lancer.png.bin"
+.org 0x265A8D
+Part_ArmLLancer:
+.incbin "../build/gfx/parts/arm_l/lancer.png.bin"
 .org 0x265B6D
-Part_ArmLDrlarm:
-.incbin "../build/gfx/parts/arm_l/drlarm.png.bin"
-.org 0x265C32
 Part_ArmRDrlarm:
 .incbin "../build/gfx/parts/arm_r/drlarm.png.bin"
+.org 0x265C32
+Part_ArmLDrlarm:
+.incbin "../build/gfx/parts/arm_l/drlarm.png.bin"
 .org 0x265CF0
-Part_ArmLBazoka:
-.incbin "../build/gfx/parts/arm_l/bazoka.png.bin"
-.org 0x265DCD
 Part_ArmRBazoka:
 .incbin "../build/gfx/parts/arm_r/bazoka.png.bin"
+.org 0x265DCD
+Part_ArmLBazoka:
+.incbin "../build/gfx/parts/arm_l/bazoka.png.bin"
 .org 0x265ED2
-Part_ArmLChnsaw:
-.incbin "../build/gfx/parts/arm_l/chnsaw.png.bin"
-.org 0x265FF6
 Part_ArmRChnsaw:
 .incbin "../build/gfx/parts/arm_r/chnsaw.png.bin"
+.org 0x265FF6
+Part_ArmLChnsaw:
+.incbin "../build/gfx/parts/arm_l/chnsaw.png.bin"
 .org 0x266137
-Part_ArmLUnused10:
-.incbin "../build/gfx/parts/arm_l/unused_10.png.bin"
-.org 0x2661E8
 Part_ArmRUnused10:
 .incbin "../build/gfx/parts/arm_r/unused_10.png.bin"
+.org 0x2661E8
+Part_ArmLUnused10:
+.incbin "../build/gfx/parts/arm_l/unused_10.png.bin"
 .org 0x266358
-Part_ArmLPwrhnd:
-.incbin "../build/gfx/parts/arm_l/pwrhnd.png.bin"
-.org 0x2663FE
 Part_ArmRPwrhnd:
 .incbin "../build/gfx/parts/arm_r/pwrhnd.png.bin"
+.org 0x2663FE
+Part_ArmLPwrhnd:
+.incbin "../build/gfx/parts/arm_l/pwrhnd.png.bin"
 .org 0x2664B0
-Part_ArmLHkclaw:
-.incbin "../build/gfx/parts/arm_l/hkclaw.png.bin"
-.org 0x266582
 Part_ArmRHkclaw:
 .incbin "../build/gfx/parts/arm_r/hkclaw.png.bin"
+.org 0x266582
+Part_ArmLHkclaw:
+.incbin "../build/gfx/parts/arm_l/hkclaw.png.bin"
 .org 0x266666
-Part_ArmLPole:
-.incbin "../build/gfx/parts/arm_l/pole.png.bin"
-.org 0x26670E
 Part_ArmRPole:
 .incbin "../build/gfx/parts/arm_r/pole.png.bin"
+.org 0x26670E
+Part_ArmLPole:
+.incbin "../build/gfx/parts/arm_l/pole.png.bin"
 .org 0x266807
-Part_ArmLRapier:
-.incbin "../build/gfx/parts/arm_l/rapier.png.bin"
-.org 0x2668D8
 Part_ArmRRapier:
 .incbin "../build/gfx/parts/arm_r/rapier.png.bin"
+.org 0x2668D8
+Part_ArmLRapier:
+.incbin "../build/gfx/parts/arm_l/rapier.png.bin"
 .org 0x2669C8
-Part_ArmLBtlhk:
-.incbin "../build/gfx/parts/arm_l/btlhk.png.bin"
-.org 0x266AAC
 Part_ArmRBtlhk:
 .incbin "../build/gfx/parts/arm_r/btlhk.png.bin"
+.org 0x266AAC
+Part_ArmLBtlhk:
+.incbin "../build/gfx/parts/arm_l/btlhk.png.bin"
 .org 0x266BA7
-Part_ArmLWhip:
-.incbin "../build/gfx/parts/arm_l/whip.png.bin"
-.org 0x266C7A
 Part_ArmRWhip:
 .incbin "../build/gfx/parts/arm_r/whip.png.bin"
+.org 0x266C7A
+Part_ArmLWhip:
+.incbin "../build/gfx/parts/arm_l/whip.png.bin"
 .org 0x266D50
-Part_ArmLWhipPlus:
-.incbin "../build/gfx/parts/arm_l/whip_plus.png.bin"
-.org 0x266E63
 Part_ArmRWhipPlus:
 .incbin "../build/gfx/parts/arm_r/whip_plus.png.bin"
+.org 0x266E63
+Part_ArmLWhipPlus:
+.incbin "../build/gfx/parts/arm_l/whip_plus.png.bin"
 .org 0x266F67
-Part_ArmLArmhnd:
-.incbin "../build/gfx/parts/arm_l/armhnd.png.bin"
-.org 0x26706C
 Part_ArmRArmhnd:
 .incbin "../build/gfx/parts/arm_r/armhnd.png.bin"
+.org 0x26706C
+Part_ArmLArmhnd:
+.incbin "../build/gfx/parts/arm_l/armhnd.png.bin"
 .org 0x26717D
-Part_ArmLDisc:
-.incbin "../build/gfx/parts/arm_l/disc.png.bin"
-.org 0x267243
 Part_ArmRDisc:
 .incbin "../build/gfx/parts/arm_r/disc.png.bin"
+.org 0x267243
+Part_ArmLDisc:
+.incbin "../build/gfx/parts/arm_l/disc.png.bin"
 .org 0x26731F
-Part_ArmLSpiked:
-.incbin "../build/gfx/parts/arm_l/spiked.png.bin"
-.org 0x26745A
 Part_ArmRSpiked:
 .incbin "../build/gfx/parts/arm_r/spiked.png.bin"
+.org 0x26745A
+Part_ArmLSpiked:
+.incbin "../build/gfx/parts/arm_l/spiked.png.bin"
 .org 0x2675C0
-Part_ArmLWarlok:
-.incbin "../build/gfx/parts/arm_l/warlok.png.bin"
-.org 0x2676FA
 Part_ArmRWarlok:
 .incbin "../build/gfx/parts/arm_r/warlok.png.bin"
+.org 0x2676FA
+Part_ArmLWarlok:
+.incbin "../build/gfx/parts/arm_l/warlok.png.bin"
 .org 0x267862
-Part_ArmLGodhnd:
-.incbin "../build/gfx/parts/arm_l/godhnd.png.bin"
-.org 0x2679AF
 Part_ArmRGodhnd:
 .incbin "../build/gfx/parts/arm_r/godhnd.png.bin"
+.org 0x2679AF
+Part_ArmLGodhnd:
+.incbin "../build/gfx/parts/arm_l/godhnd.png.bin"
 .org 0x267B12
-Part_ArmLTroopr:
-.incbin "../build/gfx/parts/arm_l/troopr.png.bin"
-.org 0x267BB7
 Part_ArmRTroopr:
 .incbin "../build/gfx/parts/arm_r/troopr.png.bin"
+.org 0x267BB7
+Part_ArmLTroopr:
+.incbin "../build/gfx/parts/arm_l/troopr.png.bin"
 .org 0x267C86
-Part_ArmLMantis:
-.incbin "../build/gfx/parts/arm_l/mantis.png.bin"
-.org 0x267D93
 Part_ArmRMantis:
 .incbin "../build/gfx/parts/arm_r/mantis.png.bin"
+.org 0x267D93
+Part_ArmLMantis:
+.incbin "../build/gfx/parts/arm_l/mantis.png.bin"
 .org 0x267ECD
-Part_ArmLGolem:
-.incbin "../build/gfx/parts/arm_l/golem.png.bin"
-.org 0x267F81
 Part_ArmRGolem:
 .incbin "../build/gfx/parts/arm_r/golem.png.bin"
+.org 0x267F81
+Part_ArmLGolem:
+.incbin "../build/gfx/parts/arm_l/golem.png.bin"
 .org 0x26802A
-Part_ArmLHydro:
-.incbin "../build/gfx/parts/arm_l/hydro.png.bin"
-.org 0x2681CB
 Part_ArmRHydro:
 .incbin "../build/gfx/parts/arm_r/hydro.png.bin"
+.org 0x2681CB
+Part_ArmLHydro:
+.incbin "../build/gfx/parts/arm_l/hydro.png.bin"
 .org 0x268389
-Part_ArmLSnaker:
-.incbin "../build/gfx/parts/arm_l/snaker.png.bin"
-.org 0x268513
 Part_ArmRSnaker:
 .incbin "../build/gfx/parts/arm_r/snaker.png.bin"
+.org 0x268513
+Part_ArmLSnaker:
+.incbin "../build/gfx/parts/arm_l/snaker.png.bin"
 .org 0x2686FF
-Part_ArmLScorp:
-.incbin "../build/gfx/parts/arm_l/scorp.png.bin"
-.org 0x2687DA
 Part_ArmRScorp:
 .incbin "../build/gfx/parts/arm_r/scorp.png.bin"
+.org 0x2687DA
+Part_ArmLScorp:
+.incbin "../build/gfx/parts/arm_l/scorp.png.bin"
 .org 0x2688BF
-Part_ArmLRedclw:
-.incbin "../build/gfx/parts/arm_l/redclw.png.bin"
-.org 0x268A0D
 Part_ArmRRedclw:
 .incbin "../build/gfx/parts/arm_r/redclw.png.bin"
+.org 0x268A0D
+Part_ArmLRedclw:
+.incbin "../build/gfx/parts/arm_l/redclw.png.bin"
 .org 0x268B3D
-Part_ArmLCrssbw:
-.incbin "../build/gfx/parts/arm_l/crssbw.png.bin"
-.org 0x268C00
 Part_ArmRCrssbw:
 .incbin "../build/gfx/parts/arm_r/crssbw.png.bin"
+.org 0x268C00
+Part_ArmLCrssbw:
+.incbin "../build/gfx/parts/arm_l/crssbw.png.bin"
 .org 0x268CCA
-Part_ArmLSabre:
-.incbin "../build/gfx/parts/arm_l/sabre.png.bin"
-.org 0x268D51
 Part_ArmRSabre:
 .incbin "../build/gfx/parts/arm_r/sabre.png.bin"
+.org 0x268D51
+Part_ArmLSabre:
+.incbin "../build/gfx/parts/arm_l/sabre.png.bin"
 .org 0x268DDD
-Part_ArmLSabrePlus:
-.incbin "../build/gfx/parts/arm_l/sabre_plus.png.bin"
-.org 0x268E86
 Part_ArmRSabrePlus:
 .incbin "../build/gfx/parts/arm_r/sabre_plus.png.bin"
+.org 0x268E86
+Part_ArmLSabrePlus:
+.incbin "../build/gfx/parts/arm_l/sabre_plus.png.bin"
 .org 0x268F2F
-Part_ArmLHndaxe:
-.incbin "../build/gfx/parts/arm_l/hndaxe.png.bin"
-.org 0x26902C
 Part_ArmRHndaxe:
 .incbin "../build/gfx/parts/arm_r/hndaxe.png.bin"
+.org 0x26902C
+Part_ArmLHndaxe:
+.incbin "../build/gfx/parts/arm_l/hndaxe.png.bin"
 .org 0x26913F
-Part_ArmLBtlaxe:
-.incbin "../build/gfx/parts/arm_l/btlaxe.png.bin"
-.org 0x26926E
 Part_ArmRBtlaxe:
 .incbin "../build/gfx/parts/arm_r/btlaxe.png.bin"
+.org 0x26926E
+Part_ArmLBtlaxe:
+.incbin "../build/gfx/parts/arm_l/btlaxe.png.bin"
 .org 0x2693A2
-Part_ArmLMgabll:
-.incbin "../build/gfx/parts/arm_l/mgabll.png.bin"
-.org 0x26949E
 Part_ArmRMgabll:
 .incbin "../build/gfx/parts/arm_r/mgabll.png.bin"
+.org 0x26949E
+Part_ArmLMgabll:
+.incbin "../build/gfx/parts/arm_l/mgabll.png.bin"
 .org 0x2695C7
-Part_ArmLCurler:
-.incbin "../build/gfx/parts/arm_l/curler.png.bin"
-.org 0x2696DE
 Part_ArmRCurler:
 .incbin "../build/gfx/parts/arm_r/curler.png.bin"
+.org 0x2696DE
+Part_ArmLCurler:
+.incbin "../build/gfx/parts/arm_l/curler.png.bin"
 .org 0x269806
-Part_ArmLSpring:
-.incbin "../build/gfx/parts/arm_l/spring.png.bin"
-.org 0x2698EB
 Part_ArmRSpring:
 .incbin "../build/gfx/parts/arm_r/spring.png.bin"
+.org 0x2698EB
+Part_ArmLSpring:
+.incbin "../build/gfx/parts/arm_l/spring.png.bin"
 .org 0x2699D3
-Part_ArmLMage:
-.incbin "../build/gfx/parts/arm_l/mage.png.bin"
-.org 0x269AB8
 Part_ArmRMage:
 .incbin "../build/gfx/parts/arm_r/mage.png.bin"
+.org 0x269AB8
+Part_ArmLMage:
+.incbin "../build/gfx/parts/arm_l/mage.png.bin"
 .org 0x269BB3
-Part_ArmLGradus:
-.incbin "../build/gfx/parts/arm_l/gradus.png.bin"
-.org 0x269C48
 Part_ArmRGradus:
 .incbin "../build/gfx/parts/arm_r/gradus.png.bin"
+.org 0x269C48
+Part_ArmLGradus:
+.incbin "../build/gfx/parts/arm_l/gradus.png.bin"
 .org 0x269D20
-Part_ArmLDirk:
-.incbin "../build/gfx/parts/arm_l/dirk.png.bin"
-.org 0x269DCC
 Part_ArmRDirk:
 .incbin "../build/gfx/parts/arm_r/dirk.png.bin"
+.org 0x269DCC
+Part_ArmLDirk:
+.incbin "../build/gfx/parts/arm_l/dirk.png.bin"
 .org 0x269EA8
-Part_ArmLLinegn:
-.incbin "../build/gfx/parts/arm_l/linegn.png.bin"
-.org 0x269F99
 Part_ArmRLinegn:
 .incbin "../build/gfx/parts/arm_r/linegn.png.bin"
+.org 0x269F99
+Part_ArmLLinegn:
+.incbin "../build/gfx/parts/arm_l/linegn.png.bin"
 .org 0x26A0C8
-Part_ArmLCannon:
-.incbin "../build/gfx/parts/arm_l/cannon.png.bin"
-.org 0x26A1DF
 Part_ArmRCannon:
 .incbin "../build/gfx/parts/arm_r/cannon.png.bin"
+.org 0x26A1DF
+Part_ArmLCannon:
+.incbin "../build/gfx/parts/arm_l/cannon.png.bin"
 .org 0x26A30D
-Part_ArmLHndgun:
-.incbin "../build/gfx/parts/arm_l/hndgun.png.bin"
-.org 0x26A3EF
 Part_ArmRHndgun:
 .incbin "../build/gfx/parts/arm_r/hndgun.png.bin"
+.org 0x26A3EF
+Part_ArmLHndgun:
+.incbin "../build/gfx/parts/arm_l/hndgun.png.bin"
 .org 0x26A4D9
-Part_ArmLVulcan:
-.incbin "../build/gfx/parts/arm_l/vulcan.png.bin"
-.org 0x26A5EF
 Part_ArmRVulcan:
 .incbin "../build/gfx/parts/arm_r/vulcan.png.bin"
+.org 0x26A5EF
+Part_ArmLVulcan:
+.incbin "../build/gfx/parts/arm_l/vulcan.png.bin"
 .org 0x26A712
-Part_ArmL2Barrl:
-.incbin "../build/gfx/parts/arm_l/2barrl.png.bin"
-.org 0x26A822
 Part_ArmR2Barrl:
 .incbin "../build/gfx/parts/arm_r/2barrl.png.bin"
+.org 0x26A822
+Part_ArmL2Barrl:
+.incbin "../build/gfx/parts/arm_l/2barrl.png.bin"
 .org 0x26A951
-Part_ArmLLncher:
-.incbin "../build/gfx/parts/arm_l/lncher.png.bin"
-.org 0x26AA45
 Part_ArmRLncher:
 .incbin "../build/gfx/parts/arm_r/lncher.png.bin"
+.org 0x26AA45
+Part_ArmLLncher:
+.incbin "../build/gfx/parts/arm_l/lncher.png.bin"
 .org 0x26AB33
-Part_ArmLBinder:
-.incbin "../build/gfx/parts/arm_l/binder.png.bin"
-.org 0x26AC12
 Part_ArmRBinder:
 .incbin "../build/gfx/parts/arm_r/binder.png.bin"
+.org 0x26AC12
+Part_ArmLBinder:
+.incbin "../build/gfx/parts/arm_l/binder.png.bin"
 .org 0x26AD1F
-Part_ArmLMagma:
-.incbin "../build/gfx/parts/arm_l/magma.png.bin"
-.org 0x26AE0B
 Part_ArmRMagma:
 .incbin "../build/gfx/parts/arm_r/magma.png.bin"
+.org 0x26AE0B
+Part_ArmLMagma:
+.incbin "../build/gfx/parts/arm_l/magma.png.bin"
 .org 0x26AF04
-Part_ArmLPliers:
-.incbin "../build/gfx/parts/arm_l/pliers.png.bin"
-.org 0x26B03D
 Part_ArmRPliers:
 .incbin "../build/gfx/parts/arm_r/pliers.png.bin"
+.org 0x26B03D
+Part_ArmLPliers:
+.incbin "../build/gfx/parts/arm_l/pliers.png.bin"
 .org 0x26B16E
-Part_ArmLBlade:
-.incbin "../build/gfx/parts/arm_l/blade.png.bin"
-.org 0x26B284
 Part_ArmRBlade:
 .incbin "../build/gfx/parts/arm_r/blade.png.bin"
+.org 0x26B284
+Part_ArmLBlade:
+.incbin "../build/gfx/parts/arm_l/blade.png.bin"
 .org 0x26B3C7
-Part_ArmLDriver:
-.incbin "../build/gfx/parts/arm_l/driver.png.bin"
-.org 0x26B499
 Part_ArmRDriver:
 .incbin "../build/gfx/parts/arm_r/driver.png.bin"
+.org 0x26B499
+Part_ArmLDriver:
+.incbin "../build/gfx/parts/arm_l/driver.png.bin"
 .org 0x26B5C3
-Part_ArmLDrill:
-.incbin "../build/gfx/parts/arm_l/drill.png.bin"
-.org 0x26B69A
 Part_ArmRDrill:
 .incbin "../build/gfx/parts/arm_r/drill.png.bin"
+.org 0x26B69A
+Part_ArmLDrill:
+.incbin "../build/gfx/parts/arm_l/drill.png.bin"
 .org 0x26B7BF
-Part_ArmLMaxi:
-.incbin "../build/gfx/parts/arm_l/maxi.png.bin"
-.org 0x26B886
 Part_ArmRMaxi:
 .incbin "../build/gfx/parts/arm_r/maxi.png.bin"
+.org 0x26B886
+Part_ArmLMaxi:
+.incbin "../build/gfx/parts/arm_l/maxi.png.bin"
 .org 0x26B94C
-Part_ArmLTwin:
-.incbin "../build/gfx/parts/arm_l/twin.png.bin"
-.org 0x26BA5E
 Part_ArmRTwin:
 .incbin "../build/gfx/parts/arm_r/twin.png.bin"
+.org 0x26BA5E
+Part_ArmLTwin:
+.incbin "../build/gfx/parts/arm_l/twin.png.bin"
 .org 0x26BB9C
-Part_ArmLSkull:
-.incbin "../build/gfx/parts/arm_l/skull.png.bin"
-.org 0x26BCAA
 Part_ArmRSkull:
 .incbin "../build/gfx/parts/arm_r/skull.png.bin"
+.org 0x26BCAA
+Part_ArmLSkull:
+.incbin "../build/gfx/parts/arm_l/skull.png.bin"
 .org 0x26BDE4
-Part_ArmLDgnhed:
-.incbin "../build/gfx/parts/arm_l/dgnhed.png.bin"
-.org 0x26BF32
 Part_ArmRDgnhed:
 .incbin "../build/gfx/parts/arm_r/dgnhed.png.bin"
+.org 0x26BF32
+Part_ArmLDgnhed:
+.incbin "../build/gfx/parts/arm_l/dgnhed.png.bin"
 .org 0x26C084
-Part_ArmLEwire:
-.incbin "../build/gfx/parts/arm_l/ewire.png.bin"
-.org 0x26C17F
 Part_ArmREwire:
 .incbin "../build/gfx/parts/arm_r/ewire.png.bin"
+.org 0x26C17F
+Part_ArmLEwire:
+.incbin "../build/gfx/parts/arm_l/ewire.png.bin"
 .org 0x26C27B
-Part_ArmLArmwre:
-.incbin "../build/gfx/parts/arm_l/armwre.png.bin"
-.org 0x26C3EA
 Part_ArmRArmwre:
 .incbin "../build/gfx/parts/arm_r/armwre.png.bin"
+.org 0x26C3EA
+Part_ArmLArmwre:
+.incbin "../build/gfx/parts/arm_l/armwre.png.bin"
 .org 0x26C574
-Part_ArmLAirhnd:
-.incbin "../build/gfx/parts/arm_l/airhnd.png.bin"
-.org 0x26C622
 Part_ArmRAirhnd:
 .incbin "../build/gfx/parts/arm_r/airhnd.png.bin"
+.org 0x26C622
+Part_ArmLAirhnd:
+.incbin "../build/gfx/parts/arm_l/airhnd.png.bin"
 .org 0x26C6E9
-Part_ArmLIceblw:
-.incbin "../build/gfx/parts/arm_l/iceblw.png.bin"
-.org 0x26C7A9
 Part_ArmRIceblw:
 .incbin "../build/gfx/parts/arm_r/iceblw.png.bin"
+.org 0x26C7A9
+Part_ArmLIceblw:
+.incbin "../build/gfx/parts/arm_l/iceblw.png.bin"
 .org 0x26C880
-Part_ArmLHook:
-.incbin "../build/gfx/parts/arm_l/hook.png.bin"
-.org 0x26C936
 Part_ArmRHook:
 .incbin "../build/gfx/parts/arm_r/hook.png.bin"
+.org 0x26C936
+Part_ArmLHook:
+.incbin "../build/gfx/parts/arm_l/hook.png.bin"
 .org 0x26C9EB
-Part_ArmLGiant:
-.incbin "../build/gfx/parts/arm_l/giant.png.bin"
-.org 0x26CAB0
 Part_ArmRGiant:
 .incbin "../build/gfx/parts/arm_r/giant.png.bin"
+.org 0x26CAB0
+Part_ArmLGiant:
+.incbin "../build/gfx/parts/arm_l/giant.png.bin"
 .org 0x26CB85
-Part_ArmLMolehd:
-.incbin "../build/gfx/parts/arm_l/molehd.png.bin"
-.org 0x26CC69
 Part_ArmRMolehd:
 .incbin "../build/gfx/parts/arm_r/molehd.png.bin"
+.org 0x26CC69
+Part_ArmLMolehd:
+.incbin "../build/gfx/parts/arm_l/molehd.png.bin"
 .org 0x26CD72
-Part_ArmLClaw:
-.incbin "../build/gfx/parts/arm_l/claw.png.bin"
-.org 0x26CE26
 Part_ArmRClaw:
 .incbin "../build/gfx/parts/arm_r/claw.png.bin"
+.org 0x26CE26
+Part_ArmLClaw:
+.incbin "../build/gfx/parts/arm_l/claw.png.bin"
 .org 0x26CEEE
-Part_ArmLTriger:
-.incbin "../build/gfx/parts/arm_l/triger.png.bin"
-.org 0x26CFC6
 Part_ArmRTriger:
 .incbin "../build/gfx/parts/arm_r/triger.png.bin"
+.org 0x26CFC6
+Part_ArmLTriger:
+.incbin "../build/gfx/parts/arm_l/triger.png.bin"
 .org 0x26D0B0
-Part_ArmLKiller:
-.incbin "../build/gfx/parts/arm_l/killer.png.bin"
-.org 0x26D186
 Part_ArmRKiller:
 .incbin "../build/gfx/parts/arm_r/killer.png.bin"
+.org 0x26D186
+Part_ArmLKiller:
+.incbin "../build/gfx/parts/arm_l/killer.png.bin"
 .org 0x26D26A
-Part_ArmLKnukle:
-.incbin "../build/gfx/parts/arm_l/knukle.png.bin"
-.org 0x26D337
 Part_ArmRKnukle:
 .incbin "../build/gfx/parts/arm_r/knukle.png.bin"
+.org 0x26D337
+Part_ArmLKnukle:
+.incbin "../build/gfx/parts/arm_l/knukle.png.bin"
 .org 0x26D3E6
-Part_ArmLGloves:
-.incbin "../build/gfx/parts/arm_l/gloves.png.bin"
-.org 0x26D4E0
 Part_ArmRGloves:
 .incbin "../build/gfx/parts/arm_r/gloves.png.bin"
+.org 0x26D4E0
+Part_ArmLGloves:
+.incbin "../build/gfx/parts/arm_l/gloves.png.bin"
 .org 0x26D5CD
-Part_ArmLBllarm:
-.incbin "../build/gfx/parts/arm_l/bllarm.png.bin"
-.org 0x26D64B
 Part_ArmRBllarm:
 .incbin "../build/gfx/parts/arm_r/bllarm.png.bin"
+.org 0x26D64B
+Part_ArmLBllarm:
+.incbin "../build/gfx/parts/arm_l/bllarm.png.bin"
 .org 0x26D6CC
-Part_ArmLTgrhnd:
-.incbin "../build/gfx/parts/arm_l/tgrhnd.png.bin"
-.org 0x26D797
 Part_ArmRTgrhnd:
 .incbin "../build/gfx/parts/arm_r/tgrhnd.png.bin"
+.org 0x26D797
+Part_ArmLTgrhnd:
+.incbin "../build/gfx/parts/arm_l/tgrhnd.png.bin"
 .org 0x26D856
-Part_ArmLOakhnd:
-.incbin "../build/gfx/parts/arm_l/oakhnd.png.bin"
-.org 0x26D90F
 Part_ArmROakhnd:
 .incbin "../build/gfx/parts/arm_r/oakhnd.png.bin"
+.org 0x26D90F
+Part_ArmLOakhnd:
+.incbin "../build/gfx/parts/arm_l/oakhnd.png.bin"
 .org 0x26D9BA
-Part_ArmLNowire:
-.incbin "../build/gfx/parts/arm_l/nowire.png.bin"
-.org 0x26DA7D
 Part_ArmRNowire:
 .incbin "../build/gfx/parts/arm_r/nowire.png.bin"
+.org 0x26DA7D
+Part_ArmLNowire:
+.incbin "../build/gfx/parts/arm_l/nowire.png.bin"
 .org 0x26DB53
-Part_ArmLHammer:
-.incbin "../build/gfx/parts/arm_l/hammer.png.bin"
-.org 0x26DC4B
 Part_ArmRHammer:
 .incbin "../build/gfx/parts/arm_r/hammer.png.bin"
+.org 0x26DC4B
+Part_ArmLHammer:
+.incbin "../build/gfx/parts/arm_l/hammer.png.bin"
 .org 0x26DD58
-Part_ArmLQatar:
-.incbin "../build/gfx/parts/arm_l/qatar.png.bin"
-.org 0x26DE1B
 Part_ArmRQatar:
 .incbin "../build/gfx/parts/arm_r/qatar.png.bin"
+.org 0x26DE1B
+Part_ArmLQatar:
+.incbin "../build/gfx/parts/arm_l/qatar.png.bin"
 .org 0x26DF17
-Part_ArmLFork:
-.incbin "../build/gfx/parts/arm_l/fork.png.bin"
-.org 0x26E002
 Part_ArmRFork:
 .incbin "../build/gfx/parts/arm_r/fork.png.bin"
+.org 0x26E002
+Part_ArmLFork:
+.incbin "../build/gfx/parts/arm_l/fork.png.bin"
 .org 0x26E124
-Part_ArmLNeedle:
-.incbin "../build/gfx/parts/arm_l/needle.png.bin"
-.org 0x26E22B
 Part_ArmRNeedle:
 .incbin "../build/gfx/parts/arm_r/needle.png.bin"
+.org 0x26E22B
+Part_ArmLNeedle:
+.incbin "../build/gfx/parts/arm_l/needle.png.bin"
 .org 0x26E33A
-Part_ArmLSword:
-.incbin "../build/gfx/parts/arm_l/sword.png.bin"
-.org 0x26E436
 Part_ArmRSword:
 .incbin "../build/gfx/parts/arm_r/sword.png.bin"
+.org 0x26E436
+Part_ArmLSword:
+.incbin "../build/gfx/parts/arm_l/sword.png.bin"
 .org 0x26E53F
-Part_ArmLKama:
-.incbin "../build/gfx/parts/arm_l/kama.png.bin"
-.org 0x26E61B
 Part_ArmRKama:
 .incbin "../build/gfx/parts/arm_r/kama.png.bin"
+.org 0x26E61B
+Part_ArmLKama:
+.incbin "../build/gfx/parts/arm_l/kama.png.bin"
 .org 0x26E721
-Part_ArmLFlint:
-.incbin "../build/gfx/parts/arm_l/flint.png.bin"
-.org 0x26E80F
 Part_ArmRFlint:
 .incbin "../build/gfx/parts/arm_r/flint.png.bin"
+.org 0x26E80F
+Part_ArmLFlint:
+.incbin "../build/gfx/parts/arm_l/flint.png.bin"
 .org 0x26E90E
-Part_ArmLStunr:
-.incbin "../build/gfx/parts/arm_l/stunr.png.bin"
-.org 0x26EA3D
 Part_ArmRStunr:
 .incbin "../build/gfx/parts/arm_r/stunr.png.bin"
+.org 0x26EA3D
+Part_ArmLStunr:
+.incbin "../build/gfx/parts/arm_l/stunr.png.bin"
 .org 0x26EB95
 Part_BackSeraph:
 .incbin "../build/gfx/parts/back/seraph.png.bin"
@@ -1416,8 +1572,8 @@ Part_BackFin:
 Part_BackGrav:
 .incbin "../build/gfx/parts/back/grav.png.bin"
 .org 0x26FD9F
-Data_26FD9F:
-.incbin "data/26FD9F.bin"
+AffinityPalettes:
+.incbin "../build/gfx/pal/26FD9F.pal.bin"
 .org 0x26FDD7
 Pal_26FDD7:
 .incbin "../build/gfx/pal/26FDD7.pal.bin"
@@ -1439,6 +1595,9 @@ ItemDescs:
 .org 0x27154B
 Data_27154B:
 .incbin "data/27154B.bin"
+.org 0x271882
+PartCategoryStart:
+.incbin "data/271882.bin"
 .org 0x27188C
 PartNames:
 .incbin "../build/tables/parts.PartNames.bin"
@@ -1454,6 +1613,9 @@ PartStats:
 .org 0x2746C0
 Data_2746C0:
 .incbin "data/2746C0.bin"
+.org 0x284124
+BattleEffects:
+.incbin "data/284124.bin"
 .org 0x2844C4
 MonoPal_2844C4:
 .incbin "../build/gfx/pal/2844C4.pal4.bin"
@@ -3040,10 +3202,7 @@ Data_2C7B6A:
 .incbin "data/2C7B6A.bin"
 .org 0x2C7B6E
 PortraitTable:
-.incbin "../build/gfx/pal/2C7B6E.pal.bin"
-.org 0x2C7BBE
-Data_2C7BBE:
-.incbin "data/2C7BBE.bin"
+.incbin "data/2C7B6E.bin"
 .org 0x2C82AE
 Pal_2C82AE:
 .incbin "../build/gfx/pal/2C82AE.pal.bin"

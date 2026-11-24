@@ -131,8 +131,8 @@ char "<STR13>" AD
 char "<STR14>" AE
 char "<STR15>" AF
 char "<ENEMY>" B0
-char "<LEFTARM>" B1
-char "<RIGHTARM>" B2
+char "<RIGHTARM>" B1
+char "<LEFTARM>" B2
 char "<SKILL1>" B3
 char "<SKILL2>" B4
 char "<WAIT>" FA

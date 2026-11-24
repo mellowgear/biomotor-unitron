@@ -26,8 +26,9 @@ The original ROM is expected at `baserom.ngp` (not included).
 | `src/gfx/maps/`, `src/gfx/pal/` | 164 tile maps, 163 palette files |
 | `src/gfx/pictures/` | Previews only: portraits and screens, verified against the emulator |
 | `src/text/` | 174 text banks as editable `.txt` |
-| `src/tables/` | Game database as editable tables: enemies, enemy attacks, attack names, skills, items, robot parts, enemy scaling, EXP and level-up tables |
+| `src/tables/` | Game database as 30 editable tables: enemies, attacks, skills, items, robot parts, development recipes, dungeon chests, encounter and damage tables, story stages, EXP and level-up tables |
 | `GAME_DATA.md` | Generated player reference: enemy stats, rewards, battle and level formulas (`tools/game_data.py`) |
+| `RAM_MAP.md`, `RAM_REFERENCE.md` | Dev reference, not part of the build: merged RAM map (decomp names + play findings) and open questions for play testing (`make ram`) |
 | `src/data/` | 366 blocks not identified yet (named by address) |
 | `assets.json` | Every asset: address, slot size, kind, source file |
 | `symbols.txt` | Human-readable names for routines and tables |

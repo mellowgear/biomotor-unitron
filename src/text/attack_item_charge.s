@@ -17,5 +17,5 @@ QuitText:
     done
 
 TText:
-    page "<LEFTARM>"
+    page "<RIGHTARM>"
     done

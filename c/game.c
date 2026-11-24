@@ -2,36 +2,36 @@
  * regenerate instead. One C function per discovered TLCS-900/H function. */
 #include "ngpc_rt.h"
 
-void sub_200040(void);
-void sub_200055(void);
+void InitSound(void);
+void ResetSoundState(void);
 void sub_20006F(void);
 void sub_2000E8(void);
-void sub_200122(void);
+void PlaySong(void);
 void sub_200289(void);
 void sub_2002B1(void);
 void sub_2002C8(void);
-void sub_200322(void);
-void sub_200329(void);
+void CopyToZ80(void);
+void SetZ80Pointer(void);
 void sub_20032F(void);
-void sub_20035E(void);
+void UploadZ80Driver(void);
 void start(void);
-void irq_vblank(void);
+void VBlankHandler(void);
 void sub_2060BE(void);
-void sub_2060CB(void);
-void sub_20612E(void);
-void sub_206144(void);
-void sub_20615B(void);
+void Random(void);
+void SetEventFlag(void);
+void ClearEventFlag(void);
+void CheckEventFlag(void);
 void sub_206179(void);
 void sub_206195(void);
 void sub_206197(void);
-void sub_2061B8(void);
+void RemoveItem(void);
 void sub_2061D4(void);
 void sub_2061D6(void);
 void sub_2061EC(void);
 void sub_20620E(void);
 void sub_20622F(void);
-void sub_206250(void);
-void sub_206286(void);
+void InitTaskList(void);
+void RunTasks(void);
 void sub_2062F5(void);
 void sub_206324(void);
 void sub_206350(void);
@@ -42,7 +42,7 @@ void sub_206379(void);
 void sub_2063EE(void);
 void sub_2064C6(void);
 void sub_20659B(void);
-void sub_206626(void);
+void FadePalettes(void);
 void sub_2066DE(void);
 void sub_206768(void);
 void sub_20677A(void);
@@ -54,20 +54,20 @@ void sub_206847(void);
 void sub_206863(void);
 void sub_206877(void);
 void sub_2068B3(void);
-void sub_20692B(void);
+void LoadRawTiles(void);
 void sub_206941(void);
-void sub_206993(void);
+void FillTiles(void);
 void sub_2069C8(void);
 void sub_206A7B(void);
-void sub_206B37(void);
-void sub_206B51(void);
-void sub_206B5D(void);
+void DrawTilemap(void);
+void DrawTilemapScr1(void);
+void DrawTilemapScr2(void);
 void sub_206BFF(void);
 void sub_206C7B(void);
 void sub_206C8F(void);
 void sub_206D30(void);
-void sub_206D9E(void);
-void sub_206DCD(void);
+void LoadPalettes(void);
+void LoadMonoPalettes(void);
 void sub_206E12(void);
 void sub_206E25(void);
 void sub_206EB6(void);
@@ -79,109 +79,109 @@ void sub_206F9E(void);
 void sub_206FAF(void);
 void sub_206FC1(void);
 void sub_206FEA(void);
-void sub_207014(void);
-void sub_207073(void);
+void ReadJoypad(void);
+void GetFontGlyph(void);
 void sub_207093(void);
-void sub_2070C7(void);
-void sub_2071AF(void);
-void sub_207206(void);
-void sub_207226(void);
-void sub_207232(void);
+void DrawPartImage(void);
+void PlotPixel(void);
+void LoadMonsterImage(void);
+void LoadCompressedTiles(void);
+void DecompressTiles(void);
 void sub_2072CD(void);
 void sub_207361(void);
-void fn_2073B3(void);
-void fn_20740C(void);
-void fn_207436(void);
+void TextStep(void);
+void TextCmd_End(void);
+void TextCmd_Wait(void);
 void fn_20743A(void);
 void fn_207443(void);
-void sub_20748A(void);
+void GetTextBox(void);
 void sub_207494(void);
-void sub_2074AA(void);
+void OpenTextBoxNoWait(void);
 void sub_2074C0(void);
 void sub_2074C4(void);
 void sub_207598(void);
 void sub_2075CC(void);
-void sub_2075D0(void);
+void TextCmd_Page(void);
 void sub_207611(void);
 void sub_20762D(void);
-void sub_207657(void);
+void TextCmd_Newline(void);
 void sub_207674(void);
 void sub_20768A(void);
 void sub_20768E(void);
 void sub_207695(void);
-void sub_207699(void);
+void DrawTextChar(void);
 void sub_2076F3(void);
 void sub_2076F7(void);
 void sub_20770B(void);
 void sub_207720(void);
-void sub_207759(void);
+void PlayMusic(void);
 void sub_20776A(void);
 void sub_20776F(void);
 void sub_207788(void);
 void sub_2077A6(void);
 void sub_2077BE(void);
-void sub_2077D1(void);
+void LoadEnemy(void);
 void sub_207A27(void);
 void sub_207A32(void);
-void sub_207B12(void);
+void TryLevelUp(void);
 void sub_207C00(void);
 void sub_207C18(void);
 void sub_207C84(void);
 void sub_207CF0(void);
-void sub_207D40(void);
+void DrawRobot(void);
 void sub_207D9D(void);
 void sub_207DC9(void);
 void sub_207DDF(void);
 void sub_207DF5(void);
 void sub_207E0B(void);
-void sub_207E21(void);
+void DrawRobotPart(void);
 void sub_207E77(void);
-void sub_207E9A(void);
+void LoadEnemyImage(void);
 void sub_207F30(void);
 void sub_207F7C(void);
 void sub_207FF7(void);
-void sub_208007(void);
+void CalcEnemyMinAttackEP(void);
 void sub_208108(void);
 void sub_208146(void);
-void sub_20814D(void);
+void RandomRange(void);
 void sub_20815F(void);
 void sub_20818A(void);
 void sub_20819F(void);
-void sub_2081E7(void);
-void sub_208217(void);
-void sub_208220(void);
+void ApplyAffinity(void);
+void AffinityIndex(void);
+void GetAffinityIcon(void);
 void sub_20823D(void);
-void sub_208272(void);
-void sub_208281(void);
-void sub_208290(void);
-void sub_2082A0(void);
-void sub_2082AF(void);
-void sub_2082BE(void);
-void sub_2082CE(void);
-void sub_2082DC(void);
-void sub_2082EB(void);
-void sub_2082FA(void);
-void sub_20833D(void);
-void sub_20834A(void);
-void sub_20836F(void);
-void sub_20837C(void);
-void sub_208389(void);
-void sub_208396(void);
-void sub_2083A3(void);
-void sub_2083B0(void);
-void sub_2083BF(void);
-void sub_2083CE(void);
-void sub_2083DD(void);
-void sub_2083EC(void);
+void GetItemName(void);
+void GetItemDesc(void);
+void GetBattleItemEffect(void);
+void GetEnemyName(void);
+void GetEnemyRecord(void);
+void GetMonsterImage(void);
+void GetMonsterPalette(void);
+void GetAttackName(void);
+void GetEnemyAttackSlots(void);
+void GetPartName(void);
+void GetArmName(void);
+void GetArmDesc(void);
+void GetBodyRecord(void);
+void GetCoreRecord(void);
+void GetLegsRecord(void);
+void GetBackRecord(void);
+void GetArmRecord(void);
+void GetArmEffects(void);
+void GetSkillName(void);
+void GetSkillDesc(void);
+void GetSkillRecord(void);
+void GetSkillData(void);
 void sub_2083FB(void);
-void sub_20840A(void);
+void GetEnemyScaling(void);
 void sub_208475(void);
 void sub_20847F(void);
-void sub_208489(void);
-void sub_2084F2(void);
-void sub_208505(void);
+void SetRobotDrawParts(void);
+void ShowMessage(void);
+void ExpandMessage(void);
 void sub_20867E(void);
-void sub_20868B(void);
+void CalcUnitStats(void);
 void sub_208879(void);
 void sub_2089CD(void);
 void sub_2089DC(void);
@@ -190,7 +190,7 @@ void sub_2089FA(void);
 void sub_208A09(void);
 void sub_208A18(void);
 void sub_208A27(void);
-void sub_208A36(void);
+void ExpForKill(void);
 void sub_208A6C(void);
 void sub_208A73(void);
 void sub_208A82(void);
@@ -199,28 +199,28 @@ void sub_208AA2(void);
 void sub_208AB7(void);
 void sub_208AC6(void);
 void sub_208AD5(void);
-void sub_208AE4(void);
+void AddGP(void);
 void sub_20984D(void);
-void sub_209B02(void);
+void ShowWeaponInfo(void);
 void sub_209CCE(void);
 void sub_209CDC(void);
 void sub_209D2F(void);
 void sub_20B440(void);
-void sub_20CDEB(void);
+void ShowHPGain(void);
 void sub_20CE00(void);
 void sub_20CE15(void);
-void sub_20CE2A(void);
-void fn_20CF34(void);
-void fn_20CF7C(void);
+void ShowEnemyEPGain(void);
+void MainMenuSetup(void);
+void MainMenu(void);
 void fn_20D0E8(void);
 void sub_20D684(void);
 void fn_20D6DF(void);
 void fn_20D71E(void);
 void fn_20D75D(void);
 void fn_20D77B(void);
-void sub_20D799(void);
+void MainMenuGraphics(void);
 void sub_20D84E(void);
-void sub_20D871(void);
+void StreetMenu(void);
 void sub_20D8FB(void);
 void sub_20D9A6(void);
 void sub_20DA5C(void);
@@ -248,35 +248,35 @@ void fn_20E278(void);
 void fn_20E29B(void);
 void fn_20E2B0(void);
 void fn_20E2CD(void);
-void fn_20E2EA(void);
+void TitleScreen(void);
 void fn_20E36F(void);
-void fn_20E3AF(void);
+void IntroBackground(void);
 void fn_20E496(void);
 void fn_20E789(void);
-void sub_20E7FF(void);
+void IntroTitleScene(void);
 void fn_20E89B(void);
 void fn_20E8E8(void);
-void fn_20E930(void);
-void fn_20E96C(void);
+void TitleReveal(void);
+void IntroLogoScene(void);
 void sub_20EB17(void);
 void sub_20EC49(void);
 void sub_20EC58(void);
 void sub_20ED46(void);
 void fn_20EFD3(void);
-void fn_20EFF4(void);
+void StorySceneUnitice(void);
 void fn_20F628(void);
 void fn_20F6E0(void);
 void fn_20F7AD(void);
 void fn_20F877(void);
-void fn_20F8DA(void);
+void NameEntrySetup(void);
 void fn_20F985(void);
-void sub_20FC87(void);
+void NameEntryScreen(void);
 void sub_20FD4B(void);
-void fn_20FDFA(void);
-void fn_20FF36(void);
+void ConfirmNames(void);
+void SelectPlayerNames(void);
 void fn_21010A(void);
-void sub_210380(void);
-void sub_2103BA(void);
+void DrawPortraitAt(void);
+void DrawPortrait(void);
 void sub_2104EF(void);
 void sub_210560(void);
 void sub_21056F(void);
@@ -342,32 +342,32 @@ void sub_211060(void);
 void sub_2110A4(void);
 void sub_2110FD(void);
 void sub_2111A2(void);
-void sub_211202(void);
-void sub_211421(void);
+void CheckEncounter(void);
+void DungeonStep(void);
 void sub_21156E(void);
 void sub_2115AC(void);
 void sub_2116A7(void);
-void sub_2116BC(void);
-void sub_21170D(void);
-void sub_21172A(void);
-void sub_2117E2(void);
-void sub_21189C(void);
+void PickWorldChest(void);
+void ClearChestTable(void);
+void SetMineChests(void);
+void RollFloorChests(void);
+void RollAllChests(void);
 void sub_2118B2(void);
 void sub_2118F4(void);
 void sub_211966(void);
 void sub_211999(void);
 void sub_2119C8(void);
-void sub_2119DE(void);
-void sub_2119FB(void);
-void sub_211A15(void);
+void GetChestContent(void);
+void GetChestGold(void);
+void GetChestGoldText(void);
 void sub_211A2E(void);
-void sub_211A80(void);
+void RollFloorMaps(void);
 void sub_211B13(void);
 void sub_211B35(void);
 void sub_211BD2(void);
 void sub_211BE0(void);
 void sub_211C52(void);
-void sub_211C7F(void);
+void LoadDungeonPalettes(void);
 void sub_211D03(void);
 void sub_211D80(void);
 void sub_211D92(void);
@@ -376,7 +376,7 @@ void sub_211DDE(void);
 void sub_211DF3(void);
 void sub_211E12(void);
 void sub_211E25(void);
-void sub_211E34(void);
+void DrawCampMenu(void);
 void sub_211E7A(void);
 void sub_211EC0(void);
 void sub_211EE1(void);
@@ -384,15 +384,15 @@ void sub_211EF4(void);
 void sub_211F03(void);
 void sub_211F20(void);
 void sub_211F4A(void);
-void sub_211F6C(void);
+void DrawStatusLabel(void);
 void sub_211FE8(void);
 void sub_21206C(void);
-void sub_212093(void);
+void CampItemUseMenu(void);
 void sub_212192(void);
 void sub_2121F9(void);
 void sub_212241(void);
 void sub_212273(void);
-void sub_2122A6(void);
+void CampLeave(void);
 void sub_2123C2(void);
 void sub_212476(void);
 void sub_21255D(void);
@@ -401,7 +401,7 @@ void sub_212622(void);
 void sub_21264C(void);
 void sub_21265F(void);
 void sub_21266E(void);
-void sub_21267C(void);
+void OpenChest(void);
 void sub_212867(void);
 void sub_21287D(void);
 void sub_212890(void);
@@ -447,7 +447,7 @@ void sub_213201(void);
 void sub_21320D(void);
 void sub_213222(void);
 void sub_21323D(void);
-void sub_213249(void);
+void DrawArenaParticipants(void);
 void sub_2132D2(void);
 void sub_2132FC(void);
 void sub_213326(void);
@@ -524,7 +524,7 @@ void sub_214D23(void);
 void sub_214D64(void);
 void sub_214D82(void);
 void sub_214D97(void);
-void sub_214DCA(void);
+void SquarePlaceMenu(void);
 void sub_214E33(void);
 void sub_214E5D(void);
 void sub_214F0F(void);
@@ -539,7 +539,7 @@ void sub_215179(void);
 void sub_2151B8(void);
 void sub_2151D8(void);
 void sub_21535A(void);
-void sub_2154FB(void);
+void LilyGivesFlowers(void);
 void sub_215741(void);
 void sub_215749(void);
 void sub_215760(void);
@@ -553,7 +553,7 @@ void sub_215C88(void);
 void sub_215DD9(void);
 void sub_215DFE(void);
 void sub_215EDC(void);
-void sub_215F1E(void);
+void HelmutSkillOffer(void);
 void sub_215F84(void);
 void sub_215F8F(void);
 void sub_215FB3(void);
@@ -604,7 +604,7 @@ void sub_216849(void);
 void sub_21684D(void);
 void sub_216851(void);
 void sub_2168AC(void);
-void sub_2168C7(void);
+void ClearStoryStage(void);
 void sub_21691A(void);
 void sub_21698A(void);
 void sub_2169E5(void);
@@ -614,16 +614,16 @@ void sub_216A6A(void);
 void sub_216A78(void);
 void sub_216A86(void);
 void sub_216A94(void);
-void sub_216AA2(void);
-void sub_216ABC(void);
-void sub_216AD4(void);
-void sub_216AFA(void);
+void GetStoryStage(void);
+void GetStageArenaRank(void);
+void SetStoryStage(void);
+void AdvanceStoryStage(void);
 void sub_216B0C(void);
 void sub_216B19(void);
 void sub_216B38(void);
 void sub_216B51(void);
-void sub_216B6A(void);
-void sub_216B89(void);
+void CheckSkillPair1(void);
+void CheckSkillPair2(void);
 void sub_216BA8(void);
 void sub_216BC9(void);
 void sub_216BEE(void);
@@ -678,15 +678,15 @@ void sub_2173D5(void);
 void sub_2173E5(void);
 void sub_2173EE(void);
 void sub_217402(void);
-void sub_21740E(void);
+void SplitRaceGender(void);
 void sub_21741B(void);
 void sub_217434(void);
 void sub_21746E(void);
-void sub_217499(void);
-void sub_2174A8(void);
-void sub_2174B7(void);
-void sub_2174BC(void);
-void sub_2174C1(void);
+void GetDevLevelExp(void);
+void GetDevLevelBonus(void);
+void GetDevPartnerBonus(void);
+void GetDevToolBonus(void);
+void Cap100(void);
 void sub_2174C9(void);
 void sub_2174D9(void);
 void sub_2174E9(void);
@@ -779,7 +779,7 @@ void sub_21895C(void);
 void sub_218965(void);
 void sub_21896A(void);
 void sub_2189B4(void);
-void sub_2189BD(void);
+void UpdateDevelopChance(void);
 void sub_218A34(void);
 void sub_218A62(void);
 void sub_218A69(void);
@@ -847,7 +847,7 @@ void sub_219720(void);
 void sub_21972D(void);
 void sub_219769(void);
 void sub_219776(void);
-void sub_219785(void);
+void CheckEngineerLevelUp(void);
 void sub_2197B5(void);
 void sub_2197BA(void);
 void sub_2197C1(void);
@@ -857,18 +857,18 @@ void sub_219807(void);
 void sub_219823(void);
 void sub_219831(void);
 void sub_219849(void);
-void sub_219864(void);
-void sub_219879(void);
+void Wait30Frames(void);
+void WaitForButton(void);
 void sub_2198E3(void);
 void sub_2198EB(void);
 void sub_21990C(void);
 void sub_219911(void);
-void sub_219947(void);
+void WorksGreeting(void);
 void sub_219A40(void);
 void sub_219C22(void);
-void sub_219C86(void);
-void sub_219F73(void);
-void sub_219FF8(void);
+void WorksInfoMenus(void);
+void WorksHelpMenu(void);
+void WorksTradeMenu(void);
 void sub_21A2E2(void);
 void sub_21A32D(void);
 void sub_21A334(void);
@@ -881,13 +881,13 @@ void sub_21A4DE(void);
 void sub_21A4EC(void);
 void sub_21A50D(void);
 void sub_21A533(void);
-void sub_21A559(void);
+void WorksSetupMenu(void);
 void sub_21A66B(void);
-void sub_21A68A(void);
-void sub_21A9A9(void);
-void sub_21A9D5(void);
-void sub_21A9FF(void);
-void sub_21AA34(void);
+void WorksDevelopMenu(void);
+void DevelopRoll(void);
+void DevelopSuccess(void);
+void EngineerLevelUp(void);
+void WorksDevelopDone(void);
 void sub_21AAA5(void);
 void sub_21AB7A(void);
 void sub_21ABDA(void);
@@ -930,7 +930,7 @@ void sub_21B9F8(void);
 void sub_21BA05(void);
 void sub_21BA12(void);
 void sub_21BA24(void);
-void sub_21D192(void);
+void GetRecipe(void);
 void sub_21D1AE(void);
 void sub_21D1BB(void);
 void sub_21D1C8(void);
@@ -952,18 +952,18 @@ void sub_21D4FD(void);
 void fn_21D5C5(void);
 void fn_21D5E9(void);
 void fn_21D60B(void);
-void fn_21D647(void);
+void NewGameSetup(void);
 void fn_21D758(void);
 void fn_21D800(void);
 void sub_21D9B9(void);
-void sub_21D9F5(void);
-void sub_21DA0C(void);
+void BiosCall(void);
+void InitConsoleType(void);
 
-void sub_200040(void)
+void InitSound(void)
 {
     wr16(Z80_RESET, 0xAAAA);                                     /* 200040 LDW     (0xB8),0xAAAA */
     ;                                                            /* 200044 NOP */
-    push32(0x200049); sub_20035E();                              /* 200045 CALL    0x20035E */
+    push32(0x200049); UploadZ80Driver();                         /* 200045 CALL    0x20035E */
     wr16(Z80_RESET, 0x5555);                                     /* 200049 LDW     (0xB8),0x5555 */
     ;                                                            /* 20004D NOP */
     WA = 0x7D0;                                                  /* 20004E LD      WA,0x7D0 */
@@ -971,7 +971,7 @@ void sub_200040(void)
     XSP += 4; return;                                            /* 200054 RET */
 }
 
-void sub_200055(void)
+void ResetSoundState(void)
 {
     A = (uint8_t)(A - A);                                        /* 200055 SUB     A,A */
     wr8(0x62AA, A);                                              /* 200057 LD      (0x62AA),A */
@@ -1011,7 +1011,7 @@ L_2000A2:
     /* CP A,0xFF */                                              /* 2000A2 CP      A,0xFF */
     if ((uint8_t)(A) != (uint8_t)(0xFF)) goto L_2000AC;          /* 2000A5 JR      NZ,0x2000AC */
     push8(A);                                                    /* 2000A7 PUSH    A */
-    push32(0x2000AB); sub_200055();                              /* 2000A8 CALR    0x200055 */
+    push32(0x2000AB); ResetSoundState();                         /* 2000A8 CALR    0x200055 */
     A = pop8();                                                  /* 2000AB POP     A */
 L_2000AC:
     W = rd8(0x62AB);                                             /* 2000AC LD      W,(0x62AB) */
@@ -1076,7 +1076,7 @@ L_20011E:
     XSP += 4; return;                                            /* 200121 RET */
 }
 
-void sub_200122(void)
+void PlaySong(void)
 {
     push32(XBC);                                                 /* 200122 PUSH    XBC */
     push32(XDE);                                                 /* 200123 PUSH    XDE */
@@ -1084,7 +1084,7 @@ void sub_200122(void)
     push32(XIX);                                                 /* 200125 PUSH    XIX */
     push32(XIY);                                                 /* 200126 PUSH    XIY */
     push32(XWA);                                                 /* 200127 PUSH    XWA */
-    push32(0x20012C); sub_200055();                              /* 200128 CALL    0x200055 */
+    push32(0x20012C); ResetSoundState();                         /* 200128 CALL    0x200055 */
     XWA = pop32();                                               /* 20012C POP     XWA */
     XHL = 0x200E86;                                              /* 20012D LD      XHL,0x200E86 */
     XWA = (uint32_t)(XWA + XWA);                                 /* 200132 ADD     XWA,XWA */
@@ -1110,13 +1110,13 @@ L_200151:
     push32(XHL);                                                 /* 200166 PUSH    XHL */
     push32(XBC);                                                 /* 200167 PUSH    XBC */
     push32(XIX);                                                 /* 200168 PUSH    XIX */
-    push32(0x20016D); sub_20035E();                              /* 200169 CALL    0x20035E */
+    push32(0x20016D); UploadZ80Driver();                         /* 200169 CALL    0x20035E */
     XIX = pop32();                                               /* 20016D POP     XIX */
     XBC = pop32();                                               /* 20016E POP     XBC */
     XHL = pop32();                                               /* 20016F POP     XHL */
     XDE = pop32();                                               /* 200170 POP     XDE */
     push32(XWA);                                                 /* 200171 PUSH    XWA */
-    push32(0x200176); sub_200055();                              /* 200172 CALL    0x200055 */
+    push32(0x200176); ResetSoundState();                         /* 200172 CALL    0x200055 */
     XWA = pop32();                                               /* 200176 POP     XWA */
     wr16(Z80_RESET, 0x5555);                                     /* 200177 LDW     (0xB8),0x5555 */
     ;                                                            /* 20017B NOP */
@@ -1137,11 +1137,11 @@ L_200196:
     XDE = (uint32_t)(XDE + 0x7000);                              /* 2001A4 ADD     XDE,0x7000 */
     wr32(0x633C, XDE);                                           /* 2001AA LD      (0x633C),XDE */
     XDE = rd32(0x6334);                                          /* 2001AF LD      XDE,(0x6334) */
-    push32(0x2001B7); sub_200329();                              /* 2001B4 CALR    0x200329 */
+    push32(0x2001B7); SetZ80Pointer();                           /* 2001B4 CALR    0x200329 */
     BC = 6;                                                      /* 2001B7 LD      BC,6 */
-    push32(0x2001BC); sub_200322();                              /* 2001B9 CALR    0x200322 */
+    push32(0x2001BC); CopyToZ80();                               /* 2001B9 CALR    0x200322 */
     XDE = rd32(0x6338);                                          /* 2001BC LD      XDE,(0x6338) */
-    push32(0x2001C4); sub_200329();                              /* 2001C1 CALR    0x200329 */
+    push32(0x2001C4); SetZ80Pointer();                           /* 2001C1 CALR    0x200329 */
     A = rd8(XHL); XHL += 1;                                      /* 2001C4 LD      A,(XHL+) */
     /* OR A,A: test */                                           /* 2001C7 OR      A,A */
     if ((uint8_t)A == 0) goto L_200286;                          /* 2001C9 JP      Z,0x200286 */
@@ -1152,11 +1152,11 @@ L_2001CE:
     XHL = 0x200E67;                                              /* 2001D5 LD      XHL,0x200E67 */
     XHL = (uint32_t)(XHL + (int16_t)DE);                         /* 2001DA LDA     XHL,XHL+DE */
     BC = 9;                                                      /* 2001DF LD      BC,9 */
-    push32(0x2001E5); sub_200322();                              /* 2001E2 CALR    0x200322 */
+    push32(0x2001E5); CopyToZ80();                               /* 2001E2 CALR    0x200322 */
     XHL = pop32();                                               /* 2001E5 POP     XHL */
     if (--A != 0) goto L_2001CE;                                 /* 2001E6 DJNZ    A,0x2001CE */
     XDE = rd32(0x633C);                                          /* 2001E9 LD      XDE,(0x633C) */
-    push32(0x2001F1); sub_200329();                              /* 2001EE CALR    0x200329 */
+    push32(0x2001F1); SetZ80Pointer();                           /* 2001EE CALR    0x200329 */
     XIX = 0x62AE;                                                /* 2001F1 LD      XIX,0x62AE */
     XIY = 0x62EE;                                                /* 2001F6 LD      XIY,0x62EE */
 L_2001FB:
@@ -1187,17 +1187,17 @@ L_200231:
     BC = (uint16_t)(BC - WA);                                    /* 200243 SUB     BC,WA */
     wr16(0x6344, DE);                                            /* 200245 LD      (0x6344),DE */
     { uint16_t t = rd16(0x6344); wr16(0x6344, BC); BC = t; }     /* 20024A EX      (0x6344),BC */
-    push32(0x200252); sub_200322();                              /* 20024F CALR    0x200322 */
+    push32(0x200252); CopyToZ80();                               /* 20024F CALR    0x200322 */
     XHL = (uint32_t)(XHL + (int16_t)WA);                         /* 200252 LDA     XHL,XHL+WA */
     XDE = rd32(0x6340);                                          /* 200257 LD      XDE,(0x6340) */
     wr32(0x6340, XHL);                                           /* 20025C LD      (0x6340),XHL */
     XHL = XDE;                                                   /* 200261 LD      XHL,XDE */
     BC = WA;                                                     /* 200263 LD      BC,WA */
-    push32(0x200268); sub_200322();                              /* 200265 CALR    0x200322 */
+    push32(0x200268); CopyToZ80();                               /* 200265 CALR    0x200322 */
     push32(XHL);                                                 /* 200268 PUSH    XHL */
     XHL = rd32(0x6340);                                          /* 200269 LD      XHL,(0x6340) */
     BC = rd16(0x6344);                                           /* 20026E LD      BC,(0x6344) */
-    push32(0x200276); sub_200322();                              /* 200273 CALR    0x200322 */
+    push32(0x200276); CopyToZ80();                               /* 200273 CALR    0x200322 */
     wr32(0x633C, XDE);                                           /* 200276 LD      (0x633C),XDE */
     XHL = pop32();                                               /* 20027B POP     XHL */
     goto L_2001FB;                                               /* 20027C JP      0x2001FB */
@@ -1296,14 +1296,14 @@ L_20031E:
     XSP += 4; return;                                            /* 200321 RET */
 }
 
-void sub_200322(void)
+void CopyToZ80(void)
 {
     XDE = rd32(0x6330);                                          /* 200322 LD      XDE,(0x6330) */
     do { wr8(XDE, rd8(XHL)); XDE += 1; XHL += 1; BC--; } while (BC != 0); cpu.fh = cpu.fn = 0; cpu.fv = 0; /* 200327 LDIR    (XDE+),(XHL+) */
-    { sub_200329(); return; }
+    { SetZ80Pointer(); return; }
 }
 
-void sub_200329(void)
+void SetZ80Pointer(void)
 {
     wr32(0x6330, XDE);                                           /* 200329 LD      (0x6330),XDE */
     XSP += 4; return;                                            /* 20032E RET */
@@ -1329,10 +1329,10 @@ L_200355:
     XSP += 4; return;                                            /* 20035D RET */
 }
 
-void sub_20035E(void)
+void UploadZ80Driver(void)
 {
     XDE = 0x7000;                                                /* 20035E LD      XDE,0x7000 */
-    push32(0x200366); sub_200329();                              /* 200363 CALR    0x200329 */
+    push32(0x200366); SetZ80Pointer();                           /* 200363 CALR    0x200329 */
     XHL = 0x2003B2;                                              /* 200366 LD      XHL,0x2003B2 */
     XDE = XHL;                                                   /* 20036B LD      XDE,XHL */
     BC = rd16(XDE + 0x8F);                                       /* 20036D LD      BC,(XDE+0x8F) */
@@ -1340,14 +1340,14 @@ void sub_20035E(void)
     XDE = (uint32_t)(uint16_t)XDE;                               /* 200374 EXTZ    XDE */
     XDE = (uint32_t)(XDE + 0x7000);                              /* 200376 LDA     XDE,XDE+0x7000 */
     wr32(0x6334, XDE);                                           /* 20037B LD      (0x6334),XDE */
-    push32(0x200383); sub_200322();                              /* 200380 CALR    0x200322 */
+    push32(0x200383); CopyToZ80();                               /* 200380 CALR    0x200322 */
     XDE = (uint32_t)(XDE + 6);                                   /* 200383 ADD     XDE,6 */
-    push32(0x20038C); sub_200329();                              /* 200389 CALR    0x200329 */
+    push32(0x20038C); SetZ80Pointer();                           /* 200389 CALR    0x200329 */
     XHL = 0x200E82;                                              /* 20038C LD      XHL,0x200E82 */
     BC = rd16(XHL); XHL += 2;                                    /* 200391 LD      BC,(XHL+) */
     /* OR BC,BC: test */                                         /* 200394 OR      BC,BC */
     if ((uint16_t)BC == 0) goto L_20039B;                        /* 200396 JR      Z,0x20039B */
-    push32(0x20039B); sub_200322();                              /* 200398 CALR    0x200322 */
+    push32(0x20039B); CopyToZ80();                               /* 200398 CALR    0x200322 */
 L_20039B:
     wr32(0x6338, XDE);                                           /* 20039B LD      (0x6338),XDE */
     XSP += 4; return;                                            /* 2003A0 RET */
@@ -1355,7 +1355,7 @@ L_20039B:
 
 void start(void)
 {
-    push32(0x205FA7); sub_21DA0C();                              /* 205FA3 CALL    0x21DA0C */
+    push32(0x205FA7); InitConsoleType();                         /* 205FA3 CALL    0x21DA0C */
     goto L_205FAB;                                               /* 205FA7 JP      0x205FAB */
 L_205FAB:
     cpu.iff = 7;                                                 /* 205FAB DI */
@@ -1363,7 +1363,7 @@ L_205FAB:
     XSP = 0x6C00;                                                /* 205FAF LD      XSP,0x6C00 */
     RW3 = 1;                                                     /* 205FB4 LD      RW3,1 */
     RBC3 = 0;                                                    /* 205FB7 LD      RBC3,0 */
-    push32(0x205FBE); sub_21D9F5();                              /* 205FBA CALL    0x21D9F5 */
+    push32(0x205FBE); BiosCall();                                /* 205FBA CALL    0x21D9F5 */
     XWA = 0;                                                     /* 205FBE LD      XWA,0 */
     XHL = 0x4000;                                                /* 205FC0 LD      XHL,0x4000 */
 L_205FC5:
@@ -1373,13 +1373,13 @@ L_205FC5:
     { uint32_t ea = TRUN; wr8(ea, (uint8_t)(rd8(ea) | 0x80)); }  /* 205FCE ORB     (0x20),0x80 */
     RW3 = 2;                                                     /* 205FD2 LD      RW3,2 */
     XHL3 = 0x500C;                                               /* 205FD5 LD      XHL3,0x500C */
-    push32(0x205FE0); sub_21D9F5();                              /* 205FDC CALL    0x21D9F5 */
+    push32(0x205FE0); BiosCall();                                /* 205FDC CALL    0x21D9F5 */
     RW3 = 0x10;                                                  /* 205FE0 LD      RW3,0x10 */
-    push32(0x205FE8); sub_21D9F5();                              /* 205FE4 CALL    0x21D9F5 */
-    push32(0x205FEC); sub_200040();                              /* 205FE8 CALL    0x200040 */
-    push32(0x205FF0); sub_200055();                              /* 205FEC CALL    0x200055 */
+    push32(0x205FE8); BiosCall();                                /* 205FE4 CALL    0x21D9F5 */
+    push32(0x205FEC); InitSound();                               /* 205FE8 CALL    0x200040 */
+    push32(0x205FF0); ResetSoundState();                         /* 205FEC CALL    0x200055 */
     XWA = 0;                                                     /* 205FF0 LD      XWA,0 */
-    push32(0x205FF6); sub_200122();                              /* 205FF2 CALL    0x200122 */
+    push32(0x205FF6); PlaySong();                                /* 205FF2 CALL    0x200122 */
     wr8(0x500A, 0);                                              /* 205FF6 LDB     (0x500A),0 */
     XHL = 0x206073;                                              /* 205FFB LD      XHL,0x206073 */
     wr32(VEC_VBLANK, XHL);                                       /* 206000 LD      (0x6FCC),XHL */
@@ -1389,7 +1389,7 @@ L_205FC5:
     DE = (uint16_t)(DE + 1);                                     /* 206010 INC     1,DE */
     push32(0x206015); sub_2060BE();                              /* 206012 CALR    0x2060BE */
     push32(0x206019); sub_206379();                              /* 206015 CALL    0x206379 */
-    push32(0x20601D); sub_206250();                              /* 206019 CALL    0x206250 */
+    push32(0x20601D); InitTaskList();                            /* 206019 CALL    0x206250 */
     push32(0x206021); sub_206FEA();                              /* 20601D CALL    0x206FEA */
     push32(0x206025); sub_206E12();                              /* 206021 CALL    0x206E12 */
     wr8(0x5280, 3);                                              /* 206025 LDB     (0x5280),3 */
@@ -1403,10 +1403,10 @@ L_20603E:
     /* CP (0x500A),0 */                                          /* 20603E CPB     (0x500A),0 */
     if ((uint8_t)(rd8(0x500A)) != (uint8_t)(0)) goto L_20603E;   /* 206043 JR      NZ,0x20603E */
     push32(0x206049); sub_20659B();                              /* 206045 CALL    0x20659B */
-    push32(0x20604D); sub_207014();                              /* 206049 CALL    0x207014 */
+    push32(0x20604D); ReadJoypad();                              /* 206049 CALL    0x207014 */
     push32(0x206051); sub_207361();                              /* 20604D CALL    0x207361 */
     push32(0x206055); sub_206E25();                              /* 206051 CALL    0x206E25 */
-    push32(0x206059); sub_206286();                              /* 206055 CALL    0x206286 */
+    push32(0x206059); RunTasks();                                /* 206055 CALL    0x206286 */
     push32(0x20605D); sub_2000E8();                              /* 206059 CALL    0x2000E8 */
     /* CP (0x5CE1),0 */                                          /* 20605D CPB     (0x5CE1),0 */
     if ((uint8_t)(rd8(0x5CE1)) == (uint8_t)(0)) goto L_206039;   /* 206062 JR      Z,0x206039 */
@@ -1415,7 +1415,7 @@ L_20603E:
     goto L_205FAB;                                               /* 206070 JRL     0x205FAB */
 }
 
-void irq_vblank(void)
+void VBlankHandler(void)
 {
     push32(XWA);                                                 /* 206073 PUSH    XWA */
     push32(XBC);                                                 /* 206074 PUSH    XBC */
@@ -1426,7 +1426,7 @@ void irq_vblank(void)
     push32(XDE3);                                                /* 20607D PUSH    XDE3 */
     push32(XHL3);                                                /* 206080 PUSH    XHL3 */
     RW3 = 0x16;                                                  /* 206083 LD      RW3,0x16 */
-    push32(0x20608B); sub_21D9F5();                              /* 206087 CALL    0x21D9F5 */
+    push32(0x20608B); BiosCall();                                /* 206087 CALL    0x21D9F5 */
     push32(0x20608F); sub_2064C6();                              /* 20608B CALL    0x2064C6 */
     push32(0x206093); sub_21D9B9();                              /* 20608F CALL    0x21D9B9 */
     XWA = rd32(0x5006);                                          /* 206093 LD      XWA,(0x5006) */
@@ -1435,7 +1435,7 @@ void irq_vblank(void)
     wr8(0x500A, 0);                                              /* 20609D LDB     (0x500A),0 */
     wr8(WDCR, 0x4E);                                             /* 2060A2 LDB     (0x6F),0x4E */
     RW3 = 0x15;                                                  /* 2060A5 LD      RW3,0x15 */
-    push32(0x2060AD); sub_21D9F5();                              /* 2060A9 CALL    0x21D9F5 */
+    push32(0x2060AD); BiosCall();                                /* 2060A9 CALL    0x21D9F5 */
     XHL3 = pop32();                                              /* 2060AD POP     XHL3 */
     XDE3 = pop32();                                              /* 2060B0 POP     XDE3 */
     XBC3 = pop32();                                              /* 2060B3 POP     XBC3 */
@@ -1455,7 +1455,7 @@ void sub_2060BE(void)
     XSP += 4; return;                                            /* 2060CA RET */
 }
 
-void sub_2060CB(void)
+void Random(void)
 {
     push32(XBC);                                                 /* 2060CB PUSH    XBC */
     BC = rd16(0x5000);                                           /* 2060CC LD      BC,(0x5000) */
@@ -1489,7 +1489,7 @@ void sub_2060CB(void)
     XSP += 4; return;                                            /* 20612D RET */
 }
 
-void sub_20612E(void)
+void SetEventFlag(void)
 {
     H = 0;                                                       /* 20612E LD      H,0 */
     XHL = (uint32_t)(uint16_t)XHL;                               /* 206130 EXTZ    XHL */
@@ -1502,7 +1502,7 @@ void sub_20612E(void)
     XSP += 4; return;                                            /* 206143 RET */
 }
 
-void sub_206144(void)
+void ClearEventFlag(void)
 {
     H = 0;                                                       /* 206144 LD      H,0 */
     XHL = (uint32_t)(uint16_t)XHL;                               /* 206146 EXTZ    XHL */
@@ -1515,7 +1515,7 @@ void sub_206144(void)
     XSP += 4; return;                                            /* 20615A RET */
 }
 
-void sub_20615B(void)
+void CheckEventFlag(void)
 {
     push8(A);                                                    /* 20615B PUSH    A */
     push16(BC);                                                  /* 20615C PUSH    BC */
@@ -1573,7 +1573,7 @@ void sub_206197(void)
     XSP += 4; return;                                            /* 2061B5 RET */
 }
 
-void sub_2061B8(void)
+void RemoveItem(void)
 {
     XHL = 0x507F;                                                /* 2061B8 LD      XHL,0x507F */
     C = rd8(XHL + (int16_t)WA);                                  /* 2061BD LD      C,(XHL+WA) */
@@ -1663,7 +1663,7 @@ void sub_20622F(void)
     XSP += 4; return;                                            /* 20624F RET */
 }
 
-void sub_206250(void)
+void InitTaskList(void)
 {
     XWA = 0;                                                     /* 206250 LD      XWA,0 */
     XHL = 0x5282;                                                /* 206252 LD      XHL,0x5282 */
@@ -1682,7 +1682,7 @@ L_20625A:
     XSP += 4; return;                                            /* 206285 RET */
 }
 
-void sub_206286(void)
+void RunTasks(void)
 {
     XIZ = 0;                                                     /* 206286 LD      XIZ,0 */
     IZ = rd16(0x5844);                                           /* 206288 LD      IZ,(0x5844) */
@@ -1812,7 +1812,7 @@ void sub_206379(void)
     wr8(0x5BC6, 0x10);                                           /* 206385 LDB     (0x5BC6),0x10 */
     RW3 = 0xE;                                                   /* 20638A LD      RW3,0xE */
     RA3 = 0x10;                                                  /* 20638E LD      RA3,0x10 */
-    push32(0x206396); sub_21D9F5();                              /* 206392 CALL    0x21D9F5 */
+    push32(0x206396); BiosCall();                                /* 206392 CALL    0x21D9F5 */
 L_206396:
     wr8(GE_PLANE_PRIO, 0x80);                                    /* 206396 LDB     (0x8030),0x80 */
     wr8(GE_BGC, 0x80);                                           /* 20639B LDB     (0x8118),0x80 */
@@ -1824,7 +1824,7 @@ L_206396:
     RW3 = 4;                                                     /* 2063B3 LD      RW3,4 */
     RB3 = 0;                                                     /* 2063B6 LD      RB3,0 */
     RC3 = 2;                                                     /* 2063B9 LD      RC3,2 */
-    push32(0x2063C0); sub_21D9F5();                              /* 2063BC CALL    0x21D9F5 */
+    push32(0x2063C0); BiosCall();                                /* 2063BC CALL    0x21D9F5 */
     push32(0x2063C4); sub_2067E1();                              /* 2063C0 CALL    0x2067E1 */
     push32(0x2063C8); sub_206847();                              /* 2063C4 CALL    0x206847 */
     push32(0x2063CC); sub_2063EE();                              /* 2063C8 CALL    0x2063EE */
@@ -2005,7 +2005,7 @@ L_2065F1:
     A = rd8(0x585B);                                             /* 2065F1 LD      A,(0x585B) */
     alu_cp(A, rd8(0x585C), 8);                                   /* 2065F5 CP      A,(0x585C) */
     wr8(0x585C, A);                                              /* 2065F9 LD      (0x585C),A */
-    if (!cpu.fz) { push32(0x206602); sub_206626(); }             /* 2065FD CALL    NZ,0x206626 */
+    if (!cpu.fz) { push32(0x206602); FadePalettes(); }           /* 2065FD CALL    NZ,0x206626 */
     goto L_206617;                                               /* 206602 JR      0x206617 */
 L_206604:
     A = rd8(0x585B);                                             /* 206604 LD      A,(0x585B) */
@@ -2021,7 +2021,7 @@ L_206617:
     XSP += 4; return;                                            /* 206625 RET */
 }
 
-void sub_206626(void)
+void FadePalettes(void)
 {
     /* CP (0x5BC6),0x10 */                                       /* 206626 CPB     (0x5BC6),0x10 */
     if ((uint8_t)(rd8(0x5BC6)) < (uint8_t)(0x10)) { XSP += 4; return; } /* 20662B RET     C */
@@ -2455,7 +2455,7 @@ L_2068D5:
     XSP += 4; return;                                            /* 2068EE RET */
 }
 
-void sub_20692B(void)
+void LoadRawTiles(void)
 {
     BC = rd16(XHL); XHL += 2;                                    /* 20692B LD      BC,(XHL+) */
     BC = (uint16_t)(BC << 3);                                    /* 20692E SLL     3,BC */
@@ -2508,7 +2508,7 @@ L_20698E:
     XSP += 4; return;                                            /* 206992 RET */
 }
 
-void sub_206993(void)
+void FillTiles(void)
 {
     XDE = 0;                                                     /* 206993 LD      XDE,0 */
     QA = (uint8_t)(QA & 3);                                      /* 206995 AND     QA,3 */
@@ -2687,7 +2687,7 @@ L_206B34:
     XSP += 4; return;                                            /* 206B36 RET */
 }
 
-void sub_206B37(void)
+void DrawTilemap(void)
 {
     WA = (uint16_t)(WA - 1);                                     /* 206B37 DEC     1,WA */
     push16(WA);                                                  /* 206B39 PUSH    WA */
@@ -2769,7 +2769,7 @@ L_206BFC:
     XSP += 4; return;                                            /* 206BFE RET */
 }
 
-void sub_206B51(void)
+void DrawTilemapScr1(void)
 {
     WA = (uint16_t)(WA - 1);                                     /* 206B51 DEC     1,WA */
     push16(WA);                                                  /* 206B53 PUSH    WA */
@@ -2847,7 +2847,7 @@ L_206BFC:
     XSP += 4; return;                                            /* 206BFE RET */
 }
 
-void sub_206B5D(void)
+void DrawTilemapScr2(void)
 {
     WA = (uint16_t)(WA - 1);                                     /* 206B5D DEC     1,WA */
     push16(WA);                                                  /* 206B5F PUSH    WA */
@@ -3181,7 +3181,7 @@ L_206D91:
     XSP += 4; return;                                            /* 206D9D RET */
 }
 
-void sub_206D9E(void)
+void LoadPalettes(void)
 {
     /* CP A,0x30 */                                              /* 206D9E CP      A,0x30 */
     if ((uint8_t)(A) >= (uint8_t)(0x30)) { XSP += 4; return; }   /* 206DA1 RET     NC */
@@ -3205,7 +3205,7 @@ L_206DB0:
     XSP += 4; return;                                            /* 206DCC RET */
 }
 
-void sub_206DCD(void)
+void LoadMonoPalettes(void)
 {
     /* CP A,6 */                                                 /* 206DCD CP      A,6 */
     if ((uint8_t)(A) >= (uint8_t)(6)) { XSP += 4; return; }      /* 206DCF RET     NC */
@@ -3489,7 +3489,7 @@ L_207007:
     XSP += 4; return;                                            /* 207013 RET */
 }
 
-void sub_207014(void)
+void ReadJoypad(void)
 {
     XHL = 0x5BDE;                                                /* 207014 LD      XHL,0x5BDE */
     E = rd8(0x5BDD);                                             /* 207019 LD      E,(0x5BDD) */
@@ -3522,7 +3522,7 @@ L_207058:
     XSP += 4; return;                                            /* 207072 RET */
 }
 
-void sub_207073(void)
+void GetFontGlyph(void)
 {
     /* OR L,L: test */                                           /* 207073 OR      L,L */
     if ((uint8_t)L == 0) goto L_20708D;                          /* 207075 JR      Z,0x20708D */
@@ -3540,7 +3540,7 @@ L_20708D:
 
 void sub_207093(void)
 {
-    push32(0x207097); sub_207073();                              /* 207093 CALL    0x207073 */
+    push32(0x207097); GetFontGlyph();                            /* 207093 CALL    0x207073 */
     XDE = 0;                                                     /* 207097 LD      XDE,0 */
     DE = WA;                                                     /* 207099 LD      DE,WA */
     XDE = (uint32_t)(XDE << 4);                                  /* 20709B SLL     4,XDE */
@@ -3562,7 +3562,7 @@ L_2070AB:
     XSP += 4; return;                                            /* 2070C6 RET */
 }
 
-void sub_2070C7(void)
+void DrawPartImage(void)
 {
     alu_cp(rd8(XHL), 4, 8); XHL += 1;                            /* 2070C7 CPB     (XHL+),4 */
     if (!cpu.fz) { XSP += 4; return; }                           /* 2070CB RET     NZ */
@@ -3607,12 +3607,12 @@ L_207119:
     QB = A;                                                      /* 207131 LD      QB,A */
     A = (uint8_t)(A >> 4);                                       /* 207134 SRL     4,A */
     /* CP A,4 */                                                 /* 207137 CP      A,4 */
-    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20713E); sub_2071AF(); } /* 207139 CALL    C,0x2071AF */
+    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20713E); PlotPixel(); } /* 207139 CALL    C,0x2071AF */
     { uint32_t ea = XSP + 0xA; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20713E INCW    1,(XSP+0xA) */
     A = QB;                                                      /* 207141 LD      A,QB */
     A = (uint8_t)(A & 0xF);                                      /* 207144 AND     A,0xF */
     /* CP A,4 */                                                 /* 207147 CP      A,4 */
-    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20714E); sub_2071AF(); } /* 207149 CALL    C,0x2071AF */
+    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20714E); PlotPixel(); } /* 207149 CALL    C,0x2071AF */
     { uint32_t ea = XSP + 0xA; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20714E INCW    1,(XSP+0xA) */
     goto L_207100;                                               /* 207151 JR      0x207100 */
 L_207153:
@@ -3631,12 +3631,12 @@ L_207165:
     QB = A;                                                      /* 20717E LD      QB,A */
     A = (uint8_t)(A >> 4);                                       /* 207181 SRL     4,A */
     /* CP A,4 */                                                 /* 207184 CP      A,4 */
-    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20718B); sub_2071AF(); } /* 207186 CALL    C,0x2071AF */
+    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20718B); PlotPixel(); } /* 207186 CALL    C,0x2071AF */
     { uint32_t ea = XSP + 0xA; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20718B INCW    1,(XSP+0xA) */
     A = QB;                                                      /* 20718E LD      A,QB */
     A = (uint8_t)(A & 0xF);                                      /* 207191 AND     A,0xF */
     /* CP A,4 */                                                 /* 207194 CP      A,4 */
-    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20719B); sub_2071AF(); } /* 207196 CALL    C,0x2071AF */
+    if ((uint8_t)(A) < (uint8_t)(4)) { push32(0x20719B); PlotPixel(); } /* 207196 CALL    C,0x2071AF */
     { uint32_t ea = XSP + 0xA; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20719B INCW    1,(XSP+0xA) */
     if (--QW != 0) goto L_207165;                                /* 20719E DJNZ    QW,0x207165 */
     goto L_207100;                                               /* 2071A2 JRL     0x207100 */
@@ -3648,7 +3648,7 @@ L_2071A5:
     XSP += 4; return;                                            /* 2071AE RET */
 }
 
-void sub_2071AF(void)
+void PlotPixel(void)
 {
     DE = rd16(XSP + 0xE);                                        /* 2071AF LD      DE,(XSP+0xE) */
     DE = divu8(DE, rd8(XSP + 0xC));                              /* 2071B2 DIV     DE,(XSP+0xC) */
@@ -3687,7 +3687,7 @@ void sub_2071AF(void)
     XSP += 4; return;                                            /* 207205 RET */
 }
 
-void sub_207206(void)
+void LoadMonsterImage(void)
 {
     /* CP (XHL+),2 */ XHL += 1;                                  /* 207206 CPB     (XHL+),2 */
     if ((uint8_t)(rd8(XHL)) != (uint8_t)(2)) { XSP += 4; return; } /* 20720A RET     NZ */
@@ -3696,7 +3696,7 @@ void sub_207206(void)
     BC = mulu8(BC, B);                                           /* 207210 MUL     BC,B */
     BC = (uint16_t)(BC >> 6);                                    /* 207212 SRL     6,BC */
     BC = (uint16_t)(BC << 4);                                    /* 207215 SLL     4,BC */
-    push32(0x20721B); sub_207232();                              /* 207218 CALR    0x207232 */
+    push32(0x20721B); DecompressTiles();                         /* 207218 CALR    0x207232 */
     B = pop8();                                                  /* 20721B POP     B */
     D = pop8();                                                  /* 20721D POP     D */
     B = (uint8_t)(B >> 3);                                       /* 20721F SRL     3,B */
@@ -3704,17 +3704,17 @@ void sub_207206(void)
     XSP += 4; return;                                            /* 207225 RET */
 }
 
-void sub_207226(void)
+void LoadCompressedTiles(void)
 {
     BC = rd16(XHL); XHL += 2;                                    /* 207226 LD      BC,(XHL+) */
     push16(BC);                                                  /* 207229 PUSH    BC */
     BC = (uint16_t)(BC << 4);                                    /* 20722A SLL     4,BC */
-    push32(0x207230); sub_207232();                              /* 20722D CALR    0x207232 */
+    push32(0x207230); DecompressTiles();                         /* 20722D CALR    0x207232 */
     BC = pop16();                                                /* 207230 POP     BC */
     XSP += 4; return;                                            /* 207231 RET */
 }
 
-void sub_207232(void)
+void DecompressTiles(void)
 {
     push32(XIX);                                                 /* 207232 PUSH    XIX */
     push32(XIY);                                                 /* 207233 PUSH    XIY */
@@ -3781,31 +3781,31 @@ void sub_2072CD(void)
 {
     WA = 1;                                                      /* 2072CD LD      WA,1 */
     XHL = 0x2C8569;                                              /* 2072CF LD      XHL,0x2C8569 */
-    push32(0x2072D8); sub_20692B();                              /* 2072D4 CALL    0x20692B */
+    push32(0x2072D8); LoadRawTiles();                            /* 2072D4 CALL    0x20692B */
     A = 1;                                                       /* 2072D8 LD      A,1 */
     C = 1;                                                       /* 2072DA LD      C,1 */
     XHL = 0x21F018;                                              /* 2072DC LD      XHL,0x21F018 */
-    push32(0x2072E5); sub_206DCD();                              /* 2072E1 CALL    0x206DCD */
+    push32(0x2072E5); LoadMonoPalettes();                        /* 2072E1 CALL    0x206DCD */
     A = 3;                                                       /* 2072E5 LD      A,3 */
     C = 1;                                                       /* 2072E7 LD      C,1 */
     XHL = 0x21F018;                                              /* 2072E9 LD      XHL,0x21F018 */
-    push32(0x2072F2); sub_206DCD();                              /* 2072EE CALL    0x206DCD */
+    push32(0x2072F2); LoadMonoPalettes();                        /* 2072EE CALL    0x206DCD */
     A = 5;                                                       /* 2072F2 LD      A,5 */
     C = 1;                                                       /* 2072F4 LD      C,1 */
     XHL = 0x21F018;                                              /* 2072F6 LD      XHL,0x21F018 */
-    push32(0x2072FF); sub_206DCD();                              /* 2072FB CALL    0x206DCD */
+    push32(0x2072FF); LoadMonoPalettes();                        /* 2072FB CALL    0x206DCD */
     A = 0xF;                                                     /* 2072FF LD      A,0xF */
     C = 1;                                                       /* 207301 LD      C,1 */
     XHL = 0x21F010;                                              /* 207303 LD      XHL,0x21F010 */
-    push32(0x20730C); sub_206D9E();                              /* 207308 CALL    0x206D9E */
+    push32(0x20730C); LoadPalettes();                            /* 207308 CALL    0x206D9E */
     A = 0x1F;                                                    /* 20730C LD      A,0x1F */
     C = 1;                                                       /* 20730E LD      C,1 */
     XHL = 0x21F010;                                              /* 207310 LD      XHL,0x21F010 */
-    push32(0x207319); sub_206D9E();                              /* 207315 CALL    0x206D9E */
+    push32(0x207319); LoadPalettes();                            /* 207315 CALL    0x206D9E */
     A = 0x2F;                                                    /* 207319 LD      A,0x2F */
     C = 1;                                                       /* 20731B LD      C,1 */
     XHL = 0x21F010;                                              /* 20731D LD      XHL,0x21F010 */
-    push32(0x207326); sub_206D9E();                              /* 207322 CALL    0x206D9E */
+    push32(0x207326); LoadPalettes();                            /* 207322 CALL    0x206D9E */
     A = 8;                                                       /* 207326 LD      A,8 */
     XHL = 0x5CE3;                                                /* 207328 LD      XHL,0x5CE3 */
     XDE = 0;                                                     /* 20732D LD      XDE,0 */
@@ -3832,7 +3832,7 @@ void sub_207361(void)
     A = 0;                                                       /* 207361 LD      A,0 */
 L_207363:
     push8(A);                                                    /* 207363 PUSH    A */
-    push32(0x207368); sub_20748A();                              /* 207364 CALL    0x20748A */
+    push32(0x207368); GetTextBox();                              /* 207364 CALL    0x20748A */
     XBC = rd32(XWA + 8);                                         /* 207368 LD      XBC,(XWA+8) */
     /* OR XBC,XBC: test */                                       /* 20736B OR      XBC,XBC */
     if ((uint32_t)XBC == 0) goto L_207381;                       /* 20736D JR      Z,0x207381 */
@@ -3855,11 +3855,11 @@ L_207381:
     XHL = 0x2C83CB;                                              /* 20739A LD      XHL,0x2C83CB */
 L_20739F:
     WA = 0xB;                                                    /* 20739F LD      WA,0xB */
-    push32(0x2073A6); sub_20692B();                              /* 2073A2 CALL    0x20692B */
+    push32(0x2073A6); LoadRawTiles();                            /* 2073A2 CALL    0x20692B */
     XSP += 4; return;                                            /* 2073A6 RET */
 }
 
-void fn_2073B3(void)
+void TextStep(void)
 {
 L_2073B3:
     XBC = rd32(XWA + 8);                                         /* 2073B3 LD      XBC,(XWA+8) */
@@ -3869,7 +3869,7 @@ L_2073B3:
     wr32(XWA + 8, XBC);                                          /* 2073BD LD      (XWA+8),XBC */
     /* CP L,0xF0 */                                              /* 2073C0 CP      L,0xF0 */
     if ((uint8_t)(L) >= (uint8_t)(0xF0)) goto L_2073D7;          /* 2073C3 JR      NC,0x2073D7 */
-    push32(0x2073C9); sub_207699();                              /* 2073C5 CALL    0x207699 */
+    push32(0x2073C9); DrawTextChar();                            /* 2073C5 CALL    0x207699 */
     L = rd8(XWA + 0x10);                                         /* 2073C9 LD      L,(XWA+0x10) */
     wr8(XWA + 0x11, L);                                          /* 2073CC LD      (XWA+0x11),L */
     /* OR L,L: test */                                           /* 2073CF OR      L,L */
@@ -3890,7 +3890,7 @@ L_2073D7:
     goto L_2073B3;                                               /* 2073F2 JR      0x2073B3 */
 }
 
-void fn_20740C(void)
+void TextCmd_End(void)
 {
     XHL = rd32(XWA + 0xC);                                       /* 20740C LD      XHL,(XWA+0xC) */
     wr32(XWA + 8, XHL);                                          /* 20740F LD      (XWA+8),XHL */
@@ -3899,7 +3899,7 @@ void fn_20740C(void)
     XSP += 4; return;                                            /* 207417 RET */
 }
 
-void fn_207436(void)
+void TextCmd_Wait(void)
 {
     { uint32_t ea = XWA + 0x12; wr8(ea, (uint8_t)(rd8(ea) + 2)); } /* 207436 INCB    2,(XWA+0x12) */
     XSP += 4; return;                                            /* 207439 RET */
@@ -3946,7 +3946,7 @@ void fn_207443(void)
     XSP += 4; return;                                            /* 207489 RET */
 }
 
-void sub_20748A(void)
+void GetTextBox(void)
 {
     WA = mulu8(WA, 0x13);                                        /* 20748A MUL     WA,0x13 */
     WA = (uint16_t)(WA + 0x5CE3);                                /* 20748D ADD     WA,0x5CE3 */
@@ -3956,29 +3956,29 @@ void sub_20748A(void)
 
 void sub_207494(void)
 {
-    push32(0x207498); sub_20748A();                              /* 207494 CALL    0x20748A */
+    push32(0x207498); GetTextBox();                              /* 207494 CALL    0x20748A */
     wr16(XWA + 0, HL);                                           /* 207498 LD      (XWA+0),HL */
     wr8(XWA + 4, C);                                             /* 20749B LD      (XWA+4),C */
     wr8(XWA + 5, E);                                             /* 20749E LD      (XWA+5),E */
     wr8(XWA + 0x12, 0);                                          /* 2074A1 LDB     (XWA+0x12),0 */
-    push32(0x2074A9); sub_2075D0();                              /* 2074A5 CALL    0x2075D0 */
+    push32(0x2074A9); TextCmd_Page();                            /* 2074A5 CALL    0x2075D0 */
     XSP += 4; return;                                            /* 2074A9 RET */
 }
 
-void sub_2074AA(void)
+void OpenTextBoxNoWait(void)
 {
-    push32(0x2074AE); sub_20748A();                              /* 2074AA CALL    0x20748A */
+    push32(0x2074AE); GetTextBox();                              /* 2074AA CALL    0x20748A */
     wr16(XWA + 0, HL);                                           /* 2074AE LD      (XWA+0),HL */
     wr8(XWA + 4, C);                                             /* 2074B1 LD      (XWA+4),C */
     wr8(XWA + 5, E);                                             /* 2074B4 LD      (XWA+5),E */
     wr8(XWA + 0x12, 0x80);                                       /* 2074B7 LDB     (XWA+0x12),0x80 */
-    push32(0x2074BF); sub_2075D0();                              /* 2074BB CALL    0x2075D0 */
+    push32(0x2074BF); TextCmd_Page();                            /* 2074BB CALL    0x2075D0 */
     XSP += 4; return;                                            /* 2074BF RET */
 }
 
 void sub_2074C0(void)
 {
-    push32(0x2074C4); sub_20748A();                              /* 2074C0 CALL    0x20748A */
+    push32(0x2074C4); GetTextBox();                              /* 2074C0 CALL    0x20748A */
     { sub_2074C4(); return; }
 }
 
@@ -4061,7 +4061,7 @@ L_207583:
 
 void sub_207598(void)
 {
-    push32(0x20759C); sub_20748A();                              /* 207598 CALL    0x20748A */
+    push32(0x20759C); GetTextBox();                              /* 207598 CALL    0x20748A */
     XHL = 0;                                                     /* 20759C LD      XHL,0 */
     wr32(XWA + 8, XHL);                                          /* 20759E LD      (XWA+8),XHL */
     wr32(XWA + 0xC, XHL);                                        /* 2075A1 LD      (XWA+0xC),XHL */
@@ -4084,11 +4084,11 @@ void sub_207598(void)
 
 void sub_2075CC(void)
 {
-    push32(0x2075D0); sub_20748A();                              /* 2075CC CALL    0x20748A */
-    { sub_2075D0(); return; }
+    push32(0x2075D0); GetTextBox();                              /* 2075CC CALL    0x20748A */
+    { TextCmd_Page(); return; }
 }
 
-void sub_2075D0(void)
+void TextCmd_Page(void)
 {
     cpu.fz = !((rd8(XWA + 0x12) >> 7) & 1); cpu.fh = 1; cpu.fn = 0; /* 2075D0 BIT     7,(XWA+0x12) */
     if (!cpu.fz) goto L_2075F6;                                  /* 2075D3 JR      NZ,0x2075F6 */
@@ -4102,7 +4102,7 @@ void sub_2075D0(void)
     push32(XWA);                                                 /* 2075E9 PUSH    XWA */
     WA = rd16(XWA + 0);                                          /* 2075EA LD      WA,(XWA+0) */
     QA = 1;                                                      /* 2075ED LD      QA,1 */
-    push32(0x2075F4); sub_206993();                              /* 2075F0 CALL    0x206993 */
+    push32(0x2075F4); FillTiles();                               /* 2075F0 CALL    0x206993 */
     XWA = pop32();                                               /* 2075F4 POP     XWA */
     XSP += 4; return;                                            /* 2075F5 RET */
 L_2075F6:
@@ -4113,14 +4113,14 @@ L_2075F6:
     push32(XWA);                                                 /* 207604 PUSH    XWA */
     WA = rd16(XWA + 0);                                          /* 207605 LD      WA,(XWA+0) */
     QA = 1;                                                      /* 207608 LD      QA,1 */
-    push32(0x20760F); sub_206993();                              /* 20760B CALL    0x206993 */
+    push32(0x20760F); FillTiles();                               /* 20760B CALL    0x206993 */
     XWA = pop32();                                               /* 20760F POP     XWA */
     XSP += 4; return;                                            /* 207610 RET */
 }
 
 void sub_207611(void)
 {
-    push32(0x207615); sub_20748A();                              /* 207611 CALL    0x20748A */
+    push32(0x207615); GetTextBox();                              /* 207611 CALL    0x20748A */
     XHL = 0;                                                     /* 207615 LD      XHL,0 */
     wr32(XWA + 8, XHL);                                          /* 207617 LD      (XWA+8),XHL */
     wr32(XWA + 0xC, XHL);                                        /* 20761A LD      (XWA+0xC),XHL */
@@ -4139,7 +4139,7 @@ void sub_20762D(void)
     B = (uint8_t)(B - 2);                                        /* 207638 DEC     2,B */
     /* CP (XWA+6),B */                                           /* 20763A CP      (XWA+6),B */
     if ((uint8_t)(rd8(XWA + 6)) < (uint8_t)(B)) { XSP += 4; return; } /* 20763D RET     C */
-    push32(0x207643); sub_207657();                              /* 20763F CALL    0x207657 */
+    push32(0x207643); TextCmd_Newline();                         /* 20763F CALL    0x207657 */
     XSP += 4; return;                                            /* 207643 RET */
 L_207644:
     { uint32_t ea = XWA + 6; wr8(ea, (uint8_t)(rd8(ea) + 1)); }  /* 207644 INCB    1,(XWA+6) */
@@ -4150,7 +4150,7 @@ L_207644:
     XSP += 4; return;                                            /* 207652 RET */
 }
 
-void sub_207657(void)
+void TextCmd_Newline(void)
 {
     /* BIT 7,(XWA+0x12) */                                       /* 207657 BIT     7,(XWA+0x12) */
     if (((rd8(XWA + 0x12) >> 7) & 1)) { sub_207674(); return; }  /* 20765A JR      NZ,0x207674 */
@@ -4181,7 +4181,7 @@ void sub_207674(void)
 
 void sub_20768A(void)
 {
-    push32(0x20768E); sub_20748A();                              /* 20768A CALL    0x20748A */
+    push32(0x20768E); GetTextBox();                              /* 20768A CALL    0x20748A */
     { sub_20768E(); return; }
 }
 
@@ -4194,16 +4194,16 @@ void sub_20768E(void)
 
 void sub_207695(void)
 {
-    push32(0x207699); sub_20748A();                              /* 207695 CALL    0x20748A */
-    { sub_207699(); return; }
+    push32(0x207699); GetTextBox();                              /* 207695 CALL    0x20748A */
+    { DrawTextChar(); return; }
 }
 
-void sub_207699(void)
+void DrawTextChar(void)
 {
     /* CP L,0xF0 */                                              /* 207699 CP      L,0xF0 */
     if ((uint8_t)(L) >= (uint8_t)(0xF0)) goto L_2076B1;          /* 20769C JR      NC,0x2076B1 */
     push32(0x2076A2); sub_207720();                              /* 20769E CALL    0x207720 */
-    push32(0x2076A6); sub_207073();                              /* 2076A2 CALL    0x207073 */
+    push32(0x2076A6); GetFontGlyph();                            /* 2076A2 CALL    0x207073 */
     BC = 8;                                                      /* 2076A6 LD      BC,8 */
     do { wr16(XDE, rd16(XHL)); XDE += 2; XHL += 2; BC--; } while (BC != 0); cpu.fh = cpu.fn = 0; cpu.fv = 0; /* 2076A9 LDIRW   (XDE+),(XHL+) */
     push32(0x2076AF); sub_20762D();                              /* 2076AB CALL    0x20762D */
@@ -4223,7 +4223,7 @@ L_2076B1:
 
 void sub_2076F3(void)
 {
-    push32(0x2076F7); sub_20748A();                              /* 2076F3 CALL    0x20748A */
+    push32(0x2076F7); GetTextBox();                              /* 2076F3 CALL    0x20748A */
     { sub_2076F7(); return; }
 }
 
@@ -4236,14 +4236,14 @@ L_2076F9:
     /* CP L,0xFF */                                              /* 2076FE CP      L,0xFF */
     if ((uint8_t)(L) == (uint8_t)(0xFF)) { XSP += 4; return; }   /* 207701 RET     Z */
     push32(XBC);                                                 /* 207703 PUSH    XBC */
-    push32(0x207708); sub_207699();                              /* 207704 CALL    0x207699 */
+    push32(0x207708); DrawTextChar();                            /* 207704 CALL    0x207699 */
     XBC = pop32();                                               /* 207708 POP     XBC */
     goto L_2076F9;                                               /* 207709 JR      0x2076F9 */
 }
 
 void sub_20770B(void)
 {
-    push32(0x20770F); sub_20748A();                              /* 20770B CALL    0x20748A */
+    push32(0x20770F); GetTextBox();                              /* 20770B CALL    0x20748A */
     XDE = 0;                                                     /* 20770F LD      XDE,0 */
     DE = rd16(XWA + 0);                                          /* 207711 LD      DE,(XWA+0) */
     DE = (uint16_t)(DE << 4);                                    /* 207714 SLL     4,DE */
@@ -4277,14 +4277,14 @@ L_207740:
     XSP += 4; return;                                            /* 207758 RET */
 }
 
-void sub_207759(void)
+void PlayMusic(void)
 {
     push16(WA);                                                  /* 207759 PUSH    WA */
-    push32(0x20775E); sub_200040();                              /* 20775A CALL    0x200040 */
-    push32(0x207762); sub_200055();                              /* 20775E CALL    0x200055 */
+    push32(0x20775E); InitSound();                               /* 20775A CALL    0x200040 */
+    push32(0x207762); ResetSoundState();                         /* 20775E CALL    0x200055 */
     WA = pop16();                                                /* 207762 POP     WA */
     XWA = (uint32_t)(uint16_t)XWA;                               /* 207763 EXTZ    XWA */
-    push32(0x207769); sub_200122();                              /* 207765 CALL    0x200122 */
+    push32(0x207769); PlaySong();                                /* 207765 CALL    0x200122 */
     XSP += 4; return;                                            /* 207769 RET */
 }
 
@@ -4345,7 +4345,7 @@ void sub_2077BE(void)
     XSP += 4; return;                                            /* 2077D0 RET */
 }
 
-void sub_2077D1(void)
+void LoadEnemy(void)
 {
     wr8(0x5DA2, A);                                              /* 2077D1 LD      (0x5DA2),A */
     XWA = 0;                                                     /* 2077D5 LD      XWA,0 */
@@ -4358,7 +4358,7 @@ void sub_2077D1(void)
     do { wr8(XDE, rd8(XHL)); XDE += 1; XHL += 1; BC--; } while (BC != 0); cpu.fh = cpu.fn = 0; cpu.fv = 0; /* 2077EA LDIR    (XDE+),(XHL+) */
 L_2077EC:
     L = rd8(0x5DA2);                                             /* 2077EC LD      L,(0x5DA2) */
-    push32(0x2077F4); sub_2082AF();                              /* 2077F0 CALL    0x2082AF */
+    push32(0x2077F4); GetEnemyRecord();                          /* 2077F0 CALL    0x2082AF */
     A = rd8(XHL + 0);                                            /* 2077F4 LD      A,(XHL+0) */
     wr8(0x5DB9, A);                                              /* 2077F7 LD      (0x5DB9),A */
     WA = rd16(XHL + 2);                                          /* 2077FB LD      WA,(XHL+2) */
@@ -4385,15 +4385,15 @@ L_2077EC:
     /* CP (0x5DA2),0x62 */                                       /* 207846 CPB     (0x5DA2),0x62 */
     if ((uint8_t)(rd8(0x5DA2)) >= (uint8_t)(0x62)) goto L_207867; /* 20784B JR      NC,0x207867 */
     WA = 0xB;                                                    /* 20784D LD      WA,0xB */
-    push32(0x207854); sub_20814D();                              /* 207850 CALL    0x20814D */
+    push32(0x207854); RandomRange();                             /* 207850 CALL    0x20814D */
     WA = (uint16_t)(WA - 6);                                     /* 207854 DEC     6,WA */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207856 ADD     (0x5DA5),WA */
     WA = 0xB;                                                    /* 20785A LD      WA,0xB */
-    push32(0x207861); sub_20814D();                              /* 20785D CALL    0x20814D */
+    push32(0x207861); RandomRange();                             /* 20785D CALL    0x20814D */
     WA = (uint16_t)(WA - 6);                                     /* 207861 DEC     6,WA */
     { uint32_t ea = 0x5DA9; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207863 ADD     (0x5DA9),WA */
 L_207867:
-    push32(0x20786B); sub_20840A();                              /* 207867 CALL    0x20840A */
+    push32(0x20786B); GetEnemyScaling();                         /* 207867 CALL    0x20840A */
     WA = rd16(XHL + 0);                                          /* 20786B LD      WA,(XHL+0) */
     XWA = mulu16(XWA, rd16(0x5DA5));                             /* 20786E MUL     XWA,(0x5DA5) */
     XWA = divu16(XWA, 0x64);                                     /* 207872 DIV     XWA,0x64 */
@@ -4420,17 +4420,17 @@ L_207867:
     wr16(0x5DB5, WA);                                            /* 2078C1 LD      (0x5DB5),WA */
     A = rd8(XHL + 0xD);                                          /* 2078C5 LD      A,(XHL+0xD) */
     W = 0;                                                       /* 2078C8 LD      W,0 */
-    push32(0x2078CE); sub_20814D();                              /* 2078CA CALL    0x20814D */
+    push32(0x2078CE); RandomRange();                             /* 2078CA CALL    0x20814D */
     A = (uint8_t)(A + rd8(XHL + 0xC));                           /* 2078CE ADD     A,(XHL+0xC) */
     wr8(0x5DB9, A);                                              /* 2078D1 LD      (0x5DB9),A */
     /* CP (0x5DA2),0x62 */                                       /* 2078D5 CPB     (0x5DA2),0x62 */
     if ((uint8_t)(rd8(0x5DA2)) >= (uint8_t)(0x62)) goto L_2078F6; /* 2078DA JR      NC,0x2078F6 */
     WA = 0xB;                                                    /* 2078DC LD      WA,0xB */
-    push32(0x2078E3); sub_20814D();                              /* 2078DF CALL    0x20814D */
+    push32(0x2078E3); RandomRange();                             /* 2078DF CALL    0x20814D */
     WA = (uint16_t)(WA - 6);                                     /* 2078E3 DEC     6,WA */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2078E5 ADD     (0x5DA5),WA */
     WA = 0xB;                                                    /* 2078E9 LD      WA,0xB */
-    push32(0x2078F0); sub_20814D();                              /* 2078EC CALL    0x20814D */
+    push32(0x2078F0); RandomRange();                             /* 2078EC CALL    0x20814D */
     WA = (uint16_t)(WA - 6);                                     /* 2078F0 DEC     6,WA */
     { uint32_t ea = 0x5DA9; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2078F2 ADD     (0x5DA9),WA */
 L_2078F6:
@@ -4439,7 +4439,7 @@ L_2078F6:
     L = rd8(0x5DD2);                                             /* 2078FE LD      L,(0x5DD2) */
     /* OR L,L: test */                                           /* 207902 OR      L,L */
     if ((uint8_t)L == 0) goto L_207A26;                          /* 207904 JRL     Z,0x207A26 */
-    push32(0x20790B); sub_20836F();                              /* 207907 CALL    0x20836F */
+    push32(0x20790B); GetBodyRecord();                           /* 207907 CALL    0x20836F */
     wr16(0x5DB7, rd16(XHL + 0xE));                               /* 20790B LDW     (0x5DB7),(XHL+0xE) */
     WA = rd16(XHL + 0);                                          /* 207910 LD      WA,(XHL+0) */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207913 ADD     (0x5DA5),WA */
@@ -4454,7 +4454,7 @@ L_2078F6:
     WA = rd16(XHL + 0xA);                                        /* 207933 LD      WA,(XHL+0xA) */
     { uint32_t ea = 0x5DB5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207936 ADD     (0x5DB5),WA */
     L = rd8(0x5DD1);                                             /* 20793A LD      L,(0x5DD1) */
-    push32(0x207942); sub_20837C();                              /* 20793E CALL    0x20837C */
+    push32(0x207942); GetCoreRecord();                           /* 20793E CALL    0x20837C */
     WA = rd16(XHL + 0);                                          /* 207942 LD      WA,(XHL+0) */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207945 ADD     (0x5DA5),WA */
     WA = rd16(XHL + 2);                                          /* 207949 LD      WA,(XHL+2) */
@@ -4468,7 +4468,7 @@ L_2078F6:
     WA = rd16(XHL + 0xA);                                        /* 207965 LD      WA,(XHL+0xA) */
     { uint32_t ea = 0x5DB5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207968 ADD     (0x5DB5),WA */
     L = rd8(0x5DD3);                                             /* 20796C LD      L,(0x5DD3) */
-    push32(0x207974); sub_2083A3();                              /* 207970 CALL    0x2083A3 */
+    push32(0x207974); GetArmRecord();                            /* 207970 CALL    0x2083A3 */
     WA = rd16(XHL + 0);                                          /* 207974 LD      WA,(XHL+0) */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207977 ADD     (0x5DA5),WA */
     WA = rd16(XHL + 2);                                          /* 20797B LD      WA,(XHL+2) */
@@ -4480,7 +4480,7 @@ L_2078F6:
     WA = rd16(XHL + 0xA);                                        /* 207990 LD      WA,(XHL+0xA) */
     { uint32_t ea = 0x5DB5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207993 ADD     (0x5DB5),WA */
     L = rd8(0x5DD4);                                             /* 207997 LD      L,(0x5DD4) */
-    push32(0x20799F); sub_2083A3();                              /* 20799B CALL    0x2083A3 */
+    push32(0x20799F); GetArmRecord();                            /* 20799B CALL    0x2083A3 */
     WA = rd16(XHL + 0);                                          /* 20799F LD      WA,(XHL+0) */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2079A2 ADD     (0x5DA5),WA */
     WA = rd16(XHL + 2);                                          /* 2079A6 LD      WA,(XHL+2) */
@@ -4492,7 +4492,7 @@ L_2078F6:
     WA = rd16(XHL + 0xA);                                        /* 2079BB LD      WA,(XHL+0xA) */
     { uint32_t ea = 0x5DB5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2079BE ADD     (0x5DB5),WA */
     L = rd8(0x5DD5);                                             /* 2079C2 LD      L,(0x5DD5) */
-    push32(0x2079CA); sub_208389();                              /* 2079C6 CALL    0x208389 */
+    push32(0x2079CA); GetLegsRecord();                           /* 2079C6 CALL    0x208389 */
     WA = rd16(XHL + 0);                                          /* 2079CA LD      WA,(XHL+0) */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2079CD ADD     (0x5DA5),WA */
     WA = rd16(XHL + 2);                                          /* 2079D1 LD      WA,(XHL+2) */
@@ -4506,7 +4506,7 @@ L_2078F6:
     WA = rd16(XHL + 0xA);                                        /* 2079ED LD      WA,(XHL+0xA) */
     { uint32_t ea = 0x5DB5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2079F0 ADD     (0x5DB5),WA */
     L = rd8(0x5DD6);                                             /* 2079F4 LD      L,(0x5DD6) */
-    push32(0x2079FC); sub_208396();                              /* 2079F8 CALL    0x208396 */
+    push32(0x2079FC); GetBackRecord();                           /* 2079F8 CALL    0x208396 */
     WA = rd16(XHL + 0);                                          /* 2079FC LD      WA,(XHL+0) */
     { uint32_t ea = 0x5DA5; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2079FF ADD     (0x5DA5),WA */
     WA = rd16(XHL + 2);                                          /* 207A03 LD      WA,(XHL+2) */
@@ -4541,7 +4541,7 @@ void sub_207A32(void)
     { jump_ind(XHL); return; }                                   /* 207A41 JP      (XHL) */
 }
 
-void sub_207B12(void)
+void TryLevelUp(void)
 {
     B = rd8(0x5022);                                             /* 207B12 LD      B,(0x5022) */
     /* CP B,0x32 */                                              /* 207B16 CP      B,0x32 */
@@ -4596,7 +4596,7 @@ L_207B65:
     if ((uint8_t)A == 0) goto L_207BBB;                          /* 207BAB JR      Z,0x207BBB */
     A = (uint8_t)(A + 1);                                        /* 207BAD INC     1,A */
     W = 0;                                                       /* 207BAF LD      W,0 */
-    push32(0x207BB5); sub_20814D();                              /* 207BB1 CALL    0x20814D */
+    push32(0x207BB5); RandomRange();                             /* 207BB1 CALL    0x20814D */
     WA = (uint16_t)(WA - 1);                                     /* 207BB5 DEC     1,WA */
     { uint32_t ea = 0x5027; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207BB7 ADD     (0x5027),WA */
 L_207BBB:
@@ -4605,7 +4605,7 @@ L_207BBB:
     if ((uint8_t)A == 0) goto L_207BD0;                          /* 207BC0 JR      Z,0x207BD0 */
     A = (uint8_t)(A + 1);                                        /* 207BC2 INC     1,A */
     W = 0;                                                       /* 207BC4 LD      W,0 */
-    push32(0x207BCA); sub_20814D();                              /* 207BC6 CALL    0x20814D */
+    push32(0x207BCA); RandomRange();                             /* 207BC6 CALL    0x20814D */
     WA = (uint16_t)(WA - 1);                                     /* 207BCA DEC     1,WA */
     { uint32_t ea = 0x5029; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207BCC ADD     (0x5029),WA */
 L_207BD0:
@@ -4614,7 +4614,7 @@ L_207BD0:
     if ((uint8_t)A == 0) goto L_207BE5;                          /* 207BD5 JR      Z,0x207BE5 */
     A = (uint8_t)(A + 1);                                        /* 207BD7 INC     1,A */
     W = 0;                                                       /* 207BD9 LD      W,0 */
-    push32(0x207BDF); sub_20814D();                              /* 207BDB CALL    0x20814D */
+    push32(0x207BDF); RandomRange();                             /* 207BDB CALL    0x20814D */
     WA = (uint16_t)(WA - 1);                                     /* 207BDF DEC     1,WA */
     { uint32_t ea = 0x502B; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207BE1 ADD     (0x502B),WA */
 L_207BE5:
@@ -4623,7 +4623,7 @@ L_207BE5:
     if ((uint8_t)A == 0) goto L_207BFA;                          /* 207BEA JR      Z,0x207BFA */
     A = (uint8_t)(A + 1);                                        /* 207BEC INC     1,A */
     W = 0;                                                       /* 207BEE LD      W,0 */
-    push32(0x207BF4); sub_20814D();                              /* 207BF0 CALL    0x20814D */
+    push32(0x207BF4); RandomRange();                             /* 207BF0 CALL    0x20814D */
     WA = (uint16_t)(WA - 1);                                     /* 207BF4 DEC     1,WA */
     { uint32_t ea = 0x502D; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 207BF6 ADD     (0x502D),WA */
 L_207BFA:
@@ -4752,7 +4752,7 @@ L_207D01:
     push16(BC);                                                  /* 207D01 PUSH    BC */
     push32(XDE);                                                 /* 207D02 PUSH    XDE */
     L = rd8(0x207D3E);                                           /* 207D03 LD      L,(0x207D3E) */
-    push32(0x207D0C); sub_207073();                              /* 207D08 CALL    0x207073 */
+    push32(0x207D0C); GetFontGlyph();                            /* 207D08 CALL    0x207073 */
     BC = 8;                                                      /* 207D0C LD      BC,8 */
     do { wr16(XDE, rd16(XHL)); XDE += 2; XHL += 2; BC--; } while (BC != 0); cpu.fh = cpu.fn = 0; cpu.fv = 0; /* 207D0F LDIRW   (XDE+),(XHL+) */
     XHL = pop32();                                               /* 207D11 POP     XHL */
@@ -4765,7 +4765,7 @@ L_207D1A:
     XBC = divu16(XBC, 0xA);                                      /* 207D1C DIV     XBC,0xA */
     HL = QBC;                                                    /* 207D20 LD      HL,QBC */
     L = (uint8_t)(L + rd8(0x207D3F));                            /* 207D23 ADD     L,(0x207D3F) */
-    push32(0x207D2C); sub_207073();                              /* 207D28 CALL    0x207073 */
+    push32(0x207D2C); GetFontGlyph();                            /* 207D28 CALL    0x207073 */
     XHL = (uint32_t)(XHL + 0xE);                                 /* 207D2C ADD     XHL,0xE */
     push16(BC);                                                  /* 207D32 PUSH    BC */
     BC = 8;                                                      /* 207D33 LD      BC,8 */
@@ -4776,13 +4776,13 @@ L_207D1A:
     XSP += 4; return;                                            /* 207D3D RET */
 }
 
-void sub_207D40(void)
+void DrawRobot(void)
 {
     push32(XHL);                                                 /* 207D40 PUSH    XHL */
     WA = HL;                                                     /* 207D41 LD      WA,HL */
     QA = 0;                                                      /* 207D43 LD      QA,0 */
     BC = 0x84;                                                   /* 207D46 LD      BC,0x84 */
-    push32(0x207D4D); sub_206993();                              /* 207D49 CALL    0x206993 */
+    push32(0x207D4D); FillTiles();                               /* 207D49 CALL    0x206993 */
     B = rd8(0x5D7F);                                             /* 207D4D LD      B,(0x5D7F) */
     C = rd8(0x5D7B);                                             /* 207D51 LD      C,(0x5D7B) */
     HL = rd16(XSP);                                              /* 207D55 LD      HL,(XSP) */
@@ -4828,7 +4828,7 @@ void sub_207D9D(void)
     DE = (uint16_t)(DE >> 3);                                    /* 207DBE SRL     3,DE */
     XIY = (uint32_t)(XIY - XDE);                                 /* 207DC1 SUB     XIY,XDE */
 L_207DC3:
-    push32(0x207DC6); sub_207E21();                              /* 207DC3 CALR    0x207E21 */
+    push32(0x207DC6); DrawRobotPart();                           /* 207DC3 CALR    0x207E21 */
     XIY = pop32();                                               /* 207DC6 POP     XIY */
     XIX = pop32();                                               /* 207DC7 POP     XIX */
     XSP += 4; return;                                            /* 207DC8 RET */
@@ -4842,7 +4842,7 @@ void sub_207DC9(void)
     push32(XIY);                                                 /* 207DCE PUSH    XIY */
     XIX = 0x220C3C;                                              /* 207DCF LD      XIX,0x220C3C */
     XIY = 0x21F03C;                                              /* 207DD4 LD      XIY,0x21F03C */
-    push32(0x207DDC); sub_207E21();                              /* 207DD9 CALR    0x207E21 */
+    push32(0x207DDC); DrawRobotPart();                           /* 207DD9 CALR    0x207E21 */
     XIY = pop32();                                               /* 207DDC POP     XIY */
     XIX = pop32();                                               /* 207DDD POP     XIX */
     XSP += 4; return;                                            /* 207DDE RET */
@@ -4856,7 +4856,7 @@ void sub_207DDF(void)
     push32(XIY);                                                 /* 207DE4 PUSH    XIY */
     XIX = 0x220D7C;                                              /* 207DE5 LD      XIX,0x220D7C */
     XIY = 0x21FA5C;                                              /* 207DEA LD      XIY,0x21FA5C */
-    push32(0x207DF2); sub_207E21();                              /* 207DEF CALR    0x207E21 */
+    push32(0x207DF2); DrawRobotPart();                           /* 207DEF CALR    0x207E21 */
     XIY = pop32();                                               /* 207DF2 POP     XIY */
     XIX = pop32();                                               /* 207DF3 POP     XIX */
     XSP += 4; return;                                            /* 207DF4 RET */
@@ -4870,7 +4870,7 @@ void sub_207DF5(void)
     push32(XIY);                                                 /* 207DFA PUSH    XIY */
     XIX = 0x220EBC;                                              /* 207DFB LD      XIX,0x220EBC */
     XIY = 0x22047C;                                              /* 207E00 LD      XIY,0x22047C */
-    push32(0x207E08); sub_207E21();                              /* 207E05 CALR    0x207E21 */
+    push32(0x207E08); DrawRobotPart();                           /* 207E05 CALR    0x207E21 */
     XIY = pop32();                                               /* 207E08 POP     XIY */
     XIX = pop32();                                               /* 207E09 POP     XIX */
     XSP += 4; return;                                            /* 207E0A RET */
@@ -4884,13 +4884,13 @@ void sub_207E0B(void)
     push32(XIY);                                                 /* 207E10 PUSH    XIY */
     XIX = 0x220F84;                                              /* 207E11 LD      XIX,0x220F84 */
     XIY = 0x220ABC;                                              /* 207E16 LD      XIY,0x220ABC */
-    push32(0x207E1E); sub_207E21();                              /* 207E1B CALR    0x207E21 */
+    push32(0x207E1E); DrawRobotPart();                           /* 207E1B CALR    0x207E21 */
     XIY = pop32();                                               /* 207E1E POP     XIY */
     XIX = pop32();                                               /* 207E1F POP     XIX */
     XSP += 4; return;                                            /* 207E20 RET */
 }
 
-void sub_207E21(void)
+void DrawRobotPart(void)
 {
     push32(XWA);                                                 /* 207E21 PUSH    XWA */
     WA = HL;                                                     /* 207E22 LD      WA,HL */
@@ -4925,7 +4925,7 @@ L_207E5D:
     QD = 0xB;                                                    /* 207E61 LD      QD,0xB */
     BC = (uint16_t)(int8_t)BC;                                   /* 207E65 EXTS    BC */
     DE = (uint16_t)(int8_t)DE;                                   /* 207E67 EXTS    DE */
-    push32(0x207E6D); sub_2070C7();                              /* 207E69 CALL    0x2070C7 */
+    push32(0x207E6D); DrawPartImage();                           /* 207E69 CALL    0x2070C7 */
     XWA = pop32();                                               /* 207E6D POP     XWA */
     QB = 0xC;                                                    /* 207E6E LD      QB,0xC */
     QD = 0xB;                                                    /* 207E72 LD      QD,0xB */
@@ -4939,7 +4939,7 @@ void sub_207E77(void)
     push16(WA);                                                  /* 207E79 PUSH    WA */
     push32(0x207E7E); sub_208475();                              /* 207E7A CALL    0x208475 */
     HL = rd16(XSP);                                              /* 207E7E LD      HL,(XSP) */
-    push32(0x207E84); sub_207D40();                              /* 207E80 CALL    0x207D40 */
+    push32(0x207E84); DrawRobot();                               /* 207E80 CALL    0x207D40 */
     WA = pop16();                                                /* 207E84 POP     WA */
     BC = pop16();                                                /* 207E85 POP     BC */
     DE = rd16(XSP);                                              /* 207E86 LD      DE,(XSP) */
@@ -4951,7 +4951,7 @@ void sub_207E77(void)
     XSP += 4; return;                                            /* 207E99 RET */
 }
 
-void sub_207E9A(void)
+void LoadEnemyImage(void)
 {
     HL = rd16(0x5DA3);                                           /* 207E9A LD      HL,(0x5DA3) */
     /* CP HL,0xFFFF */                                           /* 207E9E CP      HL,0xFFFF */
@@ -4961,8 +4961,8 @@ void sub_207E9A(void)
     push16(DE);                                                  /* 207EAA PUSH    DE */
     push16(BC);                                                  /* 207EAB PUSH    BC */
     push16(WA);                                                  /* 207EAC PUSH    WA */
-    push32(0x207EB1); sub_2082BE();                              /* 207EAD CALL    0x2082BE */
-    push32(0x207EB5); sub_207206();                              /* 207EB1 CALL    0x207206 */
+    push32(0x207EB1); GetMonsterImage();                         /* 207EAD CALL    0x2082BE */
+    push32(0x207EB5); LoadMonsterImage();                        /* 207EB1 CALL    0x207206 */
     QB = B;                                                      /* 207EB5 LD      QB,B */
     QD = D;                                                      /* 207EB8 LD      QD,D */
     WA = pop16();                                                /* 207EBB POP     WA */
@@ -4975,7 +4975,7 @@ void sub_207E9A(void)
 L_207EC8:
     push32(0x207ECC); sub_206C7B();                              /* 207EC8 CALL    0x206C7B */
     HL = rd16(0x5DA3);                                           /* 207ECC LD      HL,(0x5DA3) */
-    push32(0x207ED4); sub_2082CE();                              /* 207ED0 CALL    0x2082CE */
+    push32(0x207ED4); GetMonsterPalette();                       /* 207ED0 CALL    0x2082CE */
     DE = pop16();                                                /* 207ED4 POP     DE */
     push32(0x207ED9); sub_207F30();                              /* 207ED5 CALL    0x207F30 */
     XSP += 4; return;                                            /* 207ED9 RET */
@@ -4985,10 +4985,10 @@ L_207EDA:
     push16(WA);                                                  /* 207EDC PUSH    WA */
     QA = 0;                                                      /* 207EDD LD      QA,0 */
     BC = 0x84;                                                   /* 207EE0 LD      BC,0x84 */
-    push32(0x207EE7); sub_206993();                              /* 207EE3 CALL    0x206993 */
+    push32(0x207EE7); FillTiles();                               /* 207EE3 CALL    0x206993 */
     push32(0x207EEB); sub_20847F();                              /* 207EE7 CALL    0x20847F */
     HL = rd16(XSP);                                              /* 207EEB LD      HL,(XSP) */
-    push32(0x207EF1); sub_207D40();                              /* 207EED CALL    0x207D40 */
+    push32(0x207EF1); DrawRobot();                               /* 207EED CALL    0x207D40 */
     WA = pop16();                                                /* 207EF1 POP     WA */
     BC = pop16();                                                /* 207EF2 POP     BC */
     DE = rd16(XSP);                                              /* 207EF3 LD      DE,(XSP) */
@@ -5008,7 +5008,7 @@ L_207F15:
     XHL = (uint32_t)(XHL + 0x207F2A);                            /* 207F1B ADD     XHL,0x207F2A */
     L = rd8(XHL);                                                /* 207F21 LD      L,(XHL) */
     H = 0;                                                       /* 207F23 LD      H,0 */
-    push32(0x207F29); sub_210380();                              /* 207F25 CALL    0x210380 */
+    push32(0x207F29); DrawPortraitAt();                          /* 207F25 CALL    0x210380 */
     XSP += 4; return;                                            /* 207F29 RET */
 }
 
@@ -5018,28 +5018,28 @@ void sub_207F30(void)
     if ((uint16_t)(DE) < (uint16_t)(0x20)) goto L_207F59;        /* 207F34 JR      C,0x207F59 */
     A = 0x20;                                                    /* 207F36 LD      A,0x20 */
     C = 1;                                                       /* 207F38 LD      C,1 */
-    push32(0x207F3E); sub_206D9E();                              /* 207F3A CALL    0x206D9E */
+    push32(0x207F3E); LoadPalettes();                            /* 207F3A CALL    0x206D9E */
     A = 4;                                                       /* 207F3E LD      A,4 */
     C = 1;                                                       /* 207F40 LD      C,1 */
     XHL = 0x220BFC;                                              /* 207F42 LD      XHL,0x220BFC */
-    push32(0x207F4B); sub_206DCD();                              /* 207F47 CALL    0x206DCD */
+    push32(0x207F4B); LoadMonoPalettes();                        /* 207F47 CALL    0x206DCD */
     A = 5;                                                       /* 207F4B LD      A,5 */
     C = 1;                                                       /* 207F4D LD      C,1 */
     XHL = 0x21F018;                                              /* 207F4F LD      XHL,0x21F018 */
-    push32(0x207F58); sub_206DCD();                              /* 207F54 CALL    0x206DCD */
+    push32(0x207F58); LoadMonoPalettes();                        /* 207F54 CALL    0x206DCD */
     XSP += 4; return;                                            /* 207F58 RET */
 L_207F59:
     A = 0x10;                                                    /* 207F59 LD      A,0x10 */
     C = 1;                                                       /* 207F5B LD      C,1 */
-    push32(0x207F61); sub_206D9E();                              /* 207F5D CALL    0x206D9E */
+    push32(0x207F61); LoadPalettes();                            /* 207F5D CALL    0x206D9E */
     A = 2;                                                       /* 207F61 LD      A,2 */
     C = 1;                                                       /* 207F63 LD      C,1 */
     XHL = 0x220BFC;                                              /* 207F65 LD      XHL,0x220BFC */
-    push32(0x207F6E); sub_206DCD();                              /* 207F6A CALL    0x206DCD */
+    push32(0x207F6E); LoadMonoPalettes();                        /* 207F6A CALL    0x206DCD */
     A = 3;                                                       /* 207F6E LD      A,3 */
     C = 1;                                                       /* 207F70 LD      C,1 */
     XHL = 0x21F018;                                              /* 207F72 LD      XHL,0x21F018 */
-    push32(0x207F7B); sub_206DCD();                              /* 207F77 CALL    0x206DCD */
+    push32(0x207F7B); LoadMonoPalettes();                        /* 207F77 CALL    0x206DCD */
     XSP += 4; return;                                            /* 207F7B RET */
 }
 
@@ -5091,7 +5091,7 @@ L_208004:
     XSP += 4; return;                                            /* 208006 RET */
 }
 
-void sub_208007(void)
+void CalcEnemyMinAttackEP(void)
 {
     WA = 0xFFFF;                                                 /* 208007 LD      WA,0xFFFF */
     wr16(0x5D82, WA);                                            /* 20800A LD      (0x5D82),WA */
@@ -5101,7 +5101,7 @@ void sub_208007(void)
     wr16(0x5D80, WA);                                            /* 20801A LD      (0x5D80),WA */
     wr16(0x5DAD, WA);                                            /* 20801E LD      (0x5DAD),WA */
     L = rd8(0x5DA2);                                             /* 208022 LD      L,(0x5DA2) */
-    push32(0x20802A); sub_2082EB();                              /* 208026 CALL    0x2082EB */
+    push32(0x20802A); GetEnemyAttackSlots();                     /* 208026 CALL    0x2082EB */
     C = 4;                                                       /* 20802A LD      C,4 */
 L_20802C:
     A = rd8(XHL + 3);                                            /* 20802C LD      A,(XHL+3) */
@@ -5116,7 +5116,7 @@ L_20802C:
 L_208046:
     push32(XHL);                                                 /* 208046 PUSH    XHL */
     L = W;                                                       /* 208047 LD      L,W */
-    push32(0x20804D); sub_2083A3();                              /* 208049 CALL    0x2083A3 */
+    push32(0x20804D); GetArmRecord();                            /* 208049 CALL    0x2083A3 */
     WA = rd16(XHL + 0xC);                                        /* 20804D LD      WA,(XHL+0xC) */
     XHL = pop32();                                               /* 208050 POP     XHL */
 L_208051:
@@ -5132,7 +5132,7 @@ L_208065:
     if (--C != 0) goto L_20802C;                                 /* 20806B DJNZ    C,0x20802C */
 L_20806E:
     L = rd8(0x5048);                                             /* 20806E LD      L,(0x5048) */
-    push32(0x208076); sub_2083A3();                              /* 208072 CALL    0x2083A3 */
+    push32(0x208076); GetArmRecord();                            /* 208072 CALL    0x2083A3 */
     WA = rd16(XHL + 0xC);                                        /* 208076 LD      WA,(XHL+0xC) */
     push32(0x20807D); sub_2089DC();                              /* 208079 CALL    0x2089DC */
     wr16(0x5D82, WA);                                            /* 20807D LD      (0x5D82),WA */
@@ -5141,7 +5141,7 @@ L_20806E:
     wr16(0x5D80, WA);                                            /* 208087 LD      (0x5D80),WA */
 L_20808B:
     L = rd8(0x5049);                                             /* 20808B LD      L,(0x5049) */
-    push32(0x208093); sub_2083A3();                              /* 20808F CALL    0x2083A3 */
+    push32(0x208093); GetArmRecord();                            /* 20808F CALL    0x2083A3 */
     WA = rd16(XHL + 0xC);                                        /* 208093 LD      WA,(XHL+0xC) */
     push32(0x20809A); sub_2089DC();                              /* 208096 CALL    0x2089DC */
     wr16(0x5D84, WA);                                            /* 20809A LD      (0x5D84),WA */
@@ -5152,7 +5152,7 @@ L_2080A8:
     L = rd8(0x5025);                                             /* 2080A8 LD      L,(0x5025) */
     /* OR L,L: test */                                           /* 2080AC OR      L,L */
     if ((uint8_t)L == 0) goto L_2080C9;                          /* 2080AE JR      Z,0x2080C9 */
-    push32(0x2080B4); sub_2083DD();                              /* 2080B0 CALL    0x2083DD */
+    push32(0x2080B4); GetSkillRecord();                          /* 2080B0 CALL    0x2083DD */
     WA = rd16(XHL + 0xC);                                        /* 2080B4 LD      WA,(XHL+0xC) */
     push32(0x2080BB); sub_2089DC();                              /* 2080B7 CALL    0x2089DC */
     wr16(0x5D86, WA);                                            /* 2080BB LD      (0x5D86),WA */
@@ -5163,7 +5163,7 @@ L_2080C9:
     L = rd8(0x5026);                                             /* 2080C9 LD      L,(0x5026) */
     /* OR L,L: test */                                           /* 2080CD OR      L,L */
     if ((uint8_t)L == 0) goto L_2080EA;                          /* 2080CF JR      Z,0x2080EA */
-    push32(0x2080D5); sub_2083DD();                              /* 2080D1 CALL    0x2083DD */
+    push32(0x2080D5); GetSkillRecord();                          /* 2080D1 CALL    0x2083DD */
     WA = rd16(XHL + 0xC);                                        /* 2080D5 LD      WA,(XHL+0xC) */
     push32(0x2080DC); sub_2089DC();                              /* 2080D8 CALL    0x2089DC */
     wr16(0x5D88, WA);                                            /* 2080DC LD      (0x5D88),WA */
@@ -5196,7 +5196,7 @@ void sub_208108(void)
     push32(XWA);                                                 /* 20811D PUSH    XWA */
     A = rd8(XWA);                                                /* 20811E LD      A,(XWA) */
     W = 0;                                                       /* 208120 LD      W,0 */
-    push32(0x208126); sub_20814D();                              /* 208122 CALL    0x20814D */
+    push32(0x208126); RandomRange();                             /* 208122 CALL    0x20814D */
     wr16(XSP + 4, WA);                                           /* 208126 LD      (XSP+4),WA */
     XWA = pop32();                                               /* 208129 POP     XWA */
     XWA = (uint32_t)(XWA + 1);                                   /* 20812A INC     1,XWA */
@@ -5209,14 +5209,14 @@ void sub_208108(void)
 void sub_208146(void)
 {
     WA = 0xA;                                                    /* 208146 LD      WA,0xA */
-    { sub_20814D(); return; }                                    /* 208149 JP      0x20814D */
+    { RandomRange(); return; }                                   /* 208149 JP      0x20814D */
 }
 
-void sub_20814D(void)
+void RandomRange(void)
 {
     push16(BC);                                                  /* 20814D PUSH    BC */
     push16(WA);                                                  /* 20814E PUSH    WA */
-    push32(0x208153); sub_2060CB();                              /* 20814F CALL    0x2060CB */
+    push32(0x208153); Random();                                  /* 20814F CALL    0x2060CB */
     XWA = (uint32_t)(uint16_t)XWA;                               /* 208153 EXTZ    XWA */
     BC = pop16();                                                /* 208155 POP     BC */
     XWA = divu16(XWA, BC);                                       /* 208156 DIV     XWA,BC */
@@ -5280,7 +5280,7 @@ L_2081B4:
     BC = 0xC9;                                                   /* 2081C4 LD      BC,0xC9 */
 L_2081C7:
     WA = 0xA;                                                    /* 2081C7 LD      WA,0xA */
-    push32(0x2081CE); sub_20814D();                              /* 2081CA CALL    0x20814D */
+    push32(0x2081CE); RandomRange();                             /* 2081CA CALL    0x20814D */
     WA = (uint16_t)(WA - 1);                                     /* 2081CE DEC     1,WA */
     WA = (uint16_t)(WA >> 1);                                    /* 2081D0 SRL     1,WA */
     XBC = mulu16(XBC, 5);                                        /* 2081D3 MUL     XBC,5 */
@@ -5291,16 +5291,16 @@ L_2081C7:
     XSP += 4; return;                                            /* 2081E6 RET */
 }
 
-void sub_2081E7(void)
+void ApplyAffinity(void)
 {
     push32(XHL);                                                 /* 2081E7 PUSH    XHL */
     push16(WA);                                                  /* 2081E8 PUSH    WA */
     WA = BC;                                                     /* 2081E9 LD      WA,BC */
-    push32(0x2081EF); sub_208217();                              /* 2081EB CALL    0x208217 */
+    push32(0x2081EF); AffinityIndex();                           /* 2081EB CALL    0x208217 */
     HL = WA;                                                     /* 2081EF LD      HL,WA */
     XHL = mulu16(XHL, 9);                                        /* 2081F1 MUL     XHL,9 */
     WA = DE;                                                     /* 2081F5 LD      WA,DE */
-    push32(0x2081FB); sub_208217();                              /* 2081F7 CALL    0x208217 */
+    push32(0x2081FB); AffinityIndex();                           /* 2081F7 CALL    0x208217 */
     HL = (uint16_t)(HL + WA);                                    /* 2081FB ADD     HL,WA */
     XHL = (uint32_t)(XHL << 1);                                  /* 2081FD SLL     1,XHL */
     XHL = (uint32_t)(XHL + 0x22464A);                            /* 208200 ADD     XHL,0x22464A */
@@ -5315,7 +5315,7 @@ void sub_2081E7(void)
     XSP += 4; return;                                            /* 208216 RET */
 }
 
-void sub_208217(void)
+void AffinityIndex(void)
 {
     WA = (uint16_t)(WA | 0xFF00);                                /* 208217 OR      WA,0xFF00 */
     A = bs1f(WA);                                                /* 20821B BS1F    A,WA */
@@ -5323,11 +5323,11 @@ void sub_208217(void)
     XSP += 4; return;                                            /* 20821F RET */
 }
 
-void sub_208220(void)
+void GetAffinityIcon(void)
 {
     push16(WA);                                                  /* 208220 PUSH    WA */
     WA = HL;                                                     /* 208221 LD      WA,HL */
-    push32(0x208227); sub_208217();                              /* 208223 CALL    0x208217 */
+    push32(0x208227); AffinityIndex();                           /* 208223 CALL    0x208217 */
     XHL = 0x208235;                                              /* 208227 LD      XHL,0x208235 */
     L = rd8(XHL + (int16_t)WA);                                  /* 20822C LD      L,(XHL+WA) */
     HL = (uint16_t)(uint8_t)HL;                                  /* 208231 EXTZ    HL */
@@ -5339,17 +5339,17 @@ void sub_20823D(void)
 {
     push32(XWA);                                                 /* 20823D PUSH    XWA */
     WA = HL;                                                     /* 20823E LD      WA,HL */
-    push32(0x208244); sub_208217();                              /* 208240 CALL    0x208217 */
+    push32(0x208244); AffinityIndex();                           /* 208240 CALL    0x208217 */
     /* CP WA,7 */                                                /* 208244 CP      WA,7 */
     if ((uint16_t)(WA) < (uint16_t)(7)) goto L_208263;           /* 208246 JR      C,0x208263 */
     WA = rd16(0x5DB7);                                           /* 208248 LD      WA,(0x5DB7) */
-    push32(0x208250); sub_208217();                              /* 20824C CALL    0x208217 */
+    push32(0x208250); AffinityIndex();                           /* 20824C CALL    0x208217 */
     /* CP WA,7 */                                                /* 208250 CP      WA,7 */
     if ((uint16_t)(WA) < (uint16_t)(7)) goto L_208263;           /* 208252 JR      C,0x208263 */
     L = rd8(0x5047);                                             /* 208254 LD      L,(0x5047) */
-    push32(0x20825C); sub_20836F();                              /* 208258 CALL    0x20836F */
+    push32(0x20825C); GetBodyRecord();                           /* 208258 CALL    0x20836F */
     WA = rd16(XHL + 0xE);                                        /* 20825C LD      WA,(XHL+0xE) */
-    push32(0x208263); sub_208217();                              /* 20825F CALL    0x208217 */
+    push32(0x208263); AffinityIndex();                           /* 20825F CALL    0x208217 */
 L_208263:
     XWA = (uint32_t)(uint16_t)XWA;                               /* 208263 EXTZ    XWA */
     XWA = (uint32_t)(XWA << 3);                                  /* 208265 SLL     3,XWA */
@@ -5359,7 +5359,7 @@ L_208263:
     XSP += 4; return;                                            /* 208271 RET */
 }
 
-void sub_208272(void)
+void GetItemName(void)
 {
     H = 0;                                                       /* 208272 LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 208274 DEC     1,HL */
@@ -5368,7 +5368,7 @@ void sub_208272(void)
     XSP += 4; return;                                            /* 208280 RET */
 }
 
-void sub_208281(void)
+void GetItemDesc(void)
 {
     H = 0;                                                       /* 208281 LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 208283 DEC     1,HL */
@@ -5377,7 +5377,7 @@ void sub_208281(void)
     XSP += 4; return;                                            /* 20828F RET */
 }
 
-void sub_208290(void)
+void GetBattleItemEffect(void)
 {
     L = (uint8_t)(L - 0x26);                                     /* 208290 SUB     L,0x26 */
     H = 0;                                                       /* 208293 LD      H,0 */
@@ -5386,7 +5386,7 @@ void sub_208290(void)
     XSP += 4; return;                                            /* 20829F RET */
 }
 
-void sub_2082A0(void)
+void GetEnemyName(void)
 {
     H = 0;                                                       /* 2082A0 LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2082A2 DEC     1,HL */
@@ -5395,7 +5395,7 @@ void sub_2082A0(void)
     XSP += 4; return;                                            /* 2082AE RET */
 }
 
-void sub_2082AF(void)
+void GetEnemyRecord(void)
 {
     H = 0;                                                       /* 2082AF LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2082B1 DEC     1,HL */
@@ -5404,7 +5404,7 @@ void sub_2082AF(void)
     XSP += 4; return;                                            /* 2082BD RET */
 }
 
-void sub_2082BE(void)
+void GetMonsterImage(void)
 {
     HL = (uint16_t)(HL - 1);                                     /* 2082BE DEC     1,HL */
     XHL = (uint32_t)(uint16_t)XHL;                               /* 2082C0 EXTZ    XHL */
@@ -5414,7 +5414,7 @@ void sub_2082BE(void)
     XSP += 4; return;                                            /* 2082CD RET */
 }
 
-void sub_2082CE(void)
+void GetMonsterPalette(void)
 {
     HL = (uint16_t)(HL - 1);                                     /* 2082CE DEC     1,HL */
     XHL = (uint32_t)(uint16_t)XHL;                               /* 2082D0 EXTZ    XHL */
@@ -5423,7 +5423,7 @@ void sub_2082CE(void)
     XSP += 4; return;                                            /* 2082DB RET */
 }
 
-void sub_2082DC(void)
+void GetAttackName(void)
 {
     H = 0;                                                       /* 2082DC LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2082DE DEC     1,HL */
@@ -5432,7 +5432,7 @@ void sub_2082DC(void)
     XSP += 4; return;                                            /* 2082EA RET */
 }
 
-void sub_2082EB(void)
+void GetEnemyAttackSlots(void)
 {
     H = 0;                                                       /* 2082EB LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2082ED DEC     1,HL */
@@ -5441,7 +5441,7 @@ void sub_2082EB(void)
     XSP += 4; return;                                            /* 2082F9 RET */
 }
 
-void sub_2082FA(void)
+void GetPartName(void)
 {
     H = 0;                                                       /* 2082FA LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2082FC DEC     1,HL */
@@ -5450,7 +5450,7 @@ void sub_2082FA(void)
     XSP += 4; return;                                            /* 208308 RET */
 }
 
-void sub_20833D(void)
+void GetArmName(void)
 {
     goto L_20833D;
 L_2082FC:
@@ -5465,7 +5465,7 @@ L_20833D:
     goto L_2082FC;                                               /* 208346 JP      0x2082FC */
 }
 
-void sub_20834A(void)
+void GetArmDesc(void)
 {
     H = 0;                                                       /* 20834A LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 20834C DEC     1,HL */
@@ -5476,7 +5476,7 @@ void sub_20834A(void)
     XSP += 4; return;                                            /* 20835F RET */
 }
 
-void sub_20836F(void)
+void GetBodyRecord(void)
 {
     goto L_20836F;
 L_208362:
@@ -5491,7 +5491,7 @@ L_20836F:
     goto L_208362;                                               /* 208378 JP      0x208362 */
 }
 
-void sub_20837C(void)
+void GetCoreRecord(void)
 {
     goto L_20837C;
 L_208362:
@@ -5506,7 +5506,7 @@ L_20837C:
     goto L_208362;                                               /* 208385 JP      0x208362 */
 }
 
-void sub_208389(void)
+void GetLegsRecord(void)
 {
     goto L_208389;
 L_208362:
@@ -5521,7 +5521,7 @@ L_208389:
     goto L_208362;                                               /* 208392 JP      0x208362 */
 }
 
-void sub_208396(void)
+void GetBackRecord(void)
 {
     goto L_208396;
 L_208362:
@@ -5536,7 +5536,7 @@ L_208396:
     goto L_208362;                                               /* 20839F JP      0x208362 */
 }
 
-void sub_2083A3(void)
+void GetArmRecord(void)
 {
     goto L_2083A3;
 L_208362:
@@ -5551,7 +5551,7 @@ L_2083A3:
     goto L_208362;                                               /* 2083AC JP      0x208362 */
 }
 
-void sub_2083B0(void)
+void GetArmEffects(void)
 {
     H = 0;                                                       /* 2083B0 LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2083B2 DEC     1,HL */
@@ -5560,7 +5560,7 @@ void sub_2083B0(void)
     XSP += 4; return;                                            /* 2083BE RET */
 }
 
-void sub_2083BF(void)
+void GetSkillName(void)
 {
     H = 0;                                                       /* 2083BF LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2083C1 DEC     1,HL */
@@ -5569,7 +5569,7 @@ void sub_2083BF(void)
     XSP += 4; return;                                            /* 2083CD RET */
 }
 
-void sub_2083CE(void)
+void GetSkillDesc(void)
 {
     H = 0;                                                       /* 2083CE LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2083D0 DEC     1,HL */
@@ -5578,7 +5578,7 @@ void sub_2083CE(void)
     XSP += 4; return;                                            /* 2083DC RET */
 }
 
-void sub_2083DD(void)
+void GetSkillRecord(void)
 {
     H = 0;                                                       /* 2083DD LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2083DF DEC     1,HL */
@@ -5587,7 +5587,7 @@ void sub_2083DD(void)
     XSP += 4; return;                                            /* 2083EB RET */
 }
 
-void sub_2083EC(void)
+void GetSkillData(void)
 {
     H = 0;                                                       /* 2083EC LD      H,0 */
     HL = (uint16_t)(HL - 1);                                     /* 2083EE DEC     1,HL */
@@ -5606,7 +5606,7 @@ void sub_2083FB(void)
     XSP += 4; return;                                            /* 208409 RET */
 }
 
-void sub_20840A(void)
+void GetEnemyScaling(void)
 {
     push32(XBC);                                                 /* 20840A PUSH    XBC */
     push32(XDE);                                                 /* 20840B PUSH    XDE */
@@ -5623,10 +5623,10 @@ L_20841E:
     XBC = mulu16(XBC, 0xE);                                      /* 20841E MUL     XBC,0xE */
     XDE = 0x22475C;                                              /* 208422 LD      XDE,0x22475C */
     HL = 0xA;                                                    /* 208427 LD      HL,0xA */
-    push32(0x20842E); sub_20615B();                              /* 20842A CALL    0x20615B */
+    push32(0x20842E); CheckEventFlag();                          /* 20842A CALL    0x20615B */
     if (!cpu.fz) goto L_20843E;                                  /* 20842E JR      NZ,0x20843E */
     HL = 0xB;                                                    /* 208430 LD      HL,0xB */
-    push32(0x208437); sub_20615B();                              /* 208433 CALL    0x20615B */
+    push32(0x208437); CheckEventFlag();                          /* 208433 CALL    0x20615B */
     if (!cpu.fz) goto L_20843E;                                  /* 208437 JR      NZ,0x20843E */
     XDE = 0x2246EC;                                              /* 208439 LD      XDE,0x2246EC */
 L_20843E:
@@ -5643,10 +5643,10 @@ L_20843E:
 L_208459:
     push32(XHL);                                                 /* 208459 PUSH    XHL */
     HL = 0xA;                                                    /* 20845A LD      HL,0xA */
-    push32(0x208461); sub_20615B();                              /* 20845D CALL    0x20615B */
+    push32(0x208461); CheckEventFlag();                          /* 20845D CALL    0x20615B */
     if (!cpu.fz) goto L_20846E;                                  /* 208461 JR      NZ,0x20846E */
     HL = 0xB;                                                    /* 208463 LD      HL,0xB */
-    push32(0x20846A); sub_20615B();                              /* 208466 CALL    0x20615B */
+    push32(0x20846A); CheckEventFlag();                          /* 208466 CALL    0x20615B */
     if (!cpu.fz) goto L_20846E;                                  /* 20846A JR      NZ,0x20846E */
     XHL = pop32();                                               /* 20846C POP     XHL */
     XSP += 4; return;                                            /* 20846D RET */
@@ -5659,18 +5659,18 @@ L_20846E:
 void sub_208475(void)
 {
     XHL = 0x5046;                                                /* 208475 LD      XHL,0x5046 */
-    push32(0x20847E); sub_208489();                              /* 20847A CALL    0x208489 */
+    push32(0x20847E); SetRobotDrawParts();                       /* 20847A CALL    0x208489 */
     XSP += 4; return;                                            /* 20847E RET */
 }
 
 void sub_20847F(void)
 {
     XHL = 0x5DD1;                                                /* 20847F LD      XHL,0x5DD1 */
-    push32(0x208488); sub_208489();                              /* 208484 CALL    0x208489 */
+    push32(0x208488); SetRobotDrawParts();                       /* 208484 CALL    0x208489 */
     XSP += 4; return;                                            /* 208488 RET */
 }
 
-void sub_208489(void)
+void SetRobotDrawParts(void)
 {
     push32(XHL);                                                 /* 208489 PUSH    XHL */
     XDE = XHL;                                                   /* 20848A LD      XDE,XHL */
@@ -5680,35 +5680,35 @@ void sub_208489(void)
     L = rd8(XDE + 1);                                            /* 208496 LD      L,(XDE+1) */
     /* OR L,L: test */                                           /* 208499 OR      L,L */
     if ((uint8_t)L == 0) goto L_2084A8;                          /* 20849B JR      Z,0x2084A8 */
-    push32(0x2084A1); sub_20836F();                              /* 20849D CALL    0x20836F */
+    push32(0x2084A1); GetBodyRecord();                           /* 20849D CALL    0x20836F */
     A = rd8(XHL + 0x12);                                         /* 2084A1 LD      A,(XHL+0x12) */
     wr8(0x5D7B, A);                                              /* 2084A4 LD      (0x5D7B),A */
 L_2084A8:
     L = rd8(XDE + 2);                                            /* 2084A8 LD      L,(XDE+2) */
     /* OR L,L: test */                                           /* 2084AB OR      L,L */
     if ((uint8_t)L == 0) goto L_2084BA;                          /* 2084AD JR      Z,0x2084BA */
-    push32(0x2084B3); sub_2083A3();                              /* 2084AF CALL    0x2083A3 */
+    push32(0x2084B3); GetArmRecord();                            /* 2084AF CALL    0x2083A3 */
     A = rd8(XHL + 0x12);                                         /* 2084B3 LD      A,(XHL+0x12) */
     wr8(0x5D7C, A);                                              /* 2084B6 LD      (0x5D7C),A */
 L_2084BA:
     L = rd8(XDE + 3);                                            /* 2084BA LD      L,(XDE+3) */
     /* OR L,L: test */                                           /* 2084BD OR      L,L */
     if ((uint8_t)L == 0) goto L_2084CC;                          /* 2084BF JR      Z,0x2084CC */
-    push32(0x2084C5); sub_2083A3();                              /* 2084C1 CALL    0x2083A3 */
+    push32(0x2084C5); GetArmRecord();                            /* 2084C1 CALL    0x2083A3 */
     A = rd8(XHL + 0x12);                                         /* 2084C5 LD      A,(XHL+0x12) */
     wr8(0x5D7D, A);                                              /* 2084C8 LD      (0x5D7D),A */
 L_2084CC:
     L = rd8(XDE + 4);                                            /* 2084CC LD      L,(XDE+4) */
     /* OR L,L: test */                                           /* 2084CF OR      L,L */
     if ((uint8_t)L == 0) goto L_2084DE;                          /* 2084D1 JR      Z,0x2084DE */
-    push32(0x2084D7); sub_208389();                              /* 2084D3 CALL    0x208389 */
+    push32(0x2084D7); GetLegsRecord();                           /* 2084D3 CALL    0x208389 */
     A = rd8(XHL + 0x12);                                         /* 2084D7 LD      A,(XHL+0x12) */
     wr8(0x5D7E, A);                                              /* 2084DA LD      (0x5D7E),A */
 L_2084DE:
     L = rd8(XDE + 5);                                            /* 2084DE LD      L,(XDE+5) */
     /* OR L,L: test */                                           /* 2084E1 OR      L,L */
     if ((uint8_t)L == 0) goto L_2084F0;                          /* 2084E3 JR      Z,0x2084F0 */
-    push32(0x2084E9); sub_208396();                              /* 2084E5 CALL    0x208396 */
+    push32(0x2084E9); GetBackRecord();                           /* 2084E5 CALL    0x208396 */
     A = rd8(XHL + 0x12);                                         /* 2084E9 LD      A,(XHL+0x12) */
     wr8(0x5D7F, A);                                              /* 2084EC LD      (0x5D7F),A */
 L_2084F0:
@@ -5716,17 +5716,17 @@ L_2084F0:
     XSP += 4; return;                                            /* 2084F1 RET */
 }
 
-void sub_2084F2(void)
+void ShowMessage(void)
 {
     A = 0;                                                       /* 2084F2 LD      A,0 */
-    push32(0x2084F8); sub_20748A();                              /* 2084F4 CALL    0x20748A */
-    push32(0x2084FC); sub_208505();                              /* 2084F8 CALL    0x208505 */
+    push32(0x2084F8); GetTextBox();                              /* 2084F4 CALL    0x20748A */
+    push32(0x2084FC); ExpandMessage();                           /* 2084F8 CALL    0x208505 */
     wr32(XWA + 8, XHL);                                          /* 2084FC LD      (XWA+8),XHL */
     wr8(XWA + 0x10, rd8(0x5280));                                /* 2084FF LDB     (XWA+0x10),(0x5280) */
     XSP += 4; return;                                            /* 208504 RET */
 }
 
-void sub_208505(void)
+void ExpandMessage(void)
 {
     push32(XWA);                                                 /* 208505 PUSH    XWA */
     push32(XBC);                                                 /* 208506 PUSH    XBC */
@@ -5768,7 +5768,7 @@ L_20867E:
     goto L_20867E;                                               /* 208689 JR      0x20867E */
 }
 
-void sub_20868B(void)
+void CalcUnitStats(void)
 {
     wr16(0x504E, rd16(0x5027));                                  /* 20868B LDW     (0x504E),(0x5027) */
     wr16(0x5050, rd16(0x5029));                                  /* 208691 LDW     (0x5050),(0x5029) */
@@ -5777,7 +5777,7 @@ void sub_20868B(void)
     L = rd8(0x5047);                                             /* 2086A3 LD      L,(0x5047) */
     /* OR L,L: test */                                           /* 2086A7 OR      L,L */
     if ((uint8_t)L == 0) goto L_2086EE;                          /* 2086A9 JR      Z,0x2086EE */
-    push32(0x2086AF); sub_20836F();                              /* 2086AB CALL    0x20836F */
+    push32(0x2086AF); GetBodyRecord();                           /* 2086AB CALL    0x20836F */
     wr16(0x505C, rd16(XHL + 0));                                 /* 2086AF LDW     (0x505C),(XHL+0) */
     wr16(0x505E, rd16(XHL + 2));                                 /* 2086B4 LDW     (0x505E),(XHL+2) */
     wr16(0x505A, rd16(XHL + 0xE));                               /* 2086B9 LDW     (0x505A),(XHL+0xE) */
@@ -5799,7 +5799,7 @@ L_2086EE:
     L = rd8(0x5046);                                             /* 2086EE LD      L,(0x5046) */
     /* OR L,L: test */                                           /* 2086F2 OR      L,L */
     if ((uint8_t)L == 0) goto L_208738;                          /* 2086F4 JR      Z,0x208738 */
-    push32(0x2086FA); sub_20837C();                              /* 2086F6 CALL    0x20837C */
+    push32(0x2086FA); GetCoreRecord();                           /* 2086F6 CALL    0x20837C */
     WA = rd16(XHL + 0);                                          /* 2086FA LD      WA,(XHL+0) */
     { uint32_t ea = 0x505C; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2086FD ADD     (0x505C),WA */
     WA = rd16(XHL + 2);                                          /* 208701 LD      WA,(XHL+2) */
@@ -5822,7 +5822,7 @@ L_208738:
     L = rd8(0x5048);                                             /* 208738 LD      L,(0x5048) */
     /* OR L,L: test */                                           /* 20873C OR      L,L */
     if ((uint8_t)L == 0) goto L_208782;                          /* 20873E JR      Z,0x208782 */
-    push32(0x208744); sub_2083A3();                              /* 208740 CALL    0x2083A3 */
+    push32(0x208744); GetArmRecord();                            /* 208740 CALL    0x2083A3 */
     WA = rd16(XHL + 0);                                          /* 208744 LD      WA,(XHL+0) */
     { uint32_t ea = 0x505C; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 208747 ADD     (0x505C),WA */
     WA = rd16(XHL + 2);                                          /* 20874B LD      WA,(XHL+2) */
@@ -5845,7 +5845,7 @@ L_208782:
     L = rd8(0x5049);                                             /* 208782 LD      L,(0x5049) */
     /* OR L,L: test */                                           /* 208786 OR      L,L */
     if ((uint8_t)L == 0) goto L_2087CC;                          /* 208788 JR      Z,0x2087CC */
-    push32(0x20878E); sub_2083A3();                              /* 20878A CALL    0x2083A3 */
+    push32(0x20878E); GetArmRecord();                            /* 20878A CALL    0x2083A3 */
     WA = rd16(XHL + 0);                                          /* 20878E LD      WA,(XHL+0) */
     { uint32_t ea = 0x505C; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 208791 ADD     (0x505C),WA */
     WA = rd16(XHL + 2);                                          /* 208795 LD      WA,(XHL+2) */
@@ -5868,7 +5868,7 @@ L_2087CC:
     L = rd8(0x504A);                                             /* 2087CC LD      L,(0x504A) */
     /* OR L,L: test */                                           /* 2087D0 OR      L,L */
     if ((uint8_t)L == 0) goto L_208816;                          /* 2087D2 JR      Z,0x208816 */
-    push32(0x2087D8); sub_208389();                              /* 2087D4 CALL    0x208389 */
+    push32(0x2087D8); GetLegsRecord();                           /* 2087D4 CALL    0x208389 */
     WA = rd16(XHL + 0);                                          /* 2087D8 LD      WA,(XHL+0) */
     { uint32_t ea = 0x505C; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 2087DB ADD     (0x505C),WA */
     WA = rd16(XHL + 2);                                          /* 2087DF LD      WA,(XHL+2) */
@@ -5891,7 +5891,7 @@ L_208816:
     L = rd8(0x504B);                                             /* 208816 LD      L,(0x504B) */
     /* OR L,L: test */                                           /* 20881A OR      L,L */
     if ((uint8_t)L == 0) goto L_208860;                          /* 20881C JR      Z,0x208860 */
-    push32(0x208822); sub_208396();                              /* 20881E CALL    0x208396 */
+    push32(0x208822); GetBackRecord();                           /* 20881E CALL    0x208396 */
     WA = rd16(XHL + 0);                                          /* 208822 LD      WA,(XHL+0) */
     { uint32_t ea = 0x505C; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 208825 ADD     (0x505C),WA */
     WA = rd16(XHL + 2);                                          /* 208829 LD      WA,(XHL+2) */
@@ -6003,7 +6003,7 @@ void sub_208A27(void)
     XSP += 4; return;                                            /* 208A35 RET */
 }
 
-void sub_208A36(void)
+void ExpForKill(void)
 {
     push16(WA);                                                  /* 208A36 PUSH    WA */
     XWA = 0;                                                     /* 208A37 LD      XWA,0 */
@@ -6073,7 +6073,7 @@ void sub_208AA2(void)
     /* CP (0x5DD7),0 */                                          /* 208AA2 CPB     (0x5DD7),0 */
     if ((uint8_t)(rd8(0x5DD7)) == (uint8_t)(0)) { XSP += 4; return; } /* 208AA7 RET     Z */
     push32(XHL);                                                 /* 208AA9 PUSH    XHL */
-    push32(0x208AAE); sub_20840A();                              /* 208AAA CALL    0x20840A */
+    push32(0x208AAE); GetEnemyScaling();                         /* 208AAA CALL    0x20840A */
     XWA = mulu16(XWA, rd16(XHL + 4));                            /* 208AAE MUL     XWA,(XHL+4) */
     XWA = divu16(XWA, 0x64);                                     /* 208AB1 DIV     XWA,0x64 */
     XHL = pop32();                                               /* 208AB5 POP     XHL */
@@ -6110,7 +6110,7 @@ void sub_208AD5(void)
     XSP += 4; return;                                            /* 208AE3 RET */
 }
 
-void sub_208AE4(void)
+void AddGP(void)
 {
     XWA = (uint32_t)(uint16_t)XWA;                               /* 208AE4 EXTZ    XWA */
     push32(0x208AEA); sub_2061EC();                              /* 208AE6 CALL    0x2061EC */
@@ -6146,7 +6146,7 @@ L_209857:
     XSP += 4; return;                                            /* 209871 RET */
 }
 
-void sub_209B02(void)
+void ShowWeaponInfo(void)
 {
     A = 0;                                                       /* 209B02 LD      A,0 */
     push32(0x209B08); sub_2075CC();                              /* 209B04 CALL    0x2075CC */
@@ -6161,17 +6161,17 @@ void sub_209B02(void)
     L = rd8(0x5026);                                             /* 209B26 LD      L,(0x5026) */
 L_209B2A:
     push8(L);                                                    /* 209B2A PUSH    L */
-    push32(0x209B30); sub_2083DD();                              /* 209B2C CALL    0x2083DD */
+    push32(0x209B30); GetSkillRecord();                          /* 209B2C CALL    0x2083DD */
     WA = rd16(XHL + 0xE);                                        /* 209B30 LD      WA,(XHL+0xE) */
     L = pop8();                                                  /* 209B33 POP     L */
-    push32(0x209B39); sub_2083CE();                              /* 209B35 CALL    0x2083CE */
+    push32(0x209B39); GetSkillDesc();                            /* 209B35 CALL    0x2083CE */
     goto L_209B4A;                                               /* 209B39 JR      0x209B4A */
 L_209B3B:
     push8(L);                                                    /* 209B3B PUSH    L */
-    push32(0x209B41); sub_2083A3();                              /* 209B3D CALL    0x2083A3 */
+    push32(0x209B41); GetArmRecord();                            /* 209B3D CALL    0x2083A3 */
     WA = rd16(XHL + 0xE);                                        /* 209B41 LD      WA,(XHL+0xE) */
     L = pop8();                                                  /* 209B44 POP     L */
-    push32(0x209B4A); sub_20834A();                              /* 209B46 CALL    0x20834A */
+    push32(0x209B4A); GetArmDesc();                              /* 209B46 CALL    0x20834A */
 L_209B4A:
     push16(WA);                                                  /* 209B4A PUSH    WA */
     wr32(XIZ + 0x10, XHL);                                       /* 209B4B LD      (XIZ+0x10),XHL */
@@ -6181,7 +6181,7 @@ L_209B4A:
     WA = rd16(XHL + (int16_t)WA);                                /* 209B5A LD      WA,(XHL+WA) */
     wr16(XIZ + 0x14, WA);                                        /* 209B5F LD      (XIZ+0x14),WA */
     XHL = 0x225474;                                              /* 209B62 LD      XHL,0x225474 */
-    push32(0x209B6B); sub_208505();                              /* 209B67 CALL    0x208505 */
+    push32(0x209B6B); ExpandMessage();                           /* 209B67 CALL    0x208505 */
     A = 0;                                                       /* 209B6B LD      A,0 */
     push32(0x209B71); sub_2076F3();                              /* 209B6D CALL    0x2076F3 */
     WA = pop16();                                                /* 209B71 POP     WA */
@@ -6193,8 +6193,8 @@ L_209B4A:
     E = 2;                                                       /* 209B7B LD      E,2 */
     push32(0x209B81); sub_20768A();                              /* 209B7D CALL    0x20768A */
     HL = pop16();                                                /* 209B81 POP     HL */
-    push32(0x209B86); sub_208220();                              /* 209B82 CALL    0x208220 */
-    push32(0x209B8A); sub_207699();                              /* 209B86 CALL    0x207699 */
+    push32(0x209B86); GetAffinityIcon();                         /* 209B82 CALL    0x208220 */
+    push32(0x209B8A); DrawTextChar();                            /* 209B86 CALL    0x207699 */
     XSP += 4; return;                                            /* 209B8A RET */
 }
 
@@ -6223,7 +6223,7 @@ void sub_209CDC(void)
     push32(0x209D01); sub_2061D6();                              /* 209CFD CALL    0x2061D6 */
     HL = pop16();                                                /* 209D01 POP     HL */
     if (cpu.fc) { XSP += 4; return; }                            /* 209D02 RET     C */
-    push32(0x209D08); sub_208281();                              /* 209D04 CALL    0x208281 */
+    push32(0x209D08); GetItemDesc();                             /* 209D04 CALL    0x208281 */
     wr32(XIZ + 0x10, XHL);                                       /* 209D08 LD      (XIZ+0x10),XHL */
     XHL = 0x5D82;                                                /* 209D0B LD      XHL,0x5D82 */
     WA = rd16(0x5DE1);                                           /* 209D10 LD      WA,(0x5DE1) */
@@ -6231,7 +6231,7 @@ void sub_209CDC(void)
     WA = rd16(XHL + (int16_t)WA);                                /* 209D17 LD      WA,(XHL+WA) */
     wr16(XIZ + 0x14, WA);                                        /* 209D1C LD      (XIZ+0x14),WA */
     XHL = 0x225492;                                              /* 209D1F LD      XHL,0x225492 */
-    push32(0x209D28); sub_208505();                              /* 209D24 CALL    0x208505 */
+    push32(0x209D28); ExpandMessage();                           /* 209D24 CALL    0x208505 */
     A = 0;                                                       /* 209D28 LD      A,0 */
     push32(0x209D2E); sub_2076F3();                              /* 209D2A CALL    0x2076F3 */
     XSP += 4; return;                                            /* 209D2E RET */
@@ -6294,7 +6294,7 @@ L_209DA4:
     push32(0x209DC0); sub_20768E();                              /* 209DBC CALL    0x20768E */
     L = rd8(XSP + 0);                                            /* 209DC0 LD      L,(XSP+0) */
     L = (uint8_t)(L + 0x26);                                     /* 209DC3 ADD     L,0x26 */
-    push32(0x209DCA); sub_208272();                              /* 209DC6 CALL    0x208272 */
+    push32(0x209DCA); GetItemName();                             /* 209DC6 CALL    0x208272 */
     push32(0x209DCE); sub_2076F7();                              /* 209DCA CALL    0x2076F7 */
     C = 6;                                                       /* 209DCE LD      C,6 */
     E = rd8(XSP + 1);                                            /* 209DD0 LD      E,(XSP+1) */
@@ -6323,13 +6323,13 @@ void sub_20B440(void)
     HL = (uint16_t)(HL + 0x63);                                  /* 20B44D ADD     HL,0x63 */
     XHL = (uint32_t)(uint16_t)XHL;                               /* 20B451 EXTZ    XHL */
     XHL = divu16(XHL, 0x64);                                     /* 20B453 DIV     XHL,0x64 */
-    push32(0x20B45B); sub_2060CB();                              /* 20B457 CALL    0x2060CB */
+    push32(0x20B45B); Random();                                  /* 20B457 CALL    0x2060CB */
     WA = (uint16_t)(uint8_t)WA;                                  /* 20B45B EXTZ    WA */
     /* CP: flags unused */                                       /* 20B45D CP      WA,HL */
     XSP += 4; return;                                            /* 20B45F RET */
 }
 
-void sub_20CDEB(void)
+void ShowHPGain(void)
 {
     HL = (uint16_t)(HL + rd16(0x5056));                          /* 20CDEB ADD     HL,(0x5056) */
     alu_cp(HL, rd16(0x505C), 16);                                /* 20CDEF CP      HL,(0x505C) */
@@ -6359,7 +6359,7 @@ void sub_20CE15(void)
     XSP += 4; return;                                            /* 20CE29 RET */
 }
 
-void sub_20CE2A(void)
+void ShowEnemyEPGain(void)
 {
     HL = (uint16_t)(HL + rd16(0x5DAB));                          /* 20CE2A ADD     HL,(0x5DAB) */
     alu_cp(HL, rd16(0x5DA9), 16);                                /* 20CE2E CP      HL,(0x5DA9) */
@@ -6369,7 +6369,7 @@ void sub_20CE2A(void)
     XSP += 4; return;                                            /* 20CE3E RET */
 }
 
-void fn_20CF34(void)
+void MainMenuSetup(void)
 {
     push32(0x20CF38); sub_2072CD();                              /* 20CF34 CALL    0x2072CD */
     push32(0x20CF3C); sub_2067E1();                              /* 20CF38 CALL    0x2067E1 */
@@ -6378,14 +6378,14 @@ void fn_20CF34(void)
     HL = 0x2A;                                                   /* 20CF44 LD      HL,0x2A */
     BC = 0xA;                                                    /* 20CF47 LD      BC,0xA */
     DE = 0;                                                      /* 20CF4A LD      DE,0 */
-    push32(0x20CF50); sub_2103BA();                              /* 20CF4C CALL    0x2103BA */
+    push32(0x20CF50); DrawPortrait();                            /* 20CF4C CALL    0x2103BA */
     WA = 0x161;                                                  /* 20CF50 LD      WA,0x161 */
     HL = 0x2B;                                                   /* 20CF53 LD      HL,0x2B */
     BC = 0;                                                      /* 20CF56 LD      BC,0 */
     DE = 0;                                                      /* 20CF58 LD      DE,0 */
-    push32(0x20CF5E); sub_2103BA();                              /* 20CF5A CALL    0x2103BA */
+    push32(0x20CF5E); DrawPortrait();                            /* 20CF5A CALL    0x2103BA */
     WA = 0x14;                                                   /* 20CF5E LD      WA,0x14 */
-    push32(0x20CF65); sub_207759();                              /* 20CF61 CALL    0x207759 */
+    push32(0x20CF65); PlayMusic();                               /* 20CF61 CALL    0x207759 */
     WA = 0x35;                                                   /* 20CF65 LD      WA,0x35 */
     push32(0x20CF6C); sub_20776A();                              /* 20CF68 CALL    0x20776A */
     wr8(GE_PLANE_PRIO, 0);                                       /* 20CF6C LDB     (0x8030),0 */
@@ -6394,7 +6394,7 @@ void fn_20CF34(void)
     XSP += 4; return;                                            /* 20CF7B RET */
 }
 
-void fn_20CF7C(void)
+void MainMenu(void)
 {
     push32(0x20CF80); sub_206825();                              /* 20CF7C CALL    0x206825 */
     push32(0x20CF84); sub_206847();                              /* 20CF80 CALL    0x206847 */
@@ -6404,7 +6404,7 @@ void fn_20CF7C(void)
     HL = 0xC;                                                    /* 20CF8A LD      HL,0xC */
     push32(0x20CF91); sub_207494();                              /* 20CF8D CALL    0x207494 */
     A = 0;                                                       /* 20CF91 LD      A,0 */
-    push32(0x20CF97); sub_20748A();                              /* 20CF93 CALL    0x20748A */
+    push32(0x20CF97); GetTextBox();                              /* 20CF93 CALL    0x20748A */
     XHL = 0x20D0C2;                                              /* 20CF97 LD      XHL,0x20D0C2 */
     push32(0x20CFA0); sub_2076F7();                              /* 20CF9C CALL    0x2076F7 */
     C = 4;                                                       /* 20CFA0 LD      C,4 */
@@ -6416,7 +6416,7 @@ void fn_20CF7C(void)
     HL = 0x16;                                                   /* 20CFAE LD      HL,0x16 */
     push32(0x20CFB5); sub_207494();                              /* 20CFB1 CALL    0x207494 */
     A = 1;                                                       /* 20CFB5 LD      A,1 */
-    push32(0x20CFBB); sub_20748A();                              /* 20CFB7 CALL    0x20748A */
+    push32(0x20CFBB); GetTextBox();                              /* 20CFB7 CALL    0x20748A */
     XHL = 0x20D0CD;                                              /* 20CFBB LD      XHL,0x20D0CD */
     push32(0x20CFC4); sub_2076F7();                              /* 20CFC0 CALL    0x2076F7 */
     C = 4;                                                       /* 20CFC4 LD      C,4 */
@@ -6539,7 +6539,7 @@ void sub_20D684(void)
 
 void fn_20D6DF(void)
 {
-    push32(0x20D6E2); sub_20D799();                              /* 20D6DF CALR    0x20D799 */
+    push32(0x20D6E2); MainMenuGraphics();                        /* 20D6DF CALR    0x20D799 */
     wr8(GE_PLANE_PRIO, 0);                                       /* 20D6E2 LDB     (0x8030),0 */
     XHL = 0x20D75D;                                              /* 20D6E7 LD      XHL,0x20D75D */
     push32(0x20D6F0); sub_206324();                              /* 20D6EC CALL    0x206324 */
@@ -6559,7 +6559,7 @@ void fn_20D6DF(void)
 
 void fn_20D71E(void)
 {
-    push32(0x20D721); sub_20D799();                              /* 20D71E CALR    0x20D799 */
+    push32(0x20D721); MainMenuGraphics();                        /* 20D71E CALR    0x20D799 */
     wr8(GE_PLANE_PRIO, 0x80);                                    /* 20D721 LDB     (0x8030),0x80 */
     XHL = 0x20D75D;                                              /* 20D726 LD      XHL,0x20D75D */
     push32(0x20D72F); sub_206324();                              /* 20D72B CALL    0x206324 */
@@ -6592,13 +6592,13 @@ L_20D7BB:
     BC = rd16(XIZ + 0xE);                                        /* 20D7C1 LD      BC,(XIZ+0xE) */
     BC = (uint16_t)(-BC);                                        /* 20D7C4 NEG     BC */
     DE = 0;                                                      /* 20D7C6 LD      DE,0 */
-    push32(0x20D7CC); sub_206B37();                              /* 20D7C8 CALL    0x206B37 */
+    push32(0x20D7CC); DrawTilemap();                             /* 20D7C8 CALL    0x206B37 */
     WA = 0xB5;                                                   /* 20D7CC LD      WA,0xB5 */
     XHL = rd32(XIY + 0x16);                                      /* 20D7CF LD      XHL,(XIY+0x16) */
     BC = rd16(XIZ + 0xE);                                        /* 20D7D2 LD      BC,(XIZ+0xE) */
     BC = (uint16_t)(BC + 0xA);                                   /* 20D7D5 ADD     BC,0xA */
     DE = 0;                                                      /* 20D7D9 LD      DE,0 */
-    push32(0x20D7DF); sub_206B37();                              /* 20D7DB CALL    0x206B37 */
+    push32(0x20D7DF); DrawTilemap();                             /* 20D7DB CALL    0x206B37 */
     C = 0xA;                                                     /* 20D7DF LD      C,0xA */
     C = (uint8_t)(C - rd8(XIZ + 0xE));                           /* 20D7E1 SUB     C,(XIZ+0xE) */
     /* CP C,0xA */                                               /* 20D7E4 CP      C,0xA */
@@ -6627,13 +6627,13 @@ L_20D7BB:
     BC = rd16(XIZ + 0xE);                                        /* 20D7C1 LD      BC,(XIZ+0xE) */
     BC = (uint16_t)(-BC);                                        /* 20D7C4 NEG     BC */
     DE = 0;                                                      /* 20D7C6 LD      DE,0 */
-    push32(0x20D7CC); sub_206B37();                              /* 20D7C8 CALL    0x206B37 */
+    push32(0x20D7CC); DrawTilemap();                             /* 20D7C8 CALL    0x206B37 */
     WA = 0xB5;                                                   /* 20D7CC LD      WA,0xB5 */
     XHL = rd32(XIY + 0x16);                                      /* 20D7CF LD      XHL,(XIY+0x16) */
     BC = rd16(XIZ + 0xE);                                        /* 20D7D2 LD      BC,(XIZ+0xE) */
     BC = (uint16_t)(BC + 0xA);                                   /* 20D7D5 ADD     BC,0xA */
     DE = 0;                                                      /* 20D7D9 LD      DE,0 */
-    push32(0x20D7DF); sub_206B37();                              /* 20D7DB CALL    0x206B37 */
+    push32(0x20D7DF); DrawTilemap();                             /* 20D7DB CALL    0x206B37 */
     C = 0xA;                                                     /* 20D7DF LD      C,0xA */
     C = (uint8_t)(C - rd8(XIZ + 0xE));                           /* 20D7E1 SUB     C,(XIZ+0xE) */
     /* CP C,0xA */                                               /* 20D7E4 CP      C,0xA */
@@ -6647,7 +6647,7 @@ L_20D7BB:
     XSP += 4; return;                                            /* 20D7F9 RET */
 }
 
-void sub_20D799(void)
+void MainMenuGraphics(void)
 {
     alu_cp(rd8(0x5BC6), 0, 8);                                   /* 20D799 CPB     (0x5BC6),0 */
     XDE = 0x2876C4;                                              /* 20D79E LD      XDE,0x2876C4 */
@@ -6672,7 +6672,7 @@ void sub_20D84E(void)
     XWA = 0x20DA71;                                              /* 20D857 LD      XWA,0x20DA71 */
     wr32(XIZ + 8, XWA);                                          /* 20D85C LD      (XIZ+8),XWA */
     WA = 1;                                                      /* 20D85F LD      WA,1 */
-    push32(0x20D865); sub_207759();                              /* 20D861 CALL    0x207759 */
+    push32(0x20D865); PlayMusic();                               /* 20D861 CALL    0x207759 */
     WA = 0x21;                                                   /* 20D865 LD      WA,0x21 */
     push32(0x20D86C); sub_20776A();                              /* 20D868 CALL    0x20776A */
     XWA = pop32();                                               /* 20D86C POP     XWA */
@@ -6682,7 +6682,7 @@ void sub_20D84E(void)
     XSP += 4; return;                                            /* 20D870 RET */
 }
 
-void sub_20D871(void)
+void StreetMenu(void)
 {
     push32(XHL);                                                 /* 20D871 PUSH    XHL */
     push32(XDE);                                                 /* 20D872 PUSH    XDE */
@@ -6714,13 +6714,13 @@ void sub_20D871(void)
     push32(0x20D8CD); sub_2075CC();                              /* 20D8C9 CALL    0x2075CC */
     XHL = 0x225BE2;                                              /* 20D8CD LD      XHL,0x225BE2 */
     A = 1;                                                       /* 20D8D2 LD      A,1 */
-    push32(0x20D8D8); sub_20748A();                              /* 20D8D4 CALL    0x20748A */
+    push32(0x20D8D8); GetTextBox();                              /* 20D8D4 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 20D8D8 LD      (XWA+8),XHL */
     HL = 0x28;                                                   /* 20D8DB LD      HL,0x28 */
     push32(0x20D8E2); sub_216845();                              /* 20D8DE CALL    0x216845 */
     BC = 0;                                                      /* 20D8E2 LD      BC,0 */
     DE = 0;                                                      /* 20D8E4 LD      DE,0 */
-    push32(0x20D8EA); sub_2103BA();                              /* 20D8E6 CALL    0x2103BA */
+    push32(0x20D8EA); DrawPortrait();                            /* 20D8E6 CALL    0x2103BA */
     push32(0x20D8EE); sub_216EDE();                              /* 20D8EA CALL    0x216EDE */
     push32(0x20D8F2); sub_216FB1();                              /* 20D8EE CALL    0x216FB1 */
     push32(0x20D8F6); sub_216F6B();                              /* 20D8F2 CALL    0x216F6B */
@@ -6751,7 +6751,7 @@ L_20D914:
     push32(0x20D91F); sub_2075CC();                              /* 20D91B CALL    0x2075CC */
     XHL = 0x225BE2;                                              /* 20D91F LD      XHL,0x225BE2 */
     A = 1;                                                       /* 20D924 LD      A,1 */
-    push32(0x20D92A); sub_20748A();                              /* 20D926 CALL    0x20748A */
+    push32(0x20D92A); GetTextBox();                              /* 20D926 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 20D92A LD      (XWA+8),XHL */
     WA = 0x82;                                                   /* 20D92D LD      WA,0x82 */
     push32(0x20D934); sub_20776A();                              /* 20D930 CALL    0x20776A */
@@ -6816,7 +6816,7 @@ void sub_20D9A6(void)
     push32(XWA);                                                 /* 20D9A9 PUSH    XWA */
     XHL = 0;                                                     /* 20D9AA LD      XHL,0 */
     A = 1;                                                       /* 20D9AC LD      A,1 */
-    push32(0x20D9B2); sub_20748A();                              /* 20D9AE CALL    0x20748A */
+    push32(0x20D9B2); GetTextBox();                              /* 20D9AE CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 20D9B2 LD      (XWA+8),XHL */
     A = 1;                                                       /* 20D9B5 LD      A,1 */
     push32(0x20D9BB); sub_2075CC();                              /* 20D9B7 CALL    0x2075CC */
@@ -6830,10 +6830,10 @@ void sub_20D9A6(void)
     /* CP A,1 */                                                 /* 20D9CB CP      A,1 */
     if ((uint8_t)(A) == (uint8_t)(1)) goto L_20D9F8;             /* 20D9CD JR      Z,0x20D9F8 */
     HL = 0;                                                      /* 20D9CF LD      HL,0 */
-    push32(0x20D9D5); sub_20615B();                              /* 20D9D1 CALL    0x20615B */
+    push32(0x20D9D5); CheckEventFlag();                          /* 20D9D1 CALL    0x20615B */
     if (!cpu.fz) goto L_20D9E2;                                  /* 20D9D5 JR      NZ,0x20D9E2 */
     HL = 8;                                                      /* 20D9D7 LD      HL,8 */
-    push32(0x20D9DE); sub_20615B();                              /* 20D9DA CALL    0x20615B */
+    push32(0x20D9DE); CheckEventFlag();                          /* 20D9DA CALL    0x20615B */
     if (!cpu.fz) goto L_20D9E2;                                  /* 20D9DE JR      NZ,0x20D9E2 */
     goto L_20D9F8;                                               /* 20D9E0 JR      0x20D9F8 */
 L_20D9E2:
@@ -6841,7 +6841,7 @@ L_20D9E2:
     push32(0x20D9E8); sub_2075CC();                              /* 20D9E4 CALL    0x2075CC */
     XHL = 0x225BF4;                                              /* 20D9E8 LD      XHL,0x225BF4 */
     A = 1;                                                       /* 20D9ED LD      A,1 */
-    push32(0x20D9F3); sub_20748A();                              /* 20D9EF CALL    0x20748A */
+    push32(0x20D9F3); GetTextBox();                              /* 20D9EF CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 20D9F3 LD      (XWA+8),XHL */
     goto L_20D9FF;                                               /* 20D9F6 JR      0x20D9FF */
 L_20D9F8:
@@ -6884,7 +6884,7 @@ void fn_20DA71(void)
     A = rd8(XIZ + 0xE);                                          /* 20DA75 LD      A,(XIZ+0xE) */
     /* CP A,1 */                                                 /* 20DA78 CP      A,1 */
     if ((uint8_t)(A) != (uint8_t)(1)) goto L_20DA86;             /* 20DA7A JR      NZ,0x20DA86 */
-    push32(0x20DA7F); sub_20D871();                              /* 20DA7C CALR    0x20D871 */
+    push32(0x20DA7F); StreetMenu();                              /* 20DA7C CALR    0x20D871 */
     A = 2;                                                       /* 20DA7F LD      A,2 */
     wr8(XIZ + 0xE, A);                                           /* 20DA81 LD      (XIZ+0xE),A */
     goto L_20DAB4;                                               /* 20DA84 JR      0x20DAB4 */
@@ -6944,14 +6944,14 @@ void sub_20DACC(void)
 void sub_20DAE1(void)
 {
     RW3 = 0x16;                                                  /* 20DAE1 LD      RW3,0x16 */
-    push32(0x20DAE9); sub_21D9F5();                              /* 20DAE5 CALL    0x21D9F5 */
+    push32(0x20DAE9); BiosCall();                                /* 20DAE5 CALL    0x21D9F5 */
 L_20DAE9:
     B = 0x11;                                                    /* 20DAE9 LD      B,0x11 */
     push32(0x20DAEF); sub_20776F();                              /* 20DAEB CALL    0x20776F */
     /* CP RA3,0 */                                               /* 20DAEF CP      RA3,0 */
     if ((uint8_t)(RA3) != (uint8_t)(0)) goto L_20DAE9;           /* 20DAF2 JR      NZ,0x20DAE9 */
     RW3 = 0x15;                                                  /* 20DAF4 LD      RW3,0x15 */
-    push32(0x20DAFC); sub_21D9F5();                              /* 20DAF8 CALL    0x21D9F5 */
+    push32(0x20DAFC); BiosCall();                                /* 20DAF8 CALL    0x21D9F5 */
     XSP += 4; return;                                            /* 20DAFC RET */
 }
 
@@ -6959,7 +6959,7 @@ void sub_20DAFD(void)
 {
     push8(A);                                                    /* 20DAFD PUSH    A */
     RW3 = 0x16;                                                  /* 20DAFE LD      RW3,0x16 */
-    push32(0x20DB06); sub_21D9F5();                              /* 20DB02 CALL    0x21D9F5 */
+    push32(0x20DB06); BiosCall();                                /* 20DB02 CALL    0x21D9F5 */
     BC = 8;                                                      /* 20DB06 LD      BC,8 */
     XDE = 0x4000;                                                /* 20DB09 LD      XDE,0x4000 */
     XHL = 0xFA000;                                               /* 20DB0E LD      XHL,0xFA000 */
@@ -6984,7 +6984,7 @@ L_20DB2D:
     /* CP RA3,0 */                                               /* 20DB49 CP      RA3,0 */
     if ((uint8_t)(RA3) != (uint8_t)(0)) goto L_20DB2D;           /* 20DB4C JR      NZ,0x20DB2D */
     RW3 = 0x15;                                                  /* 20DB4E LD      RW3,0x15 */
-    push32(0x20DB56); sub_21D9F5();                              /* 20DB52 CALL    0x21D9F5 */
+    push32(0x20DB56); BiosCall();                                /* 20DB52 CALL    0x21D9F5 */
     XSP += 4; return;                                            /* 20DB56 RET */
 }
 
@@ -7007,7 +7007,7 @@ void sub_20DB72(void)
     if ((uint8_t)A == 0) { sub_20DBDE(); return; }               /* 20DB74 JP      Z,0x20DBDE */
     push8(A);                                                    /* 20DB79 PUSH    A */
     RW3 = 0x16;                                                  /* 20DB7A LD      RW3,0x16 */
-    push32(0x20DB82); sub_21D9F5();                              /* 20DB7E CALL    0x21D9F5 */
+    push32(0x20DB82); BiosCall();                                /* 20DB7E CALL    0x21D9F5 */
     BC = 8;                                                      /* 20DB82 LD      BC,8 */
     XDE = 0x4000;                                                /* 20DB85 LD      XDE,0x4000 */
     XHL = 0xFA000;                                               /* 20DB8A LD      XHL,0xFA000 */
@@ -7034,14 +7034,14 @@ L_20DBB4:
     /* CP RA3,0 */                                               /* 20DBD0 CP      RA3,0 */
     if ((uint8_t)(RA3) != (uint8_t)(0)) goto L_20DBB4;           /* 20DBD3 JR      NZ,0x20DBB4 */
     RW3 = 0x15;                                                  /* 20DBD5 LD      RW3,0x15 */
-    push32(0x20DBDD); sub_21D9F5();                              /* 20DBD9 CALL    0x21D9F5 */
+    push32(0x20DBDD); BiosCall();                                /* 20DBD9 CALL    0x21D9F5 */
     XSP += 4; return;                                            /* 20DBDD RET */
 }
 
 void sub_20DBDE(void)
 {
     RW3 = 0x16;                                                  /* 20DBDE LD      RW3,0x16 */
-    push32(0x20DBE6); sub_21D9F5();                              /* 20DBE2 CALL    0x21D9F5 */
+    push32(0x20DBE6); BiosCall();                                /* 20DBE2 CALL    0x21D9F5 */
     BC = 8;                                                      /* 20DBE6 LD      BC,8 */
     XDE = 0x4000;                                                /* 20DBE9 LD      XDE,0x4000 */
     XHL = 0xFA000;                                               /* 20DBEE LD      XHL,0xFA000 */
@@ -7068,7 +7068,7 @@ L_20DC19:
     /* CP RA3,0 */                                               /* 20DC35 CP      RA3,0 */
     if ((uint8_t)(RA3) != (uint8_t)(0)) goto L_20DC19;           /* 20DC38 JR      NZ,0x20DC19 */
     RW3 = 0x15;                                                  /* 20DC3A LD      RW3,0x15 */
-    push32(0x20DC42); sub_21D9F5();                              /* 20DC3E CALL    0x21D9F5 */
+    push32(0x20DC42); BiosCall();                                /* 20DC3E CALL    0x21D9F5 */
     XSP += 4; return;                                            /* 20DC42 RET */
 }
 
@@ -7168,7 +7168,7 @@ L_20DE21:
     E = 0;                                                       /* 20DE4C LD      E,0 */
     push32(0x20DE52); sub_20768E();                              /* 20DE4E CALL    0x20768E */
     L = rd8(0x20DF7B);                                           /* 20DE52 LD      L,(0x20DF7B) */
-    push32(0x20DE5B); sub_207699();                              /* 20DE57 CALL    0x207699 */
+    push32(0x20DE5B); DrawTextChar();                            /* 20DE57 CALL    0x207699 */
     C = 8;                                                       /* 20DE5B LD      C,8 */
     E = 1;                                                       /* 20DE5D LD      E,1 */
     push32(0x20DE63); sub_20768E();                              /* 20DE5F CALL    0x20768E */
@@ -7181,7 +7181,7 @@ L_20DE21:
     E = 1;                                                       /* 20DE76 LD      E,1 */
     push32(0x20DE7C); sub_20768E();                              /* 20DE78 CALL    0x20768E */
     L = rd8(0x20DF7B);                                           /* 20DE7C LD      L,(0x20DF7B) */
-    push32(0x20DE85); sub_207699();                              /* 20DE81 CALL    0x207699 */
+    push32(0x20DE85); DrawTextChar();                            /* 20DE81 CALL    0x207699 */
     C = 1;                                                       /* 20DE85 LD      C,1 */
     E = 0;                                                       /* 20DE87 LD      E,0 */
     push32(0x20DE8D); sub_20768E();                              /* 20DE89 CALL    0x20768E */
@@ -7204,7 +7204,7 @@ L_20DE21:
     E = 0;                                                       /* 20DEC0 LD      E,0 */
     push32(0x20DEC6); sub_20768E();                              /* 20DEC2 CALL    0x20768E */
     L = rd8(0x20DF7C);                                           /* 20DEC6 LD      L,(0x20DF7C) */
-    push32(0x20DECF); sub_207699();                              /* 20DECB CALL    0x207699 */
+    push32(0x20DECF); DrawTextChar();                            /* 20DECB CALL    0x207699 */
     XDE = pop32();                                               /* 20DECF POP     XDE */
 L_20DED0:
     L = 0x11;                                                    /* 20DED0 LD      L,0x11 */
@@ -7215,7 +7215,7 @@ L_20DED0:
     E = 0;                                                       /* 20DEDB LD      E,0 */
     push32(0x20DEE1); sub_20768E();                              /* 20DEDD CALL    0x20768E */
     L = rd8(0x20DF7D);                                           /* 20DEE1 LD      L,(0x20DF7D) */
-    push32(0x20DEEA); sub_207699();                              /* 20DEE6 CALL    0x207699 */
+    push32(0x20DEEA); DrawTextChar();                            /* 20DEE6 CALL    0x207699 */
     XDE = pop32();                                               /* 20DEEA POP     XDE */
 L_20DEEB:
     L = 0x12;                                                    /* 20DEEB LD      L,0x12 */
@@ -7226,7 +7226,7 @@ L_20DEEB:
     E = 0;                                                       /* 20DEF6 LD      E,0 */
     push32(0x20DEFC); sub_20768E();                              /* 20DEF8 CALL    0x20768E */
     L = rd8(0x20DF7E);                                           /* 20DEFC LD      L,(0x20DF7E) */
-    push32(0x20DF05); sub_207699();                              /* 20DF01 CALL    0x207699 */
+    push32(0x20DF05); DrawTextChar();                            /* 20DF01 CALL    0x207699 */
     XDE = pop32();                                               /* 20DF05 POP     XDE */
 L_20DF06:
     L = 0x13;                                                    /* 20DF06 LD      L,0x13 */
@@ -7237,7 +7237,7 @@ L_20DF06:
     E = 0;                                                       /* 20DF11 LD      E,0 */
     push32(0x20DF17); sub_20768E();                              /* 20DF13 CALL    0x20768E */
     L = rd8(0x20DF7F);                                           /* 20DF17 LD      L,(0x20DF7F) */
-    push32(0x20DF20); sub_207699();                              /* 20DF1C CALL    0x207699 */
+    push32(0x20DF20); DrawTextChar();                            /* 20DF1C CALL    0x207699 */
     XDE = pop32();                                               /* 20DF20 POP     XDE */
 L_20DF21:
     C = 9;                                                       /* 20DF21 LD      C,9 */
@@ -7445,7 +7445,7 @@ L_20E2E1:
     XSP += 4; return;                                            /* 20E2E9 RET */
 }
 
-void fn_20E2EA(void)
+void TitleScreen(void)
 {
     wr16(XIZ + 0xE, 0xB4);                                       /* 20E2EA LDW     (XIZ+0xE),0xB4 */
     wr16(XIZ + 8, 0xE2F9);                                       /* 20E2EF LDW     (XIZ+8),0xE2F9 */
@@ -7464,7 +7464,7 @@ L_20E320:
     WA = 0xE7;                                                   /* 20E320 LD      WA,0xE7 */
     BC = 0;                                                      /* 20E323 LD      BC,0 */
     DE = 2;                                                      /* 20E325 LD      DE,2 */
-    push32(0x20E32B); sub_206B5D();                              /* 20E327 CALL    0x206B5D */
+    push32(0x20E32B); DrawTilemapScr2();                         /* 20E327 CALL    0x206B5D */
     wr16(XIZ + 8, 0xE336);                                       /* 20E32B LDW     (XIZ+8),0xE336 */
     wr16(XIZ + 0xA, 0x20);                                       /* 20E330 LDW     (XIZ+0xA),0x20 */
     XSP += 4; return;                                            /* 20E335 RET */
@@ -7492,7 +7492,7 @@ L_20E3A1:
     XSP += 4; return;                                            /* 20E3AE RET */
 }
 
-void fn_20E3AF(void)
+void IntroBackground(void)
 {
 L_20E3AF:
     wr8(0x5CE2, 0);                                              /* 20E3AF LDB     (0x5CE2),0 */
@@ -7524,7 +7524,7 @@ L_20E414:
     WA = 0xE7;                                                   /* 20E414 LD      WA,0xE7 */
     BC = 0;                                                      /* 20E417 LD      BC,0 */
     DE = 2;                                                      /* 20E419 LD      DE,2 */
-    push32(0x20E41F); sub_206B5D();                              /* 20E41B CALL    0x206B5D */
+    push32(0x20E41F); DrawTilemapScr2();                         /* 20E41B CALL    0x206B5D */
     XHL = 0x20E1D4;                                              /* 20E41F LD      XHL,0x20E1D4 */
     push32(0x20E428); sub_206324();                              /* 20E424 CALL    0x206324 */
     wr16(XHL + 0xE, 5);                                          /* 20E428 LDW     (XHL+0xE),5 */
@@ -7541,7 +7541,7 @@ L_20E44E:
     WA = 0xE7;                                                   /* 20E44E LD      WA,0xE7 */
     BC = 0;                                                      /* 20E451 LD      BC,0 */
     DE = 2;                                                      /* 20E453 LD      DE,2 */
-    push32(0x20E459); sub_206B5D();                              /* 20E455 CALL    0x206B5D */
+    push32(0x20E459); DrawTilemapScr2();                         /* 20E455 CALL    0x206B5D */
     XHL = 0x20E29B;                                              /* 20E459 LD      XHL,0x20E29B */
     push32(0x20E462); sub_206324();                              /* 20E45E CALL    0x206324 */
     XWA = 0x20E462;                                              /* 20E462 LD      XWA,0x20E462 */
@@ -7562,7 +7562,7 @@ L_20E44E:
 void fn_20E496(void)
 {
     XWA = 0x11;                                                  /* 20E496 LD      XWA,0x11 */
-    push32(0x20E49F); sub_207759();                              /* 20E49B CALL    0x207759 */
+    push32(0x20E49F); PlayMusic();                               /* 20E49B CALL    0x207759 */
     XHL = 0x20E96C;                                              /* 20E49F LD      XHL,0x20E96C */
     push32(0x20E4A8); sub_206324();                              /* 20E4A4 CALL    0x206324 */
     XWA = 0x20E4A8;                                              /* 20E4A8 LD      XWA,0x20E4A8 */
@@ -7717,7 +7717,7 @@ void fn_20E496(void)
 
 void fn_20E789(void)
 {
-    push32(0x20E78C); sub_20E7FF();                              /* 20E789 CALR    0x20E7FF */
+    push32(0x20E78C); IntroTitleScene();                         /* 20E789 CALR    0x20E7FF */
     WA = 0x32;                                                   /* 20E78C LD      WA,0x32 */
     push32(0x20E793); sub_20776A();                              /* 20E78F CALL    0x20776A */
     XHL = 0x20E89B;                                              /* 20E793 LD      XHL,0x20E89B */
@@ -7751,7 +7751,7 @@ void fn_20E789(void)
     XSP += 4; return;                                            /* 20E7FE RET */
 }
 
-void sub_20E7FF(void)
+void IntroTitleScene(void)
 {
     wr8(0x585B, 0x7F);                                           /* 20E7FF LDB     (0x585B),0x7F */
     wr8(0x584B, 0);                                              /* 20E804 LDB     (0x584B),0 */
@@ -7764,38 +7764,38 @@ void sub_20E7FF(void)
     A = 0;                                                       /* 20E823 LD      A,0 */
     C = 9;                                                       /* 20E825 LD      C,9 */
     XHL = 0x2E3F68;                                              /* 20E827 LD      XHL,0x2E3F68 */
-    push32(0x20E830); sub_206D9E();                              /* 20E82C CALL    0x206D9E */
+    push32(0x20E830); LoadPalettes();                            /* 20E82C CALL    0x206D9E */
     A = 0x10;                                                    /* 20E830 LD      A,0x10 */
     C = 9;                                                       /* 20E832 LD      C,9 */
     XHL = 0x2E3F68;                                              /* 20E834 LD      XHL,0x2E3F68 */
-    push32(0x20E83D); sub_206D9E();                              /* 20E839 CALL    0x206D9E */
+    push32(0x20E83D); LoadPalettes();                            /* 20E839 CALL    0x206D9E */
     A = 0x20;                                                    /* 20E83D LD      A,0x20 */
     C = 0xA;                                                     /* 20E83F LD      C,0xA */
     XHL = 0x2E4D3F;                                              /* 20E841 LD      XHL,0x2E4D3F */
-    push32(0x20E84A); sub_206D9E();                              /* 20E846 CALL    0x206D9E */
+    push32(0x20E84A); LoadPalettes();                            /* 20E846 CALL    0x206D9E */
     A = 0;                                                       /* 20E84A LD      A,0 */
     C = 2;                                                       /* 20E84C LD      C,2 */
     XHL = 0x2E3FB0;                                              /* 20E84E LD      XHL,0x2E3FB0 */
-    push32(0x20E857); sub_206DCD();                              /* 20E853 CALL    0x206DCD */
+    push32(0x20E857); LoadMonoPalettes();                        /* 20E853 CALL    0x206DCD */
     A = 2;                                                       /* 20E857 LD      A,2 */
     C = 2;                                                       /* 20E859 LD      C,2 */
     XHL = 0x2E3FB0;                                              /* 20E85B LD      XHL,0x2E3FB0 */
-    push32(0x20E864); sub_206DCD();                              /* 20E860 CALL    0x206DCD */
+    push32(0x20E864); LoadMonoPalettes();                        /* 20E860 CALL    0x206DCD */
     A = 4;                                                       /* 20E864 LD      A,4 */
     C = 2;                                                       /* 20E866 LD      C,2 */
     XHL = 0x2E4D8F;                                              /* 20E868 LD      XHL,0x2E4D8F */
-    push32(0x20E871); sub_206DCD();                              /* 20E86D CALL    0x206DCD */
+    push32(0x20E871); LoadMonoPalettes();                        /* 20E86D CALL    0x206DCD */
     WA = 0xC;                                                    /* 20E871 LD      WA,0xC */
     XHL = 0x2E42CE;                                              /* 20E874 LD      XHL,0x2E42CE */
-    push32(0x20E87D); sub_207226();                              /* 20E879 CALL    0x207226 */
+    push32(0x20E87D); LoadCompressedTiles();                     /* 20E879 CALL    0x207226 */
     WA = 0xE7;                                                   /* 20E87D LD      WA,0xE7 */
     XHL = 0x2E5997;                                              /* 20E880 LD      XHL,0x2E5997 */
-    push32(0x20E889); sub_207226();                              /* 20E885 CALL    0x207226 */
+    push32(0x20E889); LoadCompressedTiles();                     /* 20E885 CALL    0x207226 */
     XHL = 0x2E4240;                                              /* 20E889 LD      XHL,0x2E4240 */
     WA = 0xC;                                                    /* 20E88E LD      WA,0xC */
     BC = 0;                                                      /* 20E891 LD      BC,0 */
     DE = 0x11;                                                   /* 20E893 LD      DE,0x11 */
-    push32(0x20E89A); sub_206B51();                              /* 20E896 CALL    0x206B51 */
+    push32(0x20E89A); DrawTilemapScr1();                         /* 20E896 CALL    0x206B51 */
     XSP += 4; return;                                            /* 20E89A RET */
 }
 
@@ -7810,12 +7810,12 @@ void fn_20E89B(void)
     XHL = 0x2E3FB8;                                              /* 20E8B7 LD      XHL,0x2E3FB8 */
     BC = rd16(XIZ + 0xE);                                        /* 20E8BC LD      BC,(XIZ+0xE) */
     DE = 1;                                                      /* 20E8BF LD      DE,1 */
-    push32(0x20E8C5); sub_206B51();                              /* 20E8C1 CALL    0x206B51 */
+    push32(0x20E8C5); DrawTilemapScr1();                         /* 20E8C1 CALL    0x206B51 */
     WA = 0xC;                                                    /* 20E8C5 LD      WA,0xC */
     XHL = 0x2E405A;                                              /* 20E8C8 LD      XHL,0x2E405A */
     BC = rd16(XIZ + 0x10);                                       /* 20E8CD LD      BC,(XIZ+0x10) */
     DE = 0xD;                                                    /* 20E8D0 LD      DE,0xD */
-    push32(0x20E8D7); sub_206B51();                              /* 20E8D3 CALL    0x206B51 */
+    push32(0x20E8D7); DrawTilemapScr1();                         /* 20E8D3 CALL    0x206B51 */
     { uint32_t ea = XIZ + 0x10; wr16(ea, (uint16_t)(rd16(ea) - 1)); } /* 20E8D7 DECW    1,(XIZ+0x10) */
     { uint32_t ea = XIZ + 0xE; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20E8DA INCW    1,(XIZ+0xE) */
     /* CP (XIZ+0xE),1 */                                         /* 20E8DD CPW     (XIZ+0xE),1 */
@@ -7833,12 +7833,12 @@ void fn_20E8E8(void)
     XHL = 0x2E40FC;                                              /* 20E8FF LD      XHL,0x2E40FC */
     BC = rd16(XIZ + 0xE);                                        /* 20E904 LD      BC,(XIZ+0xE) */
     DE = 5;                                                      /* 20E907 LD      DE,5 */
-    push32(0x20E90D); sub_206B51();                              /* 20E909 CALL    0x206B51 */
+    push32(0x20E90D); DrawTilemapScr1();                         /* 20E909 CALL    0x206B51 */
     WA = 0xC;                                                    /* 20E90D LD      WA,0xC */
     XHL = 0x2E419E;                                              /* 20E910 LD      XHL,0x2E419E */
     BC = rd16(XIZ + 0x10);                                       /* 20E915 LD      BC,(XIZ+0x10) */
     DE = 9;                                                      /* 20E918 LD      DE,9 */
-    push32(0x20E91F); sub_206B51();                              /* 20E91B CALL    0x206B51 */
+    push32(0x20E91F); DrawTilemapScr1();                         /* 20E91B CALL    0x206B51 */
     { uint32_t ea = XIZ + 0x10; wr16(ea, (uint16_t)(rd16(ea) - 1)); } /* 20E91F DECW    1,(XIZ+0x10) */
     { uint32_t ea = XIZ + 0xE; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20E922 INCW    1,(XIZ+0xE) */
     /* CP (XIZ+0xE),1 */                                         /* 20E925 CPW     (XIZ+0xE),1 */
@@ -7846,7 +7846,7 @@ void fn_20E8E8(void)
     XSP += 4; return;                                            /* 20E92F RET */
 }
 
-void fn_20E930(void)
+void TitleReveal(void)
 {
     wr16(XIZ + 0xE, 0x14);                                       /* 20E930 LDW     (XIZ+0xE),0x14 */
     wr16(XIZ + 8, 0xE93F);                                       /* 20E935 LDW     (XIZ+8),0xE93F */
@@ -7860,14 +7860,14 @@ L_20E952:
     BC = rd16(XIZ + 0xE);                                        /* 20E952 LD      BC,(XIZ+0xE) */
     WA = 0xE7;                                                   /* 20E955 LD      WA,0xE7 */
     DE = 2;                                                      /* 20E958 LD      DE,2 */
-    push32(0x20E95E); sub_206B5D();                              /* 20E95A CALL    0x206B5D */
+    push32(0x20E95E); DrawTilemapScr2();                         /* 20E95A CALL    0x206B5D */
     { uint32_t ea = XIZ + 0xE; wr16(ea, (uint16_t)(rd16(ea) - 1)); } /* 20E95E DECW    1,(XIZ+0xE) */
     /* CP (XIZ+0xE),0 */                                         /* 20E961 CPW     (XIZ+0xE),0 */
     if ((int16_t)(rd16(XIZ + 0xE)) < (int16_t)(0)) { sub_206369(); return; } /* 20E966 JP      LT,0x206369 */
     XSP += 4; return;                                            /* 20E96B RET */
 }
 
-void fn_20E96C(void)
+void IntroLogoScene(void)
 {
     wr8(0x585B, 0x7F);                                           /* 20E96C LDB     (0x585B),0x7F */
     push32(0x20E974); sub_20EC49();                              /* 20E971 CALR    0x20EC49 */
@@ -7888,27 +7888,27 @@ void fn_20E96C(void)
     A = 0x10;                                                    /* 20E9A2 LD      A,0x10 */
     C = 2;                                                       /* 20E9A4 LD      C,2 */
     XHL = 0x2DD54D;                                              /* 20E9A6 LD      XHL,0x2DD54D */
-    push32(0x20E9AF); sub_206D9E();                              /* 20E9AB CALL    0x206D9E */
+    push32(0x20E9AF); LoadPalettes();                            /* 20E9AB CALL    0x206D9E */
     A = 0x20;                                                    /* 20E9AF LD      A,0x20 */
     C = 2;                                                       /* 20E9B1 LD      C,2 */
     XHL = 0x2DD54D;                                              /* 20E9B3 LD      XHL,0x2DD54D */
-    push32(0x20E9BC); sub_206D9E();                              /* 20E9B8 CALL    0x206D9E */
+    push32(0x20E9BC); LoadPalettes();                            /* 20E9B8 CALL    0x206D9E */
     A = 2;                                                       /* 20E9BC LD      A,2 */
     C = 2;                                                       /* 20E9BE LD      C,2 */
     XHL = 0x2DD55D;                                              /* 20E9C0 LD      XHL,0x2DD55D */
-    push32(0x20E9C9); sub_206DCD();                              /* 20E9C5 CALL    0x206DCD */
+    push32(0x20E9C9); LoadMonoPalettes();                        /* 20E9C5 CALL    0x206DCD */
     A = 4;                                                       /* 20E9C9 LD      A,4 */
     C = 2;                                                       /* 20E9CB LD      C,2 */
     XHL = 0x2DD55D;                                              /* 20E9CD LD      XHL,0x2DD55D */
-    push32(0x20E9D6); sub_206DCD();                              /* 20E9D2 CALL    0x206DCD */
+    push32(0x20E9D6); LoadMonoPalettes();                        /* 20E9D2 CALL    0x206DCD */
     WA = 0xC;                                                    /* 20E9D6 LD      WA,0xC */
     XHL = 0x2DDAB9;                                              /* 20E9D9 LD      XHL,0x2DDAB9 */
-    push32(0x20E9E2); sub_207226();                              /* 20E9DE CALL    0x207226 */
+    push32(0x20E9E2); LoadCompressedTiles();                     /* 20E9DE CALL    0x207226 */
     WA = 0xC;                                                    /* 20E9E2 LD      WA,0xC */
     XHL = 0x2DD7BF;                                              /* 20E9E5 LD      XHL,0x2DD7BF */
     BC = 0;                                                      /* 20E9EA LD      BC,0 */
     DE = 0;                                                      /* 20E9EC LD      DE,0 */
-    push32(0x20E9F2); sub_206B5D();                              /* 20E9EE CALL    0x206B5D */
+    push32(0x20E9F2); DrawTilemapScr2();                         /* 20E9EE CALL    0x206B5D */
     wr16(XIZ + 0xE, 0xFFE8);                                     /* 20E9F2 LDW     (XIZ+0xE),0xFFE8 */
     wr8(0x585B, 0x7F);                                           /* 20E9F7 LDB     (0x585B),0x7F */
     XHL = 0x20E22B;                                              /* 20E9FC LD      XHL,0x20E22B */
@@ -7933,7 +7933,7 @@ void fn_20E96C(void)
     XHL = 0x2DD565;                                              /* 20EA49 LD      XHL,0x2DD565 */
     BC = rd16(XIZ + 0xE);                                        /* 20EA4E LD      BC,(XIZ+0xE) */
     DE = 3;                                                      /* 20EA51 LD      DE,3 */
-    push32(0x20EA57); sub_206B51();                              /* 20EA53 CALL    0x206B51 */
+    push32(0x20EA57); DrawTilemapScr1();                         /* 20EA53 CALL    0x206B51 */
     { uint32_t ea = XIZ + 0xE; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20EA57 INCW    1,(XIZ+0xE) */
     /* CP (XIZ+0xE),0x14 */                                      /* 20EA5A CPW     (XIZ+0xE),0x14 */
     if ((uint16_t)(rd16(XIZ + 0xE)) != (uint16_t)(0x14)) { XSP += 4; return; } /* 20EA5F RET     NZ */
@@ -7962,35 +7962,35 @@ void sub_20EB17(void)
     A = 0;                                                       /* 20EB17 LD      A,0 */
     C = 3;                                                       /* 20EB19 LD      C,3 */
     XHL = 0x2DE648;                                              /* 20EB1B LD      XHL,0x2DE648 */
-    push32(0x20EB24); sub_206D9E();                              /* 20EB20 CALL    0x206D9E */
+    push32(0x20EB24); LoadPalettes();                            /* 20EB20 CALL    0x206D9E */
     A = 0x10;                                                    /* 20EB24 LD      A,0x10 */
     C = 3;                                                       /* 20EB26 LD      C,3 */
     XHL = 0x2DE648;                                              /* 20EB28 LD      XHL,0x2DE648 */
-    push32(0x20EB31); sub_206D9E();                              /* 20EB2D CALL    0x206D9E */
+    push32(0x20EB31); LoadPalettes();                            /* 20EB2D CALL    0x206D9E */
     A = 0x20;                                                    /* 20EB31 LD      A,0x20 */
     C = 3;                                                       /* 20EB33 LD      C,3 */
     XHL = 0x2DE648;                                              /* 20EB35 LD      XHL,0x2DE648 */
-    push32(0x20EB3E); sub_206D9E();                              /* 20EB3A CALL    0x206D9E */
+    push32(0x20EB3E); LoadPalettes();                            /* 20EB3A CALL    0x206D9E */
     A = 0;                                                       /* 20EB3E LD      A,0 */
     C = 2;                                                       /* 20EB40 LD      C,2 */
     XHL = 0x2DE027;                                              /* 20EB42 LD      XHL,0x2DE027 */
-    push32(0x20EB4B); sub_206DCD();                              /* 20EB47 CALL    0x206DCD */
+    push32(0x20EB4B); LoadMonoPalettes();                        /* 20EB47 CALL    0x206DCD */
     A = 2;                                                       /* 20EB4B LD      A,2 */
     C = 2;                                                       /* 20EB4D LD      C,2 */
     XHL = 0x2DE027;                                              /* 20EB4F LD      XHL,0x2DE027 */
-    push32(0x20EB58); sub_206DCD();                              /* 20EB54 CALL    0x206DCD */
+    push32(0x20EB58); LoadMonoPalettes();                        /* 20EB54 CALL    0x206DCD */
     A = 4;                                                       /* 20EB58 LD      A,4 */
     C = 3;                                                       /* 20EB5A LD      C,3 */
     XHL = 0x2DE027;                                              /* 20EB5C LD      XHL,0x2DE027 */
-    push32(0x20EB65); sub_206DCD();                              /* 20EB61 CALL    0x206DCD */
+    push32(0x20EB65); LoadMonoPalettes();                        /* 20EB61 CALL    0x206DCD */
     WA = 0xC;                                                    /* 20EB65 LD      WA,0xC */
     XHL = 0x2DEB58;                                              /* 20EB68 LD      XHL,0x2DEB58 */
-    push32(0x20EB71); sub_207226();                              /* 20EB6D CALL    0x207226 */
+    push32(0x20EB71); LoadCompressedTiles();                     /* 20EB6D CALL    0x207226 */
     WA = 0xC;                                                    /* 20EB71 LD      WA,0xC */
     XHL = 0x2DE660;                                              /* 20EB74 LD      XHL,0x2DE660 */
     BC = 0;                                                      /* 20EB79 LD      BC,0 */
     DE = 0;                                                      /* 20EB7B LD      DE,0 */
-    push32(0x20EB81); sub_206B51();                              /* 20EB7D CALL    0x206B51 */
+    push32(0x20EB81); DrawTilemapScr1();                         /* 20EB7D CALL    0x206B51 */
     wr8(0x585B, 0);                                              /* 20EB81 LDB     (0x585B),0 */
     XSP += 4; return;                                            /* 20EB86 RET */
 }
@@ -8022,33 +8022,33 @@ void sub_20ED46(void)
     A = 0;                                                       /* 20ED46 LD      A,0 */
     C = 7;                                                       /* 20ED48 LD      C,7 */
     XHL = 0x2DF63C;                                              /* 20ED4A LD      XHL,0x2DF63C */
-    push32(0x20ED53); sub_206D9E();                              /* 20ED4F CALL    0x206D9E */
+    push32(0x20ED53); LoadPalettes();                            /* 20ED4F CALL    0x206D9E */
     A = 0x10;                                                    /* 20ED53 LD      A,0x10 */
     C = 7;                                                       /* 20ED55 LD      C,7 */
     XHL = 0x2DF63C;                                              /* 20ED57 LD      XHL,0x2DF63C */
-    push32(0x20ED60); sub_206D9E();                              /* 20ED5C CALL    0x206D9E */
+    push32(0x20ED60); LoadPalettes();                            /* 20ED5C CALL    0x206D9E */
     A = 0x20;                                                    /* 20ED60 LD      A,0x20 */
     C = 7;                                                       /* 20ED62 LD      C,7 */
     XHL = 0x2DF63C;                                              /* 20ED64 LD      XHL,0x2DF63C */
-    push32(0x20ED6D); sub_206D9E();                              /* 20ED69 CALL    0x206D9E */
+    push32(0x20ED6D); LoadPalettes();                            /* 20ED69 CALL    0x206D9E */
     A = 0;                                                       /* 20ED6D LD      A,0 */
     C = 2;                                                       /* 20ED6F LD      C,2 */
     XHL = 0x2DE027;                                              /* 20ED71 LD      XHL,0x2DE027 */
-    push32(0x20ED7A); sub_206DCD();                              /* 20ED76 CALL    0x206DCD */
+    push32(0x20ED7A); LoadMonoPalettes();                        /* 20ED76 CALL    0x206DCD */
     A = 2;                                                       /* 20ED7A LD      A,2 */
     C = 2;                                                       /* 20ED7C LD      C,2 */
     XHL = 0x2DE027;                                              /* 20ED7E LD      XHL,0x2DE027 */
-    push32(0x20ED87); sub_206DCD();                              /* 20ED83 CALL    0x206DCD */
+    push32(0x20ED87); LoadMonoPalettes();                        /* 20ED83 CALL    0x206DCD */
     A = 4;                                                       /* 20ED87 LD      A,4 */
     C = 2;                                                       /* 20ED89 LD      C,2 */
     XHL = 0x2DE027;                                              /* 20ED8B LD      XHL,0x2DE027 */
-    push32(0x20ED94); sub_206DCD();                              /* 20ED90 CALL    0x206DCD */
+    push32(0x20ED94); LoadMonoPalettes();                        /* 20ED90 CALL    0x206DCD */
     WA = 0x12C;                                                  /* 20ED94 LD      WA,0x12C */
     XHL = 0x2DFF62;                                              /* 20ED97 LD      XHL,0x2DFF62 */
-    push32(0x20EDA0); sub_207226();                              /* 20ED9C CALL    0x207226 */
+    push32(0x20EDA0); LoadCompressedTiles();                     /* 20ED9C CALL    0x207226 */
     WA = 0x17C;                                                  /* 20EDA0 LD      WA,0x17C */
     XHL = 0x2E3C0A;                                              /* 20EDA3 LD      XHL,0x2E3C0A */
-    push32(0x20EDAC); sub_207226();                              /* 20EDA8 CALL    0x207226 */
+    push32(0x20EDAC); LoadCompressedTiles();                     /* 20EDA8 CALL    0x207226 */
     wr8(0x585B, 0);                                              /* 20EDAC LDB     (0x585B),0 */
     XSP += 4; return;                                            /* 20EDB1 RET */
 }
@@ -8060,13 +8060,13 @@ void fn_20EFD3(void)
     push32(0x20EFE0); sub_20EC49();                              /* 20EFDD CALR    0x20EC49 */
     push32(0x20EFE3); sub_20EC58();                              /* 20EFE0 CALR    0x20EC58 */
     XWA = 4;                                                     /* 20EFE3 LD      XWA,4 */
-    push32(0x20EFE9); sub_207759();                              /* 20EFE5 CALL    0x207759 */
+    push32(0x20EFE9); PlayMusic();                               /* 20EFE5 CALL    0x207759 */
     wr16(XIZ + 8, 0xEFF4);                                       /* 20EFE9 LDW     (XIZ+8),0xEFF4 */
     wr16(XIZ + 0xA, 0x20);                                       /* 20EFEE LDW     (XIZ+0xA),0x20 */
     XSP += 4; return;                                            /* 20EFF3 RET */
 }
 
-void fn_20EFF4(void)
+void StorySceneUnitice(void)
 {
     WA = 0x24;                                                   /* 20EFF4 LD      WA,0x24 */
     push32(0x20EFFB); sub_20776A();                              /* 20EFF7 CALL    0x20776A */
@@ -8074,15 +8074,15 @@ void fn_20EFF4(void)
     HL = 0x2E;                                                   /* 20EFFE LD      HL,0x2E */
     BC = 0;                                                      /* 20F001 LD      BC,0 */
     DE = 0;                                                      /* 20F003 LD      DE,0 */
-    push32(0x20F009); sub_2103BA();                              /* 20F005 CALL    0x2103BA */
+    push32(0x20F009); DrawPortrait();                            /* 20F005 CALL    0x2103BA */
     A = 0x20;                                                    /* 20F009 LD      A,0x20 */
     C = 1;                                                       /* 20F00B LD      C,1 */
     XHL = 0x225C3D;                                              /* 20F00D LD      XHL,0x225C3D */
-    push32(0x20F016); sub_206D9E();                              /* 20F012 CALL    0x206D9E */
+    push32(0x20F016); LoadPalettes();                            /* 20F012 CALL    0x206D9E */
     A = 4;                                                       /* 20F016 LD      A,4 */
     C = 1;                                                       /* 20F018 LD      C,1 */
     XHL = 0x225C45;                                              /* 20F01A LD      XHL,0x225C45 */
-    push32(0x20F023); sub_206DCD();                              /* 20F01F CALL    0x206DCD */
+    push32(0x20F023); LoadMonoPalettes();                        /* 20F01F CALL    0x206DCD */
     wr8(0x585B, 0);                                              /* 20F023 LDB     (0x585B),0 */
     XHL = 0x20F628;                                              /* 20F028 LD      XHL,0x20F628 */
     push32(0x20F031); sub_206324();                              /* 20F02D CALL    0x206324 */
@@ -8106,7 +8106,7 @@ void fn_20EFF4(void)
     HL = 0x3C;                                                   /* 20F071 LD      HL,0x3C */
     BC = 0;                                                      /* 20F074 LD      BC,0 */
     DE = 0;                                                      /* 20F076 LD      DE,0 */
-    push32(0x20F07C); sub_2103BA();                              /* 20F078 CALL    0x2103BA */
+    push32(0x20F07C); DrawPortrait();                            /* 20F078 CALL    0x2103BA */
     XHL = 0x20E22B;                                              /* 20F07C LD      XHL,0x20E22B */
     push32(0x20F085); sub_206324();                              /* 20F081 CALL    0x206324 */
     wr16(XHL + 0xE, 0x20);                                       /* 20F085 LDW     (XHL+0xE),0x20 */
@@ -8173,7 +8173,7 @@ L_20F143:
     wr8(0x5853, 0);                                              /* 20F164 LDB     (0x5853),0 */
     wr8(0x5855, 0);                                              /* 20F169 LDB     (0x5855),0 */
     HL = 0;                                                      /* 20F16E LD      HL,0 */
-    push32(0x20F174); sub_20612E();                              /* 20F170 CALL    0x20612E */
+    push32(0x20F174); SetEventFlag();                            /* 20F170 CALL    0x20612E */
     push32(0x20F178); sub_206369();                              /* 20F174 CALL    0x206369 */
     XSP += 4; return;                                            /* 20F178 RET */
 }
@@ -8344,7 +8344,7 @@ void fn_20F7AD(void)
 {
 L_20F7AD:
     WA = 0x14;                                                   /* 20F7AD LD      WA,0x14 */
-    push32(0x20F7B4); sub_207759();                              /* 20F7B0 CALL    0x207759 */
+    push32(0x20F7B4); PlayMusic();                               /* 20F7B0 CALL    0x207759 */
     WA = 0x35;                                                   /* 20F7B4 LD      WA,0x35 */
     push32(0x20F7BB); sub_20776A();                              /* 20F7B7 CALL    0x20776A */
     push32(0x20F7BF); sub_20EC49();                              /* 20F7BB CALL    0x20EC49 */
@@ -8366,7 +8366,7 @@ L_20F7F3:
     push32(0x20F7F7); sub_20EC49();                              /* 20F7F3 CALL    0x20EC49 */
     push32(0x20F7FB); sub_20EC58();                              /* 20F7F7 CALL    0x20EC58 */
     wr16(XIZ + 0xE, 0);                                          /* 20F7FB LDW     (XIZ+0xE),0 */
-    push32(0x20F803); sub_20FC87();                              /* 20F800 CALR    0x20FC87 */
+    push32(0x20F803); NameEntryScreen();                         /* 20F800 CALR    0x20FC87 */
     XHL = 0x20F8DA;                                              /* 20F803 LD      XHL,0x20F8DA */
     push32(0x20F80C); sub_206324();                              /* 20F808 CALL    0x206324 */
     XWA = 0x20F80C;                                              /* 20F80C LD      XWA,0x20F80C */
@@ -8378,7 +8378,7 @@ L_20F7F3:
     goto L_20F7AD;                                               /* 20F821 JR      0x20F7AD */
 L_20F823:
     wr16(XIZ + 0xE, 1);                                          /* 20F823 LDW     (XIZ+0xE),1 */
-    push32(0x20F82B); sub_20FC87();                              /* 20F828 CALR    0x20FC87 */
+    push32(0x20F82B); NameEntryScreen();                         /* 20F828 CALR    0x20FC87 */
     XHL = 0x20F8DA;                                              /* 20F82B LD      XHL,0x20F8DA */
     push32(0x20F834); sub_206324();                              /* 20F830 CALL    0x206324 */
     XWA = 0x20F834;                                              /* 20F834 LD      XWA,0x20F834 */
@@ -8405,28 +8405,28 @@ L_20F823:
 void fn_20F877(void)
 {
     A = 0;                                                       /* 20F877 LD      A,0 */
-    push32(0x20F87D); sub_20748A();                              /* 20F879 CALL    0x20748A */
+    push32(0x20F87D); GetTextBox();                              /* 20F879 CALL    0x20748A */
     C = 0xB;                                                     /* 20F87D LD      C,0xB */
     E = 1;                                                       /* 20F87F LD      E,1 */
     push32(0x20F885); sub_20768E();                              /* 20F881 CALL    0x20768E */
     HL = rd16(XIY + 0x1A);                                       /* 20F885 LD      HL,(XIY+0x1A) */
-    push32(0x20F88C); sub_207699();                              /* 20F888 CALL    0x207699 */
+    push32(0x20F88C); DrawTextChar();                            /* 20F888 CALL    0x207699 */
     HL = rd16(XIY + 0x1C);                                       /* 20F88C LD      HL,(XIY+0x1C) */
-    push32(0x20F893); sub_207699();                              /* 20F88F CALL    0x207699 */
+    push32(0x20F893); DrawTextChar();                            /* 20F88F CALL    0x207699 */
     HL = rd16(XIY + 0x1E);                                       /* 20F893 LD      HL,(XIY+0x1E) */
-    push32(0x20F89A); sub_207699();                              /* 20F896 CALL    0x207699 */
+    push32(0x20F89A); DrawTextChar();                            /* 20F896 CALL    0x207699 */
     HL = rd16(XIY + 0x20);                                       /* 20F89A LD      HL,(XIY+0x20) */
-    push32(0x20F8A1); sub_207699();                              /* 20F89D CALL    0x207699 */
+    push32(0x20F8A1); DrawTextChar();                            /* 20F89D CALL    0x207699 */
     HL = rd16(XIY + 0x22);                                       /* 20F8A1 LD      HL,(XIY+0x22) */
-    push32(0x20F8A8); sub_207699();                              /* 20F8A4 CALL    0x207699 */
+    push32(0x20F8A8); DrawTextChar();                            /* 20F8A4 CALL    0x207699 */
     HL = rd16(XIY + 0x24);                                       /* 20F8A8 LD      HL,(XIY+0x24) */
-    push32(0x20F8AF); sub_207699();                              /* 20F8AB CALL    0x207699 */
+    push32(0x20F8AF); DrawTextChar();                            /* 20F8AB CALL    0x207699 */
     { uint32_t ea = XIZ + 0xE; wr16(ea, (uint16_t)(rd16(ea) + 1)); } /* 20F8AF INCW    1,(XIZ+0xE) */
     A = rd8(XIZ + 0xE);                                          /* 20F8B2 LD      A,(XIZ+0xE) */
     A = (uint8_t)(A & 0x10);                                     /* 20F8B5 AND     A,0x10 */
     if ((uint8_t)A == 0) goto L_20F8D9;                          /* 20F8B8 JR      Z,0x20F8D9 */
     A = 0;                                                       /* 20F8BA LD      A,0 */
-    push32(0x20F8C0); sub_20748A();                              /* 20F8BC CALL    0x20748A */
+    push32(0x20F8C0); GetTextBox();                              /* 20F8BC CALL    0x20748A */
     C = rd8(XIY + 0x18);                                         /* 20F8C0 LD      C,(XIY+0x18) */
     /* CP C,6 */                                                 /* 20F8C3 CP      C,6 */
     if ((int8_t)(C) >= (int8_t)(6)) goto L_20F8D9;               /* 20F8C5 JR      GE,0x20F8D9 */
@@ -8434,22 +8434,22 @@ void fn_20F877(void)
     E = 1;                                                       /* 20F8CA LD      E,1 */
     push32(0x20F8D0); sub_20768E();                              /* 20F8CC CALL    0x20768E */
     L = rd8(0x226C11);                                           /* 20F8D0 LD      L,(0x226C11) */
-    push32(0x20F8D9); sub_207699();                              /* 20F8D5 CALL    0x207699 */
+    push32(0x20F8D9); DrawTextChar();                            /* 20F8D5 CALL    0x207699 */
 L_20F8D9:
     XSP += 4; return;                                            /* 20F8D9 RET */
 }
 
-void fn_20F8DA(void)
+void NameEntrySetup(void)
 {
     XHL = 0x20F877;                                              /* 20F8DA LD      XHL,0x20F877 */
     push32(0x20F8E3); sub_206324();                              /* 20F8DF CALL    0x206324 */
     WA = 0xD8;                                                   /* 20F8E3 LD      WA,0xD8 */
     XHL = 0x2C8D88;                                              /* 20F8E6 LD      XHL,0x2C8D88 */
-    push32(0x20F8EF); sub_207226();                              /* 20F8EB CALL    0x207226 */
+    push32(0x20F8EF); LoadCompressedTiles();                     /* 20F8EB CALL    0x207226 */
     A = 1;                                                       /* 20F8EF LD      A,1 */
     C = 1;                                                       /* 20F8F1 LD      C,1 */
     XHL = 0x2C8D6C;                                              /* 20F8F3 LD      XHL,0x2C8D6C */
-    push32(0x20F8FC); sub_206D9E();                              /* 20F8F8 CALL    0x206D9E */
+    push32(0x20F8FC); LoadPalettes();                            /* 20F8F8 CALL    0x206D9E */
     wr16(XIZ + 0xE, 0);                                          /* 20F8FC LDW     (XIZ+0xE),0 */
     wr16(XIZ + 0x10, 0);                                         /* 20F901 LDW     (XIZ+0x10),0 */
     wr16(XIZ + 0x12, 0);                                         /* 20F906 LDW     (XIZ+0x12),0 */
@@ -8756,7 +8756,7 @@ L_20FC67:
     XSP += 4; return;                                            /* 20FC6E RET */
 }
 
-void sub_20FC87(void)
+void NameEntryScreen(void)
 {
     A = 0;                                                       /* 20FC87 LD      A,0 */
     C = 0x14;                                                    /* 20FC89 LD      C,0x14 */
@@ -8764,7 +8764,7 @@ void sub_20FC87(void)
     HL = 0xC;                                                    /* 20FC8D LD      HL,0xC */
     push32(0x20FC94); sub_207494();                              /* 20FC90 CALL    0x207494 */
     A = 0;                                                       /* 20FC94 LD      A,0 */
-    push32(0x20FC9A); sub_20748A();                              /* 20FC96 CALL    0x20748A */
+    push32(0x20FC9A); GetTextBox();                              /* 20FC96 CALL    0x20748A */
     C = 0;                                                       /* 20FC9A LD      C,0 */
     E = 0;                                                       /* 20FC9C LD      E,0 */
     push32(0x20FCA2); sub_2074C4();                              /* 20FC9E CALL    0x2074C4 */
@@ -8787,14 +8787,14 @@ L_20FCCE:
     WA = 0xDA;                                                   /* 20FCD2 LD      WA,0xDA */
     BC = 0xD;                                                    /* 20FCD5 LD      BC,0xD */
     DE = 4;                                                      /* 20FCD8 LD      DE,4 */
-    push32(0x20FCDE); sub_210380();                              /* 20FCDA CALL    0x210380 */
+    push32(0x20FCDE); DrawPortraitAt();                          /* 20FCDA CALL    0x210380 */
     A = 1;                                                       /* 20FCDE LD      A,1 */
     C = 0xA;                                                     /* 20FCE0 LD      C,0xA */
     E = 9;                                                       /* 20FCE2 LD      E,9 */
     HL = 0x30;                                                   /* 20FCE4 LD      HL,0x30 */
-    push32(0x20FCEB); sub_2074AA();                              /* 20FCE7 CALL    0x2074AA */
+    push32(0x20FCEB); OpenTextBoxNoWait();                       /* 20FCE7 CALL    0x2074AA */
     A = 1;                                                       /* 20FCEB LD      A,1 */
-    push32(0x20FCF1); sub_20748A();                              /* 20FCED CALL    0x20748A */
+    push32(0x20FCF1); GetTextBox();                              /* 20FCED CALL    0x20748A */
     C = 1;                                                       /* 20FCF1 LD      C,1 */
     E = 5;                                                       /* 20FCF3 LD      E,5 */
     push32(0x20FCF9); sub_2074C4();                              /* 20FCF5 CALL    0x2074C4 */
@@ -8804,9 +8804,9 @@ L_20FCCE:
     C = 6;                                                       /* 20FD04 LD      C,6 */
     E = 2;                                                       /* 20FD06 LD      E,2 */
     HL = 0xBA;                                                   /* 20FD08 LD      HL,0xBA */
-    push32(0x20FD0F); sub_2074AA();                              /* 20FD0B CALL    0x2074AA */
+    push32(0x20FD0F); OpenTextBoxNoWait();                       /* 20FD0B CALL    0x2074AA */
     A = 3;                                                       /* 20FD0F LD      A,3 */
-    push32(0x20FD15); sub_20748A();                              /* 20FD11 CALL    0x20748A */
+    push32(0x20FD15); GetTextBox();                              /* 20FD11 CALL    0x20748A */
     C = 1;                                                       /* 20FD15 LD      C,1 */
     E = 0xF;                                                     /* 20FD17 LD      E,0xF */
     push32(0x20FD1D); sub_2074C4();                              /* 20FD19 CALL    0x2074C4 */
@@ -8818,7 +8818,7 @@ L_20FCCE:
     HL = 0x8A;                                                   /* 20FD2C LD      HL,0x8A */
     push32(0x20FD33); sub_207494();                              /* 20FD2F CALL    0x207494 */
     A = 2;                                                       /* 20FD33 LD      A,2 */
-    push32(0x20FD39); sub_20748A();                              /* 20FD35 CALL    0x20748A */
+    push32(0x20FD39); GetTextBox();                              /* 20FD35 CALL    0x20748A */
     C = 7;                                                       /* 20FD39 LD      C,7 */
     E = 0xE;                                                     /* 20FD3B LD      E,0xE */
     push32(0x20FD41); sub_2074C4();                              /* 20FD3D CALL    0x2074C4 */
@@ -8833,9 +8833,9 @@ void sub_20FD4B(void)
     C = 9;                                                       /* 20FD4D LD      C,9 */
     E = 1;                                                       /* 20FD4F LD      E,1 */
     HL = 0xD3;                                                   /* 20FD51 LD      HL,0xD3 */
-    push32(0x20FD58); sub_2074AA();                              /* 20FD54 CALL    0x2074AA */
+    push32(0x20FD58); OpenTextBoxNoWait();                       /* 20FD54 CALL    0x2074AA */
     A = 5;                                                       /* 20FD58 LD      A,5 */
-    push32(0x20FD5E); sub_20748A();                              /* 20FD5A CALL    0x20748A */
+    push32(0x20FD5E); GetTextBox();                              /* 20FD5A CALL    0x20748A */
     C = 6;                                                       /* 20FD5E LD      C,6 */
     E = 0xD;                                                     /* 20FD60 LD      E,0xD */
     push32(0x20FD66); sub_2074C4();                              /* 20FD62 CALL    0x2074C4 */
@@ -8843,9 +8843,9 @@ void sub_20FD4B(void)
     C = 7;                                                       /* 20FD68 LD      C,7 */
     E = 1;                                                       /* 20FD6A LD      E,1 */
     HL = 0xC5;                                                   /* 20FD6C LD      HL,0xC5 */
-    push32(0x20FD73); sub_2074AA();                              /* 20FD6F CALL    0x2074AA */
+    push32(0x20FD73); OpenTextBoxNoWait();                       /* 20FD6F CALL    0x2074AA */
     A = 3;                                                       /* 20FD73 LD      A,3 */
-    push32(0x20FD79); sub_20748A();                              /* 20FD75 CALL    0x20748A */
+    push32(0x20FD79); GetTextBox();                              /* 20FD75 CALL    0x20748A */
     C = 1;                                                       /* 20FD79 LD      C,1 */
     E = 0;                                                       /* 20FD7B LD      E,0 */
     push32(0x20FD81); sub_2074C4();                              /* 20FD7D CALL    0x2074C4 */
@@ -8853,9 +8853,9 @@ void sub_20FD4B(void)
     C = 7;                                                       /* 20FD83 LD      C,7 */
     E = 1;                                                       /* 20FD85 LD      E,1 */
     HL = 0xCC;                                                   /* 20FD87 LD      HL,0xCC */
-    push32(0x20FD8E); sub_2074AA();                              /* 20FD8A CALL    0x2074AA */
+    push32(0x20FD8E); OpenTextBoxNoWait();                       /* 20FD8A CALL    0x2074AA */
     A = 4;                                                       /* 20FD8E LD      A,4 */
-    push32(0x20FD94); sub_20748A();                              /* 20FD90 CALL    0x20748A */
+    push32(0x20FD94); GetTextBox();                              /* 20FD90 CALL    0x20748A */
     C = 0xB;                                                     /* 20FD94 LD      C,0xB */
     E = 0;                                                       /* 20FD96 LD      E,0 */
     push32(0x20FD9C); sub_2074C4();                              /* 20FD98 CALL    0x2074C4 */
@@ -8865,7 +8865,7 @@ void sub_20FD4B(void)
     HL = 0x84;                                                   /* 20FDA2 LD      HL,0x84 */
     push32(0x20FDA9); sub_207494();                              /* 20FDA5 CALL    0x207494 */
     A = 2;                                                       /* 20FDA9 LD      A,2 */
-    push32(0x20FDAF); sub_20748A();                              /* 20FDAB CALL    0x20748A */
+    push32(0x20FDAF); GetTextBox();                              /* 20FDAB CALL    0x20748A */
     C = 0;                                                       /* 20FDAF LD      C,0 */
     E = 0xE;                                                     /* 20FDB1 LD      E,0xE */
     push32(0x20FDB7); sub_2074C4();                              /* 20FDB3 CALL    0x2074C4 */
@@ -8875,7 +8875,7 @@ void sub_20FD4B(void)
     HL = 0xC;                                                    /* 20FDBD LD      HL,0xC */
     push32(0x20FDC4); sub_207494();                              /* 20FDC0 CALL    0x207494 */
     A = 0;                                                       /* 20FDC4 LD      A,0 */
-    push32(0x20FDCA); sub_20748A();                              /* 20FDC6 CALL    0x20748A */
+    push32(0x20FDCA); GetTextBox();                              /* 20FDC6 CALL    0x20748A */
     C = 1;                                                       /* 20FDCA LD      C,1 */
     E = 1;                                                       /* 20FDCC LD      E,1 */
     push32(0x20FDD2); sub_2074C4();                              /* 20FDCE CALL    0x2074C4 */
@@ -8885,35 +8885,35 @@ void sub_20FD4B(void)
     HL = 0x48;                                                   /* 20FDD8 LD      HL,0x48 */
     push32(0x20FDDF); sub_207494();                              /* 20FDDB CALL    0x207494 */
     A = 1;                                                       /* 20FDDF LD      A,1 */
-    push32(0x20FDE5); sub_20748A();                              /* 20FDE1 CALL    0x20748A */
+    push32(0x20FDE5); GetTextBox();                              /* 20FDE1 CALL    0x20748A */
     C = 0xB;                                                     /* 20FDE5 LD      C,0xB */
     E = 0x21;                                                    /* 20FDE7 LD      E,0x21 */
     push32(0x20FDED); sub_2074C4();                              /* 20FDE9 CALL    0x2074C4 */
     WA = 0xDC;                                                   /* 20FDED LD      WA,0xDC */
     XHL = 0x2C861B;                                              /* 20FDF0 LD      XHL,0x2C861B */
-    push32(0x20FDF9); sub_20692B();                              /* 20FDF5 CALL    0x20692B */
+    push32(0x20FDF9); LoadRawTiles();                            /* 20FDF5 CALL    0x20692B */
     XSP += 4; return;                                            /* 20FDF9 RET */
 }
 
-void fn_20FDFA(void)
+void ConfirmNames(void)
 {
     XHL = 0x226C5B;                                              /* 20FDFA LD      XHL,0x226C5B */
     A = 2;                                                       /* 20FDFF LD      A,2 */
-    push32(0x20FE05); sub_20748A();                              /* 20FE01 CALL    0x20748A */
+    push32(0x20FE05); GetTextBox();                              /* 20FE01 CALL    0x20748A */
     C = 0;                                                       /* 20FE05 LD      C,0 */
     E = 0;                                                       /* 20FE07 LD      E,0 */
     push32(0x20FE0D); sub_20768E();                              /* 20FE09 CALL    0x20768E */
     push32(0x20FE11); sub_2076F7();                              /* 20FE0D CALL    0x2076F7 */
     XHL = 0x5013;                                                /* 20FE11 LD      XHL,0x5013 */
     A = 3;                                                       /* 20FE16 LD      A,3 */
-    push32(0x20FE1C); sub_20748A();                              /* 20FE18 CALL    0x20748A */
+    push32(0x20FE1C); GetTextBox();                              /* 20FE18 CALL    0x20748A */
     C = 0;                                                       /* 20FE1C LD      C,0 */
     E = 0;                                                       /* 20FE1E LD      E,0 */
     push32(0x20FE24); sub_20768E();                              /* 20FE20 CALL    0x20768E */
     push32(0x20FE28); sub_2076F7();                              /* 20FE24 CALL    0x2076F7 */
     XHL = 0x502F;                                                /* 20FE28 LD      XHL,0x502F */
     A = 4;                                                       /* 20FE2D LD      A,4 */
-    push32(0x20FE33); sub_20748A();                              /* 20FE2F CALL    0x20748A */
+    push32(0x20FE33); GetTextBox();                              /* 20FE2F CALL    0x20748A */
     C = 0;                                                       /* 20FE33 LD      C,0 */
     E = 0;                                                       /* 20FE35 LD      E,0 */
     push32(0x20FE3B); sub_20768E();                              /* 20FE37 CALL    0x20768E */
@@ -8931,7 +8931,7 @@ void fn_20FDFA(void)
     BC = 2;                                                      /* 20FE59 LD      BC,2 */
     DE = 2;                                                      /* 20FE5B LD      DE,2 */
     WA = 0xC;                                                    /* 20FE5D LD      WA,0xC */
-    push32(0x20FE64); sub_210380();                              /* 20FE60 CALL    0x210380 */
+    push32(0x20FE64); DrawPortraitAt();                          /* 20FE60 CALL    0x210380 */
     E = 0xC;                                                     /* 20FE64 LD      E,0xC */
     C = 0x22;                                                    /* 20FE66 LD      C,0x22 */
     B = 6;                                                       /* 20FE68 LD      B,6 */
@@ -8945,7 +8945,7 @@ void fn_20FDFA(void)
     BC = 0xC;                                                    /* 20FE7E LD      BC,0xC */
     DE = 0x22;                                                   /* 20FE81 LD      DE,0x22 */
     WA = 0x48;                                                   /* 20FE84 LD      WA,0x48 */
-    push32(0x20FE8B); sub_210380();                              /* 20FE87 CALL    0x210380 */
+    push32(0x20FE8B); DrawPortraitAt();                          /* 20FE87 CALL    0x210380 */
     wr16(XIZ + 0xE, 1);                                          /* 20FE8B LDW     (XIZ+0xE),1 */
     wr16(XIZ + 8, 0xFE9A);                                       /* 20FE90 LDW     (XIZ+8),0xFE9A */
     wr16(XIZ + 0xA, 0x20);                                       /* 20FE95 LDW     (XIZ+0xA),0x20 */
@@ -9003,17 +9003,17 @@ L_20FF25:
     XSP += 4; return;                                            /* 20FF35 RET */
 }
 
-void fn_20FF36(void)
+void SelectPlayerNames(void)
 {
     A = 3;                                                       /* 20FF36 LD      A,3 */
-    push32(0x20FF3C); sub_20748A();                              /* 20FF38 CALL    0x20748A */
+    push32(0x20FF3C); GetTextBox();                              /* 20FF38 CALL    0x20748A */
     C = 0;                                                       /* 20FF3C LD      C,0 */
     E = 0;                                                       /* 20FF3E LD      E,0 */
     push32(0x20FF44); sub_20768E();                              /* 20FF40 CALL    0x20768E */
     XHL = 0x226C2A;                                              /* 20FF44 LD      XHL,0x226C2A */
     push32(0x20FF4D); sub_2076F7();                              /* 20FF49 CALL    0x2076F7 */
     A = 4;                                                       /* 20FF4D LD      A,4 */
-    push32(0x20FF53); sub_20748A();                              /* 20FF4F CALL    0x20748A */
+    push32(0x20FF53); GetTextBox();                              /* 20FF4F CALL    0x20748A */
     C = 0;                                                       /* 20FF53 LD      C,0 */
     E = 0;                                                       /* 20FF55 LD      E,0 */
     push32(0x20FF5B); sub_20768E();                              /* 20FF57 CALL    0x20768E */
@@ -9102,24 +9102,24 @@ L_21004C:
     WA = 0xC;                                                    /* 21005D LD      WA,0xC */
     BC = 2;                                                      /* 210060 LD      BC,2 */
     DE = 2;                                                      /* 210062 LD      DE,2 */
-    push32(0x210068); sub_210380();                              /* 210064 CALL    0x210380 */
+    push32(0x210068); DrawPortraitAt();                          /* 210064 CALL    0x210380 */
     HL = rd16(XIZ + 0x16);                                       /* 210068 LD      HL,(XIZ+0x16) */
     HL = (uint16_t)(HL + 0xA);                                   /* 21006B ADD     HL,0xA */
     WA = 0x48;                                                   /* 21006F LD      WA,0x48 */
     BC = 0xC;                                                    /* 210072 LD      BC,0xC */
     DE = 0x22;                                                   /* 210075 LD      DE,0x22 */
-    push32(0x21007C); sub_210380();                              /* 210078 CALL    0x210380 */
+    push32(0x21007C); DrawPortraitAt();                          /* 210078 CALL    0x210380 */
     wr16(XIZ + 0x18, 0);                                         /* 21007C LDW     (XIZ+0x18),0 */
 L_210081:
     A = 2;                                                       /* 210081 LD      A,2 */
-    push32(0x210087); sub_20748A();                              /* 210083 CALL    0x20748A */
+    push32(0x210087); GetTextBox();                              /* 210083 CALL    0x20748A */
     C = 0;                                                       /* 210087 LD      C,0 */
     E = 0;                                                       /* 210089 LD      E,0 */
     push32(0x21008F); sub_20768E();                              /* 21008B CALL    0x20768E */
     XHL = 0x226C3B;                                              /* 21008F LD      XHL,0x226C3B */
     push32(0x210098); sub_2076F7();                              /* 210094 CALL    0x2076F7 */
     A = 5;                                                       /* 210098 LD      A,5 */
-    push32(0x21009E); sub_20748A();                              /* 21009A CALL    0x20748A */
+    push32(0x21009E); GetTextBox();                              /* 21009A CALL    0x20748A */
     C = 0;                                                       /* 21009E LD      C,0 */
     E = 0;                                                       /* 2100A0 LD      E,0 */
     push32(0x2100A6); sub_20768E();                              /* 2100A2 CALL    0x20768E */
@@ -9146,7 +9146,7 @@ L_2100D8:
     WA = 0x81;                                                   /* 2100E1 LD      WA,0x81 */
     push32(0x2100E8); sub_20776A();                              /* 2100E4 CALL    0x20776A */
     A = 2;                                                       /* 2100E8 LD      A,2 */
-    push32(0x2100EE); sub_20748A();                              /* 2100EA CALL    0x20748A */
+    push32(0x2100EE); GetTextBox();                              /* 2100EA CALL    0x20748A */
     C = 0;                                                       /* 2100EE LD      C,0 */
     E = 0;                                                       /* 2100F0 LD      E,0 */
     push32(0x2100F6); sub_20768E();                              /* 2100F2 CALL    0x20768E */
@@ -9258,7 +9258,7 @@ L_210204:
     XSP += 4; return;                                            /* 210212 RET */
 }
 
-void sub_210380(void)
+void DrawPortraitAt(void)
 {
     push16(WA);                                                  /* 210380 PUSH    WA */
     push16(HL);                                                  /* 210381 PUSH    HL */
@@ -9286,11 +9286,11 @@ L_21039C:
 L_2103B4:
     HL = pop16();                                                /* 2103B4 POP     HL */
     WA = pop16();                                                /* 2103B5 POP     WA */
-    push32(0x2103B9); sub_2103BA();                              /* 2103B6 CALR    0x2103BA */
+    push32(0x2103B9); DrawPortrait();                            /* 2103B6 CALR    0x2103BA */
     XSP += 4; return;                                            /* 2103B9 RET */
 }
 
-void sub_2103BA(void)
+void DrawPortrait(void)
 {
     push16(WA);                                                  /* 2103BA PUSH    WA */
     push16(BC);                                                  /* 2103BB PUSH    BC */
@@ -9307,8 +9307,8 @@ void sub_2103BA(void)
 L_2103D8:
     push32(XHL);                                                 /* 2103D8 PUSH    XHL */
     XHL = rd32(XHL);                                             /* 2103D9 LD      XHL,(XHL) */
-    push32(0x2103DF); sub_206D9E();                              /* 2103DB CALL    0x206D9E */
-    push32(0x2103E3); sub_206626();                              /* 2103DF CALL    0x206626 */
+    push32(0x2103DF); LoadPalettes();                            /* 2103DB CALL    0x206D9E */
+    push32(0x2103E3); FadePalettes();                            /* 2103DF CALL    0x206626 */
     XHL = pop32();                                               /* 2103E3 POP     XHL */
     C = 2;                                                       /* 2103E4 LD      C,2 */
     A = 2;                                                       /* 2103E6 LD      A,2 */
@@ -9318,7 +9318,7 @@ L_2103D8:
 L_2103F0:
     push32(XHL);                                                 /* 2103F0 PUSH    XHL */
     XHL = rd32(XHL + 0xC);                                       /* 2103F1 LD      XHL,(XHL+0xC) */
-    push32(0x2103F8); sub_206DCD();                              /* 2103F4 CALL    0x206DCD */
+    push32(0x2103F8); LoadMonoPalettes();                        /* 2103F4 CALL    0x206DCD */
     push32(0x2103FC); sub_2066DE();                              /* 2103F8 CALL    0x2066DE */
     XHL = pop32();                                               /* 2103FC POP     XHL */
     A = rd8(0x5BC6);                                             /* 2103FD LD      A,(0x5BC6) */
@@ -9327,25 +9327,25 @@ L_2103F0:
     WA = rd16(XSP + 4);                                          /* 210406 LD      WA,(XSP+4) */
     push32(XHL);                                                 /* 210409 PUSH    XHL */
     XHL = rd32(XHL + 0x10);                                      /* 21040A LD      XHL,(XHL+0x10) */
-    push32(0x210411); sub_207226();                              /* 21040D CALL    0x207226 */
+    push32(0x210411); LoadCompressedTiles();                     /* 21040D CALL    0x207226 */
     XHL = pop32();                                               /* 210411 POP     XHL */
     XHL = rd32(XHL + 0x14);                                      /* 210412 LD      XHL,(XHL+0x14) */
     DE = rd16(XSP);                                              /* 210415 LD      DE,(XSP) */
     BC = rd16(XSP + 2);                                          /* 210417 LD      BC,(XSP+2) */
     WA = rd16(XSP + 4);                                          /* 21041A LD      WA,(XSP+4) */
-    push32(0x210421); sub_206B37();                              /* 21041D CALL    0x206B37 */
+    push32(0x210421); DrawTilemap();                             /* 21041D CALL    0x206B37 */
     goto L_21043E;                                               /* 210421 JR      0x21043E */
 L_210423:
     WA = rd16(XSP + 4);                                          /* 210423 LD      WA,(XSP+4) */
     push32(XHL);                                                 /* 210426 PUSH    XHL */
     XHL = rd32(XHL + 4);                                         /* 210427 LD      XHL,(XHL+4) */
-    push32(0x21042E); sub_207226();                              /* 21042A CALL    0x207226 */
+    push32(0x21042E); LoadCompressedTiles();                     /* 21042A CALL    0x207226 */
     XHL = pop32();                                               /* 21042E POP     XHL */
     XHL = rd32(XHL + 8);                                         /* 21042F LD      XHL,(XHL+8) */
     DE = rd16(XSP);                                              /* 210432 LD      DE,(XSP) */
     BC = rd16(XSP + 2);                                          /* 210434 LD      BC,(XSP+2) */
     WA = rd16(XSP + 4);                                          /* 210437 LD      WA,(XSP+4) */
-    push32(0x21043E); sub_206B37();                              /* 21043A CALL    0x206B37 */
+    push32(0x21043E); DrawTilemap();                             /* 21043A CALL    0x206B37 */
 L_21043E:
     DE = pop16();                                                /* 21043E POP     DE */
     BC = pop16();                                                /* 21043F POP     BC */
@@ -9376,7 +9376,7 @@ L_210503:
     BC = 0;                                                      /* 210513 LD      BC,0 */
     DE = 0;                                                      /* 210515 LD      DE,0 */
 L_210517:
-    push32(0x21051B); sub_2103BA();                              /* 210517 CALL    0x2103BA */
+    push32(0x21051B); DrawPortrait();                            /* 210517 CALL    0x2103BA */
     XWA = pop32();                                               /* 21051B POP     XWA */
     XBC = pop32();                                               /* 21051C POP     XBC */
     XDE = pop32();                                               /* 21051D POP     XDE */
@@ -9528,11 +9528,11 @@ void sub_210600(void)
     push32(XWA);                                                 /* 210603 PUSH    XWA */
     XHL = 0x2C8691;                                              /* 210604 LD      XHL,0x2C8691 */
     WA = 0x10;                                                   /* 210609 LD      WA,0x10 */
-    push32(0x210610); sub_207226();                              /* 21060C CALL    0x207226 */
+    push32(0x210610); LoadCompressedTiles();                     /* 21060C CALL    0x207226 */
     XHL = 0x2C865D;                                              /* 210610 LD      XHL,0x2C865D */
     A = 1;                                                       /* 210615 LD      A,1 */
     C = 1;                                                       /* 210617 LD      C,1 */
-    push32(0x21061D); sub_206D9E();                              /* 210619 CALL    0x206D9E */
+    push32(0x21061D); LoadPalettes();                            /* 210619 CALL    0x206D9E */
     XWA = pop32();                                               /* 21061D POP     XWA */
     XBC = pop32();                                               /* 21061E POP     XBC */
     XDE = pop32();                                               /* 21061F POP     XDE */
@@ -9592,7 +9592,7 @@ void sub_210675(void)
 L_21067E:
     push8(C);                                                    /* 21067E PUSH    C */
     push16(HL);                                                  /* 210680 PUSH    HL */
-    push32(0x210685); sub_20615B();                              /* 210681 CALL    0x20615B */
+    push32(0x210685); CheckEventFlag();                          /* 210681 CALL    0x20615B */
     /* CP L,0 */                                                 /* 210685 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_210694;             /* 210687 JR      Z,0x210694 */
     HL = pop16();                                                /* 210689 POP     HL */
@@ -9667,7 +9667,7 @@ void sub_2106DE(void)
     A = 2;                                                       /* 210704 LD      A,2 */
     wr8(XIZ + 0xF, A);                                           /* 210706 LD      (XIZ+0xF),A */
     XWA = 0x14;                                                  /* 210709 LD      XWA,0x14 */
-    push32(0x210712); sub_207759();                              /* 21070E CALL    0x207759 */
+    push32(0x210712); PlayMusic();                               /* 21070E CALL    0x207759 */
     WA = 0x35;                                                   /* 210712 LD      WA,0x35 */
     push32(0x210719); sub_20776A();                              /* 210715 CALL    0x20776A */
     XSP += 4; return;                                            /* 210719 RET */
@@ -10354,7 +10354,7 @@ L_210CC9:
     if ((uint8_t)(A) < (uint8_t)(4)) goto L_210D0C;              /* 210CCE JR      C,0x210D0C */
     /* CP A,6 */                                                 /* 210CD0 CP      A,6 */
     if ((uint8_t)(A) >= (uint8_t)(6)) goto L_210D0C;             /* 210CD2 JR      NC,0x210D0C */
-    push32(0x210CD8); sub_211C7F();                              /* 210CD4 CALL    0x211C7F */
+    push32(0x210CD8); LoadDungeonPalettes();                     /* 210CD4 CALL    0x211C7F */
     push32(0x210CDB); sub_2106A1();                              /* 210CD8 CALR    0x2106A1 */
     push32(0x210CDF); sub_211D92();                              /* 210CDB CALL    0x211D92 */
     push32(0x210CE2); sub_210675();                              /* 210CDF CALR    0x210675 */
@@ -10405,7 +10405,7 @@ void sub_210D34(void)
 
 void sub_210D3A(void)
 {
-    push32(0x210D3E); sub_211A80();                              /* 210D3A CALL    0x211A80 */
+    push32(0x210D3E); RollFloorMaps();                           /* 210D3A CALL    0x211A80 */
     A = 1;                                                       /* 210D3E LD      A,1 */
     W = rd8(XIZ + 0x10);                                         /* 210D40 LD      W,(XIZ+0x10) */
     /* CP W,5 */                                                 /* 210D43 CP      W,5 */
@@ -10617,7 +10617,7 @@ void sub_210EBD(void)
     WA = (uint16_t)(uint8_t)WA;                                  /* 210EC6 EXTZ    WA */
     XWA = (uint32_t)(uint16_t)XWA;                               /* 210EC8 EXTZ    XWA */
     XWA = (uint32_t)(XWA + 5);                                   /* 210ECA ADD     XWA,5 */
-    push32(0x210ED4); sub_207759();                              /* 210ED0 CALL    0x207759 */
+    push32(0x210ED4); PlayMusic();                               /* 210ED0 CALL    0x207759 */
     A = rd8(XIZ + 0x10);                                         /* 210ED4 LD      A,(XIZ+0x10) */
     A = (uint8_t)(A - 1);                                        /* 210ED7 DEC     1,A */
     WA = (uint16_t)(uint8_t)WA;                                  /* 210ED9 EXTZ    WA */
@@ -10672,7 +10672,7 @@ L_210F20:
     W = 8;                                                       /* 210F20 LD      W,8 */
 L_210F22:
     wr8(0x5DDB, W);                                              /* 210F22 LD      (0x5DDB),W */
-    push32(0x210F2A); sub_2077D1();                              /* 210F26 CALL    0x2077D1 */
+    push32(0x210F2A); LoadEnemy();                               /* 210F26 CALL    0x2077D1 */
     wr8(0x5DDA, 1);                                              /* 210F2A LDB     (0x5DDA),1 */
     push32(0x210F33); sub_207C00();                              /* 210F2F CALL    0x207C00 */
     A = 7;                                                       /* 210F33 LD      A,7 */
@@ -10801,7 +10801,7 @@ void sub_210FC0(void)
 
 void sub_210FD6(void)
 {
-    push32(0x210FDA); sub_21267C();                              /* 210FD6 CALL    0x21267C */
+    push32(0x210FDA); OpenChest();                               /* 210FD6 CALL    0x21267C */
     XSP += 4; return;                                            /* 210FDA RET */
 }
 
@@ -11097,7 +11097,7 @@ L_2111CF:
     push32(0x2111E1); sub_212C10();                              /* 2111DD CALL    0x212C10 */
     XHL = 0x2275B1;                                              /* 2111E1 LD      XHL,0x2275B1 */
     A = 6;                                                       /* 2111E6 LD      A,6 */
-    push32(0x2111EC); sub_20748A();                              /* 2111E8 CALL    0x20748A */
+    push32(0x2111EC); GetTextBox();                              /* 2111E8 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 2111EC LD      (XWA+8),XHL */
     A = rd8(XIZ + 0x15);                                         /* 2111EF LD      A,(XIZ+0x15) */
     A = (uint8_t)(A << 4);                                       /* 2111F2 SLA     4,A */
@@ -11112,7 +11112,7 @@ L_2111FD:
     XSP += 4; return;                                            /* 211201 RET */
 }
 
-void sub_211202(void)
+void CheckEncounter(void)
 {
     A = rd8(XIZ + 0x2C);                                         /* 211202 LD      A,(XIZ+0x2C) */
     A = alu_and(A, A, 8);                                        /* 211205 AND     A,A */
@@ -11161,7 +11161,7 @@ L_211261:
     XHL = (uint32_t)(XHL + XWA);                                 /* 211279 ADD     XHL,XWA */
     W = rd8(XHL);                                                /* 21127B LD      W,(XHL) */
     push8(W);                                                    /* 21127D PUSH    W */
-    push32(0x211283); sub_2060CB();                              /* 21127F CALL    0x2060CB */
+    push32(0x211283); Random();                                  /* 21127F CALL    0x2060CB */
     W = 0;                                                       /* 211283 LD      W,0 */
     WA = divu8(WA, 0x64);                                        /* 211285 DIV     WA,0x64 */
     A = W;                                                       /* 211288 LD      A,W */
@@ -11358,7 +11358,7 @@ L_211420:
     XSP += 4; return;                                            /* 211420 RET */
 }
 
-void sub_211421(void)
+void DungeonStep(void)
 {
     A = rd8(XIZ + 0xF);                                          /* 211421 LD      A,(XIZ+0xF) */
     /* CP A,1 */                                                 /* 211424 CP      A,1 */
@@ -11375,7 +11375,7 @@ L_211433:
 L_21143D:
     /* CP A,3 */                                                 /* 21143D CP      A,3 */
     if ((uint8_t)(A) != (uint8_t)(3)) goto L_211447;             /* 21143F JR      NZ,0x211447 */
-    push32(0x211444); sub_211202();                              /* 211441 CALR    0x211202 */
+    push32(0x211444); CheckEncounter();                          /* 211441 CALR    0x211202 */
     goto L_2114F7;                                               /* 211444 JRL     0x2114F7 */
 L_211447:
     /* CP A,4 */                                                 /* 211447 CP      A,4 */
@@ -11439,7 +11439,7 @@ L_2114BC:
     /* CP A,0xF */                                               /* 2114BC CP      A,0xF */
     if ((uint8_t)(A) != (uint8_t)(0xF)) goto L_2114D8;           /* 2114BF JR      NZ,0x2114D8 */
     A = 6;                                                       /* 2114C1 LD      A,6 */
-    push32(0x2114C7); sub_20748A();                              /* 2114C3 CALL    0x20748A */
+    push32(0x2114C7); GetTextBox();                              /* 2114C3 CALL    0x20748A */
     C = rd8(XWA + 0x12);                                         /* 2114C7 LD      C,(XWA+0x12) */
     C = (uint8_t)(C & 0x7F);                                     /* 2114CA AND     C,0x7F */
     /* CP C,2 */                                                 /* 2114CD CP      C,2 */
@@ -11490,7 +11490,7 @@ L_21152B:
     push32(0x211534); sub_211D03();                              /* 211530 CALL    0x211D03 */
     goto L_21153A;                                               /* 211534 JR      0x21153A */
 L_211536:
-    push32(0x21153A); sub_211C7F();                              /* 211536 CALL    0x211C7F */
+    push32(0x21153A); LoadDungeonPalettes();                     /* 211536 CALL    0x211C7F */
 L_21153A:
     push32(0x21153E); sub_211D80();                              /* 21153A CALL    0x211D80 */
     push32(0x211542); sub_2116A7();                              /* 21153E CALL    0x2116A7 */
@@ -11522,12 +11522,12 @@ L_211581:
     WA = (uint16_t)(uint8_t)WA;                                  /* 21158A EXTZ    WA */
     HL = 0x60;                                                   /* 21158C LD      HL,0x60 */
     HL = (uint16_t)(HL + WA);                                    /* 21158F ADD     HL,WA */
-    push32(0x211595); sub_20615B();                              /* 211591 CALL    0x20615B */
+    push32(0x211595); CheckEventFlag();                          /* 211591 CALL    0x20615B */
     A = L;                                                       /* 211595 LD      A,L */
     goto L_2115A6;                                               /* 211597 JR      0x2115A6 */
 L_211599:
     HL = 0xA;                                                    /* 211599 LD      HL,0xA */
-    push32(0x2115A0); sub_20615B();                              /* 21159C CALL    0x20615B */
+    push32(0x2115A0); CheckEventFlag();                          /* 21159C CALL    0x20615B */
     A = L;                                                       /* 2115A0 LD      A,L */
     goto L_2115A6;                                               /* 2115A2 JR      0x2115A6 */
 L_2115A4:
@@ -11597,7 +11597,7 @@ L_21162F:
     push32(XHL);                                                 /* 21162F PUSH    XHL */
     push16(WA);                                                  /* 211630 PUSH    WA */
     push8(C);                                                    /* 211631 PUSH    C */
-    push32(0x211637); sub_20692B();                              /* 211633 CALL    0x20692B */
+    push32(0x211637); LoadRawTiles();                            /* 211633 CALL    0x20692B */
     C = pop8();                                                  /* 211637 POP     C */
     WA = pop16();                                                /* 211639 POP     WA */
     XHL = pop32();                                               /* 21163A POP     XHL */
@@ -11631,13 +11631,13 @@ L_211666:
 L_211681:
     push32(XHL);                                                 /* 211681 PUSH    XHL */
     XHL = XDE;                                                   /* 211682 LD      XHL,XDE */
-    push32(0x211688); sub_20692B();                              /* 211684 CALL    0x20692B */
+    push32(0x211688); LoadRawTiles();                            /* 211684 CALL    0x20692B */
     XHL = pop32();                                               /* 211688 POP     XHL */
     /* CP XHL,0 */                                               /* 211689 CP      XHL,0 */
     if ((uint32_t)(XHL) == (uint32_t)(0)) goto L_2116A2;         /* 21168F JR      Z,0x2116A2 */
     A = 0x19;                                                    /* 211691 LD      A,0x19 */
     C = 1;                                                       /* 211693 LD      C,1 */
-    push32(0x211699); sub_206D9E();                              /* 211695 CALL    0x206D9E */
+    push32(0x211699); LoadPalettes();                            /* 211695 CALL    0x206D9E */
     XHL = 0x227641;                                              /* 211699 LD      XHL,0x227641 */
     A = 2;                                                       /* 21169E LD      A,2 */
     C = 1;                                                       /* 2116A0 LD      C,1 */
@@ -11667,7 +11667,7 @@ L_2116B7:
     XSP += 4; return;                                            /* 2116BB RET */
 }
 
-void sub_2116BC(void)
+void PickWorldChest(void)
 {
     push32(XHL);                                                 /* 2116BC PUSH    XHL */
     push32(XDE);                                                 /* 2116BD PUSH    XDE */
@@ -11684,7 +11684,7 @@ void sub_2116BC(void)
     XHL = 0x2495EC;                                              /* 2116D8 LD      XHL,0x2495EC */
     XHL = (uint32_t)(XHL + XDE);                                 /* 2116DD ADD     XHL,XDE */
     push8(W);                                                    /* 2116DF PUSH    W */
-    push32(0x2116E5); sub_2060CB();                              /* 2116E1 CALL    0x2060CB */
+    push32(0x2116E5); Random();                                  /* 2116E1 CALL    0x2060CB */
     W = 0;                                                       /* 2116E5 LD      W,0 */
     WA = divu8(WA, 0x64);                                        /* 2116E7 DIV     WA,0x64 */
     A = W;                                                       /* 2116EA LD      A,W */
@@ -11709,7 +11709,7 @@ L_211701:
     XSP += 4; return;                                            /* 21170C RET */
 }
 
-void sub_21170D(void)
+void ClearChestTable(void)
 {
     push32(XHL);                                                 /* 21170D PUSH    XHL */
     push32(XDE);                                                 /* 21170E PUSH    XDE */
@@ -11730,7 +11730,7 @@ void sub_21170D(void)
     XSP += 4; return;                                            /* 211729 RET */
 }
 
-void sub_21172A(void)
+void SetMineChests(void)
 {
     push32(XHL);                                                 /* 21172A PUSH    XHL */
     push32(XDE);                                                 /* 21172B PUSH    XDE */
@@ -11780,7 +11780,7 @@ L_21177B:
     HL = (uint16_t)(HL + WA);                                    /* 211791 ADD     HL,WA */
     HL = (uint16_t)(HL + 0x70);                                  /* 211793 ADD     HL,0x70 */
     push16(BC);                                                  /* 211797 PUSH    BC */
-    push32(0x21179C); sub_20615B();                              /* 211798 CALL    0x20615B */
+    push32(0x21179C); CheckEventFlag();                          /* 211798 CALL    0x20615B */
     BC = pop16();                                                /* 21179C POP     BC */
     WA = HL;                                                     /* 21179D LD      WA,HL */
     XHL = pop32();                                               /* 21179F POP     XHL */
@@ -11818,7 +11818,7 @@ L_2117C3:
     XSP += 4; return;                                            /* 2117E1 RET */
 }
 
-void sub_2117E2(void)
+void RollFloorChests(void)
 {
     push32(XHL);                                                 /* 2117E2 PUSH    XHL */
     push32(XDE);                                                 /* 2117E3 PUSH    XDE */
@@ -11828,7 +11828,7 @@ void sub_2117E2(void)
     A = rd8(XIZ + 0x10);                                         /* 2117E9 LD      A,(XIZ+0x10) */
     /* CP A,5 */                                                 /* 2117EC CP      A,5 */
     if ((uint8_t)(A) != (uint8_t)(5)) goto L_2117F6;             /* 2117EE JR      NZ,0x2117F6 */
-    push32(0x2117F3); sub_21172A();                              /* 2117F0 CALR    0x21172A */
+    push32(0x2117F3); SetMineChests();                           /* 2117F0 CALR    0x21172A */
     goto L_211897;                                               /* 2117F3 JRL     0x211897 */
 L_2117F6:
     A = rd8(XIZ + 0x22);                                         /* 2117F6 LD      A,(XIZ+0x22) */
@@ -11865,7 +11865,7 @@ L_211836:
     B = 5;                                                       /* 211843 LD      B,5 */
 L_211845:
     push32(XHL);                                                 /* 211845 PUSH    XHL */
-    push32(0x21184A); sub_2060CB();                              /* 211846 CALL    0x2060CB */
+    push32(0x21184A); Random();                                  /* 211846 CALL    0x2060CB */
     W = 0;                                                       /* 21184A LD      W,0 */
     WA = divu8(WA, C);                                           /* 21184C DIV     WA,C */
     A = W;                                                       /* 21184E LD      A,W */
@@ -11888,7 +11888,7 @@ L_21186F:
     A = rd8(XHL + 0);                                            /* 21186F LD      A,(XHL+0) */
     alu_cp(A, 0xFD, 8);                                          /* 211872 CP      A,0xFD */
     if (!cpu.fz) goto L_21187D;                                  /* 211875 JR      NZ,0x21187D */
-    push32(0x21187A); sub_2116BC();                              /* 211877 CALR    0x2116BC */
+    push32(0x21187A); PickWorldChest();                          /* 211877 CALR    0x2116BC */
     wr8(XHL + 0, A);                                             /* 21187A LD      (XHL+0),A */
 L_21187D:
     WA = rd16(XDE);                                              /* 21187D LD      WA,(XDE) */
@@ -11910,7 +11910,7 @@ L_211897:
     XSP += 4; return;                                            /* 21189B RET */
 }
 
-void sub_21189C(void)
+void RollAllChests(void)
 {
     push32(XHL);                                                 /* 21189C PUSH    XHL */
     push32(XDE);                                                 /* 21189D PUSH    XDE */
@@ -11919,7 +11919,7 @@ void sub_21189C(void)
     C = rd8(XIZ + 0x16);                                         /* 2118A0 LD      C,(XIZ+0x16) */
     A = 0;                                                       /* 2118A3 LD      A,0 */
 L_2118A5:
-    push32(0x2118A8); sub_2117E2();                              /* 2118A5 CALR    0x2117E2 */
+    push32(0x2118A8); RollFloorChests();                         /* 2118A5 CALR    0x2117E2 */
     A = (uint8_t)(A + 1);                                        /* 2118A8 INC     1,A */
     if (--C != 0) goto L_2118A5;                                 /* 2118AA DJNZ    C,0x2118A5 */
     XWA = pop32();                                               /* 2118AD POP     XWA */
@@ -12016,7 +12016,7 @@ L_211944:
     push32(XHL);                                                 /* 211952 PUSH    XHL */
     push16(BC);                                                  /* 211953 PUSH    BC */
     XHL = XDE;                                                   /* 211954 LD      XHL,XDE */
-    push32(0x21195A); sub_20692B();                              /* 211956 CALL    0x20692B */
+    push32(0x21195A); LoadRawTiles();                            /* 211956 CALL    0x20692B */
     BC = pop16();                                                /* 21195A POP     BC */
     XHL = pop32();                                               /* 21195B POP     XHL */
     XHL = (uint32_t)(XHL + 5);                                   /* 21195C INC     5,XHL */
@@ -12111,7 +12111,7 @@ L_2119D8:
     XSP += 4; return;                                            /* 2119DD RET */
 }
 
-void sub_2119DE(void)
+void GetChestContent(void)
 {
     push32(XHL);                                                 /* 2119DE PUSH    XHL */
     push32(XDE);                                                 /* 2119DF PUSH    XDE */
@@ -12134,7 +12134,7 @@ L_2119F7:
     XSP += 4; return;                                            /* 2119FA RET */
 }
 
-void sub_2119FB(void)
+void GetChestGold(void)
 {
     push32(XHL);                                                 /* 2119FB PUSH    XHL */
     push32(XDE);                                                 /* 2119FC PUSH    XDE */
@@ -12152,7 +12152,7 @@ void sub_2119FB(void)
     XSP += 4; return;                                            /* 211A14 RET */
 }
 
-void sub_211A15(void)
+void GetChestGoldText(void)
 {
     push32(XDE);                                                 /* 211A15 PUSH    XDE */
     push32(XBC);                                                 /* 211A16 PUSH    XBC */
@@ -12203,7 +12203,7 @@ void sub_211A2E(void)
     HL = (uint16_t)(uint8_t)HL;                                  /* 211A6C EXTZ    HL */
     HL = (uint16_t)(HL + WA);                                    /* 211A6E ADD     HL,WA */
     HL = (uint16_t)(HL + 0x70);                                  /* 211A70 ADD     HL,0x70 */
-    push32(0x211A78); sub_20612E();                              /* 211A74 CALL    0x20612E */
+    push32(0x211A78); SetEventFlag();                            /* 211A74 CALL    0x20612E */
 L_211A78:
     push32(0x211A7B); sub_2118F4();                              /* 211A78 CALR    0x2118F4 */
     XWA = pop32();                                               /* 211A7B POP     XWA */
@@ -12213,7 +12213,7 @@ L_211A78:
     XSP += 4; return;                                            /* 211A7F RET */
 }
 
-void sub_211A80(void)
+void RollFloorMaps(void)
 {
     push32(XHL);                                                 /* 211A80 PUSH    XHL */
     push32(XDE);                                                 /* 211A81 PUSH    XDE */
@@ -12229,7 +12229,7 @@ void sub_211A80(void)
     C = 6;                                                       /* 211A98 LD      C,6 */
 L_211A9A:
     push8(W);                                                    /* 211A9A PUSH    W */
-    push32(0x211AA0); sub_2060CB();                              /* 211A9C CALL    0x2060CB */
+    push32(0x211AA0); Random();                                  /* 211A9C CALL    0x2060CB */
     W = 0;                                                       /* 211AA0 LD      W,0 */
     WA = divu8(WA, 0xC);                                         /* 211AA2 DIV     WA,0xC */
     A = W;                                                       /* 211AA5 LD      A,W */
@@ -12278,8 +12278,8 @@ L_211AEA:
     A = (uint8_t)(A + 1);                                        /* 211B03 INC     1,A */
     wr8(XIZ + 0x1B, A);                                          /* 211B05 LD      (XIZ+0x1B),A */
 L_211B08:
-    push32(0x211B0B); sub_21170D();                              /* 211B08 CALR    0x21170D */
-    push32(0x211B0E); sub_21189C();                              /* 211B0B CALR    0x21189C */
+    push32(0x211B0B); ClearChestTable();                         /* 211B08 CALR    0x21170D */
+    push32(0x211B0E); RollAllChests();                           /* 211B0B CALR    0x21189C */
     XWA = pop32();                                               /* 211B0E POP     XWA */
     XBC = pop32();                                               /* 211B0F POP     XBC */
     XDE = pop32();                                               /* 211B10 POP     XDE */
@@ -12321,7 +12321,7 @@ void sub_211B35(void)
     XHL = rd32(XHL);                                             /* 211B4D LD      XHL,(XHL) */
     C = 0xF;                                                     /* 211B4F LD      C,0xF */
     A = 0x10;                                                    /* 211B51 LD      A,0x10 */
-    push32(0x211B57); sub_206D9E();                              /* 211B53 CALL    0x206D9E */
+    push32(0x211B57); LoadPalettes();                            /* 211B53 CALL    0x206D9E */
     A = rd8(XIZ + 0x10);                                         /* 211B57 LD      A,(XIZ+0x10) */
     A = (uint8_t)(A - 1);                                        /* 211B5A SUB     A,1 */
     WA = (uint16_t)(uint8_t)WA;                                  /* 211B5D EXTZ    WA */
@@ -12332,7 +12332,7 @@ void sub_211B35(void)
     XHL = rd32(XHL);                                             /* 211B6B LD      XHL,(XHL) */
     C = 1;                                                       /* 211B6D LD      C,1 */
     A = 2;                                                       /* 211B6F LD      A,2 */
-    push32(0x211B75); sub_206DCD();                              /* 211B71 CALL    0x206DCD */
+    push32(0x211B75); LoadMonoPalettes();                        /* 211B71 CALL    0x206DCD */
     XHL = 0x2493EC;                                              /* 211B75 LD      XHL,0x2493EC */
     XWA = rd32(XHL);                                             /* 211B7A LD      XWA,(XHL) */
     wr32(0x5BD5, XWA);                                           /* 211B7C LD      (0x5BD5),XWA */
@@ -12346,7 +12346,7 @@ void sub_211B35(void)
     XHL = XDE;                                                   /* 211B9C LD      XHL,XDE */
     WA = 0x37;                                                   /* 211B9E LD      WA,0x37 */
     wr16(0x5BCF, WA);                                            /* 211BA1 LD      (0x5BCF),WA */
-    push32(0x211BA9); sub_207226();                              /* 211BA5 CALL    0x207226 */
+    push32(0x211BA9); LoadCompressedTiles();                     /* 211BA5 CALL    0x207226 */
     push32(0x211BAC); sub_211B13();                              /* 211BA9 CALR    0x211B13 */
     XWA = rd32(XHL);                                             /* 211BAC LD      XWA,(XHL) */
     wr32(0x5BD1, XWA);                                           /* 211BAE LD      (0x5BD1),XWA */
@@ -12461,7 +12461,7 @@ void sub_211C52(void)
     XSP += 4; return;                                            /* 211C7E RET */
 }
 
-void sub_211C7F(void)
+void LoadDungeonPalettes(void)
 {
     push32(XHL);                                                 /* 211C7F PUSH    XHL */
     push32(XDE);                                                 /* 211C80 PUSH    XDE */
@@ -12510,11 +12510,11 @@ L_211CC1:
     XHL = (uint32_t)(XHL + XWA);                                 /* 211CE7 ADD     XHL,XWA */
     A = 0;                                                       /* 211CE9 LD      A,0 */
     C = 1;                                                       /* 211CEB LD      C,1 */
-    push32(0x211CF1); sub_206D9E();                              /* 211CED CALL    0x206D9E */
+    push32(0x211CF1); LoadPalettes();                            /* 211CED CALL    0x206D9E */
     XHL = 0x26FE07;                                              /* 211CF1 LD      XHL,0x26FE07 */
     A = 0;                                                       /* 211CF6 LD      A,0 */
     C = 1;                                                       /* 211CF8 LD      C,1 */
-    push32(0x211CFE); sub_206DCD();                              /* 211CFA CALL    0x206DCD */
+    push32(0x211CFE); LoadMonoPalettes();                        /* 211CFA CALL    0x206DCD */
     XWA = pop32();                                               /* 211CFE POP     XWA */
     XBC = pop32();                                               /* 211CFF POP     XBC */
     XDE = pop32();                                               /* 211D00 POP     XDE */
@@ -12567,11 +12567,11 @@ L_211D35:
     XHL = (uint32_t)(XHL + XWA);                                 /* 211D64 ADD     XHL,XWA */
     A = 0;                                                       /* 211D66 LD      A,0 */
     C = 1;                                                       /* 211D68 LD      C,1 */
-    push32(0x211D6E); sub_206D9E();                              /* 211D6A CALL    0x206D9E */
+    push32(0x211D6E); LoadPalettes();                            /* 211D6A CALL    0x206D9E */
     XHL = 0x26FE07;                                              /* 211D6E LD      XHL,0x26FE07 */
     A = 0;                                                       /* 211D73 LD      A,0 */
     C = 1;                                                       /* 211D75 LD      C,1 */
-    push32(0x211D7B); sub_206DCD();                              /* 211D77 CALL    0x206DCD */
+    push32(0x211D7B); LoadMonoPalettes();                        /* 211D77 CALL    0x206DCD */
     XWA = pop32();                                               /* 211D7B POP     XWA */
     XBC = pop32();                                               /* 211D7C POP     XBC */
     XDE = pop32();                                               /* 211D7D POP     XDE */
@@ -12647,7 +12647,7 @@ void sub_211DDE(void)
     push32(XDE);                                                 /* 211DDF PUSH    XDE */
     push32(XBC);                                                 /* 211DE0 PUSH    XBC */
     push32(XWA);                                                 /* 211DE1 PUSH    XWA */
-    push32(0x211DE6); sub_20748A();                              /* 211DE2 CALL    0x20748A */
+    push32(0x211DE6); GetTextBox();                              /* 211DE2 CALL    0x20748A */
     XHL = 0x249755;                                              /* 211DE6 LD      XHL,0x249755 */
     wr32(XWA + 8, XHL);                                          /* 211DEB LD      (XWA+8),XHL */
     XWA = pop32();                                               /* 211DEE POP     XWA */
@@ -12710,7 +12710,7 @@ void sub_211E25(void)
     XSP += 4; return;                                            /* 211E33 RET */
 }
 
-void sub_211E34(void)
+void DrawCampMenu(void)
 {
     push32(XHL);                                                 /* 211E34 PUSH    XHL */
     push32(XDE);                                                 /* 211E35 PUSH    XDE */
@@ -12867,7 +12867,7 @@ void sub_211F4A(void)
     push32(0x211F52); sub_206825();                              /* 211F4E CALL    0x206825 */
     push32(0x211F55); sub_211F03();                              /* 211F52 CALR    0x211F03 */
     push32(0x211F58); sub_211FE8();                              /* 211F55 CALR    0x211FE8 */
-    push32(0x211F5B); sub_211F6C();                              /* 211F58 CALR    0x211F6C */
+    push32(0x211F5B); DrawStatusLabel();                         /* 211F58 CALR    0x211F6C */
     push32(0x211F5E); sub_211F20();                              /* 211F5B CALR    0x211F20 */
     push32(0x211F61); sub_21206C();                              /* 211F5E CALR    0x21206C */
     A = 0;                                                       /* 211F61 LD      A,0 */
@@ -12877,7 +12877,7 @@ void sub_211F4A(void)
     XSP += 4; return;                                            /* 211F6B RET */
 }
 
-void sub_211F6C(void)
+void DrawStatusLabel(void)
 {
     A = 2;                                                       /* 211F6C LD      A,2 */
     push32(0x211F72); sub_2075CC();                              /* 211F6E CALL    0x2075CC */
@@ -12949,7 +12949,7 @@ L_212014:
     push16(WA);                                                  /* 212017 PUSH    WA */
     push8(C);                                                    /* 212018 PUSH    C */
     L = A;                                                       /* 21201A LD      L,A */
-    push32(0x212020); sub_208272();                              /* 21201C CALL    0x208272 */
+    push32(0x212020); GetItemName();                             /* 21201C CALL    0x208272 */
     A = 4;                                                       /* 212020 LD      A,4 */
     push32(0x212026); sub_2076F3();                              /* 212022 CALL    0x2076F3 */
     C = pop8();                                                  /* 212026 POP     C */
@@ -13004,7 +13004,7 @@ L_212090:
     XSP += 4; return;                                            /* 212092 RET */
 }
 
-void sub_212093(void)
+void CampItemUseMenu(void)
 {
     A = rd8(0x5CDF);                                             /* 212093 LD      A,(0x5CDF) */
     cpu.fz = !((A >> 4) & 1); cpu.fh = 1; cpu.fn = 0;            /* 212097 BIT     4,A */
@@ -13091,12 +13091,12 @@ L_21213D:
     wr8(XIZ + 0x22, A);                                          /* 212147 LD      (XIZ+0x22),A */
     A = rd8(XIZ + 0x22);                                         /* 21214A LD      A,(XIZ+0x22) */
     WA = (uint16_t)(uint8_t)WA;                                  /* 21214D EXTZ    WA */
-    push32(0x212153); sub_2061B8();                              /* 21214F CALL    0x2061B8 */
+    push32(0x212153); RemoveItem();                              /* 21214F CALL    0x2061B8 */
     A = rd8(XIZ + 0x22);                                         /* 212153 LD      A,(XIZ+0x22) */
     WA = (uint16_t)(uint8_t)WA;                                  /* 212156 EXTZ    WA */
     push32(0x21215B); sub_212192();                              /* 212158 CALR    0x212192 */
     push32(0x21215E); sub_211FE8();                              /* 21215B CALR    0x211FE8 */
-    push32(0x212161); sub_211F6C();                              /* 21215E CALR    0x211F6C */
+    push32(0x212161); DrawStatusLabel();                         /* 21215E CALR    0x211F6C */
     push32(0x212165); sub_2166EB();                              /* 212161 CALL    0x2166EB */
     A = rd8(XIZ + 0x22);                                         /* 212165 LD      A,(XIZ+0x22) */
     A = (uint8_t)(A - 0x26);                                     /* 212168 SUB     A,0x26 */
@@ -13237,7 +13237,7 @@ L_21227C:
 L_212282:
     /* CP A,3 */                                                 /* 212282 CP      A,3 */
     if ((uint8_t)(A) != (uint8_t)(3)) goto L_21228B;             /* 212284 JR      NZ,0x21228B */
-    push32(0x212289); sub_212093();                              /* 212286 CALR    0x212093 */
+    push32(0x212289); CampItemUseMenu();                         /* 212286 CALR    0x212093 */
     goto L_2122A5;                                               /* 212289 JR      0x2122A5 */
 L_21228B:
     /* CP A,4 */                                                 /* 21228B CP      A,4 */
@@ -13259,7 +13259,7 @@ L_2122A5:
     XSP += 4; return;                                            /* 2122A5 RET */
 }
 
-void sub_2122A6(void)
+void CampLeave(void)
 {
     A = rd8(0x5CDF);                                             /* 2122A6 LD      A,(0x5CDF) */
     cpu.fz = !((A >> 4) & 1); cpu.fh = 1; cpu.fn = 0;            /* 2122AA BIT     4,A */
@@ -13456,7 +13456,7 @@ L_212443:
     goto L_212475;                                               /* 212458 JR      0x212475 */
 L_21245A:
     push32(0x21245D); sub_211EF4();                              /* 21245A CALR    0x211EF4 */
-    push32(0x212460); sub_211E34();                              /* 21245D CALR    0x211E34 */
+    push32(0x212460); DrawCampMenu();                            /* 21245D CALR    0x211E34 */
     push32(0x212464); sub_2128E8();                              /* 212460 CALL    0x2128E8 */
     push32(0x212468); sub_2128D5();                              /* 212464 CALL    0x2128D5 */
     A = rd8(XIZ + 0x1E);                                         /* 212468 LD      A,(XIZ+0x1E) */
@@ -13568,7 +13568,7 @@ L_21252A:
     wr8(XIZ + 0x2A, A);                                          /* 212549 LD      (XIZ+0x2A),A */
     goto L_21255C;                                               /* 21254C JR      0x21255C */
 L_21254E:
-    push32(0x212551); sub_211E34();                              /* 21254E CALR    0x211E34 */
+    push32(0x212551); DrawCampMenu();                            /* 21254E CALR    0x211E34 */
     A = rd8(XIZ + 0x1E);                                         /* 212551 LD      A,(XIZ+0x1E) */
     wr8(XIZ + 0x20, A);                                          /* 212554 LD      (XIZ+0x20),A */
     A = 3;                                                       /* 212557 LD      A,3 */
@@ -13590,7 +13590,7 @@ void sub_212563(void)
     /* CP A,1 */                                                 /* 212566 CP      A,1 */
     if ((uint8_t)(A) != (uint8_t)(1)) goto L_21257D;             /* 212568 JR      NZ,0x21257D */
     push32(0x21256D); sub_211DF3();                              /* 21256A CALR    0x211DF3 */
-    push32(0x212570); sub_211E34();                              /* 21256D CALR    0x211E34 */
+    push32(0x212570); DrawCampMenu();                            /* 21256D CALR    0x211E34 */
     A = 0;                                                       /* 212570 LD      A,0 */
     wr8(XIZ + 0x20, A);                                          /* 212572 LD      (XIZ+0x20),A */
     A = 2;                                                       /* 212575 LD      A,2 */
@@ -13607,7 +13607,7 @@ L_21257D:
 L_212590:
     /* CP A,3 */                                                 /* 212590 CP      A,3 */
     if ((uint8_t)(A) != (uint8_t)(3)) goto L_212599;             /* 212592 JR      NZ,0x212599 */
-    push32(0x212597); sub_2122A6();                              /* 212594 CALR    0x2122A6 */
+    push32(0x212597); CampLeave();                               /* 212594 CALR    0x2122A6 */
     goto L_212618;                                               /* 212597 JR      0x212618 */
 L_212599:
     /* CP A,4 */                                                 /* 212599 CP      A,4 */
@@ -13654,7 +13654,7 @@ L_2125F0:
     if ((uint8_t)(A) != (uint8_t)(9)) goto L_212613;             /* 2125F3 JR      NZ,0x212613 */
     push32(0x2125F9); sub_210EA0();                              /* 2125F5 CALL    0x210EA0 */
     push32(0x2125FC); sub_211DF3();                              /* 2125F9 CALR    0x211DF3 */
-    push32(0x2125FF); sub_211E34();                              /* 2125FC CALR    0x211E34 */
+    push32(0x2125FF); DrawCampMenu();                            /* 2125FC CALR    0x211E34 */
     push32(0x212602); sub_211E12();                              /* 2125FF CALR    0x211E12 */
     push32(0x212606); sub_2129E9();                              /* 212602 CALL    0x2129E9 */
     A = 0;                                                       /* 212606 LD      A,0 */
@@ -13740,7 +13740,7 @@ void sub_21266E(void)
     XSP += 4; return;                                            /* 21267B RET */
 }
 
-void sub_21267C(void)
+void OpenChest(void)
 {
     push32(XHL);                                                 /* 21267C PUSH    XHL */
     push32(XDE);                                                 /* 21267D PUSH    XDE */
@@ -13832,12 +13832,12 @@ L_212711:
     A = pop8();                                                  /* 21273B POP     A */
     if (cpu.fz) goto L_21279A;                                   /* 21273C JR      Z,0x21279A */
     push8(A);                                                    /* 21273E PUSH    A */
-    push32(0x212743); sub_2119DE();                              /* 21273F CALL    0x2119DE */
+    push32(0x212743); GetChestContent();                         /* 21273F CALL    0x2119DE */
     push32(0x212747); sub_206197();                              /* 212743 CALL    0x206197 */
     A = pop8();                                                  /* 212747 POP     A */
     if (!cpu.fc) goto L_212772;                                  /* 212748 JR      NC,0x212772 */
     push8(A);                                                    /* 21274A PUSH    A */
-    push32(0x21274F); sub_2119DE();                              /* 21274B CALL    0x2119DE */
+    push32(0x21274F); GetChestContent();                         /* 21274B CALL    0x2119DE */
     push32(0x212753); sub_216BA8();                              /* 21274F CALL    0x216BA8 */
     A = 5;                                                       /* 212753 LD      A,5 */
     push32(0x212759); sub_2076F3();                              /* 212755 CALL    0x2076F3 */
@@ -13855,7 +13855,7 @@ L_212772:
     XHL = 0x2498A5;                                              /* 212775 LD      XHL,0x2498A5 */
     push32(0x21277E); sub_2076F3();                              /* 21277A CALL    0x2076F3 */
     A = pop8();                                                  /* 21277E POP     A */
-    push32(0x212783); sub_2119DE();                              /* 21277F CALL    0x2119DE */
+    push32(0x212783); GetChestContent();                         /* 21277F CALL    0x2119DE */
     push32(0x212787); sub_216BA8();                              /* 212783 CALL    0x216BA8 */
     A = 5;                                                       /* 212787 LD      A,5 */
     push32(0x21278D); sub_2076F3();                              /* 212789 CALL    0x2076F3 */
@@ -13873,15 +13873,15 @@ L_21279A:
     push32(0x2127B1); sub_2076F3();                              /* 2127AD CALL    0x2076F3 */
     A = pop8();                                                  /* 2127B1 POP     A */
     push8(A);                                                    /* 2127B2 PUSH    A */
-    push32(0x2127B7); sub_211A15();                              /* 2127B3 CALL    0x211A15 */
+    push32(0x2127B7); GetChestGoldText();                        /* 2127B3 CALL    0x211A15 */
     A = 5;                                                       /* 2127B7 LD      A,5 */
     push32(0x2127BD); sub_2076F3();                              /* 2127B9 CALL    0x2076F3 */
     A = 5;                                                       /* 2127BD LD      A,5 */
     XHL = 0x2498CF;                                              /* 2127BF LD      XHL,0x2498CF */
     push32(0x2127C8); sub_2076F3();                              /* 2127C4 CALL    0x2076F3 */
     A = pop8();                                                  /* 2127C8 POP     A */
-    push32(0x2127CD); sub_2119FB();                              /* 2127C9 CALL    0x2119FB */
-    push32(0x2127D1); sub_208AE4();                              /* 2127CD CALL    0x208AE4 */
+    push32(0x2127CD); GetChestGold();                            /* 2127C9 CALL    0x2119FB */
+    push32(0x2127D1); AddGP();                                   /* 2127CD CALL    0x208AE4 */
     goto L_2127DE;                                               /* 2127D1 JR      0x2127DE */
 L_2127D3:
     A = 5;                                                       /* 2127D3 LD      A,5 */
@@ -14374,7 +14374,7 @@ void sub_212B14(void)
     A = 0;                                                       /* 212B18 LD      A,0 */
     wr8(XIZ + 0x2C, A);                                          /* 212B1A LD      (XIZ+0x2C),A */
     XWA = 0xE;                                                   /* 212B1D LD      XWA,0xE */
-    push32(0x212B26); sub_207759();                              /* 212B22 CALL    0x207759 */
+    push32(0x212B26); PlayMusic();                               /* 212B22 CALL    0x207759 */
     WA = 0x2E;                                                   /* 212B26 LD      WA,0x2E */
     push32(0x212B2D); sub_20776A();                              /* 212B29 CALL    0x20776A */
     XWA = pop32();                                               /* 212B2D POP     XWA */
@@ -14483,7 +14483,7 @@ void sub_212BAB(void)
     XHL = 0x24998E;                                              /* 212BC6 LD      XHL,0x24998E */
     XHL = (uint32_t)(XHL + XDE);                                 /* 212BCB ADD     XHL,XDE */
     B = rd8(XHL);                                                /* 212BCD LD      B,(XHL) */
-    push32(0x212BD3); sub_2060CB();                              /* 212BCF CALL    0x2060CB */
+    push32(0x212BD3); Random();                                  /* 212BCF CALL    0x2060CB */
     W = 0;                                                       /* 212BD3 LD      W,0 */
     WA = divu8(WA, B);                                           /* 212BD5 DIV     WA,B */
     B = W;                                                       /* 212BD7 LD      B,W */
@@ -14683,13 +14683,13 @@ void sub_212CD5(void)
     wr8(XIZ + 0x24, B);                                          /* 212CE6 LD      (XIZ+0x24),B */
     if (!cpu.fz) goto L_212D96;                                  /* 212CE9 JRL     NZ,0x212D96 */
     A = 6;                                                       /* 212CEC LD      A,6 */
-    push32(0x212CF2); sub_20748A();                              /* 212CEE CALL    0x20748A */
+    push32(0x212CF2); GetTextBox();                              /* 212CEE CALL    0x20748A */
     wr8(XWA + 0x10, C);                                          /* 212CF2 LD      (XWA+0x10),C */
     A = 0xFF;                                                    /* 212CF5 LD      A,0xFF */
     wr8(XIZ + 0x23, A);                                          /* 212CF7 LD      (XIZ+0x23),A */
 L_212CFA:
     A = 6;                                                       /* 212CFA LD      A,6 */
-    push32(0x212D00); sub_20748A();                              /* 212CFC CALL    0x20748A */
+    push32(0x212D00); GetTextBox();                              /* 212CFC CALL    0x20748A */
     XHL = rd32(XWA + 8);                                         /* 212D00 LD      XHL,(XWA+8) */
     /* CP XHL,0 */                                               /* 212D03 CP      XHL,0 */
     if ((uint32_t)(XHL) == (uint32_t)(0)) goto L_212D49;         /* 212D09 JR      Z,0x212D49 */
@@ -14711,7 +14711,7 @@ L_212D1A:
     goto L_212D96;                                               /* 212D2F JR      0x212D96 */
 L_212D31:
     A = 6;                                                       /* 212D31 LD      A,6 */
-    push32(0x212D37); sub_20748A();                              /* 212D33 CALL    0x20748A */
+    push32(0x212D37); GetTextBox();                              /* 212D33 CALL    0x20748A */
     C = rd8(XWA + 0x10);                                         /* 212D37 LD      C,(XWA+0x10) */
     wr8(XIZ + 0x23, C);                                          /* 212D3A LD      (XIZ+0x23),C */
     C = (uint8_t)(C + 1);                                        /* 212D3D INC     1,C */
@@ -14743,7 +14743,7 @@ L_212D57:
     XHL = (uint32_t)(XHL + XWA);                                 /* 212D7B ADD     XHL,XWA */
     XHL = rd32(XHL);                                             /* 212D7D LD      XHL,(XHL) */
     A = 6;                                                       /* 212D7F LD      A,6 */
-    push32(0x212D85); sub_20748A();                              /* 212D81 CALL    0x20748A */
+    push32(0x212D85); GetTextBox();                              /* 212D81 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 212D85 LD      (XWA+8),XHL */
     A = 2;                                                       /* 212D88 LD      A,2 */
     wr8(XIZ + 0x25, A);                                          /* 212D8A LD      (XIZ+0x25),A */
@@ -14766,7 +14766,7 @@ void sub_212D9B(void)
     A = 8;                                                       /* 212DA3 LD      A,8 */
     wr8(XIZ + 0x2A, A);                                          /* 212DA5 LD      (XIZ+0x2A),A */
     XWA = 0xE;                                                   /* 212DA8 LD      XWA,0xE */
-    push32(0x212DB1); sub_207759();                              /* 212DAD CALL    0x207759 */
+    push32(0x212DB1); PlayMusic();                               /* 212DAD CALL    0x207759 */
     WA = 0x2E;                                                   /* 212DB1 LD      WA,0x2E */
     push32(0x212DB8); sub_20776A();                              /* 212DB4 CALL    0x20776A */
     XWA = pop32();                                               /* 212DB8 POP     XWA */
@@ -14803,7 +14803,7 @@ L_212DD0:
     DE = 0;                                                      /* 212DFA LD      DE,0 */
     WA = 0x37;                                                   /* 212DFC LD      WA,0x37 */
     HL = 0x39;                                                   /* 212DFF LD      HL,0x39 */
-    push32(0x212E06); sub_2103BA();                              /* 212E02 CALL    0x2103BA */
+    push32(0x212E06); DrawPortrait();                            /* 212E02 CALL    0x2103BA */
     goto L_2130C1;                                               /* 212E06 JRL     0x2130C1 */
 L_212E09:
     /* CP A,3 */                                                 /* 212E09 CP      A,3 */
@@ -14949,7 +14949,7 @@ L_212F44:
     W = 8;                                                       /* 212F44 LD      W,8 */
 L_212F46:
     wr8(0x5DDB, W);                                              /* 212F46 LD      (0x5DDB),W */
-    push32(0x212F4E); sub_2077D1();                              /* 212F4A CALL    0x2077D1 */
+    push32(0x212F4E); LoadEnemy();                               /* 212F4A CALL    0x2077D1 */
     wr8(0x5DDA, 1);                                              /* 212F4E LDB     (0x5DDA),1 */
     push32(0x212F57); sub_207C00();                              /* 212F53 CALL    0x207C00 */
     A = 9;                                                       /* 212F57 LD      A,9 */
@@ -15002,7 +15002,7 @@ L_212FA9:
     WA = (uint16_t)(uint8_t)WA;                                  /* 212FCC EXTZ    WA */
     HL = 0x60;                                                   /* 212FCE LD      HL,0x60 */
     HL = (uint16_t)(HL + WA);                                    /* 212FD1 ADD     HL,WA */
-    push32(0x212FD7); sub_20612E();                              /* 212FD3 CALL    0x20612E */
+    push32(0x212FD7); SetEventFlag();                            /* 212FD3 CALL    0x20612E */
     push32(0x212FDB); sub_2115AC();                              /* 212FD7 CALL    0x2115AC */
     goto L_212FF3;                                               /* 212FDB JR      0x212FF3 */
 L_212FDD:
@@ -15010,7 +15010,7 @@ L_212FDD:
     DE = 0;                                                      /* 212FDF LD      DE,0 */
     WA = 0x37;                                                   /* 212FE1 LD      WA,0x37 */
     HL = 0x3B;                                                   /* 212FE4 LD      HL,0x3B */
-    push32(0x212FEB); sub_2103BA();                              /* 212FE7 CALL    0x2103BA */
+    push32(0x212FEB); DrawPortrait();                            /* 212FE7 CALL    0x2103BA */
 L_212FEB:
     push32(0x212FEF); sub_212BF1();                              /* 212FEB CALL    0x212BF1 */
     push32(0x212FF3); sub_212C10();                              /* 212FEF CALL    0x212C10 */
@@ -15046,7 +15046,7 @@ L_213025:
     WA = (uint16_t)(uint8_t)WA;                                  /* 213035 EXTZ    WA */
     HL = 0x60;                                                   /* 213037 LD      HL,0x60 */
     HL = (uint16_t)(HL + WA);                                    /* 21303A ADD     HL,WA */
-    push32(0x213040); sub_20612E();                              /* 21303C CALL    0x20612E */
+    push32(0x213040); SetEventFlag();                            /* 21303C CALL    0x20612E */
     A = rd8(XIZ + 0x10);                                         /* 213040 LD      A,(XIZ+0x10) */
     /* CP A,5 */                                                 /* 213043 CP      A,5 */
     if ((uint8_t)(A) == (uint8_t)(5)) goto L_213057;             /* 213045 JR      Z,0x213057 */
@@ -15054,7 +15054,7 @@ L_213025:
     WA = (uint16_t)(uint8_t)WA;                                  /* 21304A EXTZ    WA */
     HL = 0x10;                                                   /* 21304C LD      HL,0x10 */
     HL = (uint16_t)(HL + WA);                                    /* 21304F ADD     HL,WA */
-    push32(0x213055); sub_20612E();                              /* 213051 CALL    0x20612E */
+    push32(0x213055); SetEventFlag();                            /* 213051 CALL    0x20612E */
     goto L_213057;                                               /* 213055 JR      0x213057 */
 L_213057:
     push32(0x21305B); sub_2115AC();                              /* 213057 CALL    0x2115AC */
@@ -15207,7 +15207,7 @@ void sub_213222(void)
     push32(0x213230); sub_216845();                              /* 21322C CALL    0x216845 */
     BC = 0;                                                      /* 213230 LD      BC,0 */
     DE = 0;                                                      /* 213232 LD      DE,0 */
-    push32(0x213238); sub_2103BA();                              /* 213234 CALL    0x2103BA */
+    push32(0x213238); DrawPortrait();                            /* 213234 CALL    0x2103BA */
     XWA = pop32();                                               /* 213238 POP     XWA */
     XBC = pop32();                                               /* 213239 POP     XBC */
     XDE = pop32();                                               /* 21323A POP     XDE */
@@ -15224,7 +15224,7 @@ void sub_21323D(void)
     XSP += 4; return;                                            /* 213248 RET */
 }
 
-void sub_213249(void)
+void DrawArenaParticipants(void)
 {
     push32(XHL);                                                 /* 213249 PUSH    XHL */
     push32(XDE);                                                 /* 21324A PUSH    XDE */
@@ -15245,7 +15245,7 @@ void sub_213249(void)
     DE = 0;                                                      /* 21326E LD      DE,0 */
     E = (uint8_t)(E + 0x20);                                     /* 213270 ADD     E,0x20 */
     push32(0x213277); sub_216849();                              /* 213273 CALL    0x216849 */
-    push32(0x21327B); sub_210380();                              /* 213277 CALL    0x210380 */
+    push32(0x21327B); DrawPortraitAt();                          /* 213277 CALL    0x210380 */
     goto L_2132CD;                                               /* 21327B JR      0x2132CD */
 L_21327D:
     A = rd8(0x5021);                                             /* 21327D LD      A,(0x5021) */
@@ -15260,7 +15260,7 @@ L_21327D:
     DE = 0;                                                      /* 213294 LD      DE,0 */
     E = (uint8_t)(E + 0x20);                                     /* 213296 ADD     E,0x20 */
     push32(0x21329D); sub_216849();                              /* 213299 CALL    0x216849 */
-    push32(0x2132A1); sub_210380();                              /* 21329D CALL    0x210380 */
+    push32(0x2132A1); DrawPortraitAt();                          /* 21329D CALL    0x210380 */
     goto L_2132CD;                                               /* 2132A1 JR      0x2132CD */
 L_2132A3:
     HL = 0xB;                                                    /* 2132A3 LD      HL,0xB */
@@ -15269,7 +15269,7 @@ L_2132A3:
     DE = 4;                                                      /* 2132AA LD      DE,4 */
     E = (uint8_t)(E + 0x20);                                     /* 2132AC ADD     E,0x20 */
     push32(0x2132B3); sub_21684D();                              /* 2132AF CALL    0x21684D */
-    push32(0x2132B7); sub_2103BA();                              /* 2132B3 CALL    0x2103BA */
+    push32(0x2132B7); DrawPortrait();                            /* 2132B3 CALL    0x2103BA */
     goto L_2132CD;                                               /* 2132B7 JR      0x2132CD */
 L_2132B9:
     push32(0x2132BD); sub_21676A();                              /* 2132B9 CALL    0x21676A */
@@ -15277,7 +15277,7 @@ L_2132B9:
     BC = 0;                                                      /* 2132C1 LD      BC,0 */
     DE = 0;                                                      /* 2132C3 LD      DE,0 */
     push32(0x2132C9); sub_216845();                              /* 2132C5 CALL    0x216845 */
-    push32(0x2132CD); sub_2103BA();                              /* 2132C9 CALL    0x2103BA */
+    push32(0x2132CD); DrawPortrait();                            /* 2132C9 CALL    0x2103BA */
 L_2132CD:
     XWA = pop32();                                               /* 2132CD POP     XWA */
     XBC = pop32();                                               /* 2132CE POP     XBC */
@@ -15304,7 +15304,7 @@ void sub_2132D2(void)
     wr8(XIZ + 0x13, A);                                          /* 2132ED LD      (XIZ+0x13),A */
     L = A;                                                       /* 2132F0 LD      L,A */
     HL = (uint16_t)(int8_t)HL;                                   /* 2132F2 EXTS    HL */
-    push32(0x2132F7); sub_213249();                              /* 2132F4 CALR    0x213249 */
+    push32(0x2132F7); DrawArenaParticipants();                   /* 2132F4 CALR    0x213249 */
 L_2132F7:
     XWA = pop32();                                               /* 2132F7 POP     XWA */
     XBC = pop32();                                               /* 2132F8 POP     XBC */
@@ -15357,7 +15357,7 @@ L_213335:
     /* CP A,0 */                                                 /* 213341 CP      A,0 */
     if ((uint8_t)(A) == (uint8_t)(0)) goto L_21340B;             /* 213343 JRL     Z,0x21340B */
 L_213346:
-    push32(0x21334A); sub_216AA2();                              /* 213346 CALL    0x216AA2 */
+    push32(0x21334A); GetStoryStage();                           /* 213346 CALL    0x216AA2 */
     WA = (uint16_t)(uint8_t)WA;                                  /* 21334A EXTZ    WA */
     XWA = (uint32_t)(uint16_t)XWA;                               /* 21334C EXTZ    XWA */
     XHL = 0x249B66;                                              /* 21334E LD      XHL,0x249B66 */
@@ -15375,7 +15375,7 @@ L_213369:
     push16(BC);                                                  /* 21336A PUSH    BC */
     L = rd8(XHL);                                                /* 21336B LD      L,(XHL) */
     HL = (uint16_t)(uint8_t)HL;                                  /* 21336D EXTZ    HL */
-    push32(0x213373); sub_20615B();                              /* 21336F CALL    0x20615B */
+    push32(0x213373); CheckEventFlag();                          /* 21336F CALL    0x20615B */
     BC = pop16();                                                /* 213373 POP     BC */
     B = (uint8_t)(B & L);                                        /* 213374 AND     B,L */
     XHL = pop32();                                               /* 213376 POP     XHL */
@@ -15392,7 +15392,7 @@ L_21338D:
     W = 0x40;                                                    /* 21338D LD      W,0x40 */
     goto L_21340F;                                               /* 21338F JR      0x21340F */
 L_213391:
-    push32(0x213395); sub_216ABC();                              /* 213391 CALL    0x216ABC */
+    push32(0x213395); GetStageArenaRank();                       /* 213391 CALL    0x216ABC */
     /* CP A,9 */                                                 /* 213395 CP      A,9 */
     if ((uint8_t)(A) == (uint8_t)(9)) goto L_2133C7;             /* 213398 JR      Z,0x2133C7 */
     push32(0x21339E); sub_216A94();                              /* 21339A CALL    0x216A94 */
@@ -15401,10 +15401,10 @@ L_213391:
     push32(0x2133A6); sub_216A86();                              /* 2133A2 CALL    0x216A86 */
     /* CP A,1 */                                                 /* 2133A6 CP      A,1 */
     if ((uint8_t)(A) == (uint8_t)(1)) goto L_2133EF;             /* 2133A8 JR      Z,0x2133EF */
-    push32(0x2133AE); sub_216ABC();                              /* 2133AA CALL    0x216ABC */
+    push32(0x2133AE); GetStageArenaRank();                       /* 2133AA CALL    0x216ABC */
     /* CP A,8 */                                                 /* 2133AE CP      A,8 */
     if ((uint8_t)(A) == (uint8_t)(8)) goto L_2133DF;             /* 2133B1 JR      Z,0x2133DF */
-    push32(0x2133B7); sub_216ABC();                              /* 2133B3 CALL    0x216ABC */
+    push32(0x2133B7); GetStageArenaRank();                       /* 2133B3 CALL    0x216ABC */
     /* CP A,0 */                                                 /* 2133B7 CP      A,0 */
     if ((uint8_t)(A) == (uint8_t)(0)) goto L_2133CF;             /* 2133B9 JR      Z,0x2133CF */
     /* CP A,2 */                                                 /* 2133BB CP      A,2 */
@@ -15466,7 +15466,7 @@ void sub_213413(void)
     push32(XHL);                                                 /* 213413 PUSH    XHL */
     push32(XDE);                                                 /* 213414 PUSH    XDE */
     push32(XBC);                                                 /* 213415 PUSH    XBC */
-    push32(0x21341A); sub_216ABC();                              /* 213416 CALL    0x216ABC */
+    push32(0x21341A); GetStageArenaRank();                       /* 213416 CALL    0x216ABC */
     W = rd8(XIZ + 0x15);                                         /* 21341A LD      W,(XIZ+0x15) */
     /* CP A,W */                                                 /* 21341D CP      A,W */
     if ((uint8_t)(A) >= (uint8_t)(W)) goto L_213441;             /* 21341F JR      NC,0x213441 */
@@ -15522,15 +15522,15 @@ L_213478:
     push32(0x21347C); sub_216A78();                              /* 213478 CALL    0x216A78 */
     goto L_213501;                                               /* 21347C JRL     0x213501 */
 L_21347F:
-    push32(0x213483); sub_216AFA();                              /* 21347F CALL    0x216AFA */
-    push32(0x213487); sub_216ABC();                              /* 213483 CALL    0x216ABC */
+    push32(0x213483); AdvanceStoryStage();                       /* 21347F CALL    0x216AFA */
+    push32(0x213487); GetStageArenaRank();                       /* 213483 CALL    0x216ABC */
     /* CP A,9 */                                                 /* 213487 CP      A,9 */
     if ((uint8_t)(A) >= (uint8_t)(9)) goto L_213497;             /* 21348A JR      NC,0x213497 */
     push32(0x213490); sub_21691A();                              /* 21348C CALL    0x21691A */
     HL = 0x50;                                                   /* 213490 LD      HL,0x50 */
-    push32(0x213497); sub_206144();                              /* 213493 CALL    0x206144 */
+    push32(0x213497); ClearEventFlag();                          /* 213493 CALL    0x206144 */
 L_213497:
-    push32(0x21349B); sub_216ABC();                              /* 213497 CALL    0x216ABC */
+    push32(0x21349B); GetStageArenaRank();                       /* 213497 CALL    0x216ABC */
     /* CP A,3 */                                                 /* 21349B CP      A,3 */
     if ((uint8_t)(A) < (uint8_t)(3)) goto L_2134BA;              /* 21349D JR      C,0x2134BA */
     /* CP A,9 */                                                 /* 21349F CP      A,9 */
@@ -15544,7 +15544,7 @@ L_213497:
     WA = (uint16_t)(uint8_t)WA;                                  /* 2134B4 EXTZ    WA */
     push32(0x2134BA); sub_206197();                              /* 2134B6 CALL    0x206197 */
 L_2134BA:
-    push32(0x2134BE); sub_216ABC();                              /* 2134BA CALL    0x216ABC */
+    push32(0x2134BE); GetStageArenaRank();                       /* 2134BA CALL    0x216ABC */
     /* CP A,2 */                                                 /* 2134BE CP      A,2 */
     if ((uint8_t)(A) < (uint8_t)(2)) goto L_2134F0;              /* 2134C0 JR      C,0x2134F0 */
     alu_cp(A, 8, 8);                                             /* 2134C2 CP      A,8 */
@@ -15557,15 +15557,15 @@ L_2134BA:
     XHL = 0x249CE1;                                              /* 2134D3 LD      XHL,0x249CE1 */
     XHL = (uint32_t)(XHL + XWA);                                 /* 2134D8 ADD     XHL,XWA */
     WA = rd16(XHL);                                              /* 2134DA LD      WA,(XHL) */
-    push32(0x2134E0); sub_208AE4();                              /* 2134DC CALL    0x208AE4 */
+    push32(0x2134E0); AddGP();                                   /* 2134DC CALL    0x208AE4 */
     goto L_2134F0;                                               /* 2134E0 JR      0x2134F0 */
 L_2134E2:
     WA = 0xC350;                                                 /* 2134E2 LD      WA,0xC350 */
-    push32(0x2134E9); sub_208AE4();                              /* 2134E5 CALL    0x208AE4 */
+    push32(0x2134E9); AddGP();                                   /* 2134E5 CALL    0x208AE4 */
     WA = 0xC350;                                                 /* 2134E9 LD      WA,0xC350 */
-    push32(0x2134F0); sub_208AE4();                              /* 2134EC CALL    0x208AE4 */
+    push32(0x2134F0); AddGP();                                   /* 2134EC CALL    0x208AE4 */
 L_2134F0:
-    push32(0x2134F4); sub_216ABC();                              /* 2134F0 CALL    0x216ABC */
+    push32(0x2134F4); GetStageArenaRank();                       /* 2134F0 CALL    0x216ABC */
     /* CP A,8 */                                                 /* 2134F4 CP      A,8 */
     if ((uint8_t)(A) != (uint8_t)(8)) goto L_2134FF;             /* 2134F7 JR      NZ,0x2134FF */
     A = 1;                                                       /* 2134F9 LD      A,1 */
@@ -15670,7 +15670,7 @@ L_2135C5:
     push32(0x2135DE); sub_213222();                              /* 2135DB CALR    0x213222 */
     push32(XWA);                                                 /* 2135DE PUSH    XWA */
     XWA = 4;                                                     /* 2135DF LD      XWA,4 */
-    push32(0x2135E5); sub_207759();                              /* 2135E1 CALL    0x207759 */
+    push32(0x2135E5); PlayMusic();                               /* 2135E1 CALL    0x207759 */
     WA = 0x24;                                                   /* 2135E5 LD      WA,0x24 */
     push32(0x2135EC); sub_20776A();                              /* 2135E8 CALL    0x20776A */
     XWA = pop32();                                               /* 2135EC POP     XWA */
@@ -15741,7 +15741,7 @@ L_213651:
     wr8(XIZ + 0x25, A);                                          /* 21366C LD      (XIZ+0x25),A */
     push32(XWA);                                                 /* 21366F PUSH    XWA */
     XWA = 4;                                                     /* 213670 LD      XWA,4 */
-    push32(0x213676); sub_207759();                              /* 213672 CALL    0x207759 */
+    push32(0x213676); PlayMusic();                               /* 213672 CALL    0x207759 */
     WA = 0x24;                                                   /* 213676 LD      WA,0x24 */
     push32(0x21367D); sub_20776A();                              /* 213679 CALL    0x20776A */
     XWA = pop32();                                               /* 21367D POP     XWA */
@@ -15770,13 +15770,13 @@ void sub_21368D(void)
     wr8(XIZ + 0x24, B);                                          /* 21369E LD      (XIZ+0x24),B */
     if (!cpu.fz) goto L_213763;                                  /* 2136A1 JRL     NZ,0x213763 */
     A = 1;                                                       /* 2136A4 LD      A,1 */
-    push32(0x2136AA); sub_20748A();                              /* 2136A6 CALL    0x20748A */
+    push32(0x2136AA); GetTextBox();                              /* 2136A6 CALL    0x20748A */
     wr8(XWA + 0x10, C);                                          /* 2136AA LD      (XWA+0x10),C */
     A = 0xFF;                                                    /* 2136AD LD      A,0xFF */
     wr8(XIZ + 0x23, A);                                          /* 2136AF LD      (XIZ+0x23),A */
 L_2136B2:
     A = 1;                                                       /* 2136B2 LD      A,1 */
-    push32(0x2136B8); sub_20748A();                              /* 2136B4 CALL    0x20748A */
+    push32(0x2136B8); GetTextBox();                              /* 2136B4 CALL    0x20748A */
     XHL = rd32(XWA + 8);                                         /* 2136B8 LD      XHL,(XWA+8) */
     /* CP XHL,0 */                                               /* 2136BB CP      XHL,0 */
     if ((uint32_t)(XHL) == (uint32_t)(0)) goto L_213702;         /* 2136C1 JR      Z,0x213702 */
@@ -15798,7 +15798,7 @@ L_2136D2:
     goto L_213763;                                               /* 2136E8 JR      0x213763 */
 L_2136EA:
     A = 1;                                                       /* 2136EA LD      A,1 */
-    push32(0x2136F0); sub_20748A();                              /* 2136EC CALL    0x20748A */
+    push32(0x2136F0); GetTextBox();                              /* 2136EC CALL    0x20748A */
     C = rd8(XWA + 0x10);                                         /* 2136F0 LD      C,(XWA+0x10) */
     wr8(XIZ + 0x23, C);                                          /* 2136F3 LD      (XIZ+0x23),C */
     C = (uint8_t)(C + 1);                                        /* 2136F6 INC     1,C */
@@ -15839,7 +15839,7 @@ L_21373D:
     XHL = (uint32_t)(XHL + XWA);                                 /* 21374C ADD     XHL,XWA */
     XHL = rd32(XHL);                                             /* 21374E LD      XHL,(XHL) */
     A = 1;                                                       /* 213750 LD      A,1 */
-    push32(0x213756); sub_20748A();                              /* 213752 CALL    0x20748A */
+    push32(0x213756); GetTextBox();                              /* 213752 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 213756 LD      (XWA+8),XHL */
     A = 0;                                                       /* 213759 LD      A,0 */
     wr8(XIZ + 0x26, A);                                          /* 21375B LD      (XIZ+0x26),A */
@@ -16078,7 +16078,7 @@ void sub_213903(void)
     push32(XBC);                                                 /* 213905 PUSH    XBC */
     push32(XWA);                                                 /* 213906 PUSH    XWA */
     push32(0x21390B); sub_216732();                              /* 213907 CALL    0x216732 */
-    push32(0x21390F); sub_216ABC();                              /* 21390B CALL    0x216ABC */
+    push32(0x21390F); GetStageArenaRank();                       /* 21390B CALL    0x216ABC */
     /* CP A,1 */                                                 /* 21390F CP      A,1 */
     if ((uint8_t)(A) >= (uint8_t)(1)) goto L_213913;             /* 213911 JR      NC,0x213913 */
 L_213913:
@@ -16529,7 +16529,7 @@ L_213C6D:
     if ((uint8_t)(A) != (uint8_t)(0xFF)) goto L_213C97;          /* 213C72 JR      NZ,0x213C97 */
     push32(XDE);                                                 /* 213C74 PUSH    XDE */
 L_213C75:
-    push32(0x213C79); sub_2060CB();                              /* 213C75 CALL    0x2060CB */
+    push32(0x213C79); Random();                                  /* 213C75 CALL    0x2060CB */
     W = 0;                                                       /* 213C79 LD      W,0 */
     WA = divu8(WA, 0xF);                                         /* 213C7B DIV     WA,0xF */
     A = W;                                                       /* 213C7E LD      A,W */
@@ -16595,7 +16595,7 @@ L_213CBF:
     XHL = 0x249E1A;                                              /* 213D0C LD      XHL,0x249E1A */
     XHL = (uint32_t)(XHL + XWA);                                 /* 213D11 ADD     XHL,XWA */
     B = rd8(XHL);                                                /* 213D13 LD      B,(XHL) */
-    push32(0x213D19); sub_2060CB();                              /* 213D15 CALL    0x2060CB */
+    push32(0x213D19); Random();                                  /* 213D15 CALL    0x2060CB */
     W = 0;                                                       /* 213D19 LD      W,0 */
     WA = divu8(WA, B);                                           /* 213D1B DIV     WA,B */
     B = W;                                                       /* 213D1D LD      B,W */
@@ -16617,7 +16617,7 @@ L_213CBF:
     XHL = 0x249E1A;                                              /* 213D46 LD      XHL,0x249E1A */
     XHL = (uint32_t)(XHL + XWA);                                 /* 213D4B ADD     XHL,XWA */
     B = rd8(XHL);                                                /* 213D4D LD      B,(XHL) */
-    push32(0x213D53); sub_2060CB();                              /* 213D4F CALL    0x2060CB */
+    push32(0x213D53); Random();                                  /* 213D4F CALL    0x2060CB */
     W = 0;                                                       /* 213D53 LD      W,0 */
     WA = divu8(WA, B);                                           /* 213D55 DIV     WA,B */
     B = W;                                                       /* 213D57 LD      B,W */
@@ -16639,7 +16639,7 @@ L_213CBF:
     XHL = 0x249D5A;                                              /* 213D80 LD      XHL,0x249D5A */
     XHL = (uint32_t)(XHL + XWA);                                 /* 213D85 ADD     XHL,XWA */
     B = rd8(XHL);                                                /* 213D87 LD      B,(XHL) */
-    push32(0x213D8D); sub_2060CB();                              /* 213D89 CALL    0x2060CB */
+    push32(0x213D8D); Random();                                  /* 213D89 CALL    0x2060CB */
     W = 0;                                                       /* 213D8D LD      W,0 */
     WA = divu8(WA, B);                                           /* 213D8F DIV     WA,B */
     B = W;                                                       /* 213D91 LD      B,W */
@@ -16665,7 +16665,7 @@ L_213CBF:
     XHL = 0x249DBA;                                              /* 213DC5 LD      XHL,0x249DBA */
     XHL = (uint32_t)(XHL + XWA);                                 /* 213DCA ADD     XHL,XWA */
     B = rd8(XHL);                                                /* 213DCC LD      B,(XHL) */
-    push32(0x213DD2); sub_2060CB();                              /* 213DCE CALL    0x2060CB */
+    push32(0x213DD2); Random();                                  /* 213DCE CALL    0x2060CB */
     W = 0;                                                       /* 213DD2 LD      W,0 */
     WA = divu8(WA, B);                                           /* 213DD4 DIV     WA,B */
     B = W;                                                       /* 213DD6 LD      B,W */
@@ -17009,7 +17009,7 @@ L_21404E:
     XHL = (uint32_t)(XHL + XWA);                                 /* 21405A ADD     XHL,XWA */
     A = rd8(XHL);                                                /* 21405C LD      A,(XHL) */
     L = A;                                                       /* 21405E LD      L,A */
-    push32(0x214064); sub_2082A0();                              /* 214060 CALL    0x2082A0 */
+    push32(0x214064); GetEnemyName();                            /* 214060 CALL    0x2082A0 */
 L_214064:
     XWA = pop32();                                               /* 214064 POP     XWA */
     XBC = pop32();                                               /* 214065 POP     XBC */
@@ -17106,11 +17106,11 @@ void sub_2140D5(void)
 L_21410B:
     HL = 0;                                                      /* 21410B LD      HL,0 */
 L_21410D:
-    push32(0x214111); sub_2077D1();                              /* 21410D CALL    0x2077D1 */
+    push32(0x214111); LoadEnemy();                               /* 21410D CALL    0x2077D1 */
     push32(0x214115); sub_216845();                              /* 214111 CALL    0x216845 */
     BC = 0;                                                      /* 214115 LD      BC,0 */
     DE = 0;                                                      /* 214117 LD      DE,0 */
-    push32(0x21411D); sub_207E9A();                              /* 214119 CALL    0x207E9A */
+    push32(0x21411D); LoadEnemyImage();                          /* 214119 CALL    0x207E9A */
     XWA = pop32();                                               /* 21411D POP     XWA */
     XBC = pop32();                                               /* 21411E POP     XBC */
     XDE = pop32();                                               /* 21411F POP     XDE */
@@ -17362,7 +17362,7 @@ void sub_2142EF(void)
     HL = 0x29;                                                   /* 21432C LD      HL,0x29 */
     push32(0x214332); sub_213222();                              /* 21432F CALR    0x213222 */
     HL = 0x15;                                                   /* 214332 LD      HL,0x15 */
-    push32(0x214338); sub_213249();                              /* 214335 CALR    0x213249 */
+    push32(0x214338); DrawArenaParticipants();                   /* 214335 CALR    0x213249 */
     A = rd8(XIZ + 0x15);                                         /* 214338 LD      A,(XIZ+0x15) */
     A = (uint8_t)(A - 2);                                        /* 21433B SUB     A,2 */
     WA = (uint16_t)(uint8_t)WA;                                  /* 21433E EXTZ    WA */
@@ -17415,7 +17415,7 @@ void sub_21437A(void)
     HL = 0x29;                                                   /* 2143AD LD      HL,0x29 */
     push32(0x2143B3); sub_213222();                              /* 2143B0 CALR    0x213222 */
     HL = 0x15;                                                   /* 2143B3 LD      HL,0x15 */
-    push32(0x2143B9); sub_213249();                              /* 2143B6 CALR    0x213249 */
+    push32(0x2143B9); DrawArenaParticipants();                   /* 2143B6 CALR    0x213249 */
     A = 0xC;                                                     /* 2143B9 LD      A,0xC */
     wr8(XIZ + 0x12, A);                                          /* 2143BB LD      (XIZ+0x12),A */
     A = 3;                                                       /* 2143BE LD      A,3 */
@@ -17479,17 +17479,17 @@ void sub_214401(void)
 L_214417:
     push32(0x21441A); sub_21320D();                              /* 214417 CALR    0x21320D */
     XWA = 4;                                                     /* 21441A LD      XWA,4 */
-    push32(0x214420); sub_207759();                              /* 21441C CALL    0x207759 */
+    push32(0x214420); PlayMusic();                               /* 21441C CALL    0x207759 */
     WA = 0x10;                                                   /* 214420 LD      WA,0x10 */
     BC = 0;                                                      /* 214423 LD      BC,0 */
     DE = 0;                                                      /* 214425 LD      DE,0 */
     HL = 0x2B;                                                   /* 214427 LD      HL,0x2B */
-    push32(0x21442E); sub_2103BA();                              /* 21442A CALL    0x2103BA */
+    push32(0x21442E); DrawPortrait();                            /* 21442A CALL    0x2103BA */
     WA = 0xCE;                                                   /* 21442E LD      WA,0xCE */
     BC = 0xA;                                                    /* 214431 LD      BC,0xA */
     DE = 0x20;                                                   /* 214434 LD      DE,0x20 */
     HL = 0x2A;                                                   /* 214437 LD      HL,0x2A */
-    push32(0x21443E); sub_2103BA();                              /* 21443A CALL    0x2103BA */
+    push32(0x21443E); DrawPortrait();                            /* 21443A CALL    0x2103BA */
     A = 0;                                                       /* 21443E LD      A,0 */
     wr8(XIZ + 0x1E, A);                                          /* 214440 LD      (XIZ+0x1E),A */
     A = 0;                                                       /* 214443 LD      A,0 */
@@ -17545,7 +17545,7 @@ L_2144A3:
     A = 1;                                                       /* 2144AB LD      A,1 */
     wr8(XIZ + 0x1E, A);                                          /* 2144AD LD      (XIZ+0x1E),A */
     XWA = 0;                                                     /* 2144B0 LD      XWA,0 */
-    push32(0x2144B6); sub_207759();                              /* 2144B2 CALL    0x207759 */
+    push32(0x2144B6); PlayMusic();                               /* 2144B2 CALL    0x207759 */
     WA = 0x84;                                                   /* 2144B6 LD      WA,0x84 */
     push32(0x2144BD); sub_20776A();                              /* 2144B9 CALL    0x20776A */
     goto L_2144D7;                                               /* 2144BD JR      0x2144D7 */
@@ -17599,7 +17599,7 @@ void sub_2144F7(void)
     wr8(0x584B, A);                                              /* 214515 LD      (0x584B),A */
     wr8(0x5853, A);                                              /* 214519 LD      (0x5853),A */
     XWA = 4;                                                     /* 21451D LD      XWA,4 */
-    push32(0x214523); sub_207759();                              /* 21451F CALL    0x207759 */
+    push32(0x214523); PlayMusic();                               /* 21451F CALL    0x207759 */
     A = 9;                                                       /* 214523 LD      A,9 */
     wr8(XIZ + 0xE, A);                                           /* 214525 LD      (XIZ+0xE),A */
     XWA = pop32();                                               /* 214528 POP     XWA */
@@ -17622,7 +17622,7 @@ void sub_21452D(void)
     wr8(XIZ + 0x12, A);                                          /* 21453E LD      (XIZ+0x12),A */
     push32(XWA);                                                 /* 214541 PUSH    XWA */
     XWA = 0;                                                     /* 214542 LD      XWA,0 */
-    push32(0x214548); sub_207759();                              /* 214544 CALL    0x207759 */
+    push32(0x214548); PlayMusic();                               /* 214544 CALL    0x207759 */
     WA = 0x20;                                                   /* 214548 LD      WA,0x20 */
     push32(0x21454F); sub_20776A();                              /* 21454B CALL    0x20776A */
     XWA = pop32();                                               /* 21454F POP     XWA */
@@ -17646,15 +17646,15 @@ void sub_21457E(void)
     A = 0;                                                       /* 214582 LD      A,0 */
     C = 6;                                                       /* 214584 LD      C,6 */
     XHL = 0x2C8772;                                              /* 214586 LD      XHL,0x2C8772 */
-    push32(0x21458F); sub_206D9E();                              /* 21458B CALL    0x206D9E */
+    push32(0x21458F); LoadPalettes();                            /* 21458B CALL    0x206D9E */
     A = 0x10;                                                    /* 21458F LD      A,0x10 */
     C = 6;                                                       /* 214591 LD      C,6 */
     XHL = 0x2C8772;                                              /* 214593 LD      XHL,0x2C8772 */
-    push32(0x21459C); sub_206D9E();                              /* 214598 CALL    0x206D9E */
+    push32(0x21459C); LoadPalettes();                            /* 214598 CALL    0x206D9E */
     A = 0x20;                                                    /* 21459C LD      A,0x20 */
     C = 6;                                                       /* 21459E LD      C,6 */
     XHL = 0x2C8772;                                              /* 2145A0 LD      XHL,0x2C8772 */
-    push32(0x2145A9); sub_206D9E();                              /* 2145A5 CALL    0x206D9E */
+    push32(0x2145A9); LoadPalettes();                            /* 2145A5 CALL    0x206D9E */
     XWA = pop32();                                               /* 2145A9 POP     XWA */
     XBC = pop32();                                               /* 2145AA POP     XBC */
     XDE = pop32();                                               /* 2145AB POP     XDE */
@@ -17671,15 +17671,15 @@ void sub_2145AE(void)
     A = 0;                                                       /* 2145B2 LD      A,0 */
     C = 2;                                                       /* 2145B4 LD      C,2 */
     XHL = 0x2C87A2;                                              /* 2145B6 LD      XHL,0x2C87A2 */
-    push32(0x2145BF); sub_206DCD();                              /* 2145BB CALL    0x206DCD */
+    push32(0x2145BF); LoadMonoPalettes();                        /* 2145BB CALL    0x206DCD */
     A = 2;                                                       /* 2145BF LD      A,2 */
     C = 2;                                                       /* 2145C1 LD      C,2 */
     XHL = 0x2C87A2;                                              /* 2145C3 LD      XHL,0x2C87A2 */
-    push32(0x2145CC); sub_206DCD();                              /* 2145C8 CALL    0x206DCD */
+    push32(0x2145CC); LoadMonoPalettes();                        /* 2145C8 CALL    0x206DCD */
     A = 4;                                                       /* 2145CC LD      A,4 */
     C = 2;                                                       /* 2145CE LD      C,2 */
     XHL = 0x2C87A2;                                              /* 2145D0 LD      XHL,0x2C87A2 */
-    push32(0x2145D9); sub_206DCD();                              /* 2145D5 CALL    0x206DCD */
+    push32(0x2145D9); LoadMonoPalettes();                        /* 2145D5 CALL    0x206DCD */
     XWA = pop32();                                               /* 2145D9 POP     XWA */
     XBC = pop32();                                               /* 2145DA POP     XBC */
     XDE = pop32();                                               /* 2145DB POP     XDE */
@@ -17701,7 +17701,7 @@ void sub_2145DE(void)
     wr8(0x5855, A);                                              /* 2145F0 LD      (0x5855),A */
     XHL = 0x2C8A0A;                                              /* 2145F4 LD      XHL,0x2C8A0A */
     push32(0x2145FD); sub_216845();                              /* 2145F9 CALL    0x216845 */
-    push32(0x214601); sub_207226();                              /* 2145FD CALL    0x207226 */
+    push32(0x214601); LoadCompressedTiles();                     /* 2145FD CALL    0x207226 */
     A = rd8(0x5BC6);                                             /* 214601 LD      A,(0x5BC6) */
     /* CP A,0 */                                                 /* 214605 CP      A,0 */
     if ((uint8_t)(A) == (uint8_t)(0)) goto L_21460E;             /* 214607 JR      Z,0x21460E */
@@ -18055,7 +18055,7 @@ L_21488F:
     /* CP A,0x98 */                                              /* 2148A0 CP      A,0x98 */
     if ((uint8_t)(A) < (uint8_t)(0x98)) goto L_2148BF;           /* 2148A3 JR      C,0x2148BF */
     XWA = 0xB;                                                   /* 2148A5 LD      XWA,0xB */
-    push32(0x2148AE); sub_207759();                              /* 2148AA CALL    0x207759 */
+    push32(0x2148AE); PlayMusic();                               /* 2148AA CALL    0x207759 */
     WA = 0xA0;                                                   /* 2148AE LD      WA,0xA0 */
     push32(0x2148B5); sub_20776A();                              /* 2148B1 CALL    0x20776A */
     A = 0;                                                       /* 2148B5 LD      A,0 */
@@ -18144,7 +18144,7 @@ L_214956:
     W = (uint8_t)(W - 2);                                        /* 214959 SUB     W,2 */
     W = (uint8_t)(W + 1);                                        /* 21495C INC     1,W */
     wr8(0x5DDB, W);                                              /* 21495E LD      (0x5DDB),W */
-    push32(0x214966); sub_2077D1();                              /* 214962 CALL    0x2077D1 */
+    push32(0x214966); LoadEnemy();                               /* 214962 CALL    0x2077D1 */
     wr8(0x5DDA, 0);                                              /* 214966 LDB     (0x5DDA),0 */
     push32(0x21496F); sub_207C00();                              /* 21496B CALL    0x207C00 */
     A = 6;                                                       /* 21496F LD      A,6 */
@@ -18204,7 +18204,7 @@ L_2149B9:
     A = rd8(XIZ + 0x15);                                         /* 2149BD LD      A,(XIZ+0x15) */
     /* CP A,8 */                                                 /* 2149C0 CP      A,8 */
     if ((uint8_t)(A) != (uint8_t)(8)) goto L_2149D2;             /* 2149C3 JR      NZ,0x2149D2 */
-    push32(0x2149C9); sub_216ABC();                              /* 2149C5 CALL    0x216ABC */
+    push32(0x2149C9); GetStageArenaRank();                       /* 2149C5 CALL    0x216ABC */
     /* CP A,7 */                                                 /* 2149C9 CP      A,7 */
     if ((uint8_t)(A) != (uint8_t)(7)) goto L_2149D2;             /* 2149CB JR      NZ,0x2149D2 */
     A = 1;                                                       /* 2149CD LD      A,1 */
@@ -18229,7 +18229,7 @@ void sub_2149DC(void)
     A = rd8(XIZ + 0x15);                                         /* 2149E0 LD      A,(XIZ+0x15) */
     /* CP A,8 */                                                 /* 2149E3 CP      A,8 */
     if ((uint8_t)(A) != (uint8_t)(8)) goto L_214A1F;             /* 2149E6 JR      NZ,0x214A1F */
-    push32(0x2149EC); sub_216ABC();                              /* 2149E8 CALL    0x216ABC */
+    push32(0x2149EC); GetStageArenaRank();                       /* 2149E8 CALL    0x216ABC */
     /* CP A,7 */                                                 /* 2149EC CP      A,7 */
     if ((uint8_t)(A) != (uint8_t)(7)) goto L_214A1F;             /* 2149EE JR      NZ,0x214A1F */
     push32(0x2149F4); sub_2167CF();                              /* 2149F0 CALL    0x2167CF */
@@ -18238,12 +18238,12 @@ void sub_2149DC(void)
     push32(0x2149FF); sub_2076F3();                              /* 2149FB CALL    0x2076F3 */
     push32(0x214A03); sub_2166C9();                              /* 2149FF CALL    0x2166C9 */
     HL = 0x3A;                                                   /* 214A03 LD      HL,0x3A */
-    push32(0x214A09); sub_213249();                              /* 214A06 CALR    0x213249 */
+    push32(0x214A09); DrawArenaParticipants();                   /* 214A06 CALR    0x213249 */
     A = 0;                                                       /* 214A09 LD      A,0 */
     wr8(XIZ + 0x13, A);                                          /* 214A0B LD      (XIZ+0x13),A */
     push32(XWA);                                                 /* 214A0E PUSH    XWA */
     XWA = 0;                                                     /* 214A0F LD      XWA,0 */
-    push32(0x214A15); sub_207759();                              /* 214A11 CALL    0x207759 */
+    push32(0x214A15); PlayMusic();                               /* 214A11 CALL    0x207759 */
     WA = 0x20;                                                   /* 214A15 LD      WA,0x20 */
     push32(0x214A1C); sub_20776A();                              /* 214A18 CALL    0x20776A */
     XWA = pop32();                                               /* 214A1C POP     XWA */
@@ -18274,7 +18274,7 @@ void sub_214A33(void)
     A = rd8(XIZ + 0x15);                                         /* 214A3E LD      A,(XIZ+0x15) */
     /* CP A,8 */                                                 /* 214A41 CP      A,8 */
     if ((uint8_t)(A) != (uint8_t)(8)) goto L_214A71;             /* 214A44 JR      NZ,0x214A71 */
-    push32(0x214A4A); sub_216ABC();                              /* 214A46 CALL    0x216ABC */
+    push32(0x214A4A); GetStageArenaRank();                       /* 214A46 CALL    0x216ABC */
     /* CP A,7 */                                                 /* 214A4A CP      A,7 */
     if ((uint8_t)(A) != (uint8_t)(7)) goto L_214A71;             /* 214A4C JR      NZ,0x214A71 */
     push32(0x214A52); sub_2166B3();                              /* 214A4E CALL    0x2166B3 */
@@ -18283,7 +18283,7 @@ void sub_214A33(void)
     wr8(XIZ + 0x12, A);                                          /* 214A58 LD      (XIZ+0x12),A */
     push32(XWA);                                                 /* 214A5B PUSH    XWA */
     XWA = 0;                                                     /* 214A5C LD      XWA,0 */
-    push32(0x214A62); sub_207759();                              /* 214A5E CALL    0x207759 */
+    push32(0x214A62); PlayMusic();                               /* 214A5E CALL    0x207759 */
     WA = 0x20;                                                   /* 214A62 LD      WA,0x20 */
     push32(0x214A69); sub_20776A();                              /* 214A65 CALL    0x20776A */
     XWA = pop32();                                               /* 214A69 POP     XWA */
@@ -18536,11 +18536,11 @@ L_214BEB:
 
 void fn_214C0E(void)
 {
-    push32(0x214C12); sub_216AA2();                              /* 214C0E CALL    0x216AA2 */
+    push32(0x214C12); GetStoryStage();                           /* 214C0E CALL    0x216AA2 */
     /* CP A,0 */                                                 /* 214C12 CP      A,0 */
     if ((uint8_t)(A) != (uint8_t)(0)) goto L_214C30;             /* 214C14 JR      NZ,0x214C30 */
     HL = 0x4E;                                                   /* 214C16 LD      HL,0x4E */
-    push32(0x214C1D); sub_20615B();                              /* 214C19 CALL    0x20615B */
+    push32(0x214C1D); CheckEventFlag();                          /* 214C19 CALL    0x20615B */
     /* CP L,1 */                                                 /* 214C1D CP      L,1 */
     if ((uint8_t)(L) == (uint8_t)(1)) goto L_214C30;             /* 214C1F JR      Z,0x214C30 */
     push32(0x214C25); sub_206803();                              /* 214C21 CALL    0x206803 */
@@ -18549,11 +18549,11 @@ void fn_214C0E(void)
     wr8(XIZ + 0x15, A);                                          /* 214C2B LD      (XIZ+0x15),A */
     goto L_214C62;                                               /* 214C2E JR      0x214C62 */
 L_214C30:
-    push32(0x214C34); sub_216AA2();                              /* 214C30 CALL    0x216AA2 */
+    push32(0x214C34); GetStoryStage();                           /* 214C30 CALL    0x216AA2 */
     /* CP A,0xA */                                               /* 214C34 CP      A,0xA */
     if ((uint8_t)(A) != (uint8_t)(0xA)) goto L_214C53;           /* 214C37 JR      NZ,0x214C53 */
     HL = 0x4E;                                                   /* 214C39 LD      HL,0x4E */
-    push32(0x214C40); sub_20615B();                              /* 214C3C CALL    0x20615B */
+    push32(0x214C40); CheckEventFlag();                          /* 214C3C CALL    0x20615B */
     /* CP L,1 */                                                 /* 214C40 CP      L,1 */
     if ((uint8_t)(L) == (uint8_t)(1)) goto L_214C53;             /* 214C42 JR      Z,0x214C53 */
     push32(0x214C48); sub_206803();                              /* 214C44 CALL    0x206803 */
@@ -18667,7 +18667,7 @@ void sub_214D23(void)
     push32(0x214D44); sub_216845();                              /* 214D40 CALL    0x216845 */
     BC = 0;                                                      /* 214D44 LD      BC,0 */
     DE = 0;                                                      /* 214D46 LD      DE,0 */
-    push32(0x214D4C); sub_2103BA();                              /* 214D48 CALL    0x2103BA */
+    push32(0x214D4C); DrawPortrait();                            /* 214D48 CALL    0x2103BA */
     XWA = pop32();                                               /* 214D4C POP     XWA */
     XWA = (uint32_t)(XWA << 2);                                  /* 214D4D SLL     2,XWA */
     XHL = 0x249EAB;                                              /* 214D50 LD      XHL,0x249EAB */
@@ -18750,7 +18750,7 @@ L_214DC6:
     XSP += 4; return;                                            /* 214DC9 RET */
 }
 
-void sub_214DCA(void)
+void SquarePlaceMenu(void)
 {
     push32(XHL);                                                 /* 214DCA PUSH    XHL */
     push32(XDE);                                                 /* 214DCB PUSH    XDE */
@@ -18776,7 +18776,7 @@ void sub_214DCA(void)
     push32(0x214E0E); sub_2075CC();                              /* 214E0A CALL    0x2075CC */
     XHL = 0x249ED6;                                              /* 214E0E LD      XHL,0x249ED6 */
     A = 1;                                                       /* 214E13 LD      A,1 */
-    push32(0x214E19); sub_20748A();                              /* 214E15 CALL    0x20748A */
+    push32(0x214E19); GetTextBox();                              /* 214E15 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 214E19 LD      (XWA+8),XHL */
     A = 0;                                                       /* 214E1C LD      A,0 */
     wr8(XIZ + 0x2D, A);                                          /* 214E1E LD      (XIZ+0x2D),A */
@@ -18795,7 +18795,7 @@ void sub_214DCA(void)
 void sub_214E33(void)
 {
     push32(0x214E37); sub_2167CF();                              /* 214E33 CALL    0x2167CF */
-    push32(0x214E3A); sub_214DCA();                              /* 214E37 CALR    0x214DCA */
+    push32(0x214E3A); SquarePlaceMenu();                         /* 214E37 CALR    0x214DCA */
     A = 0;                                                       /* 214E3A LD      A,0 */
     wr8(XIZ + 0x10, A);                                          /* 214E3C LD      (XIZ+0x10),A */
     push32(0x214E43); sub_2167E4();                              /* 214E3F CALL    0x2167E4 */
@@ -18803,7 +18803,7 @@ void sub_214E33(void)
     push32(0x214E4B); sub_216FB1();                              /* 214E47 CALL    0x216FB1 */
     push32(0x214E4F); sub_216F6B();                              /* 214E4B CALL    0x216F6B */
     XWA = 1;                                                     /* 214E4F LD      XWA,1 */
-    push32(0x214E55); sub_207759();                              /* 214E51 CALL    0x207759 */
+    push32(0x214E55); PlayMusic();                               /* 214E51 CALL    0x207759 */
     WA = 0x21;                                                   /* 214E55 LD      WA,0x21 */
     push32(0x214E5C); sub_20776A();                              /* 214E58 CALL    0x20776A */
     XSP += 4; return;                                            /* 214E5C RET */
@@ -18954,7 +18954,7 @@ L_214F4F:
     XHL = 0x24A2F4;                                              /* 214F73 LD      XHL,0x24A2F4 */
     XHL = (uint32_t)(XHL + XWA);                                 /* 214F78 ADD     XHL,XWA */
     XHL = rd32(XHL);                                             /* 214F7A LD      XHL,(XHL) */
-    push32(0x214F80); sub_216AA2();                              /* 214F7C CALL    0x216AA2 */
+    push32(0x214F80); GetStoryStage();                           /* 214F7C CALL    0x216AA2 */
     WA = (uint16_t)(uint8_t)WA;                                  /* 214F80 EXTZ    WA */
     XWA = (uint32_t)(uint16_t)XWA;                               /* 214F82 EXTZ    XWA */
     XWA = mulu16(XWA, BC);                                       /* 214F84 MUL     XWA,BC */
@@ -19025,7 +19025,7 @@ L_214FFE:
     push32(0x21500C); sub_2075CC();                              /* 215008 CALL    0x2075CC */
     XHL = 0x249F06;                                              /* 21500C LD      XHL,0x249F06 */
     A = 1;                                                       /* 215011 LD      A,1 */
-    push32(0x215017); sub_20748A();                              /* 215013 CALL    0x20748A */
+    push32(0x215017); GetTextBox();                              /* 215013 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 215017 LD      (XWA+8),XHL */
     A = 0;                                                       /* 21501A LD      A,0 */
     wr8(XIZ + 0x2D, A);                                          /* 21501C LD      (XIZ+0x2D),A */
@@ -19174,7 +19174,7 @@ void sub_215115(void)
     wr8(XIZ + 0x10, A);                                          /* 21512A LD      (XIZ+0x10),A */
     A = 0;                                                       /* 21512D LD      A,0 */
     wr8(XIZ + 0x15, A);                                          /* 21512F LD      (XIZ+0x15),A */
-    push32(0x215135); sub_214DCA();                              /* 215132 CALR    0x214DCA */
+    push32(0x215135); SquarePlaceMenu();                         /* 215132 CALR    0x214DCA */
     goto L_21515C;                                               /* 215135 JR      0x21515C */
 L_215137:
     push32(0x21513A); sub_214D82();                              /* 215137 CALR    0x214D82 */
@@ -19245,7 +19245,7 @@ L_215193:
     goto L_2151AB;                                               /* 2151A9 JR      0x2151AB */
 L_2151AB:
     push32(0x2151AF); sub_216849();                              /* 2151AB CALL    0x216849 */
-    push32(0x2151B3); sub_210380();                              /* 2151AF CALL    0x210380 */
+    push32(0x2151B3); DrawPortraitAt();                          /* 2151AF CALL    0x210380 */
 L_2151B3:
     XWA = pop32();                                               /* 2151B3 POP     XWA */
     XBC = pop32();                                               /* 2151B4 POP     XBC */
@@ -19302,7 +19302,7 @@ void sub_2151D8(void)
     A = E;                                                       /* 215207 LD      A,E */
     WA = (uint16_t)(uint8_t)WA;                                  /* 215209 EXTZ    WA */
     HL = (uint16_t)(HL + WA);                                    /* 21520B ADD     HL,WA */
-    push32(0x215211); sub_20615B();                              /* 21520D CALL    0x20615B */
+    push32(0x215211); CheckEventFlag();                          /* 21520D CALL    0x20615B */
     /* CP L,1 */                                                 /* 215211 CP      L,1 */
     if ((uint8_t)(L) == (uint8_t)(1)) goto L_21521A;             /* 215213 JR      Z,0x21521A */
     W = D;                                                       /* 215215 LD      W,D */
@@ -19327,7 +19327,7 @@ L_215231:
     /* CP A,0 */                                                 /* 215243 CP      A,0 */
     if ((uint8_t)(A) == (uint8_t)(0)) goto L_2152E2;             /* 215245 JRL     Z,0x2152E2 */
     HL = 0x14;                                                   /* 215248 LD      HL,0x14 */
-    push32(0x21524F); sub_20615B();                              /* 21524B CALL    0x20615B */
+    push32(0x21524F); CheckEventFlag();                          /* 21524B CALL    0x20615B */
     /* CP L,0 */                                                 /* 21524F CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_21525E;             /* 215251 JR      Z,0x21525E */
     push32(0x215257); sub_216B19();                              /* 215253 CALL    0x216B19 */
@@ -19339,7 +19339,7 @@ L_21525E:
     goto L_215356;                                               /* 215260 JRL     0x215356 */
 L_215263:
     HL = 0x20;                                                   /* 215263 LD      HL,0x20 */
-    push32(0x21526A); sub_20615B();                              /* 215266 CALL    0x20615B */
+    push32(0x21526A); CheckEventFlag();                          /* 215266 CALL    0x20615B */
     /* CP L,1 */                                                 /* 21526A CP      L,1 */
     if ((uint8_t)(L) == (uint8_t)(1)) goto L_215278;             /* 21526C JR      Z,0x215278 */
     A = 0;                                                       /* 21526E LD      A,0 */
@@ -19358,7 +19358,7 @@ L_215282:
     W = D;                                                       /* 215289 LD      W,D */
     /* CP W,0x22 */                                              /* 21528B CP      W,0x22 */
     if ((uint8_t)(W) < (uint8_t)(0x22)) goto L_215356;           /* 21528E JRL     C,0x215356 */
-    push32(0x215294); sub_215F1E();                              /* 215291 CALR    0x215F1E */
+    push32(0x215294); HelmutSkillOffer();                        /* 215291 CALR    0x215F1E */
     /* CP A,0x14 */                                              /* 215294 CP      A,0x14 */
     if ((uint8_t)(A) == (uint8_t)(0x14)) goto L_2152E2;          /* 215297 JR      Z,0x2152E2 */
     wr8(XIZ + 0x29, A);                                          /* 215299 LD      (XIZ+0x29),A */
@@ -19368,18 +19368,18 @@ L_2152A1:
     W = D;                                                       /* 2152A1 LD      W,D */
     /* CP W,0x1B */                                              /* 2152A3 CP      W,0x1B */
     if ((uint8_t)(W) >= (uint8_t)(0x1B)) goto L_215356;          /* 2152A6 JRL     NC,0x215356 */
-    push32(0x2152AD); sub_216ABC();                              /* 2152A9 CALL    0x216ABC */
+    push32(0x2152AD); GetStageArenaRank();                       /* 2152A9 CALL    0x216ABC */
     /* CP A,3 */                                                 /* 2152AD CP      A,3 */
     if ((uint8_t)(A) < (uint8_t)(3)) goto L_2152E2;              /* 2152AF JR      C,0x2152E2 */
     HL = 0x15;                                                   /* 2152B1 LD      HL,0x15 */
-    push32(0x2152B8); sub_20615B();                              /* 2152B4 CALL    0x20615B */
+    push32(0x2152B8); CheckEventFlag();                          /* 2152B4 CALL    0x20615B */
     /* CP L,0 */                                                 /* 2152B8 CP      L,0 */
     if ((uint8_t)(L) != (uint8_t)(0)) goto L_2152C1;             /* 2152BA JR      NZ,0x2152C1 */
     W = 0x1B;                                                    /* 2152BC LD      W,0x1B */
     goto L_215356;                                               /* 2152BE JRL     0x215356 */
 L_2152C1:
     push8(W);                                                    /* 2152C1 PUSH    W */
-    push32(0x2152C7); sub_2060CB();                              /* 2152C3 CALL    0x2060CB */
+    push32(0x2152C7); Random();                                  /* 2152C3 CALL    0x2060CB */
     W = 0;                                                       /* 2152C7 LD      W,0 */
     WA = divu8(WA, 0x64);                                        /* 2152C9 DIV     WA,0x64 */
     A = W;                                                       /* 2152CC LD      A,W */
@@ -19399,17 +19399,17 @@ L_2152E2:
     A = E;                                                       /* 2152E7 LD      A,E */
     WA = (uint16_t)(uint8_t)WA;                                  /* 2152E9 EXTZ    WA */
     HL = (uint16_t)(HL + WA);                                    /* 2152EB ADD     HL,WA */
-    push32(0x2152F1); sub_20615B();                              /* 2152ED CALL    0x20615B */
+    push32(0x2152F1); CheckEventFlag();                          /* 2152ED CALL    0x20615B */
     /* CP L,1 */                                                 /* 2152F1 CP      L,1 */
     if ((uint8_t)(L) != (uint8_t)(1)) goto L_2152F7;             /* 2152F3 JR      NZ,0x2152F7 */
     D = (uint8_t)(D + 1);                                        /* 2152F5 INC     1,D */
 L_2152F7:
     HL = 0xA;                                                    /* 2152F7 LD      HL,0xA */
-    push32(0x2152FE); sub_20615B();                              /* 2152FA CALL    0x20615B */
+    push32(0x2152FE); CheckEventFlag();                          /* 2152FA CALL    0x20615B */
     /* CP L,1 */                                                 /* 2152FE CP      L,1 */
     if ((uint8_t)(L) == (uint8_t)(1)) goto L_21530F;             /* 215300 JR      Z,0x21530F */
     HL = 0xB;                                                    /* 215302 LD      HL,0xB */
-    push32(0x215309); sub_20615B();                              /* 215305 CALL    0x20615B */
+    push32(0x215309); CheckEventFlag();                          /* 215305 CALL    0x20615B */
     /* CP L,1 */                                                 /* 215309 CP      L,1 */
     if ((uint8_t)(L) == (uint8_t)(1)) goto L_21530F;             /* 21530B JR      Z,0x21530F */
     goto L_215311;                                               /* 21530D JR      0x215311 */
@@ -19476,7 +19476,7 @@ void sub_21535A(void)
     W = 0xFF;                                                    /* 215374 LD      W,0xFF */
     goto L_2154F7;                                               /* 215376 JRL     0x2154F7 */
 L_215379:
-    push32(0x21537D); sub_216AA2();                              /* 215379 CALL    0x216AA2 */
+    push32(0x21537D); GetStoryStage();                           /* 215379 CALL    0x216AA2 */
     /* CP A,0xA */                                               /* 21537D CP      A,0xA */
     if ((uint8_t)(A) == (uint8_t)(0xA)) goto L_21549F;           /* 215380 JRL     Z,0x21549F */
     /* CP A,8 */                                                 /* 215383 CP      A,8 */
@@ -19487,39 +19487,39 @@ L_215379:
     goto L_2154F7;                                               /* 21538E JRL     0x2154F7 */
 L_215391:
     HL = 0x4E;                                                   /* 215391 LD      HL,0x4E */
-    push32(0x215398); sub_20615B();                              /* 215394 CALL    0x20615B */
+    push32(0x215398); CheckEventFlag();                          /* 215394 CALL    0x20615B */
     /* CP L,0 */                                                 /* 215398 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153FE;             /* 21539A JR      Z,0x2153FE */
     HL = 0x40;                                                   /* 21539C LD      HL,0x40 */
-    push32(0x2153A3); sub_20615B();                              /* 21539F CALL    0x20615B */
+    push32(0x2153A3); CheckEventFlag();                          /* 21539F CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153A3 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153A5 JR      Z,0x2153F9 */
     HL = 0x41;                                                   /* 2153A7 LD      HL,0x41 */
-    push32(0x2153AE); sub_20615B();                              /* 2153AA CALL    0x20615B */
+    push32(0x2153AE); CheckEventFlag();                          /* 2153AA CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153AE CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153B0 JR      Z,0x2153F9 */
     HL = 0x43;                                                   /* 2153B2 LD      HL,0x43 */
-    push32(0x2153B9); sub_20615B();                              /* 2153B5 CALL    0x20615B */
+    push32(0x2153B9); CheckEventFlag();                          /* 2153B5 CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153B9 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153BB JR      Z,0x2153F9 */
     HL = 0x45;                                                   /* 2153BD LD      HL,0x45 */
-    push32(0x2153C4); sub_20615B();                              /* 2153C0 CALL    0x20615B */
+    push32(0x2153C4); CheckEventFlag();                          /* 2153C0 CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153C4 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153C6 JR      Z,0x2153F9 */
     HL = 0x47;                                                   /* 2153C8 LD      HL,0x47 */
-    push32(0x2153CF); sub_20615B();                              /* 2153CB CALL    0x20615B */
+    push32(0x2153CF); CheckEventFlag();                          /* 2153CB CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153CF CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153D1 JR      Z,0x2153F9 */
     HL = 0x48;                                                   /* 2153D3 LD      HL,0x48 */
-    push32(0x2153DA); sub_20615B();                              /* 2153D6 CALL    0x20615B */
+    push32(0x2153DA); CheckEventFlag();                          /* 2153D6 CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153DA CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153DC JR      Z,0x2153F9 */
     HL = 0x4A;                                                   /* 2153DE LD      HL,0x4A */
-    push32(0x2153E5); sub_20615B();                              /* 2153E1 CALL    0x20615B */
+    push32(0x2153E5); CheckEventFlag();                          /* 2153E1 CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153E5 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153E7 JR      Z,0x2153F9 */
     HL = 0x4B;                                                   /* 2153E9 LD      HL,0x4B */
-    push32(0x2153F0); sub_20615B();                              /* 2153EC CALL    0x20615B */
+    push32(0x2153F0); CheckEventFlag();                          /* 2153EC CALL    0x20615B */
     /* CP L,0 */                                                 /* 2153F0 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2153F9;             /* 2153F2 JR      Z,0x2153F9 */
     W = 2;                                                       /* 2153F4 LD      W,2 */
@@ -19532,55 +19532,55 @@ L_2153FE:
     goto L_2154F7;                                               /* 215400 JRL     0x2154F7 */
 L_215403:
     HL = 0x4E;                                                   /* 215403 LD      HL,0x4E */
-    push32(0x21540A); sub_20615B();                              /* 215406 CALL    0x20615B */
+    push32(0x21540A); CheckEventFlag();                          /* 215406 CALL    0x20615B */
     /* CP L,0 */                                                 /* 21540A CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_21549B;             /* 21540C JRL     Z,0x21549B */
     HL = 0x40;                                                   /* 21540F LD      HL,0x40 */
-    push32(0x215416); sub_20615B();                              /* 215412 CALL    0x20615B */
+    push32(0x215416); CheckEventFlag();                          /* 215412 CALL    0x20615B */
     /* CP L,0 */                                                 /* 215416 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215418 JR      Z,0x215497 */
     HL = 0x42;                                                   /* 21541A LD      HL,0x42 */
-    push32(0x215421); sub_20615B();                              /* 21541D CALL    0x20615B */
+    push32(0x215421); CheckEventFlag();                          /* 21541D CALL    0x20615B */
     /* CP L,0 */                                                 /* 215421 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215423 JR      Z,0x215497 */
     HL = 0x43;                                                   /* 215425 LD      HL,0x43 */
-    push32(0x21542C); sub_20615B();                              /* 215428 CALL    0x20615B */
+    push32(0x21542C); CheckEventFlag();                          /* 215428 CALL    0x20615B */
     /* CP L,0 */                                                 /* 21542C CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 21542E JR      Z,0x215497 */
     HL = 0x45;                                                   /* 215430 LD      HL,0x45 */
-    push32(0x215437); sub_20615B();                              /* 215433 CALL    0x20615B */
+    push32(0x215437); CheckEventFlag();                          /* 215433 CALL    0x20615B */
     /* CP L,0 */                                                 /* 215437 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215439 JR      Z,0x215497 */
     HL = 0x46;                                                   /* 21543B LD      HL,0x46 */
-    push32(0x215442); sub_20615B();                              /* 21543E CALL    0x20615B */
+    push32(0x215442); CheckEventFlag();                          /* 21543E CALL    0x20615B */
     /* CP L,0 */                                                 /* 215442 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215444 JR      Z,0x215497 */
     HL = 0x47;                                                   /* 215446 LD      HL,0x47 */
-    push32(0x21544D); sub_20615B();                              /* 215449 CALL    0x20615B */
+    push32(0x21544D); CheckEventFlag();                          /* 215449 CALL    0x20615B */
     /* CP L,0 */                                                 /* 21544D CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 21544F JR      Z,0x215497 */
     HL = 0x48;                                                   /* 215451 LD      HL,0x48 */
-    push32(0x215458); sub_20615B();                              /* 215454 CALL    0x20615B */
+    push32(0x215458); CheckEventFlag();                          /* 215454 CALL    0x20615B */
     /* CP L,0 */                                                 /* 215458 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 21545A JR      Z,0x215497 */
     HL = 0x49;                                                   /* 21545C LD      HL,0x49 */
-    push32(0x215463); sub_20615B();                              /* 21545F CALL    0x20615B */
+    push32(0x215463); CheckEventFlag();                          /* 21545F CALL    0x20615B */
     /* CP L,0 */                                                 /* 215463 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215465 JR      Z,0x215497 */
     HL = 0x4A;                                                   /* 215467 LD      HL,0x4A */
-    push32(0x21546E); sub_20615B();                              /* 21546A CALL    0x20615B */
+    push32(0x21546E); CheckEventFlag();                          /* 21546A CALL    0x20615B */
     /* CP L,0 */                                                 /* 21546E CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215470 JR      Z,0x215497 */
     HL = 0x4B;                                                   /* 215472 LD      HL,0x4B */
-    push32(0x215479); sub_20615B();                              /* 215475 CALL    0x20615B */
+    push32(0x215479); CheckEventFlag();                          /* 215475 CALL    0x20615B */
     /* CP L,0 */                                                 /* 215479 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 21547B JR      Z,0x215497 */
     HL = 0x4C;                                                   /* 21547D LD      HL,0x4C */
-    push32(0x215484); sub_20615B();                              /* 215480 CALL    0x20615B */
+    push32(0x215484); CheckEventFlag();                          /* 215480 CALL    0x20615B */
     /* CP L,0 */                                                 /* 215484 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215486 JR      Z,0x215497 */
     HL = 0x4D;                                                   /* 215488 LD      HL,0x4D */
-    push32(0x21548F); sub_20615B();                              /* 21548B CALL    0x20615B */
+    push32(0x21548F); CheckEventFlag();                          /* 21548B CALL    0x20615B */
     /* CP L,0 */                                                 /* 21548F CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_215497;             /* 215491 JR      Z,0x215497 */
     W = 5;                                                       /* 215493 LD      W,5 */
@@ -19593,7 +19593,7 @@ L_21549B:
     goto L_2154F7;                                               /* 21549D JR      0x2154F7 */
 L_21549F:
     HL = 0x4E;                                                   /* 21549F LD      HL,0x4E */
-    push32(0x2154A6); sub_20615B();                              /* 2154A2 CALL    0x20615B */
+    push32(0x2154A6); CheckEventFlag();                          /* 2154A2 CALL    0x20615B */
     /* CP L,0 */                                                 /* 2154A6 CP      L,0 */
     if ((uint8_t)(L) == (uint8_t)(0)) goto L_2154AE;             /* 2154A8 JR      Z,0x2154AE */
     W = 0xFF;                                                    /* 2154AA LD      W,0xFF */
@@ -19603,10 +19603,10 @@ L_2154AE:
     goto L_2154F7;                                               /* 2154B0 JR      0x2154F7 */
 L_2154B2:
     HL = 0x43;                                                   /* 2154B2 LD      HL,0x43 */
-    push32(0x2154B9); sub_20615B();                              /* 2154B5 CALL    0x20615B */
+    push32(0x2154B9); CheckEventFlag();                          /* 2154B5 CALL    0x20615B */
     /* CP L,1 */                                                 /* 2154B9 CP      L,1 */
     if ((uint8_t)(L) == (uint8_t)(1)) goto L_2154D6;             /* 2154BB JR      Z,0x2154D6 */
-    push32(0x2154C1); sub_216AA2();                              /* 2154BD CALL    0x216AA2 */
+    push32(0x2154C1); GetStoryStage();                           /* 2154BD CALL    0x216AA2 */
     /* CP A,8 */                                                 /* 2154C1 CP      A,8 */
     if ((uint8_t)(A) == (uint8_t)(8)) goto L_2154D2;             /* 2154C4 JR      Z,0x2154D2 */
     /* CP A,0 */                                                 /* 2154C6 CP      A,0 */
@@ -19620,7 +19620,7 @@ L_2154D2:
     W = 4;                                                       /* 2154D2 LD      W,4 */
     goto L_2154F7;                                               /* 2154D4 JR      0x2154F7 */
 L_2154D6:
-    push32(0x2154DA); sub_216AA2();                              /* 2154D6 CALL    0x216AA2 */
+    push32(0x2154DA); GetStoryStage();                           /* 2154D6 CALL    0x216AA2 */
     /* CP A,8 */                                                 /* 2154DA CP      A,8 */
     if ((uint8_t)(A) == (uint8_t)(8)) goto L_2154EB;             /* 2154DD JR      Z,0x2154EB */
     /* CP A,0 */                                                 /* 2154DF CP      A,0 */
@@ -19646,7 +19646,7 @@ L_2154F7:
     XSP += 4; return;                                            /* 2154FA RET */
 }
 
-void sub_2154FB(void)
+void LilyGivesFlowers(void)
 {
     push32(XHL);                                                 /* 2154FB PUSH    XHL */
     push32(XDE);                                                 /* 2154FC PUSH    XDE */
@@ -19659,7 +19659,7 @@ void sub_2154FB(void)
     L = A;                                                       /* 21550A LD      L,A */
     HL = (uint16_t)(uint8_t)HL;                                  /* 21550C EXTZ    HL */
     push8(A);                                                    /* 21550E PUSH    A */
-    push32(0x215513); sub_20612E();                              /* 21550F CALL    0x20612E */
+    push32(0x215513); SetEventFlag();                            /* 21550F CALL    0x20612E */
     A = pop8();                                                  /* 215513 POP     A */
     /* CP A,1 */                                                 /* 215514 CP      A,1 */
     if ((uint8_t)(A) == (uint8_t)(1)) goto L_21552B;             /* 215516 JR      Z,0x21552B */
@@ -19672,7 +19672,7 @@ void sub_2154FB(void)
     goto L_215609;                                               /* 215528 JRL     0x215609 */
 L_21552B:
     HL = 0;                                                      /* 21552B LD      HL,0 */
-    push32(0x215531); sub_206144();                              /* 21552D CALL    0x206144 */
+    push32(0x215531); ClearEventFlag();                          /* 21552D CALL    0x206144 */
     push32(0x215535); sub_21691A();                              /* 215531 CALL    0x21691A */
     A = 1;                                                       /* 215535 LD      A,1 */
     wr8(0x5045, A);                                              /* 215537 LD      (0x5045),A */
@@ -19695,15 +19695,15 @@ L_21552B:
     WA = 0x39;                                                   /* 215573 LD      WA,0x39 */
     push32(0x21557A); sub_206197();                              /* 215576 CALL    0x206197 */
     WA = 0x1F4;                                                  /* 21557A LD      WA,0x1F4 */
-    push32(0x215581); sub_208AE4();                              /* 21557D CALL    0x208AE4 */
+    push32(0x215581); AddGP();                                   /* 21557D CALL    0x208AE4 */
     goto L_215609;                                               /* 215581 JRL     0x215609 */
 L_215584:
     HL = 8;                                                      /* 215584 LD      HL,8 */
-    push32(0x21558B); sub_206144();                              /* 215587 CALL    0x206144 */
+    push32(0x21558B); ClearEventFlag();                          /* 215587 CALL    0x206144 */
     push32(0x21558F); sub_21691A();                              /* 21558B CALL    0x21691A */
     goto L_215609;                                               /* 21558F JR      0x215609 */
 L_215591:
-    push32(0x215595); sub_216AA2();                              /* 215591 CALL    0x216AA2 */
+    push32(0x215595); GetStoryStage();                           /* 215591 CALL    0x216AA2 */
     /* CP A,2 */                                                 /* 215595 CP      A,2 */
     if ((uint8_t)(A) < (uint8_t)(2)) goto L_215609;              /* 215597 JR      C,0x215609 */
     /* CP A,9 */                                                 /* 215599 CP      A,9 */
@@ -19714,7 +19714,7 @@ L_215591:
     WA = pop16();                                                /* 2155A6 POP     WA */
     goto L_215609;                                               /* 2155A7 JR      0x215609 */
 L_2155A9:
-    push32(0x2155AD); sub_216AA2();                              /* 2155A9 CALL    0x216AA2 */
+    push32(0x2155AD); GetStoryStage();                           /* 2155A9 CALL    0x216AA2 */
     /* CP A,1 */                                                 /* 2155AD CP      A,1 */
     if ((uint8_t)(A) < (uint8_t)(1)) goto L_215609;              /* 2155AF JR      C,0x215609 */
     /* CP A,9 */                                                 /* 2155B1 CP      A,9 */
@@ -19854,7 +19854,7 @@ L_2156D9:
     wr8(XIZ + 0x12, A);                                          /* 2156F0 LD      (XIZ+0x12),A */
     goto L_215739;                                               /* 2156F3 JR      0x215739 */
 L_2156F5:
-    push32(0x2156F9); sub_216AA2();                              /* 2156F5 CALL    0x216AA2 */
+    push32(0x2156F9); GetStoryStage();                           /* 2156F5 CALL    0x216AA2 */
     A = (uint8_t)(A - 3);                                        /* 2156F9 SUB     A,3 */
     A = (uint8_t)(A + 0x49);                                     /* 2156FC ADD     A,0x49 */
     wr8(XIZ + 0x12, A);                                          /* 2156FF LD      (XIZ+0x12),A */
@@ -19963,13 +19963,13 @@ L_21578A:
     /* CP A,6 */                                                 /* 2157BF CP      A,6 */
     if ((uint8_t)(A) != (uint8_t)(6)) goto L_2157E1;             /* 2157C1 JR      NZ,0x2157E1 */
     XWA = 3;                                                     /* 2157C3 LD      XWA,3 */
-    push32(0x2157C9); sub_207759();                              /* 2157C5 CALL    0x207759 */
+    push32(0x2157C9); PlayMusic();                               /* 2157C5 CALL    0x207759 */
     WA = 0x23;                                                   /* 2157C9 LD      WA,0x23 */
     push32(0x2157D0); sub_20776A();                              /* 2157CC CALL    0x20776A */
     goto L_2157E1;                                               /* 2157D0 JR      0x2157E1 */
 L_2157D2:
     XWA = 2;                                                     /* 2157D2 LD      XWA,2 */
-    push32(0x2157D8); sub_207759();                              /* 2157D4 CALL    0x207759 */
+    push32(0x2157D8); PlayMusic();                               /* 2157D4 CALL    0x207759 */
     WA = 0x22;                                                   /* 2157D8 LD      WA,0x22 */
     push32(0x2157DF); sub_20776A();                              /* 2157DB CALL    0x20776A */
     goto L_2157E1;                                               /* 2157DF JR      0x2157E1 */
@@ -19984,12 +19984,12 @@ L_2157E3:
     push32(0x2157F5); sub_216845();                              /* 2157F1 CALL    0x216845 */
     BC = 0;                                                      /* 2157F5 LD      BC,0 */
     DE = 0;                                                      /* 2157F7 LD      DE,0 */
-    push32(0x2157FD); sub_2103BA();                              /* 2157F9 CALL    0x2103BA */
+    push32(0x2157FD); DrawPortrait();                            /* 2157F9 CALL    0x2103BA */
     push32(0x215801); sub_2166C9();                              /* 2157FD CALL    0x2166C9 */
     A = 0;                                                       /* 215801 LD      A,0 */
     wr8(XIZ + 0x13, A);                                          /* 215803 LD      (XIZ+0x13),A */
     XWA = 4;                                                     /* 215806 LD      XWA,4 */
-    push32(0x21580C); sub_207759();                              /* 215808 CALL    0x207759 */
+    push32(0x21580C); PlayMusic();                               /* 215808 CALL    0x207759 */
     WA = 0x24;                                                   /* 21580C LD      WA,0x24 */
     push32(0x215813); sub_20776A();                              /* 21580F CALL    0x20776A */
     push32(0x215817); sub_216E3A();                              /* 215813 CALL    0x216E3A */
@@ -20015,13 +20015,13 @@ void sub_215822(void)
     wr8(XIZ + 0x24, B);                                          /* 215833 LD      (XIZ+0x24),B */
     if (!cpu.fz) goto L_21591F;                                  /* 215836 JRL     NZ,0x21591F */
     A = 1;                                                       /* 215839 LD      A,1 */
-    push32(0x21583F); sub_20748A();                              /* 21583B CALL    0x20748A */
+    push32(0x21583F); GetTextBox();                              /* 21583B CALL    0x20748A */
     wr8(XWA + 0x10, C);                                          /* 21583F LD      (XWA+0x10),C */
     A = 0xFF;                                                    /* 215842 LD      A,0xFF */
     wr8(XIZ + 0x23, A);                                          /* 215844 LD      (XIZ+0x23),A */
 L_215847:
     A = 1;                                                       /* 215847 LD      A,1 */
-    push32(0x21584D); sub_20748A();                              /* 215849 CALL    0x20748A */
+    push32(0x21584D); GetTextBox();                              /* 215849 CALL    0x20748A */
     XHL = rd32(XWA + 8);                                         /* 21584D LD      XHL,(XWA+8) */
     /* CP XHL,0 */                                               /* 215850 CP      XHL,0 */
     if ((uint32_t)(XHL) == (uint32_t)(0)) goto L_2158BD;         /* 215856 JR      Z,0x2158BD */
@@ -20058,7 +20058,7 @@ L_21588D:
     goto L_21591F;                                               /* 2158A3 JR      0x21591F */
 L_2158A5:
     A = 1;                                                       /* 2158A5 LD      A,1 */
-    push32(0x2158AB); sub_20748A();                              /* 2158A7 CALL    0x20748A */
+    push32(0x2158AB); GetTextBox();                              /* 2158A7 CALL    0x20748A */
     C = rd8(XWA + 0x10);                                         /* 2158AB LD      C,(XWA+0x10) */
     wr8(XIZ + 0x23, C);                                          /* 2158AE LD      (XIZ+0x23),C */
     C = (uint8_t)(C + 1);                                        /* 2158B1 INC     1,C */
@@ -20072,7 +20072,7 @@ L_2158BD:
     if ((uint8_t)(A) == (uint8_t)(0)) goto L_2158CE;             /* 2158C2 JR      Z,0x2158CE */
     A = 1;                                                       /* 2158C4 LD      A,1 */
     wr8(XIZ + 0x25, A);                                          /* 2158C6 LD      (XIZ+0x25),A */
-    push32(0x2158CC); sub_2154FB();                              /* 2158C9 CALR    0x2154FB */
+    push32(0x2158CC); LilyGivesFlowers();                        /* 2158C9 CALR    0x2154FB */
     goto L_21591F;                                               /* 2158CC JR      0x21591F */
 L_2158CE:
     W = rd8(XIZ + 0x12);                                         /* 2158CE LD      W,(XIZ+0x12) */
@@ -20099,7 +20099,7 @@ L_2158DC:
     XHL = rd32(XHL);                                             /* 21590A LD      XHL,(XHL) */
 L_21590C:
     A = 1;                                                       /* 21590C LD      A,1 */
-    push32(0x215912); sub_20748A();                              /* 21590E CALL    0x20748A */
+    push32(0x215912); GetTextBox();                              /* 21590E CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 215912 LD      (XWA+8),XHL */
     A = 0;                                                       /* 215915 LD      A,0 */
     wr8(XIZ + 0x26, A);                                          /* 215917 LD      (XIZ+0x26),A */
@@ -20209,7 +20209,7 @@ L_2159DB:
     push32(0x2159FA); sub_216845();                              /* 2159F6 CALL    0x216845 */
     BC = 0;                                                      /* 2159FA LD      BC,0 */
     DE = 0;                                                      /* 2159FC LD      DE,0 */
-    push32(0x215A02); sub_2103BA();                              /* 2159FE CALL    0x2103BA */
+    push32(0x215A02); DrawPortrait();                            /* 2159FE CALL    0x2103BA */
     push32(0x215A05); sub_215161();                              /* 215A02 CALR    0x215161 */
     A = rd8(XHL + 0);                                            /* 215A05 LD      A,(XHL+0) */
     wr8(XIZ + 0x13, A);                                          /* 215A08 LD      (XIZ+0x13),A */
@@ -20219,7 +20219,7 @@ L_2159DB:
     DE = 0;                                                      /* 215A11 LD      DE,0 */
     E = (uint8_t)(E + 0x20);                                     /* 215A13 ADD     E,0x20 */
     push32(0x215A1A); sub_216849();                              /* 215A16 CALL    0x216849 */
-    push32(0x215A1E); sub_210380();                              /* 215A1A CALL    0x210380 */
+    push32(0x215A1E); DrawPortraitAt();                          /* 215A1A CALL    0x210380 */
     A = 7;                                                       /* 215A1E LD      A,7 */
     wr8(XIZ + 0xF, A);                                           /* 215A20 LD      (XIZ+0xF),A */
     goto L_215AE8;                                               /* 215A23 JRL     0x215AE8 */
@@ -20239,7 +20239,7 @@ L_215A26:
     push32(0x215A52); sub_216FB1();                              /* 215A4E CALL    0x216FB1 */
     push32(0x215A56); sub_216E31();                              /* 215A52 CALL    0x216E31 */
     XWA = 2;                                                     /* 215A56 LD      XWA,2 */
-    push32(0x215A5C); sub_207759();                              /* 215A58 CALL    0x207759 */
+    push32(0x215A5C); PlayMusic();                               /* 215A58 CALL    0x207759 */
     A = 9;                                                       /* 215A5C LD      A,9 */
     wr8(XIZ + 0xF, A);                                           /* 215A5E LD      (XIZ+0xF),A */
     goto L_215AE8;                                               /* 215A61 JRL     0x215AE8 */
@@ -20259,7 +20259,7 @@ L_215A64:
     push32(0x215A90); sub_216FB1();                              /* 215A8C CALL    0x216FB1 */
     push32(0x215A94); sub_216E31();                              /* 215A90 CALL    0x216E31 */
     XWA = 2;                                                     /* 215A94 LD      XWA,2 */
-    push32(0x215A9A); sub_207759();                              /* 215A96 CALL    0x207759 */
+    push32(0x215A9A); PlayMusic();                               /* 215A96 CALL    0x207759 */
     A = 0xA;                                                     /* 215A9A LD      A,0xA */
     wr8(XIZ + 0xF, A);                                           /* 215A9C LD      (XIZ+0xF),A */
     goto L_215AE8;                                               /* 215A9F JR      0x215AE8 */
@@ -20270,7 +20270,7 @@ L_215AA1:
     /* CP A,1 */                                                 /* 215AAA CP      A,1 */
     if ((uint8_t)(A) == (uint8_t)(1)) goto L_215AE8;             /* 215AAC JR      Z,0x215AE8 */
     XWA = 2;                                                     /* 215AAE LD      XWA,2 */
-    push32(0x215AB4); sub_207759();                              /* 215AB0 CALL    0x207759 */
+    push32(0x215AB4); PlayMusic();                               /* 215AB0 CALL    0x207759 */
     WA = 0x22;                                                   /* 215AB4 LD      WA,0x22 */
     push32(0x215ABB); sub_20776A();                              /* 215AB7 CALL    0x20776A */
     A = 3;                                                       /* 215ABB LD      A,3 */
@@ -20283,7 +20283,7 @@ L_215AC2:
     /* CP A,1 */                                                 /* 215ACB CP      A,1 */
     if ((uint8_t)(A) == (uint8_t)(1)) goto L_215AE8;             /* 215ACD JR      Z,0x215AE8 */
     XWA = 2;                                                     /* 215ACF LD      XWA,2 */
-    push32(0x215AD5); sub_207759();                              /* 215AD1 CALL    0x207759 */
+    push32(0x215AD5); PlayMusic();                               /* 215AD1 CALL    0x207759 */
     WA = 0x22;                                                   /* 215AD5 LD      WA,0x22 */
     push32(0x215ADC); sub_20776A();                              /* 215AD8 CALL    0x20776A */
     A = 3;                                                       /* 215ADC LD      A,3 */
@@ -20757,7 +20757,7 @@ L_215EA1:
     goto L_215ED3;                                               /* 215EB1 JR      0x215ED3 */
 L_215EB3:
     push32(0x215EB7); sub_216B38();                              /* 215EB3 CALL    0x216B38 */
-    push32(0x215EBB); sub_216AA2();                              /* 215EB7 CALL    0x216AA2 */
+    push32(0x215EBB); GetStoryStage();                           /* 215EB7 CALL    0x216AA2 */
     /* CP A,0xA */                                               /* 215EBB CP      A,0xA */
     if ((uint8_t)(A) < (uint8_t)(0xA)) goto L_215EC4;            /* 215EBE JR      C,0x215EC4 */
     push32(0x215EC4); sub_216B51();                              /* 215EC0 CALL    0x216B51 */
@@ -20817,28 +20817,28 @@ L_215F15:
     XSP += 4; return;                                            /* 215F1D RET */
 }
 
-void sub_215F1E(void)
+void HelmutSkillOffer(void)
 {
     push32(XHL);                                                 /* 215F1E PUSH    XHL */
     push32(XDE);                                                 /* 215F1F PUSH    XDE */
     push32(XBC);                                                 /* 215F20 PUSH    XBC */
     push8(W);                                                    /* 215F21 PUSH    W */
-    push32(0x215F27); sub_216B6A();                              /* 215F23 CALL    0x216B6A */
+    push32(0x215F27); CheckSkillPair1();                         /* 215F23 CALL    0x216B6A */
     W = A;                                                       /* 215F27 LD      W,A */
-    push32(0x215F2D); sub_216B89();                              /* 215F29 CALL    0x216B89 */
+    push32(0x215F2D); CheckSkillPair2();                         /* 215F29 CALL    0x216B89 */
     A = (uint8_t)(A & W);                                        /* 215F2D AND     A,W */
     /* CP A,1 */                                                 /* 215F2F CP      A,1 */
     if ((uint8_t)(A) == (uint8_t)(1)) goto L_215F55;             /* 215F31 JR      Z,0x215F55 */
     A = rd8(0x5022);                                             /* 215F33 LD      A,(0x5022) */
     /* CP A,0x14 */                                              /* 215F37 CP      A,0x14 */
     if ((uint8_t)(A) < (uint8_t)(0x14)) goto L_215F7C;           /* 215F3A JR      C,0x215F7C */
-    push32(0x215F40); sub_216B6A();                              /* 215F3C CALL    0x216B6A */
+    push32(0x215F40); CheckSkillPair1();                         /* 215F3C CALL    0x216B6A */
     /* CP A,0 */                                                 /* 215F40 CP      A,0 */
     if ((uint8_t)(A) == (uint8_t)(0)) goto L_215F6C;             /* 215F42 JR      Z,0x215F6C */
     A = rd8(0x5022);                                             /* 215F44 LD      A,(0x5022) */
     /* CP A,0x1E */                                              /* 215F48 CP      A,0x1E */
     if ((uint8_t)(A) < (uint8_t)(0x1E)) goto L_215F7C;           /* 215F4B JR      C,0x215F7C */
-    push32(0x215F51); sub_216B89();                              /* 215F4D CALL    0x216B89 */
+    push32(0x215F51); CheckSkillPair2();                         /* 215F4D CALL    0x216B89 */
     /* CP A,0 */                                                 /* 215F51 CP      A,0 */
     if ((uint8_t)(A) == (uint8_t)(0)) goto L_215F59;             /* 215F53 JR      Z,0x215F59 */
 L_215F55:
@@ -21172,7 +21172,7 @@ L_2161CE:
     W = rd8(XIZ + 0x2A);                                         /* 2161D1 LD      W,(XIZ+0x2A) */
     W = (uint8_t)(W + A);                                        /* 2161D4 ADD     W,A */
     W = (uint8_t)(W + 1);                                        /* 2161D6 INC     1,W */
-    push32(0x2161DC); sub_216B6A();                              /* 2161D8 CALL    0x216B6A */
+    push32(0x2161DC); CheckSkillPair1();                         /* 2161D8 CALL    0x216B6A */
     /* CP A,1 */                                                 /* 2161DC CP      A,1 */
     if ((uint8_t)(A) == (uint8_t)(1)) goto L_2161E8;             /* 2161DE JR      Z,0x2161E8 */
     wr8(0x5025, W);                                              /* 2161E0 LD      (0x5025),W */
@@ -21186,7 +21186,7 @@ L_2161EE:
     A = (uint8_t)(A + W);                                        /* 2161F1 ADD     A,W */
     L = A;                                                       /* 2161F3 LD      L,A */
     HL = (uint16_t)(uint8_t)HL;                                  /* 2161F5 EXTZ    HL */
-    push32(0x2161FB); sub_20612E();                              /* 2161F7 CALL    0x20612E */
+    push32(0x2161FB); SetEventFlag();                            /* 2161F7 CALL    0x20612E */
     A = 0x1E;                                                    /* 2161FB LD      A,0x1E */
     goto L_2161FF;                                               /* 2161FD JR      0x2161FF */
 L_2161FF:
@@ -21281,9 +21281,9 @@ L_21628F:
     push32(0x2162B5); sub_216845();                              /* 2162B1 CALL    0x216845 */
     BC = 0;                                                      /* 2162B5 LD      BC,0 */
     DE = 0;                                                      /* 2162B7 LD      DE,0 */
-    push32(0x2162BD); sub_2103BA();                              /* 2162B9 CALL    0x2103BA */
+    push32(0x2162BD); DrawPortrait();                            /* 2162B9 CALL    0x2103BA */
     XWA = 0;                                                     /* 2162BD LD      XWA,0 */
-    push32(0x2162C3); sub_207759();                              /* 2162BF CALL    0x207759 */
+    push32(0x2162C3); PlayMusic();                               /* 2162BF CALL    0x207759 */
     WA = 0x20;                                                   /* 2162C3 LD      WA,0x20 */
     push32(0x2162CA); sub_20776A();                              /* 2162C6 CALL    0x20776A */
     A = 2;                                                       /* 2162CA LD      A,2 */
@@ -21341,7 +21341,7 @@ void sub_216306(void)
     push32(0x216320); sub_2166EB();                              /* 21631C CALL    0x2166EB */
     push32(0x216323); sub_214D23();                              /* 216320 CALR    0x214D23 */
     XWA = 2;                                                     /* 216323 LD      XWA,2 */
-    push32(0x216329); sub_207759();                              /* 216325 CALL    0x207759 */
+    push32(0x216329); PlayMusic();                               /* 216325 CALL    0x207759 */
     WA = 0x22;                                                   /* 216329 LD      WA,0x22 */
     push32(0x216330); sub_20776A();                              /* 21632C CALL    0x20776A */
     A = 5;                                                       /* 216330 LD      A,5 */
@@ -21408,7 +21408,7 @@ void sub_216391(void)
     push32(XHL);                                                 /* 216391 PUSH    XHL */
     push8(C);                                                    /* 216392 PUSH    C */
     push32(XWA);                                                 /* 216394 PUSH    XWA */
-    push32(0x216399); sub_216ABC();                              /* 216395 CALL    0x216ABC */
+    push32(0x216399); GetStageArenaRank();                       /* 216395 CALL    0x216ABC */
     /* CP A,3 */                                                 /* 216399 CP      A,3 */
     if ((uint8_t)(A) >= (uint8_t)(3)) goto L_2163A1;             /* 21639B JR      NC,0x2163A1 */
     A = 3;                                                       /* 21639D LD      A,3 */
@@ -21425,7 +21425,7 @@ L_2163AA:
     XHL = 0x24A09E;                                              /* 2163B1 LD      XHL,0x24A09E */
     XHL = (uint32_t)(XHL + XWA);                                 /* 2163B6 ADD     XHL,XWA */
     push8(W);                                                    /* 2163B8 PUSH    W */
-    push32(0x2163BE); sub_2060CB();                              /* 2163BA CALL    0x2060CB */
+    push32(0x2163BE); Random();                                  /* 2163BA CALL    0x2060CB */
     W = 0;                                                       /* 2163BE LD      W,0 */
     WA = divu8(WA, 0x64);                                        /* 2163C0 DIV     WA,0x64 */
     A = W;                                                       /* 2163C3 LD      A,W */
@@ -21442,7 +21442,7 @@ L_2163D9:
     wr8(XIZ + 0x28, C);                                          /* 2163D9 LD      (XIZ+0x28),C */
     XHL = 0x24A0DA;                                              /* 2163DC LD      XHL,0x24A0DA */
     push8(W);                                                    /* 2163E1 PUSH    W */
-    push32(0x2163E7); sub_2060CB();                              /* 2163E3 CALL    0x2060CB */
+    push32(0x2163E7); Random();                                  /* 2163E3 CALL    0x2060CB */
     W = 0;                                                       /* 2163E7 LD      W,0 */
     WA = divu8(WA, 0x64);                                        /* 2163E9 DIV     WA,0x64 */
     A = W;                                                       /* 2163EC LD      A,W */
@@ -21770,7 +21770,7 @@ void sub_216649(void)
 L_2166A4:
     WA = 0xFF;                                                   /* 2166A4 LD      WA,0xFF */
     push8(C);                                                    /* 2166A7 PUSH    C */
-    push32(0x2166AD); sub_2061B8();                              /* 2166A9 CALL    0x2061B8 */
+    push32(0x2166AD); RemoveItem();                              /* 2166A9 CALL    0x2061B8 */
     C = pop8();                                                  /* 2166AD POP     C */
     if (--C != 0) goto L_2166A4;                                 /* 2166AF DJNZ    C,0x2166A4 */
 L_2166B2:
@@ -22194,35 +22194,35 @@ void sub_2168AC(void)
     XSP += 4; return;                                            /* 2168C6 RET */
 }
 
-void sub_2168C7(void)
+void ClearStoryStage(void)
 {
     push32(XHL);                                                 /* 2168C7 PUSH    XHL */
     push16(BC);                                                  /* 2168C8 PUSH    BC */
     push8(A);                                                    /* 2168C9 PUSH    A */
     HL = 0;                                                      /* 2168CA LD      HL,0 */
-    push32(0x2168D0); sub_206144();                              /* 2168CC CALL    0x206144 */
+    push32(0x2168D0); ClearEventFlag();                          /* 2168CC CALL    0x206144 */
     HL = 1;                                                      /* 2168D0 LD      HL,1 */
-    push32(0x2168D6); sub_206144();                              /* 2168D2 CALL    0x206144 */
+    push32(0x2168D6); ClearEventFlag();                          /* 2168D2 CALL    0x206144 */
     HL = 2;                                                      /* 2168D6 LD      HL,2 */
-    push32(0x2168DC); sub_206144();                              /* 2168D8 CALL    0x206144 */
+    push32(0x2168DC); ClearEventFlag();                          /* 2168D8 CALL    0x206144 */
     HL = 3;                                                      /* 2168DC LD      HL,3 */
-    push32(0x2168E2); sub_206144();                              /* 2168DE CALL    0x206144 */
+    push32(0x2168E2); ClearEventFlag();                          /* 2168DE CALL    0x206144 */
     HL = 4;                                                      /* 2168E2 LD      HL,4 */
-    push32(0x2168E8); sub_206144();                              /* 2168E4 CALL    0x206144 */
+    push32(0x2168E8); ClearEventFlag();                          /* 2168E4 CALL    0x206144 */
     HL = 5;                                                      /* 2168E8 LD      HL,5 */
-    push32(0x2168EE); sub_206144();                              /* 2168EA CALL    0x206144 */
+    push32(0x2168EE); ClearEventFlag();                          /* 2168EA CALL    0x206144 */
     HL = 6;                                                      /* 2168EE LD      HL,6 */
-    push32(0x2168F4); sub_206144();                              /* 2168F0 CALL    0x206144 */
+    push32(0x2168F4); ClearEventFlag();                          /* 2168F0 CALL    0x206144 */
     HL = 7;                                                      /* 2168F4 LD      HL,7 */
-    push32(0x2168FA); sub_206144();                              /* 2168F6 CALL    0x206144 */
+    push32(0x2168FA); ClearEventFlag();                          /* 2168F6 CALL    0x206144 */
     HL = 8;                                                      /* 2168FA LD      HL,8 */
-    push32(0x216901); sub_206144();                              /* 2168FD CALL    0x206144 */
+    push32(0x216901); ClearEventFlag();                          /* 2168FD CALL    0x206144 */
     HL = 9;                                                      /* 216901 LD      HL,9 */
-    push32(0x216908); sub_206144();                              /* 216904 CALL    0x206144 */
+    push32(0x216908); ClearEventFlag();                          /* 216904 CALL    0x206144 */
     HL = 0xA;                                                    /* 216908 LD      HL,0xA */
-    push32(0x21690F); sub_206144();                              /* 21690B CALL    0x206144 */
+    push32(0x21690F); ClearEventFlag();                          /* 21690B CALL    0x206144 */
     HL = 0xB;                                                    /* 21690F LD      HL,0xB */
-    push32(0x216916); sub_206144();                              /* 216912 CALL    0x206144 */
+    push32(0x216916); ClearEventFlag();                          /* 216912 CALL    0x206144 */
     A = pop8();                                                  /* 216916 POP     A */
     BC = pop16();                                                /* 216917 POP     BC */
     XHL = pop32();                                               /* 216918 POP     XHL */
@@ -22235,35 +22235,35 @@ void sub_21691A(void)
     push16(BC);                                                  /* 21691B PUSH    BC */
     push8(A);                                                    /* 21691C PUSH    A */
     HL = 0x40;                                                   /* 21691D LD      HL,0x40 */
-    push32(0x216924); sub_206144();                              /* 216920 CALL    0x206144 */
+    push32(0x216924); ClearEventFlag();                          /* 216920 CALL    0x206144 */
     HL = 0x41;                                                   /* 216924 LD      HL,0x41 */
-    push32(0x21692B); sub_206144();                              /* 216927 CALL    0x206144 */
+    push32(0x21692B); ClearEventFlag();                          /* 216927 CALL    0x206144 */
     HL = 0x42;                                                   /* 21692B LD      HL,0x42 */
-    push32(0x216932); sub_206144();                              /* 21692E CALL    0x206144 */
+    push32(0x216932); ClearEventFlag();                          /* 21692E CALL    0x206144 */
     HL = 0x43;                                                   /* 216932 LD      HL,0x43 */
-    push32(0x216939); sub_206144();                              /* 216935 CALL    0x206144 */
+    push32(0x216939); ClearEventFlag();                          /* 216935 CALL    0x206144 */
     HL = 0x44;                                                   /* 216939 LD      HL,0x44 */
-    push32(0x216940); sub_206144();                              /* 21693C CALL    0x206144 */
+    push32(0x216940); ClearEventFlag();                          /* 21693C CALL    0x206144 */
     HL = 0x45;                                                   /* 216940 LD      HL,0x45 */
-    push32(0x216947); sub_206144();                              /* 216943 CALL    0x206144 */
+    push32(0x216947); ClearEventFlag();                          /* 216943 CALL    0x206144 */
     HL = 0x46;                                                   /* 216947 LD      HL,0x46 */
-    push32(0x21694E); sub_206144();                              /* 21694A CALL    0x206144 */
+    push32(0x21694E); ClearEventFlag();                          /* 21694A CALL    0x206144 */
     HL = 0x47;                                                   /* 21694E LD      HL,0x47 */
-    push32(0x216955); sub_206144();                              /* 216951 CALL    0x206144 */
+    push32(0x216955); ClearEventFlag();                          /* 216951 CALL    0x206144 */
     HL = 0x48;                                                   /* 216955 LD      HL,0x48 */
-    push32(0x21695C); sub_206144();                              /* 216958 CALL    0x206144 */
+    push32(0x21695C); ClearEventFlag();                          /* 216958 CALL    0x206144 */
     HL = 0x49;                                                   /* 21695C LD      HL,0x49 */
-    push32(0x216963); sub_206144();                              /* 21695F CALL    0x206144 */
+    push32(0x216963); ClearEventFlag();                          /* 21695F CALL    0x206144 */
     HL = 0x4A;                                                   /* 216963 LD      HL,0x4A */
-    push32(0x21696A); sub_206144();                              /* 216966 CALL    0x206144 */
+    push32(0x21696A); ClearEventFlag();                          /* 216966 CALL    0x206144 */
     HL = 0x4B;                                                   /* 21696A LD      HL,0x4B */
-    push32(0x216971); sub_206144();                              /* 21696D CALL    0x206144 */
+    push32(0x216971); ClearEventFlag();                          /* 21696D CALL    0x206144 */
     HL = 0x4C;                                                   /* 216971 LD      HL,0x4C */
-    push32(0x216978); sub_206144();                              /* 216974 CALL    0x206144 */
+    push32(0x216978); ClearEventFlag();                          /* 216974 CALL    0x206144 */
     HL = 0x4D;                                                   /* 216978 LD      HL,0x4D */
-    push32(0x21697F); sub_206144();                              /* 21697B CALL    0x206144 */
+    push32(0x21697F); ClearEventFlag();                          /* 21697B CALL    0x206144 */
     HL = 0x4E;                                                   /* 21697F LD      HL,0x4E */
-    push32(0x216986); sub_206144();                              /* 216982 CALL    0x206144 */
+    push32(0x216986); ClearEventFlag();                          /* 216982 CALL    0x206144 */
     A = pop8();                                                  /* 216986 POP     A */
     BC = pop16();                                                /* 216987 POP     BC */
     XHL = pop32();                                               /* 216988 POP     XHL */
@@ -22276,29 +22276,29 @@ void sub_21698A(void)
     push16(BC);                                                  /* 21698B PUSH    BC */
     push8(A);                                                    /* 21698C PUSH    A */
     HL = 0x40;                                                   /* 21698D LD      HL,0x40 */
-    push32(0x216994); sub_20612E();                              /* 216990 CALL    0x20612E */
+    push32(0x216994); SetEventFlag();                            /* 216990 CALL    0x20612E */
     HL = 0x41;                                                   /* 216994 LD      HL,0x41 */
-    push32(0x21699B); sub_20612E();                              /* 216997 CALL    0x20612E */
+    push32(0x21699B); SetEventFlag();                            /* 216997 CALL    0x20612E */
     HL = 0x42;                                                   /* 21699B LD      HL,0x42 */
-    push32(0x2169A2); sub_20612E();                              /* 21699E CALL    0x20612E */
+    push32(0x2169A2); SetEventFlag();                            /* 21699E CALL    0x20612E */
     HL = 0x45;                                                   /* 2169A2 LD      HL,0x45 */
-    push32(0x2169A9); sub_20612E();                              /* 2169A5 CALL    0x20612E */
+    push32(0x2169A9); SetEventFlag();                            /* 2169A5 CALL    0x20612E */
     HL = 0x46;                                                   /* 2169A9 LD      HL,0x46 */
-    push32(0x2169B0); sub_20612E();                              /* 2169AC CALL    0x20612E */
+    push32(0x2169B0); SetEventFlag();                            /* 2169AC CALL    0x20612E */
     HL = 0x47;                                                   /* 2169B0 LD      HL,0x47 */
-    push32(0x2169B7); sub_20612E();                              /* 2169B3 CALL    0x20612E */
+    push32(0x2169B7); SetEventFlag();                            /* 2169B3 CALL    0x20612E */
     HL = 0x48;                                                   /* 2169B7 LD      HL,0x48 */
-    push32(0x2169BE); sub_20612E();                              /* 2169BA CALL    0x20612E */
+    push32(0x2169BE); SetEventFlag();                            /* 2169BA CALL    0x20612E */
     HL = 0x49;                                                   /* 2169BE LD      HL,0x49 */
-    push32(0x2169C5); sub_20612E();                              /* 2169C1 CALL    0x20612E */
+    push32(0x2169C5); SetEventFlag();                            /* 2169C1 CALL    0x20612E */
     HL = 0x4A;                                                   /* 2169C5 LD      HL,0x4A */
-    push32(0x2169CC); sub_20612E();                              /* 2169C8 CALL    0x20612E */
+    push32(0x2169CC); SetEventFlag();                            /* 2169C8 CALL    0x20612E */
     HL = 0x4B;                                                   /* 2169CC LD      HL,0x4B */
-    push32(0x2169D3); sub_20612E();                              /* 2169CF CALL    0x20612E */
+    push32(0x2169D3); SetEventFlag();                            /* 2169CF CALL    0x20612E */
     HL = 0x4C;                                                   /* 2169D3 LD      HL,0x4C */
-    push32(0x2169DA); sub_20612E();                              /* 2169D6 CALL    0x20612E */
+    push32(0x2169DA); SetEventFlag();                            /* 2169D6 CALL    0x20612E */
     HL = 0x4D;                                                   /* 2169DA LD      HL,0x4D */
-    push32(0x2169E1); sub_20612E();                              /* 2169DD CALL    0x20612E */
+    push32(0x2169E1); SetEventFlag();                            /* 2169DD CALL    0x20612E */
     A = pop8();                                                  /* 2169E1 POP     A */
     BC = pop16();                                                /* 2169E2 POP     BC */
     XHL = pop32();                                               /* 2169E3 POP     XHL */
@@ -22311,33 +22311,33 @@ void sub_2169E5(void)
     push16(BC);                                                  /* 2169E6 PUSH    BC */
     push8(A);                                                    /* 2169E7 PUSH    A */
     HL = 0x51;                                                   /* 2169E8 LD      HL,0x51 */
-    push32(0x2169EF); sub_206144();                              /* 2169EB CALL    0x206144 */
+    push32(0x2169EF); ClearEventFlag();                          /* 2169EB CALL    0x206144 */
     HL = 0x52;                                                   /* 2169EF LD      HL,0x52 */
-    push32(0x2169F6); sub_206144();                              /* 2169F2 CALL    0x206144 */
+    push32(0x2169F6); ClearEventFlag();                          /* 2169F2 CALL    0x206144 */
     HL = 0x53;                                                   /* 2169F6 LD      HL,0x53 */
-    push32(0x2169FD); sub_206144();                              /* 2169F9 CALL    0x206144 */
+    push32(0x2169FD); ClearEventFlag();                          /* 2169F9 CALL    0x206144 */
     HL = 0x54;                                                   /* 2169FD LD      HL,0x54 */
-    push32(0x216A04); sub_206144();                              /* 216A00 CALL    0x206144 */
+    push32(0x216A04); ClearEventFlag();                          /* 216A00 CALL    0x206144 */
     HL = 0x55;                                                   /* 216A04 LD      HL,0x55 */
-    push32(0x216A0B); sub_206144();                              /* 216A07 CALL    0x206144 */
+    push32(0x216A0B); ClearEventFlag();                          /* 216A07 CALL    0x206144 */
     HL = 0x56;                                                   /* 216A0B LD      HL,0x56 */
-    push32(0x216A12); sub_206144();                              /* 216A0E CALL    0x206144 */
+    push32(0x216A12); ClearEventFlag();                          /* 216A0E CALL    0x206144 */
     HL = 0x57;                                                   /* 216A12 LD      HL,0x57 */
-    push32(0x216A19); sub_206144();                              /* 216A15 CALL    0x206144 */
+    push32(0x216A19); ClearEventFlag();                          /* 216A15 CALL    0x206144 */
     HL = 0x58;                                                   /* 216A19 LD      HL,0x58 */
-    push32(0x216A20); sub_206144();                              /* 216A1C CALL    0x206144 */
+    push32(0x216A20); ClearEventFlag();                          /* 216A1C CALL    0x206144 */
     HL = 0x59;                                                   /* 216A20 LD      HL,0x59 */
-    push32(0x216A27); sub_206144();                              /* 216A23 CALL    0x206144 */
+    push32(0x216A27); ClearEventFlag();                          /* 216A23 CALL    0x206144 */
     HL = 0x5A;                                                   /* 216A27 LD      HL,0x5A */
-    push32(0x216A2E); sub_206144();                              /* 216A2A CALL    0x206144 */
+    push32(0x216A2E); ClearEventFlag();                          /* 216A2A CALL    0x206144 */
     HL = 0x5B;                                                   /* 216A2E LD      HL,0x5B */
-    push32(0x216A35); sub_206144();                              /* 216A31 CALL    0x206144 */
+    push32(0x216A35); ClearEventFlag();                          /* 216A31 CALL    0x206144 */
     HL = 0x5C;                                                   /* 216A35 LD      HL,0x5C */
-    push32(0x216A3C); sub_206144();                              /* 216A38 CALL    0x206144 */
+    push32(0x216A3C); ClearEventFlag();                          /* 216A38 CALL    0x206144 */
     HL = 0x5D;                                                   /* 216A3C LD      HL,0x5D */
-    push32(0x216A43); sub_206144();                              /* 216A3F CALL    0x206144 */
+    push32(0x216A43); ClearEventFlag();                          /* 216A3F CALL    0x206144 */
     HL = 0x5E;                                                   /* 216A43 LD      HL,0x5E */
-    push32(0x216A4A); sub_206144();                              /* 216A46 CALL    0x206144 */
+    push32(0x216A4A); ClearEventFlag();                          /* 216A46 CALL    0x206144 */
     A = pop8();                                                  /* 216A4A POP     A */
     BC = pop16();                                                /* 216A4B POP     BC */
     XHL = pop32();                                               /* 216A4C POP     XHL */
@@ -22349,7 +22349,7 @@ void sub_216A4E(void)
     push32(XHL);                                                 /* 216A4E PUSH    XHL */
     push16(BC);                                                  /* 216A4F PUSH    BC */
     HL = 0x40;                                                   /* 216A50 LD      HL,0x40 */
-    push32(0x216A57); sub_20615B();                              /* 216A53 CALL    0x20615B */
+    push32(0x216A57); CheckEventFlag();                          /* 216A53 CALL    0x20615B */
     A = L;                                                       /* 216A57 LD      A,L */
     BC = pop16();                                                /* 216A59 POP     BC */
     XHL = pop32();                                               /* 216A5A POP     XHL */
@@ -22362,7 +22362,7 @@ void sub_216A5C(void)
     push16(BC);                                                  /* 216A5D PUSH    BC */
     push8(A);                                                    /* 216A5E PUSH    A */
     HL = 0x40;                                                   /* 216A5F LD      HL,0x40 */
-    push32(0x216A66); sub_20612E();                              /* 216A62 CALL    0x20612E */
+    push32(0x216A66); SetEventFlag();                            /* 216A62 CALL    0x20612E */
     A = pop8();                                                  /* 216A66 POP     A */
     BC = pop16();                                                /* 216A67 POP     BC */
     XHL = pop32();                                               /* 216A68 POP     XHL */
@@ -22374,7 +22374,7 @@ void sub_216A6A(void)
     push32(XHL);                                                 /* 216A6A PUSH    XHL */
     push16(BC);                                                  /* 216A6B PUSH    BC */
     HL = 0x50;                                                   /* 216A6C LD      HL,0x50 */
-    push32(0x216A73); sub_20615B();                              /* 216A6F CALL    0x20615B */
+    push32(0x216A73); CheckEventFlag();                          /* 216A6F CALL    0x20615B */
     A = L;                                                       /* 216A73 LD      A,L */
     BC = pop16();                                                /* 216A75 POP     BC */
     XHL = pop32();                                               /* 216A76 POP     XHL */
@@ -22387,7 +22387,7 @@ void sub_216A78(void)
     push16(BC);                                                  /* 216A79 PUSH    BC */
     push8(A);                                                    /* 216A7A PUSH    A */
     HL = 0x50;                                                   /* 216A7B LD      HL,0x50 */
-    push32(0x216A82); sub_20612E();                              /* 216A7E CALL    0x20612E */
+    push32(0x216A82); SetEventFlag();                            /* 216A7E CALL    0x20612E */
     A = pop8();                                                  /* 216A82 POP     A */
     BC = pop16();                                                /* 216A83 POP     BC */
     XHL = pop32();                                               /* 216A84 POP     XHL */
@@ -22399,7 +22399,7 @@ void sub_216A86(void)
     push32(XHL);                                                 /* 216A86 PUSH    XHL */
     push16(BC);                                                  /* 216A87 PUSH    BC */
     HL = 9;                                                      /* 216A88 LD      HL,9 */
-    push32(0x216A8F); sub_20615B();                              /* 216A8B CALL    0x20615B */
+    push32(0x216A8F); CheckEventFlag();                          /* 216A8B CALL    0x20615B */
     A = L;                                                       /* 216A8F LD      A,L */
     BC = pop16();                                                /* 216A91 POP     BC */
     XHL = pop32();                                               /* 216A92 POP     XHL */
@@ -22411,21 +22411,21 @@ void sub_216A94(void)
     push32(XHL);                                                 /* 216A94 PUSH    XHL */
     push16(BC);                                                  /* 216A95 PUSH    BC */
     HL = 0xA;                                                    /* 216A96 LD      HL,0xA */
-    push32(0x216A9D); sub_20615B();                              /* 216A99 CALL    0x20615B */
+    push32(0x216A9D); CheckEventFlag();                          /* 216A99 CALL    0x20615B */
     A = L;                                                       /* 216A9D LD      A,L */
     BC = pop16();                                                /* 216A9F POP     BC */
     XHL = pop32();                                               /* 216AA0 POP     XHL */
     XSP += 4; return;                                            /* 216AA1 RET */
 }
 
-void sub_216AA2(void)
+void GetStoryStage(void)
 {
     push32(XHL);                                                 /* 216AA2 PUSH    XHL */
     push16(BC);                                                  /* 216AA3 PUSH    BC */
     HL = 0xB;                                                    /* 216AA4 LD      HL,0xB */
 L_216AA7:
     push16(HL);                                                  /* 216AA7 PUSH    HL */
-    push32(0x216AAC); sub_20615B();                              /* 216AA8 CALL    0x20615B */
+    push32(0x216AAC); CheckEventFlag();                          /* 216AA8 CALL    0x20615B */
     alu_cp(L, 1, 8);                                             /* 216AAC CP      L,1 */
     HL = pop16();                                                /* 216AAE POP     HL */
     if (cpu.fz) goto L_216AB7;                                   /* 216AAF JR      Z,0x216AB7 */
@@ -22438,11 +22438,11 @@ L_216AB7:
     XSP += 4; return;                                            /* 216ABB RET */
 }
 
-void sub_216ABC(void)
+void GetStageArenaRank(void)
 {
     push32(XHL);                                                 /* 216ABC PUSH    XHL */
     push8(W);                                                    /* 216ABD PUSH    W */
-    push32(0x216AC3); sub_216AA2();                              /* 216ABF CALL    0x216AA2 */
+    push32(0x216AC3); GetStoryStage();                           /* 216ABF CALL    0x216AA2 */
     WA = (uint16_t)(uint8_t)WA;                                  /* 216AC3 EXTZ    WA */
     XWA = (uint32_t)(uint16_t)XWA;                               /* 216AC5 EXTZ    XWA */
     XHL = 0x24A212;                                              /* 216AC7 LD      XHL,0x24A212 */
@@ -22453,20 +22453,20 @@ void sub_216ABC(void)
     XSP += 4; return;                                            /* 216AD3 RET */
 }
 
-void sub_216AD4(void)
+void SetStoryStage(void)
 {
     push32(XHL);                                                 /* 216AD4 PUSH    XHL */
     push16(BC);                                                  /* 216AD5 PUSH    BC */
     push32(XWA);                                                 /* 216AD6 PUSH    XWA */
-    push32(0x216ADB); sub_2168C7();                              /* 216AD7 CALL    0x2168C7 */
+    push32(0x216ADB); ClearStoryStage();                         /* 216AD7 CALL    0x2168C7 */
     WA = (uint16_t)(uint8_t)WA;                                  /* 216ADB EXTZ    WA */
     XWA = (uint32_t)(uint16_t)XWA;                               /* 216ADD EXTZ    XWA */
     XHL = 0x24A21E;                                              /* 216ADF LD      XHL,0x24A21E */
     XHL = (uint32_t)(XHL + XWA);                                 /* 216AE4 ADD     XHL,XWA */
     L = rd8(XHL);                                                /* 216AE6 LD      L,(XHL) */
     HL = (uint16_t)(uint8_t)HL;                                  /* 216AE8 EXTZ    HL */
-    push32(0x216AEE); sub_20612E();                              /* 216AEA CALL    0x20612E */
-    push32(0x216AF2); sub_216ABC();                              /* 216AEE CALL    0x216ABC */
+    push32(0x216AEE); SetEventFlag();                            /* 216AEA CALL    0x20612E */
+    push32(0x216AF2); GetStageArenaRank();                       /* 216AEE CALL    0x216ABC */
     wr8(0x5045, A);                                              /* 216AF2 LD      (0x5045),A */
     XWA = pop32();                                               /* 216AF6 POP     XWA */
     BC = pop16();                                                /* 216AF7 POP     BC */
@@ -22474,14 +22474,14 @@ void sub_216AD4(void)
     XSP += 4; return;                                            /* 216AF9 RET */
 }
 
-void sub_216AFA(void)
+void AdvanceStoryStage(void)
 {
     push8(A);                                                    /* 216AFA PUSH    A */
-    push32(0x216AFF); sub_216ABC();                              /* 216AFB CALL    0x216ABC */
+    push32(0x216AFF); GetStageArenaRank();                       /* 216AFB CALL    0x216ABC */
     /* CP A,9 */                                                 /* 216AFF CP      A,9 */
     if ((uint8_t)(A) >= (uint8_t)(9)) goto L_216B0A;             /* 216B02 JR      NC,0x216B0A */
     A = (uint8_t)(A + 1);                                        /* 216B04 INC     1,A */
-    push32(0x216B0A); sub_216AD4();                              /* 216B06 CALL    0x216AD4 */
+    push32(0x216B0A); SetStoryStage();                           /* 216B06 CALL    0x216AD4 */
 L_216B0A:
     A = pop8();                                                  /* 216B0A POP     A */
     XSP += 4; return;                                            /* 216B0B RET */
@@ -22507,7 +22507,7 @@ void sub_216B19(void)
 L_216B24:
     push16(HL);                                                  /* 216B24 PUSH    HL */
     push16(WA);                                                  /* 216B25 PUSH    WA */
-    push32(0x216B2A); sub_20615B();                              /* 216B26 CALL    0x20615B */
+    push32(0x216B2A); CheckEventFlag();                          /* 216B26 CALL    0x20615B */
     WA = pop16();                                                /* 216B2A POP     WA */
     A = (uint8_t)(A + L);                                        /* 216B2B ADD     A,L */
     HL = pop16();                                                /* 216B2D POP     HL */
@@ -22529,7 +22529,7 @@ void sub_216B38(void)
 L_216B40:
     push16(HL);                                                  /* 216B40 PUSH    HL */
     push8(A);                                                    /* 216B41 PUSH    A */
-    push32(0x216B46); sub_206144();                              /* 216B42 CALL    0x206144 */
+    push32(0x216B46); ClearEventFlag();                          /* 216B42 CALL    0x206144 */
     A = pop8();                                                  /* 216B46 POP     A */
     HL = pop16();                                                /* 216B47 POP     HL */
     HL = (uint16_t)(HL + 1);                                     /* 216B48 INC     1,HL */
@@ -22550,7 +22550,7 @@ void sub_216B51(void)
 L_216B59:
     push16(HL);                                                  /* 216B59 PUSH    HL */
     push8(A);                                                    /* 216B5A PUSH    A */
-    push32(0x216B5F); sub_206144();                              /* 216B5B CALL    0x206144 */
+    push32(0x216B5F); ClearEventFlag();                          /* 216B5B CALL    0x206144 */
     A = pop8();                                                  /* 216B5F POP     A */
     HL = pop16();                                                /* 216B60 POP     HL */
     HL = (uint16_t)(HL + 1);                                     /* 216B61 INC     1,HL */
@@ -22561,17 +22561,17 @@ L_216B59:
     XSP += 4; return;                                            /* 216B69 RET */
 }
 
-void sub_216B6A(void)
+void CheckSkillPair1(void)
 {
     push32(XHL);                                                 /* 216B6A PUSH    XHL */
     push16(BC);                                                  /* 216B6B PUSH    BC */
     push8(W);                                                    /* 216B6C PUSH    W */
     W = 0;                                                       /* 216B6E LD      W,0 */
     HL = 0x30;                                                   /* 216B70 LD      HL,0x30 */
-    push32(0x216B77); sub_20615B();                              /* 216B73 CALL    0x20615B */
+    push32(0x216B77); CheckEventFlag();                          /* 216B73 CALL    0x20615B */
     W = (uint8_t)(W | L);                                        /* 216B77 OR      W,L */
     HL = 0x31;                                                   /* 216B79 LD      HL,0x31 */
-    push32(0x216B80); sub_20615B();                              /* 216B7C CALL    0x20615B */
+    push32(0x216B80); CheckEventFlag();                          /* 216B7C CALL    0x20615B */
     W = (uint8_t)(W | L);                                        /* 216B80 OR      W,L */
     A = W;                                                       /* 216B82 LD      A,W */
     W = pop8();                                                  /* 216B84 POP     W */
@@ -22580,17 +22580,17 @@ void sub_216B6A(void)
     XSP += 4; return;                                            /* 216B88 RET */
 }
 
-void sub_216B89(void)
+void CheckSkillPair2(void)
 {
     push32(XHL);                                                 /* 216B89 PUSH    XHL */
     push16(BC);                                                  /* 216B8A PUSH    BC */
     push8(W);                                                    /* 216B8B PUSH    W */
     W = 0;                                                       /* 216B8D LD      W,0 */
     HL = 0x32;                                                   /* 216B8F LD      HL,0x32 */
-    push32(0x216B96); sub_20615B();                              /* 216B92 CALL    0x20615B */
+    push32(0x216B96); CheckEventFlag();                          /* 216B92 CALL    0x20615B */
     W = (uint8_t)(W | L);                                        /* 216B96 OR      W,L */
     HL = 0x33;                                                   /* 216B98 LD      HL,0x33 */
-    push32(0x216B9F); sub_20615B();                              /* 216B9B CALL    0x20615B */
+    push32(0x216B9F); CheckEventFlag();                          /* 216B9B CALL    0x20615B */
     W = (uint8_t)(W | L);                                        /* 216B9F OR      W,L */
     A = W;                                                       /* 216BA1 LD      A,W */
     W = pop8();                                                  /* 216BA3 POP     W */
@@ -22607,13 +22607,13 @@ void sub_216BA8(void)
     /* CP WA,0x101 */                                            /* 216BAB CP      WA,0x101 */
     if ((uint16_t)(WA) >= (uint16_t)(0x101)) goto L_216BB9;      /* 216BAF JR      NC,0x216BB9 */
     L = A;                                                       /* 216BB1 LD      L,A */
-    push32(0x216BB7); sub_208272();                              /* 216BB3 CALL    0x208272 */
+    push32(0x216BB7); GetItemName();                             /* 216BB3 CALL    0x208272 */
     goto L_216BC5;                                               /* 216BB7 JR      0x216BC5 */
 L_216BB9:
     WA = (uint16_t)(WA - 0x101);                                 /* 216BB9 SUB     WA,0x101 */
     WA = (uint16_t)(WA + 1);                                     /* 216BBD INC     1,WA */
     L = A;                                                       /* 216BBF LD      L,A */
-    push32(0x216BC5); sub_2082FA();                              /* 216BC1 CALL    0x2082FA */
+    push32(0x216BC5); GetPartName();                             /* 216BC1 CALL    0x2082FA */
 L_216BC5:
     XWA = pop32();                                               /* 216BC5 POP     XWA */
     XBC = pop32();                                               /* 216BC6 POP     XBC */
@@ -23489,7 +23489,7 @@ L_21721D:
 
 void sub_21721E(void)
 {
-    push32(0x217222); sub_20748A();                              /* 21721E CALL    0x20748A */
+    push32(0x217222); GetTextBox();                              /* 21721E CALL    0x20748A */
     B = rd8(XWA + 2);                                            /* 217222 LD      B,(XWA+2) */
     C = rd8(XWA + 3);                                            /* 217225 LD      C,(XWA+3) */
     B = (uint8_t)(B & 0x1F);                                     /* 217228 AND     B,0x1F */
@@ -23521,7 +23521,7 @@ void sub_21722F(void)
 
 void sub_21725D(void)
 {
-    push32(0x217261); sub_20748A();                              /* 21725D CALL    0x20748A */
+    push32(0x217261); GetTextBox();                              /* 21725D CALL    0x20748A */
     XHL = rd32(XWA + 8);                                         /* 217261 LD      XHL,(XWA+8) */
     /* OR XHL,XHL: test */                                       /* 217264 OR      XHL,XHL */
     if ((uint32_t)XHL == 0) { XSP += 4; return; }                /* 217266 RET     Z */
@@ -23531,7 +23531,7 @@ void sub_21725D(void)
 
 void sub_21726A(void)
 {
-    push32(0x21726E); sub_20748A();                              /* 21726A CALL    0x20748A */
+    push32(0x21726E); GetTextBox();                              /* 21726A CALL    0x20748A */
     A = rd8(XWA + 0x12);                                         /* 21726E LD      A,(XWA+0x12) */
     A = (uint8_t)(A & 0x7F);                                     /* 217271 AND     A,0x7F */
     alu_cp(A, 2, 8);                                             /* 217274 CP      A,2 */
@@ -23543,14 +23543,14 @@ void sub_21726A(void)
 
 void sub_217289(void)
 {
-    push32(0x21728D); sub_20748A();                              /* 217289 CALL    0x20748A */
+    push32(0x21728D); GetTextBox();                              /* 217289 CALL    0x20748A */
     wr8(XWA + 0x10, B);                                          /* 21728D LD      (XWA+0x10),B */
     XSP += 4; return;                                            /* 217290 RET */
 }
 
 void sub_217291(void)
 {
-    push32(0x217295); sub_20748A();                              /* 217291 CALL    0x20748A */
+    push32(0x217295); GetTextBox();                              /* 217291 CALL    0x20748A */
     wr32(XWA + 8, XHL);                                          /* 217295 LD      (XWA+8),XHL */
     XSP += 4; return;                                            /* 217298 RET */
 }
@@ -23861,7 +23861,7 @@ L_217427:
     XSP += 4; return;                                            /* 21742C RET */
 }
 
-void sub_21740E(void)
+void SplitRaceGender(void)
 {
     A = (uint8_t)(A - 1);                                        /* 21740E DEC     1,A */
     W = A;                                                       /* 217410 LD      W,A */
@@ -23919,7 +23919,7 @@ L_217490:
     XSP += 4; return;                                            /* 217490 RET */
 }
 
-void sub_217499(void)
+void GetDevLevelExp(void)
 {
     /* OR W,W: test */                                           /* 217499 OR      W,W */
     if ((uint8_t)W != 0) goto L_2174A3;                          /* 21749B JR      NZ,0x2174A3 */
@@ -23931,7 +23931,7 @@ L_2174A7:
     XSP += 4; return;                                            /* 2174A7 RET */
 }
 
-void sub_2174A8(void)
+void GetDevLevelBonus(void)
 {
     /* OR W,W: test */                                           /* 2174A8 OR      W,W */
     if ((uint8_t)W != 0) goto L_2174B2;                          /* 2174AA JR      NZ,0x2174B2 */
@@ -23943,19 +23943,19 @@ L_2174B6:
     XSP += 4; return;                                            /* 2174B6 RET */
 }
 
-void sub_2174B7(void)
+void GetDevPartnerBonus(void)
 {
     push32(0x2174BB); sub_21BA12();                              /* 2174B7 CALL    0x21BA12 */
     XSP += 4; return;                                            /* 2174BB RET */
 }
 
-void sub_2174BC(void)
+void GetDevToolBonus(void)
 {
     push32(0x2174C0); sub_21BA24();                              /* 2174BC CALL    0x21BA24 */
     XSP += 4; return;                                            /* 2174C0 RET */
 }
 
-void sub_2174C1(void)
+void Cap100(void)
 {
     /* CP A,0x64 */                                              /* 2174C1 CP      A,0x64 */
     if ((uint8_t)(A) < (uint8_t)(0x64)) goto L_2174C8;           /* 2174C4 JR      C,0x2174C8 */
@@ -23966,7 +23966,7 @@ L_2174C8:
 
 void sub_2174C9(void)
 {
-    push32(0x2174CD); sub_2060CB();                              /* 2174C9 CALL    0x2060CB */
+    push32(0x2174CD); Random();                                  /* 2174C9 CALL    0x2060CB */
     XWA = mulu16(XWA, 0x100);                                    /* 2174CD MUL     XWA,0x100 */
     XWA = divu16(XWA, 0x7530);                                   /* 2174D1 DIV     XWA,0x7530 */
     XWA = (uint32_t)(XWA >> 16);                                 /* 2174D5 SRL     16,XWA */
@@ -24980,7 +24980,7 @@ void sub_217F20(void)
     WA = 0x7E;                                                   /* 217F2E LD      WA,0x7E */
     QA = 0;                                                      /* 217F31 LD      QA,0 */
     BC = 0x1C2;                                                  /* 217F34 LD      BC,0x1C2 */
-    push32(0x217F3B); sub_206993();                              /* 217F37 CALL    0x206993 */
+    push32(0x217F3B); FillTiles();                               /* 217F37 CALL    0x206993 */
     A = 3;                                                       /* 217F3B LD      A,3 */
     C = 0xC;                                                     /* 217F3D LD      C,0xC */
     E = 0xE;                                                     /* 217F3F LD      E,0xE */
@@ -25576,16 +25576,16 @@ L_2189B1:
 
 void sub_2189B4(void)
 {
-    push32(0x2189B8); sub_2189BD();                              /* 2189B4 CALL    0x2189BD */
+    push32(0x2189B8); UpdateDevelopChance();                     /* 2189B4 CALL    0x2189BD */
     push32(0x2189BC); sub_218A34();                              /* 2189B8 CALL    0x218A34 */
     XSP += 4; return;                                            /* 2189BC RET */
 }
 
-void sub_2189BD(void)
+void UpdateDevelopChance(void)
 {
     W = rd8(0x618D);                                             /* 2189BD LD      W,(0x618D) */
     A = rd8(0x618E);                                             /* 2189C1 LD      A,(0x618E) */
-    push32(0x2189C9); sub_21D192();                              /* 2189C5 CALL    0x21D192 */
+    push32(0x2189C9); GetRecipe();                               /* 2189C5 CALL    0x21D192 */
     A = rd8(XHL + 0);                                            /* 2189C9 LD      A,(XHL+0) */
     wr8(0x6190, A);                                              /* 2189CC LD      (0x6190),A */
     A = rd8(XHL + 1);                                            /* 2189D0 LD      A,(XHL+1) */
@@ -25596,24 +25596,24 @@ void sub_2189BD(void)
     A = alu_or(A, A, 8);                                         /* 2189E2 OR      A,A */
     if (cpu.fs) goto L_218A33;                                   /* 2189E4 JP      MI,0x218A33 */
     A = rd8(0x61DF);                                             /* 2189E9 LD      A,(0x61DF) */
-    push32(0x2189F1); sub_21740E();                              /* 2189ED CALL    0x21740E */
+    push32(0x2189F1); SplitRaceGender();                         /* 2189ED CALL    0x21740E */
     A = rd8(0x61E0);                                             /* 2189F1 LD      A,(0x61E0) */
-    push32(0x2189F9); sub_2174A8();                              /* 2189F5 CALL    0x2174A8 */
+    push32(0x2189F9); GetDevLevelBonus();                        /* 2189F5 CALL    0x2174A8 */
     A = (uint8_t)(A + rd8(0x6190));                              /* 2189F9 ADD     A,(0x6190) */
-    push32(0x218A01); sub_2174C1();                              /* 2189FD CALL    0x2174C1 */
+    push32(0x218A01); Cap100();                                  /* 2189FD CALL    0x2174C1 */
     wr8(0x6190, A);                                              /* 218A01 LD      (0x6190),A */
     A = rd8(0x61DF);                                             /* 218A05 LD      A,(0x61DF) */
-    push32(0x218A0D); sub_2174B7();                              /* 218A09 CALL    0x2174B7 */
+    push32(0x218A0D); GetDevPartnerBonus();                      /* 218A09 CALL    0x2174B7 */
     A = (uint8_t)(A + rd8(0x6190));                              /* 218A0D ADD     A,(0x6190) */
-    push32(0x218A15); sub_2174C1();                              /* 218A11 CALL    0x2174C1 */
+    push32(0x218A15); Cap100();                                  /* 218A11 CALL    0x2174C1 */
     wr8(0x6190, A);                                              /* 218A15 LD      (0x6190),A */
     A = rd8(0x618F);                                             /* 218A19 LD      A,(0x618F) */
     A = alu_or(A, A, 8);                                         /* 218A1D OR      A,A */
     if (cpu.fz) goto L_218A33;                                   /* 218A1F JR      Z,0x218A33 */
     if (cpu.fs) goto L_218A33;                                   /* 218A21 JR      MI,0x218A33 */
-    push32(0x218A27); sub_2174BC();                              /* 218A23 CALL    0x2174BC */
+    push32(0x218A27); GetDevToolBonus();                         /* 218A23 CALL    0x2174BC */
     A = (uint8_t)(A + rd8(0x6190));                              /* 218A27 ADD     A,(0x6190) */
-    push32(0x218A2F); sub_2174C1();                              /* 218A2B CALL    0x2174C1 */
+    push32(0x218A2F); Cap100();                                  /* 218A2B CALL    0x2174C1 */
     wr8(0x6190, A);                                              /* 218A2F LD      (0x6190),A */
 L_218A33:
     XSP += 4; return;                                            /* 218A33 RET */
@@ -26033,7 +26033,7 @@ L_21905B:
     WA = 2;                                                      /* 21906E LD      WA,2 */
     push32(0x219074); sub_2171DF();                              /* 219070 CALL    0x2171DF */
     A = rd8(0x61A8);                                             /* 219074 LD      A,(0x61A8) */
-    push32(0x21907C); sub_21740E();                              /* 219078 CALL    0x21740E */
+    push32(0x21907C); SplitRaceGender();                         /* 219078 CALL    0x21740E */
     push32(0x219080); sub_21741B();                              /* 21907C CALL    0x21741B */
     BC = 1;                                                      /* 219080 LD      BC,1 */
     WA = 2;                                                      /* 219082 LD      WA,2 */
@@ -26092,7 +26092,7 @@ void sub_219048(void)
     WA = 2;                                                      /* 21906E LD      WA,2 */
     push32(0x219074); sub_2171DF();                              /* 219070 CALL    0x2171DF */
     A = rd8(0x61A8);                                             /* 219074 LD      A,(0x61A8) */
-    push32(0x21907C); sub_21740E();                              /* 219078 CALL    0x21740E */
+    push32(0x21907C); SplitRaceGender();                         /* 219078 CALL    0x21740E */
     push32(0x219080); sub_21741B();                              /* 21907C CALL    0x21741B */
     BC = 1;                                                      /* 219080 LD      BC,1 */
     WA = 2;                                                      /* 219082 LD      WA,2 */
@@ -26350,8 +26350,8 @@ void sub_21936A(void)
     WA = 0x7E;                                                   /* 219386 LD      WA,0x7E */
     QA = 0;                                                      /* 219389 LD      QA,0 */
     BC = 0x1C2;                                                  /* 21938C LD      BC,0x1C2 */
-    push32(0x219393); sub_206993();                              /* 21938F CALL    0x206993 */
-    push32(0x219397); sub_20868B();                              /* 219393 CALL    0x20868B */
+    push32(0x219393); FillTiles();                               /* 21938F CALL    0x206993 */
+    push32(0x219397); CalcUnitStats();                           /* 219393 CALL    0x20868B */
     WA = 0x7E;                                                   /* 219397 LD      WA,0x7E */
     BC = 0;                                                      /* 21939A LD      BC,0 */
     DE = 2;                                                      /* 21939C LD      DE,2 */
@@ -26396,7 +26396,7 @@ void sub_2193C5(void)
     WA = 0x7E;                                                   /* 2193E1 LD      WA,0x7E */
     QA = 0;                                                      /* 2193E4 LD      QA,0 */
     BC = 0x1C2;                                                  /* 2193E7 LD      BC,0x1C2 */
-    push32(0x2193EE); sub_206993();                              /* 2193EA CALL    0x206993 */
+    push32(0x2193EE); FillTiles();                               /* 2193EA CALL    0x206993 */
     B = rd8(0x6106);                                             /* 2193EE LD      B,(0x6106) */
     D = rd8(0x6107);                                             /* 2193F2 LD      D,(0x6107) */
     QB = 0xC;                                                    /* 2193F6 LD      QB,0xC */
@@ -26688,7 +26688,7 @@ void sub_2196C7(void)
     push32(0x2196CB); sub_21968B();                              /* 2196C7 CALL    0x21968B */
     if (!cpu.fc) { XSP += 4; return; }                           /* 2196CB RET     NC */
     WA = (uint16_t)(WA + 1);                                     /* 2196CD INC     1,WA */
-    push32(0x2196D3); sub_2061B8();                              /* 2196CF CALL    0x2061B8 */
+    push32(0x2196D3); RemoveItem();                              /* 2196CF CALL    0x2061B8 */
     XSP += 4; return;                                            /* 2196D3 RET */
 }
 
@@ -26739,7 +26739,7 @@ void sub_219720(void)
     push32(0x219724); sub_2196D4();                              /* 219720 CALL    0x2196D4 */
     if (!cpu.fc) { XSP += 4; return; }                           /* 219724 RET     NC */
     WA = (uint16_t)(WA + 1);                                     /* 219726 INC     1,WA */
-    push32(0x21972C); sub_2061B8();                              /* 219728 CALL    0x2061B8 */
+    push32(0x21972C); RemoveItem();                              /* 219728 CALL    0x2061B8 */
     XSP += 4; return;                                            /* 21972C RET */
 }
 
@@ -26814,11 +26814,11 @@ void sub_219776(void)
 {
     XHL3 = 0x61E6;                                               /* 219776 LD      XHL3,0x61E6 */
     RW3 = 2;                                                     /* 21977D LD      RW3,2 */
-    push32(0x219784); sub_21D9F5();                              /* 219780 CALL    0x21D9F5 */
+    push32(0x219784); BiosCall();                                /* 219780 CALL    0x21D9F5 */
     XSP += 4; return;                                            /* 219784 RET */
 }
 
-void sub_219785(void)
+void CheckEngineerLevelUp(void)
 {
     /* CP (0x61E0),0x32 */                                       /* 219785 CPB     (0x61E0),0x32 */
     if ((uint8_t)(rd8(0x61E0)) >= (uint8_t)(0x32)) goto L_219795; /* 21978A JR      NC,0x219795 */
@@ -26854,7 +26854,7 @@ L_2197AA:
     push16(WA);                                                  /* 2197AC PUSH    WA */
     WA = HL;                                                     /* 2197AD LD      WA,HL */
     HL = pop16();                                                /* 2197AF POP     HL */
-    push32(0x2197B4); sub_210380();                              /* 2197B0 CALL    0x210380 */
+    push32(0x2197B4); DrawPortraitAt();                          /* 2197B0 CALL    0x210380 */
     XSP += 4; return;                                            /* 2197B4 RET */
 L_2197BA:
     HL = 0x126;                                                  /* 2197BA LD      HL,0x126 */
@@ -26878,7 +26878,7 @@ L_2197AA:
     push16(WA);                                                  /* 2197AC PUSH    WA */
     WA = HL;                                                     /* 2197AD LD      WA,HL */
     HL = pop16();                                                /* 2197AF POP     HL */
-    push32(0x2197B4); sub_210380();                              /* 2197B0 CALL    0x210380 */
+    push32(0x2197B4); DrawPortraitAt();                          /* 2197B0 CALL    0x210380 */
     XSP += 4; return;                                            /* 2197B4 RET */
 L_2197C1:
     BC = 0;                                                      /* 2197C1 LD      BC,0 */
@@ -26914,7 +26914,7 @@ void sub_2197DD(void)
     WA = 0x7E;                                                   /* 2197F9 LD      WA,0x7E */
     QA = 0;                                                      /* 2197FC LD      QA,0 */
     BC = 0x1C2;                                                  /* 2197FF LD      BC,0x1C2 */
-    push32(0x219806); sub_206993();                              /* 219802 CALL    0x206993 */
+    push32(0x219806); FillTiles();                               /* 219802 CALL    0x206993 */
     XSP += 4; return;                                            /* 219806 RET */
 }
 
@@ -26929,7 +26929,7 @@ void sub_219807(void)
     WA = 0x126;                                                  /* 219815 LD      WA,0x126 */
     QA = 0;                                                      /* 219818 LD      QA,0 */
     BC = 0xA8;                                                   /* 21981B LD      BC,0xA8 */
-    push32(0x219822); sub_206993();                              /* 21981E CALL    0x206993 */
+    push32(0x219822); FillTiles();                               /* 21981E CALL    0x206993 */
     XSP += 4; return;                                            /* 219822 RET */
 }
 
@@ -26937,7 +26937,7 @@ void sub_219823(void)
 {
     L = A;                                                       /* 219823 LD      L,A */
     HL = (uint16_t)(uint8_t)HL;                                  /* 219825 EXTZ    HL */
-    push32(0x21982B); sub_20615B();                              /* 219827 CALL    0x20615B */
+    push32(0x21982B); CheckEventFlag();                          /* 219827 CALL    0x20615B */
     /* OR HL,HL: test */                                         /* 21982B OR      HL,HL */
     if ((uint16_t)HL == 0) { XSP += 4; return; }                 /* 21982D RET     Z */
     cpu.fc = 1; cpu.fh = cpu.fn = 0;                             /* 21982F SCF */
@@ -26948,7 +26948,7 @@ void sub_219831(void)
 {
     L = A;                                                       /* 219831 LD      L,A */
     HL = (uint16_t)(uint8_t)HL;                                  /* 219833 EXTZ    HL */
-    push32(0x219839); sub_20612E();                              /* 219835 CALL    0x20612E */
+    push32(0x219839); SetEventFlag();                            /* 219835 CALL    0x20612E */
     XSP += 4; return;                                            /* 219839 RET */
 }
 
@@ -26964,7 +26964,7 @@ void sub_219849(void)
     { jump_ind(XHL); return; }                                   /* 219862 JP      (XHL) */
 }
 
-void sub_219864(void)
+void Wait30Frames(void)
 {
     XDE = pop32();                                               /* 219864 POP     XDE */
     wr32(0x61ED, XDE);                                           /* 219865 LD      (0x61ED),XDE */
@@ -26975,7 +26975,7 @@ void sub_219864(void)
     { jump_ind(XHL); return; }                                   /* 219877 JP      (XHL) */
 }
 
-void sub_219879(void)
+void WaitForButton(void)
 {
     XDE = pop32();                                               /* 219879 POP     XDE */
     wr32(0x61ED, XDE);                                           /* 21987A LD      (0x61ED),XDE */
@@ -27020,7 +27020,7 @@ void sub_2198E3(void)
 void sub_2198EB(void)
 {
     A = rd8(0x61DF);                                             /* 2198EB LD      A,(0x61DF) */
-    push32(0x2198F3); sub_21740E();                              /* 2198EF CALL    0x21740E */
+    push32(0x2198F3); SplitRaceGender();                         /* 2198EF CALL    0x21740E */
     /* OR W,W: test */                                           /* 2198F3 OR      W,W */
     if ((uint8_t)W == 0) { XSP += 4; return; }                   /* 2198F5 RET     Z */
     XHL = XDE;                                                   /* 2198F7 LD      XHL,XDE */
@@ -27037,14 +27037,14 @@ void sub_219911(void)
 {
     goto L_219911;
 L_219907:
-    push32(0x21990B); sub_207759();                              /* 219907 CALL    0x207759 */
+    push32(0x21990B); PlayMusic();                               /* 219907 CALL    0x207759 */
     XSP += 4; return;                                            /* 21990B RET */
 L_219911:
     XWA = 2;                                                     /* 219911 LD      XWA,2 */
     goto L_219907;                                               /* 219913 JP      0x219907 */
 }
 
-void sub_219947(void)
+void WorksGreeting(void)
 {
     /* CP (0x61F6),4 */                                          /* 219947 CPB     (0x61F6),4 */
     if ((uint8_t)(rd8(0x61F6)) == (uint8_t)(4)) goto L_21995B;   /* 21994C JR      Z,0x21995B */
@@ -27105,7 +27105,7 @@ L_219C80:
     { jump_ind(XHL); return; }                                   /* 219C84 JP      (XHL) */
 }
 
-void sub_219C86(void)
+void WorksInfoMenus(void)
 {
     XHL = pop32();                                               /* 219C86 POP     XHL */
     wr32(0x61FC, XHL);                                           /* 219C87 LD      (0x61FC),XHL */
@@ -27154,14 +27154,14 @@ L_219D14:
     { jump_ind(XHL); return; }                                   /* 219D18 JP      (XHL) */
 }
 
-void sub_219F73(void)
+void WorksHelpMenu(void)
 {
     push32(0x219F77); sub_21ABDA();                              /* 219F73 CALL    0x21ABDA */
     push32(0x219F7B); sub_2175AF();                              /* 219F77 CALL    0x2175AF */
     XSP += 4; return;                                            /* 219F7B RET */
 }
 
-void sub_219FF8(void)
+void WorksTradeMenu(void)
 {
     push32(0x219FFC); sub_2179FE();                              /* 219FF8 CALL    0x2179FE */
     push32(0x21A000); sub_21ABDA();                              /* 219FFC CALL    0x21ABDA */
@@ -27395,7 +27395,7 @@ void sub_21A533(void)
     XSP += 4; return;                                            /* 21A558 RET */
 }
 
-void sub_21A559(void)
+void WorksSetupMenu(void)
 {
     push32(0x21A55D); sub_21D256();                              /* 21A559 CALL    0x21D256 */
     WA = rd16(XHL + 4);                                          /* 21A55D LD      WA,(XHL+4) */
@@ -27412,7 +27412,7 @@ void sub_21A66B(void)
     if (cpu.fc) goto L_21A689;                                   /* 21A66F JR      C,0x21A689 */
     XHL = 0x61CF;                                                /* 21A671 LD      XHL,0x61CF */
     XDE = 0x61D1;                                                /* 21A676 LD      XDE,0x61D1 */
-    push32(0x21A67F); sub_21A68A();                              /* 21A67B CALL    0x21A68A */
+    push32(0x21A67F); WorksDevelopMenu();                        /* 21A67B CALL    0x21A68A */
     WA = rd16(XHL);                                              /* 21A67F LD      WA,(XHL) */
     wr16(XHL, 0);                                                /* 21A681 LDW     (XHL),0 */
     push32(0x21A689); sub_219713();                              /* 21A685 CALL    0x219713 */
@@ -27420,14 +27420,14 @@ L_21A689:
     XSP += 4; return;                                            /* 21A689 RET */
 }
 
-void sub_21A68A(void)
+void WorksDevelopMenu(void)
 {
     if (cpu.fz) { XSP += 4; return; }                            /* 21A68A RET     Z */
     XHL = XDE;                                                   /* 21A68C LD      XHL,XDE */
     XSP += 4; return;                                            /* 21A68E RET */
 }
 
-void sub_21A9A9(void)
+void DevelopRoll(void)
 {
     A = rd8(0x61AC);                                             /* 21A9A9 LD      A,(0x61AC) */
     W = 5;                                                       /* 21A9AD LD      W,5 */
@@ -27445,7 +27445,7 @@ void sub_21A9A9(void)
     XSP += 4; return;                                            /* 21A9D4 RET */
 }
 
-void sub_21A9D5(void)
+void DevelopSuccess(void)
 {
     A = rd8(0x6191);                                             /* 21A9D5 LD      A,(0x6191) */
     W = 5;                                                       /* 21A9D9 LD      W,5 */
@@ -27464,12 +27464,12 @@ L_21A9FD:
     XSP += 4; return;                                            /* 21A9FE RET */
 }
 
-void sub_21A9FF(void)
+void EngineerLevelUp(void)
 {
     A = rd8(0x61DF);                                             /* 21A9FF LD      A,(0x61DF) */
-    push32(0x21AA07); sub_21740E();                              /* 21AA03 CALL    0x21740E */
+    push32(0x21AA07); SplitRaceGender();                         /* 21AA03 CALL    0x21740E */
     A = rd8(0x61E0);                                             /* 21AA07 LD      A,(0x61E0) */
-    push32(0x21AA0F); sub_217499();                              /* 21AA0B CALL    0x217499 */
+    push32(0x21AA0F); GetDevLevelExp();                          /* 21AA0B CALL    0x217499 */
     WA = (uint16_t)(uint8_t)WA;                                  /* 21AA0F EXTZ    WA */
     { uint32_t ea = 0x503F; wr16(ea, (uint16_t)(rd16(ea) + WA)); } /* 21AA11 ADD     (0x503F),WA */
     A = rd8(0x61E0);                                             /* 21AA15 LD      A,(0x61E0) */
@@ -27486,7 +27486,7 @@ L_21AA33:
     XSP += 4; return;                                            /* 21AA33 RET */
 }
 
-void sub_21AA34(void)
+void WorksDevelopDone(void)
 {
     push32(0x21AA38); sub_217684();                              /* 21AA34 CALL    0x217684 */
     A = rd8(0x6191);                                             /* 21AA38 LD      A,(0x6191) */
@@ -27585,7 +27585,7 @@ void sub_21ABDA(void)
     WA = 0x7E;                                                   /* 21ABF6 LD      WA,0x7E */
     QA = 0;                                                      /* 21ABF9 LD      QA,0 */
     BC = 0x1C2;                                                  /* 21ABFC LD      BC,0x1C2 */
-    push32(0x21AC03); sub_206993();                              /* 21ABFF CALL    0x206993 */
+    push32(0x21AC03); FillTiles();                               /* 21ABFF CALL    0x206993 */
     XHL = 0x9000;                                                /* 21AC03 LD      XHL,0x9000 */
     XDE = 0x9001;                                                /* 21AC08 LD      XDE,0x9001 */
     XBC = 0x7FF;                                                 /* 21AC0D LD      XBC,0x7FF */
@@ -27678,7 +27678,7 @@ void sub_21AC78(void)
 {
     goto L_21AC78;
 L_219907:
-    push32(0x21990B); sub_207759();                              /* 219907 CALL    0x207759 */
+    push32(0x21990B); PlayMusic();                               /* 219907 CALL    0x207759 */
     XSP += 4; return;                                            /* 21990B RET */
 L_21AC78:
     XWA = 3;                                                     /* 21AC78 LD      XWA,3 */
@@ -28197,7 +28197,7 @@ void sub_21BA24(void)
     XSP += 4; return;                                            /* 21BA30 RET */
 }
 
-void sub_21D192(void)
+void GetRecipe(void)
 {
     L = W;                                                       /* 21D192 LD      L,W */
     L = (uint8_t)(L - 1);                                        /* 21D194 DEC     1,L */
@@ -28452,7 +28452,7 @@ L_21D643:
     XSP += 4; return;                                            /* 21D646 RET */
 }
 
-void fn_21D647(void)
+void NewGameSetup(void)
 {
     push32(0x21D64B); sub_206863();                              /* 21D647 CALL    0x206863 */
     XHL = 0x20F7AD;                                              /* 21D64B LD      XHL,0x20F7AD */
@@ -28483,8 +28483,8 @@ L_21D687:
     wr16(0x502D, WA);                                            /* 21D6A4 LD      (0x502D),WA */
     wr8(0x5022, A);                                              /* 21D6A8 LD      (0x5022),A */
     wr16(0x5023, WA);                                            /* 21D6AC LD      (0x5023),WA */
-    push32(0x21D6B4); sub_207B12();                              /* 21D6B0 CALL    0x207B12 */
-    push32(0x21D6B8); sub_207B12();                              /* 21D6B4 CALL    0x207B12 */
+    push32(0x21D6B4); TryLevelUp();                              /* 21D6B0 CALL    0x207B12 */
+    push32(0x21D6B8); TryLevelUp();                              /* 21D6B4 CALL    0x207B12 */
     A = rd8(0x5021);                                             /* 21D6B8 LD      A,(0x5021) */
     A = (uint8_t)(A - 1);                                        /* 21D6BC DEC     1,A */
     A = (uint8_t)(A >> 1);                                       /* 21D6BE SRL     1,A */
@@ -28496,7 +28496,7 @@ L_21D687:
     do { wr8(XDE, rd8(XHL)); XDE += 1; XHL += 1; BC--; } while (BC != 0); cpu.fh = cpu.fn = 0; cpu.fv = 0; /* 21D6D5 LDIR    (XDE+),(XHL+) */
     wr8(0x504C, 0);                                              /* 21D6D7 LDB     (0x504C),0 */
     wr8(0x504D, 0);                                              /* 21D6DC LDB     (0x504D),0 */
-    push32(0x21D6E5); sub_20868B();                              /* 21D6E1 CALL    0x20868B */
+    push32(0x21D6E5); CalcUnitStats();                           /* 21D6E1 CALL    0x20868B */
     wr16(0x5056, rd16(0x505C));                                  /* 21D6E5 LDW     (0x5056),(0x505C) */
     wr16(0x5058, rd16(0x505E));                                  /* 21D6EB LDW     (0x5058),(0x505E) */
     A = rd8(0x5048);                                             /* 21D6F1 LD      A,(0x5048) */
@@ -28563,7 +28563,7 @@ void fn_21D800(void)
     push32(0x21D81B); sub_2068B3();                              /* 21D817 CALL    0x2068B3 */
     /* CP (0x60F0),1 */                                          /* 21D81B CPB     (0x60F0),1 */
     if ((uint8_t)(rd8(0x60F0)) == (uint8_t)(1)) goto L_21D836;   /* 21D820 JR      Z,0x21D836 */
-    push32(0x21D826); sub_20868B();                              /* 21D822 CALL    0x20868B */
+    push32(0x21D826); CalcUnitStats();                           /* 21D822 CALL    0x20868B */
     wr8(0x5DF4, 0);                                              /* 21D826 LDB     (0x5DF4),0 */
     wr16(XIZ + 8, 0xD758);                                       /* 21D82B LDW     (XIZ+8),0xD758 */
     wr16(XIZ + 0xA, 0x21);                                       /* 21D830 LDW     (XIZ+0xA),0x21 */
@@ -28572,7 +28572,7 @@ L_21D836:
     wr16(0x5DB7, rd16(0x505A));                                  /* 21D836 LDW     (0x5DB7),(0x505A) */
     A = 1;                                                       /* 21D83C LD      A,1 */
     push32(0x21D842); sub_21AAA5();                              /* 21D83E CALL    0x21AAA5 */
-    push32(0x21D846); sub_20868B();                              /* 21D842 CALL    0x20868B */
+    push32(0x21D846); CalcUnitStats();                           /* 21D842 CALL    0x20868B */
     wr8(0x5DF4, 0);                                              /* 21D846 LDB     (0x5DF4),0 */
     wr16(XIZ + 8, 0xD758);                                       /* 21D84B LDW     (XIZ+8),0xD758 */
     wr16(XIZ + 0xA, 0x21);                                       /* 21D850 LDW     (XIZ+0xA),0x21 */
@@ -28605,7 +28605,7 @@ L_21D9F4:
     XSP += 4; return;                                            /* 21D9F4 RET */
 }
 
-void sub_21D9F5(void)
+void BiosCall(void)
 {
     push16(get_sr());                                            /* 21D9F5 PUSH    SR */
     cpu.rfp = 3 & 3;                                             /* 21D9F6 LDF     3 */
@@ -28620,7 +28620,7 @@ void sub_21D9F5(void)
     XSP += 4; return;                                            /* 21DA0B RET */
 }
 
-void sub_21DA0C(void)
+void InitConsoleType(void)
 {
     /* CP (0x6F91),0 */                                          /* 21DA0C CPB     (0x6F91),0 */
     if ((uint8_t)(rd8(SYS_OS_VERSION)) != (uint8_t)(0)) goto L_21DA1C; /* 21DA11 JR      NZ,0x21DA1C */
@@ -28633,36 +28633,36 @@ L_21DA1C:
 void call_ind(uint32_t a)
 {
     switch (a & 0xFFFFFF) {
-    case 0x200040: sub_200040(); return;
-    case 0x200055: sub_200055(); return;
+    case 0x200040: InitSound(); return;
+    case 0x200055: ResetSoundState(); return;
     case 0x20006F: sub_20006F(); return;
     case 0x2000E8: sub_2000E8(); return;
-    case 0x200122: sub_200122(); return;
+    case 0x200122: PlaySong(); return;
     case 0x200289: sub_200289(); return;
     case 0x2002B1: sub_2002B1(); return;
     case 0x2002C8: sub_2002C8(); return;
-    case 0x200322: sub_200322(); return;
-    case 0x200329: sub_200329(); return;
+    case 0x200322: CopyToZ80(); return;
+    case 0x200329: SetZ80Pointer(); return;
     case 0x20032F: sub_20032F(); return;
-    case 0x20035E: sub_20035E(); return;
+    case 0x20035E: UploadZ80Driver(); return;
     case 0x205FA3: start(); return;
-    case 0x206073: irq_vblank(); return;
+    case 0x206073: VBlankHandler(); return;
     case 0x2060BE: sub_2060BE(); return;
-    case 0x2060CB: sub_2060CB(); return;
-    case 0x20612E: sub_20612E(); return;
-    case 0x206144: sub_206144(); return;
-    case 0x20615B: sub_20615B(); return;
+    case 0x2060CB: Random(); return;
+    case 0x20612E: SetEventFlag(); return;
+    case 0x206144: ClearEventFlag(); return;
+    case 0x20615B: CheckEventFlag(); return;
     case 0x206179: sub_206179(); return;
     case 0x206195: sub_206195(); return;
     case 0x206197: sub_206197(); return;
-    case 0x2061B8: sub_2061B8(); return;
+    case 0x2061B8: RemoveItem(); return;
     case 0x2061D4: sub_2061D4(); return;
     case 0x2061D6: sub_2061D6(); return;
     case 0x2061EC: sub_2061EC(); return;
     case 0x20620E: sub_20620E(); return;
     case 0x20622F: sub_20622F(); return;
-    case 0x206250: sub_206250(); return;
-    case 0x206286: sub_206286(); return;
+    case 0x206250: InitTaskList(); return;
+    case 0x206286: RunTasks(); return;
     case 0x2062F5: sub_2062F5(); return;
     case 0x206324: sub_206324(); return;
     case 0x206350: sub_206350(); return;
@@ -28673,7 +28673,7 @@ void call_ind(uint32_t a)
     case 0x2063EE: sub_2063EE(); return;
     case 0x2064C6: sub_2064C6(); return;
     case 0x20659B: sub_20659B(); return;
-    case 0x206626: sub_206626(); return;
+    case 0x206626: FadePalettes(); return;
     case 0x2066DE: sub_2066DE(); return;
     case 0x206768: sub_206768(); return;
     case 0x20677A: sub_20677A(); return;
@@ -28685,20 +28685,20 @@ void call_ind(uint32_t a)
     case 0x206863: sub_206863(); return;
     case 0x206877: sub_206877(); return;
     case 0x2068B3: sub_2068B3(); return;
-    case 0x20692B: sub_20692B(); return;
+    case 0x20692B: LoadRawTiles(); return;
     case 0x206941: sub_206941(); return;
-    case 0x206993: sub_206993(); return;
+    case 0x206993: FillTiles(); return;
     case 0x2069C8: sub_2069C8(); return;
     case 0x206A7B: sub_206A7B(); return;
-    case 0x206B37: sub_206B37(); return;
-    case 0x206B51: sub_206B51(); return;
-    case 0x206B5D: sub_206B5D(); return;
+    case 0x206B37: DrawTilemap(); return;
+    case 0x206B51: DrawTilemapScr1(); return;
+    case 0x206B5D: DrawTilemapScr2(); return;
     case 0x206BFF: sub_206BFF(); return;
     case 0x206C7B: sub_206C7B(); return;
     case 0x206C8F: sub_206C8F(); return;
     case 0x206D30: sub_206D30(); return;
-    case 0x206D9E: sub_206D9E(); return;
-    case 0x206DCD: sub_206DCD(); return;
+    case 0x206D9E: LoadPalettes(); return;
+    case 0x206DCD: LoadMonoPalettes(); return;
     case 0x206E12: sub_206E12(); return;
     case 0x206E25: sub_206E25(); return;
     case 0x206EB6: sub_206EB6(); return;
@@ -28710,109 +28710,109 @@ void call_ind(uint32_t a)
     case 0x206FAF: sub_206FAF(); return;
     case 0x206FC1: sub_206FC1(); return;
     case 0x206FEA: sub_206FEA(); return;
-    case 0x207014: sub_207014(); return;
-    case 0x207073: sub_207073(); return;
+    case 0x207014: ReadJoypad(); return;
+    case 0x207073: GetFontGlyph(); return;
     case 0x207093: sub_207093(); return;
-    case 0x2070C7: sub_2070C7(); return;
-    case 0x2071AF: sub_2071AF(); return;
-    case 0x207206: sub_207206(); return;
-    case 0x207226: sub_207226(); return;
-    case 0x207232: sub_207232(); return;
+    case 0x2070C7: DrawPartImage(); return;
+    case 0x2071AF: PlotPixel(); return;
+    case 0x207206: LoadMonsterImage(); return;
+    case 0x207226: LoadCompressedTiles(); return;
+    case 0x207232: DecompressTiles(); return;
     case 0x2072CD: sub_2072CD(); return;
     case 0x207361: sub_207361(); return;
-    case 0x2073B3: fn_2073B3(); return;
-    case 0x20740C: fn_20740C(); return;
-    case 0x207436: fn_207436(); return;
+    case 0x2073B3: TextStep(); return;
+    case 0x20740C: TextCmd_End(); return;
+    case 0x207436: TextCmd_Wait(); return;
     case 0x20743A: fn_20743A(); return;
     case 0x207443: fn_207443(); return;
-    case 0x20748A: sub_20748A(); return;
+    case 0x20748A: GetTextBox(); return;
     case 0x207494: sub_207494(); return;
-    case 0x2074AA: sub_2074AA(); return;
+    case 0x2074AA: OpenTextBoxNoWait(); return;
     case 0x2074C0: sub_2074C0(); return;
     case 0x2074C4: sub_2074C4(); return;
     case 0x207598: sub_207598(); return;
     case 0x2075CC: sub_2075CC(); return;
-    case 0x2075D0: sub_2075D0(); return;
+    case 0x2075D0: TextCmd_Page(); return;
     case 0x207611: sub_207611(); return;
     case 0x20762D: sub_20762D(); return;
-    case 0x207657: sub_207657(); return;
+    case 0x207657: TextCmd_Newline(); return;
     case 0x207674: sub_207674(); return;
     case 0x20768A: sub_20768A(); return;
     case 0x20768E: sub_20768E(); return;
     case 0x207695: sub_207695(); return;
-    case 0x207699: sub_207699(); return;
+    case 0x207699: DrawTextChar(); return;
     case 0x2076F3: sub_2076F3(); return;
     case 0x2076F7: sub_2076F7(); return;
     case 0x20770B: sub_20770B(); return;
     case 0x207720: sub_207720(); return;
-    case 0x207759: sub_207759(); return;
+    case 0x207759: PlayMusic(); return;
     case 0x20776A: sub_20776A(); return;
     case 0x20776F: sub_20776F(); return;
     case 0x207788: sub_207788(); return;
     case 0x2077A6: sub_2077A6(); return;
     case 0x2077BE: sub_2077BE(); return;
-    case 0x2077D1: sub_2077D1(); return;
+    case 0x2077D1: LoadEnemy(); return;
     case 0x207A27: sub_207A27(); return;
     case 0x207A32: sub_207A32(); return;
-    case 0x207B12: sub_207B12(); return;
+    case 0x207B12: TryLevelUp(); return;
     case 0x207C00: sub_207C00(); return;
     case 0x207C18: sub_207C18(); return;
     case 0x207C84: sub_207C84(); return;
     case 0x207CF0: sub_207CF0(); return;
-    case 0x207D40: sub_207D40(); return;
+    case 0x207D40: DrawRobot(); return;
     case 0x207D9D: sub_207D9D(); return;
     case 0x207DC9: sub_207DC9(); return;
     case 0x207DDF: sub_207DDF(); return;
     case 0x207DF5: sub_207DF5(); return;
     case 0x207E0B: sub_207E0B(); return;
-    case 0x207E21: sub_207E21(); return;
+    case 0x207E21: DrawRobotPart(); return;
     case 0x207E77: sub_207E77(); return;
-    case 0x207E9A: sub_207E9A(); return;
+    case 0x207E9A: LoadEnemyImage(); return;
     case 0x207F30: sub_207F30(); return;
     case 0x207F7C: sub_207F7C(); return;
     case 0x207FF7: sub_207FF7(); return;
-    case 0x208007: sub_208007(); return;
+    case 0x208007: CalcEnemyMinAttackEP(); return;
     case 0x208108: sub_208108(); return;
     case 0x208146: sub_208146(); return;
-    case 0x20814D: sub_20814D(); return;
+    case 0x20814D: RandomRange(); return;
     case 0x20815F: sub_20815F(); return;
     case 0x20818A: sub_20818A(); return;
     case 0x20819F: sub_20819F(); return;
-    case 0x2081E7: sub_2081E7(); return;
-    case 0x208217: sub_208217(); return;
-    case 0x208220: sub_208220(); return;
+    case 0x2081E7: ApplyAffinity(); return;
+    case 0x208217: AffinityIndex(); return;
+    case 0x208220: GetAffinityIcon(); return;
     case 0x20823D: sub_20823D(); return;
-    case 0x208272: sub_208272(); return;
-    case 0x208281: sub_208281(); return;
-    case 0x208290: sub_208290(); return;
-    case 0x2082A0: sub_2082A0(); return;
-    case 0x2082AF: sub_2082AF(); return;
-    case 0x2082BE: sub_2082BE(); return;
-    case 0x2082CE: sub_2082CE(); return;
-    case 0x2082DC: sub_2082DC(); return;
-    case 0x2082EB: sub_2082EB(); return;
-    case 0x2082FA: sub_2082FA(); return;
-    case 0x20833D: sub_20833D(); return;
-    case 0x20834A: sub_20834A(); return;
-    case 0x20836F: sub_20836F(); return;
-    case 0x20837C: sub_20837C(); return;
-    case 0x208389: sub_208389(); return;
-    case 0x208396: sub_208396(); return;
-    case 0x2083A3: sub_2083A3(); return;
-    case 0x2083B0: sub_2083B0(); return;
-    case 0x2083BF: sub_2083BF(); return;
-    case 0x2083CE: sub_2083CE(); return;
-    case 0x2083DD: sub_2083DD(); return;
-    case 0x2083EC: sub_2083EC(); return;
+    case 0x208272: GetItemName(); return;
+    case 0x208281: GetItemDesc(); return;
+    case 0x208290: GetBattleItemEffect(); return;
+    case 0x2082A0: GetEnemyName(); return;
+    case 0x2082AF: GetEnemyRecord(); return;
+    case 0x2082BE: GetMonsterImage(); return;
+    case 0x2082CE: GetMonsterPalette(); return;
+    case 0x2082DC: GetAttackName(); return;
+    case 0x2082EB: GetEnemyAttackSlots(); return;
+    case 0x2082FA: GetPartName(); return;
+    case 0x20833D: GetArmName(); return;
+    case 0x20834A: GetArmDesc(); return;
+    case 0x20836F: GetBodyRecord(); return;
+    case 0x20837C: GetCoreRecord(); return;
+    case 0x208389: GetLegsRecord(); return;
+    case 0x208396: GetBackRecord(); return;
+    case 0x2083A3: GetArmRecord(); return;
+    case 0x2083B0: GetArmEffects(); return;
+    case 0x2083BF: GetSkillName(); return;
+    case 0x2083CE: GetSkillDesc(); return;
+    case 0x2083DD: GetSkillRecord(); return;
+    case 0x2083EC: GetSkillData(); return;
     case 0x2083FB: sub_2083FB(); return;
-    case 0x20840A: sub_20840A(); return;
+    case 0x20840A: GetEnemyScaling(); return;
     case 0x208475: sub_208475(); return;
     case 0x20847F: sub_20847F(); return;
-    case 0x208489: sub_208489(); return;
-    case 0x2084F2: sub_2084F2(); return;
-    case 0x208505: sub_208505(); return;
+    case 0x208489: SetRobotDrawParts(); return;
+    case 0x2084F2: ShowMessage(); return;
+    case 0x208505: ExpandMessage(); return;
     case 0x20867E: sub_20867E(); return;
-    case 0x20868B: sub_20868B(); return;
+    case 0x20868B: CalcUnitStats(); return;
     case 0x208879: sub_208879(); return;
     case 0x2089CD: sub_2089CD(); return;
     case 0x2089DC: sub_2089DC(); return;
@@ -28821,7 +28821,7 @@ void call_ind(uint32_t a)
     case 0x208A09: sub_208A09(); return;
     case 0x208A18: sub_208A18(); return;
     case 0x208A27: sub_208A27(); return;
-    case 0x208A36: sub_208A36(); return;
+    case 0x208A36: ExpForKill(); return;
     case 0x208A6C: sub_208A6C(); return;
     case 0x208A73: sub_208A73(); return;
     case 0x208A82: sub_208A82(); return;
@@ -28830,28 +28830,28 @@ void call_ind(uint32_t a)
     case 0x208AB7: sub_208AB7(); return;
     case 0x208AC6: sub_208AC6(); return;
     case 0x208AD5: sub_208AD5(); return;
-    case 0x208AE4: sub_208AE4(); return;
+    case 0x208AE4: AddGP(); return;
     case 0x20984D: sub_20984D(); return;
-    case 0x209B02: sub_209B02(); return;
+    case 0x209B02: ShowWeaponInfo(); return;
     case 0x209CCE: sub_209CCE(); return;
     case 0x209CDC: sub_209CDC(); return;
     case 0x209D2F: sub_209D2F(); return;
     case 0x20B440: sub_20B440(); return;
-    case 0x20CDEB: sub_20CDEB(); return;
+    case 0x20CDEB: ShowHPGain(); return;
     case 0x20CE00: sub_20CE00(); return;
     case 0x20CE15: sub_20CE15(); return;
-    case 0x20CE2A: sub_20CE2A(); return;
-    case 0x20CF34: fn_20CF34(); return;
-    case 0x20CF7C: fn_20CF7C(); return;
+    case 0x20CE2A: ShowEnemyEPGain(); return;
+    case 0x20CF34: MainMenuSetup(); return;
+    case 0x20CF7C: MainMenu(); return;
     case 0x20D0E8: fn_20D0E8(); return;
     case 0x20D684: sub_20D684(); return;
     case 0x20D6DF: fn_20D6DF(); return;
     case 0x20D71E: fn_20D71E(); return;
     case 0x20D75D: fn_20D75D(); return;
     case 0x20D77B: fn_20D77B(); return;
-    case 0x20D799: sub_20D799(); return;
+    case 0x20D799: MainMenuGraphics(); return;
     case 0x20D84E: sub_20D84E(); return;
-    case 0x20D871: sub_20D871(); return;
+    case 0x20D871: StreetMenu(); return;
     case 0x20D8FB: sub_20D8FB(); return;
     case 0x20D9A6: sub_20D9A6(); return;
     case 0x20DA5C: sub_20DA5C(); return;
@@ -28879,35 +28879,35 @@ void call_ind(uint32_t a)
     case 0x20E29B: fn_20E29B(); return;
     case 0x20E2B0: fn_20E2B0(); return;
     case 0x20E2CD: fn_20E2CD(); return;
-    case 0x20E2EA: fn_20E2EA(); return;
+    case 0x20E2EA: TitleScreen(); return;
     case 0x20E36F: fn_20E36F(); return;
-    case 0x20E3AF: fn_20E3AF(); return;
+    case 0x20E3AF: IntroBackground(); return;
     case 0x20E496: fn_20E496(); return;
     case 0x20E789: fn_20E789(); return;
-    case 0x20E7FF: sub_20E7FF(); return;
+    case 0x20E7FF: IntroTitleScene(); return;
     case 0x20E89B: fn_20E89B(); return;
     case 0x20E8E8: fn_20E8E8(); return;
-    case 0x20E930: fn_20E930(); return;
-    case 0x20E96C: fn_20E96C(); return;
+    case 0x20E930: TitleReveal(); return;
+    case 0x20E96C: IntroLogoScene(); return;
     case 0x20EB17: sub_20EB17(); return;
     case 0x20EC49: sub_20EC49(); return;
     case 0x20EC58: sub_20EC58(); return;
     case 0x20ED46: sub_20ED46(); return;
     case 0x20EFD3: fn_20EFD3(); return;
-    case 0x20EFF4: fn_20EFF4(); return;
+    case 0x20EFF4: StorySceneUnitice(); return;
     case 0x20F628: fn_20F628(); return;
     case 0x20F6E0: fn_20F6E0(); return;
     case 0x20F7AD: fn_20F7AD(); return;
     case 0x20F877: fn_20F877(); return;
-    case 0x20F8DA: fn_20F8DA(); return;
+    case 0x20F8DA: NameEntrySetup(); return;
     case 0x20F985: fn_20F985(); return;
-    case 0x20FC87: sub_20FC87(); return;
+    case 0x20FC87: NameEntryScreen(); return;
     case 0x20FD4B: sub_20FD4B(); return;
-    case 0x20FDFA: fn_20FDFA(); return;
-    case 0x20FF36: fn_20FF36(); return;
+    case 0x20FDFA: ConfirmNames(); return;
+    case 0x20FF36: SelectPlayerNames(); return;
     case 0x21010A: fn_21010A(); return;
-    case 0x210380: sub_210380(); return;
-    case 0x2103BA: sub_2103BA(); return;
+    case 0x210380: DrawPortraitAt(); return;
+    case 0x2103BA: DrawPortrait(); return;
     case 0x2104EF: sub_2104EF(); return;
     case 0x210560: sub_210560(); return;
     case 0x21056F: sub_21056F(); return;
@@ -28973,32 +28973,32 @@ void call_ind(uint32_t a)
     case 0x2110A4: sub_2110A4(); return;
     case 0x2110FD: sub_2110FD(); return;
     case 0x2111A2: sub_2111A2(); return;
-    case 0x211202: sub_211202(); return;
-    case 0x211421: sub_211421(); return;
+    case 0x211202: CheckEncounter(); return;
+    case 0x211421: DungeonStep(); return;
     case 0x21156E: sub_21156E(); return;
     case 0x2115AC: sub_2115AC(); return;
     case 0x2116A7: sub_2116A7(); return;
-    case 0x2116BC: sub_2116BC(); return;
-    case 0x21170D: sub_21170D(); return;
-    case 0x21172A: sub_21172A(); return;
-    case 0x2117E2: sub_2117E2(); return;
-    case 0x21189C: sub_21189C(); return;
+    case 0x2116BC: PickWorldChest(); return;
+    case 0x21170D: ClearChestTable(); return;
+    case 0x21172A: SetMineChests(); return;
+    case 0x2117E2: RollFloorChests(); return;
+    case 0x21189C: RollAllChests(); return;
     case 0x2118B2: sub_2118B2(); return;
     case 0x2118F4: sub_2118F4(); return;
     case 0x211966: sub_211966(); return;
     case 0x211999: sub_211999(); return;
     case 0x2119C8: sub_2119C8(); return;
-    case 0x2119DE: sub_2119DE(); return;
-    case 0x2119FB: sub_2119FB(); return;
-    case 0x211A15: sub_211A15(); return;
+    case 0x2119DE: GetChestContent(); return;
+    case 0x2119FB: GetChestGold(); return;
+    case 0x211A15: GetChestGoldText(); return;
     case 0x211A2E: sub_211A2E(); return;
-    case 0x211A80: sub_211A80(); return;
+    case 0x211A80: RollFloorMaps(); return;
     case 0x211B13: sub_211B13(); return;
     case 0x211B35: sub_211B35(); return;
     case 0x211BD2: sub_211BD2(); return;
     case 0x211BE0: sub_211BE0(); return;
     case 0x211C52: sub_211C52(); return;
-    case 0x211C7F: sub_211C7F(); return;
+    case 0x211C7F: LoadDungeonPalettes(); return;
     case 0x211D03: sub_211D03(); return;
     case 0x211D80: sub_211D80(); return;
     case 0x211D92: sub_211D92(); return;
@@ -29007,7 +29007,7 @@ void call_ind(uint32_t a)
     case 0x211DF3: sub_211DF3(); return;
     case 0x211E12: sub_211E12(); return;
     case 0x211E25: sub_211E25(); return;
-    case 0x211E34: sub_211E34(); return;
+    case 0x211E34: DrawCampMenu(); return;
     case 0x211E7A: sub_211E7A(); return;
     case 0x211EC0: sub_211EC0(); return;
     case 0x211EE1: sub_211EE1(); return;
@@ -29015,15 +29015,15 @@ void call_ind(uint32_t a)
     case 0x211F03: sub_211F03(); return;
     case 0x211F20: sub_211F20(); return;
     case 0x211F4A: sub_211F4A(); return;
-    case 0x211F6C: sub_211F6C(); return;
+    case 0x211F6C: DrawStatusLabel(); return;
     case 0x211FE8: sub_211FE8(); return;
     case 0x21206C: sub_21206C(); return;
-    case 0x212093: sub_212093(); return;
+    case 0x212093: CampItemUseMenu(); return;
     case 0x212192: sub_212192(); return;
     case 0x2121F9: sub_2121F9(); return;
     case 0x212241: sub_212241(); return;
     case 0x212273: sub_212273(); return;
-    case 0x2122A6: sub_2122A6(); return;
+    case 0x2122A6: CampLeave(); return;
     case 0x2123C2: sub_2123C2(); return;
     case 0x212476: sub_212476(); return;
     case 0x21255D: sub_21255D(); return;
@@ -29032,7 +29032,7 @@ void call_ind(uint32_t a)
     case 0x21264C: sub_21264C(); return;
     case 0x21265F: sub_21265F(); return;
     case 0x21266E: sub_21266E(); return;
-    case 0x21267C: sub_21267C(); return;
+    case 0x21267C: OpenChest(); return;
     case 0x212867: sub_212867(); return;
     case 0x21287D: sub_21287D(); return;
     case 0x212890: sub_212890(); return;
@@ -29078,7 +29078,7 @@ void call_ind(uint32_t a)
     case 0x21320D: sub_21320D(); return;
     case 0x213222: sub_213222(); return;
     case 0x21323D: sub_21323D(); return;
-    case 0x213249: sub_213249(); return;
+    case 0x213249: DrawArenaParticipants(); return;
     case 0x2132D2: sub_2132D2(); return;
     case 0x2132FC: sub_2132FC(); return;
     case 0x213326: sub_213326(); return;
@@ -29155,7 +29155,7 @@ void call_ind(uint32_t a)
     case 0x214D64: sub_214D64(); return;
     case 0x214D82: sub_214D82(); return;
     case 0x214D97: sub_214D97(); return;
-    case 0x214DCA: sub_214DCA(); return;
+    case 0x214DCA: SquarePlaceMenu(); return;
     case 0x214E33: sub_214E33(); return;
     case 0x214E5D: sub_214E5D(); return;
     case 0x214F0F: sub_214F0F(); return;
@@ -29170,7 +29170,7 @@ void call_ind(uint32_t a)
     case 0x2151B8: sub_2151B8(); return;
     case 0x2151D8: sub_2151D8(); return;
     case 0x21535A: sub_21535A(); return;
-    case 0x2154FB: sub_2154FB(); return;
+    case 0x2154FB: LilyGivesFlowers(); return;
     case 0x215741: sub_215741(); return;
     case 0x215749: sub_215749(); return;
     case 0x215760: sub_215760(); return;
@@ -29184,7 +29184,7 @@ void call_ind(uint32_t a)
     case 0x215DD9: sub_215DD9(); return;
     case 0x215DFE: sub_215DFE(); return;
     case 0x215EDC: sub_215EDC(); return;
-    case 0x215F1E: sub_215F1E(); return;
+    case 0x215F1E: HelmutSkillOffer(); return;
     case 0x215F84: sub_215F84(); return;
     case 0x215F8F: sub_215F8F(); return;
     case 0x215FB3: sub_215FB3(); return;
@@ -29235,7 +29235,7 @@ void call_ind(uint32_t a)
     case 0x21684D: sub_21684D(); return;
     case 0x216851: sub_216851(); return;
     case 0x2168AC: sub_2168AC(); return;
-    case 0x2168C7: sub_2168C7(); return;
+    case 0x2168C7: ClearStoryStage(); return;
     case 0x21691A: sub_21691A(); return;
     case 0x21698A: sub_21698A(); return;
     case 0x2169E5: sub_2169E5(); return;
@@ -29245,16 +29245,16 @@ void call_ind(uint32_t a)
     case 0x216A78: sub_216A78(); return;
     case 0x216A86: sub_216A86(); return;
     case 0x216A94: sub_216A94(); return;
-    case 0x216AA2: sub_216AA2(); return;
-    case 0x216ABC: sub_216ABC(); return;
-    case 0x216AD4: sub_216AD4(); return;
-    case 0x216AFA: sub_216AFA(); return;
+    case 0x216AA2: GetStoryStage(); return;
+    case 0x216ABC: GetStageArenaRank(); return;
+    case 0x216AD4: SetStoryStage(); return;
+    case 0x216AFA: AdvanceStoryStage(); return;
     case 0x216B0C: sub_216B0C(); return;
     case 0x216B19: sub_216B19(); return;
     case 0x216B38: sub_216B38(); return;
     case 0x216B51: sub_216B51(); return;
-    case 0x216B6A: sub_216B6A(); return;
-    case 0x216B89: sub_216B89(); return;
+    case 0x216B6A: CheckSkillPair1(); return;
+    case 0x216B89: CheckSkillPair2(); return;
     case 0x216BA8: sub_216BA8(); return;
     case 0x216BC9: sub_216BC9(); return;
     case 0x216BEE: sub_216BEE(); return;
@@ -29309,15 +29309,15 @@ void call_ind(uint32_t a)
     case 0x2173E5: sub_2173E5(); return;
     case 0x2173EE: sub_2173EE(); return;
     case 0x217402: sub_217402(); return;
-    case 0x21740E: sub_21740E(); return;
+    case 0x21740E: SplitRaceGender(); return;
     case 0x21741B: sub_21741B(); return;
     case 0x217434: sub_217434(); return;
     case 0x21746E: sub_21746E(); return;
-    case 0x217499: sub_217499(); return;
-    case 0x2174A8: sub_2174A8(); return;
-    case 0x2174B7: sub_2174B7(); return;
-    case 0x2174BC: sub_2174BC(); return;
-    case 0x2174C1: sub_2174C1(); return;
+    case 0x217499: GetDevLevelExp(); return;
+    case 0x2174A8: GetDevLevelBonus(); return;
+    case 0x2174B7: GetDevPartnerBonus(); return;
+    case 0x2174BC: GetDevToolBonus(); return;
+    case 0x2174C1: Cap100(); return;
     case 0x2174C9: sub_2174C9(); return;
     case 0x2174D9: sub_2174D9(); return;
     case 0x2174E9: sub_2174E9(); return;
@@ -29410,7 +29410,7 @@ void call_ind(uint32_t a)
     case 0x218965: sub_218965(); return;
     case 0x21896A: sub_21896A(); return;
     case 0x2189B4: sub_2189B4(); return;
-    case 0x2189BD: sub_2189BD(); return;
+    case 0x2189BD: UpdateDevelopChance(); return;
     case 0x218A34: sub_218A34(); return;
     case 0x218A62: sub_218A62(); return;
     case 0x218A69: sub_218A69(); return;
@@ -29478,7 +29478,7 @@ void call_ind(uint32_t a)
     case 0x21972D: sub_21972D(); return;
     case 0x219769: sub_219769(); return;
     case 0x219776: sub_219776(); return;
-    case 0x219785: sub_219785(); return;
+    case 0x219785: CheckEngineerLevelUp(); return;
     case 0x2197B5: sub_2197B5(); return;
     case 0x2197BA: sub_2197BA(); return;
     case 0x2197C1: sub_2197C1(); return;
@@ -29488,18 +29488,18 @@ void call_ind(uint32_t a)
     case 0x219823: sub_219823(); return;
     case 0x219831: sub_219831(); return;
     case 0x219849: sub_219849(); return;
-    case 0x219864: sub_219864(); return;
-    case 0x219879: sub_219879(); return;
+    case 0x219864: Wait30Frames(); return;
+    case 0x219879: WaitForButton(); return;
     case 0x2198E3: sub_2198E3(); return;
     case 0x2198EB: sub_2198EB(); return;
     case 0x21990C: sub_21990C(); return;
     case 0x219911: sub_219911(); return;
-    case 0x219947: sub_219947(); return;
+    case 0x219947: WorksGreeting(); return;
     case 0x219A40: sub_219A40(); return;
     case 0x219C22: sub_219C22(); return;
-    case 0x219C86: sub_219C86(); return;
-    case 0x219F73: sub_219F73(); return;
-    case 0x219FF8: sub_219FF8(); return;
+    case 0x219C86: WorksInfoMenus(); return;
+    case 0x219F73: WorksHelpMenu(); return;
+    case 0x219FF8: WorksTradeMenu(); return;
     case 0x21A2E2: sub_21A2E2(); return;
     case 0x21A32D: sub_21A32D(); return;
     case 0x21A334: sub_21A334(); return;
@@ -29512,13 +29512,13 @@ void call_ind(uint32_t a)
     case 0x21A4EC: sub_21A4EC(); return;
     case 0x21A50D: sub_21A50D(); return;
     case 0x21A533: sub_21A533(); return;
-    case 0x21A559: sub_21A559(); return;
+    case 0x21A559: WorksSetupMenu(); return;
     case 0x21A66B: sub_21A66B(); return;
-    case 0x21A68A: sub_21A68A(); return;
-    case 0x21A9A9: sub_21A9A9(); return;
-    case 0x21A9D5: sub_21A9D5(); return;
-    case 0x21A9FF: sub_21A9FF(); return;
-    case 0x21AA34: sub_21AA34(); return;
+    case 0x21A68A: WorksDevelopMenu(); return;
+    case 0x21A9A9: DevelopRoll(); return;
+    case 0x21A9D5: DevelopSuccess(); return;
+    case 0x21A9FF: EngineerLevelUp(); return;
+    case 0x21AA34: WorksDevelopDone(); return;
     case 0x21AAA5: sub_21AAA5(); return;
     case 0x21AB7A: sub_21AB7A(); return;
     case 0x21ABDA: sub_21ABDA(); return;
@@ -29561,7 +29561,7 @@ void call_ind(uint32_t a)
     case 0x21BA05: sub_21BA05(); return;
     case 0x21BA12: sub_21BA12(); return;
     case 0x21BA24: sub_21BA24(); return;
-    case 0x21D192: sub_21D192(); return;
+    case 0x21D192: GetRecipe(); return;
     case 0x21D1AE: sub_21D1AE(); return;
     case 0x21D1BB: sub_21D1BB(); return;
     case 0x21D1C8: sub_21D1C8(); return;
@@ -29583,12 +29583,12 @@ void call_ind(uint32_t a)
     case 0x21D5C5: fn_21D5C5(); return;
     case 0x21D5E9: fn_21D5E9(); return;
     case 0x21D60B: fn_21D60B(); return;
-    case 0x21D647: fn_21D647(); return;
+    case 0x21D647: NewGameSetup(); return;
     case 0x21D758: fn_21D758(); return;
     case 0x21D800: fn_21D800(); return;
     case 0x21D9B9: sub_21D9B9(); return;
-    case 0x21D9F5: sub_21D9F5(); return;
-    case 0x21DA0C: sub_21DA0C(); return;
+    case 0x21D9F5: BiosCall(); return;
+    case 0x21DA0C: InitConsoleType(); return;
     default: unknown_code(a); return;
     }
 }

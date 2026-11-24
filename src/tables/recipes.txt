@@ -1,0 +1,2012 @@
+# recipes: 1995 entries, one line per id (keep the order and count).
+# Works > Develop. GetRecipe 0x21D192: Recipes + 3 * (15 * (arm - 1) + material - 1).
+# Line id = arm.material: arm 1-133 = part id - 94 (parts.txt), material 1-15 = item id - 56
+# (items.txt: Steel Silver Gold Tngstn Platnm Mithrl Slmndr Dryad Undine Sylph Gnome Hirokn
+# Oricon Zeus Hades). pct 255 = no recipe (the % box stays blank; the other two
+# columns are then unused, mostly 1 1). `empty` = 3 x FF.
+# pct: base success %. UpdateDevelopChance 0x2189BD shows (wDevelopChance 0x6190)
+#   min(100, min(100, pct + dev_level_bonus[partner gender][engineer level])
+#            + dev_partner_bonus[partner race/gender]) + tool bonus, capped at 100;
+#   tool bonus (0x21BA1F): Tool1 5, Tool2 10, Tool3 15, Tool4 20, Myster 100.
+#   DevelopRoll 0x21A9A9 takes the arm, material and tool, then succeeds if a random
+#   0-99 is below that %. (Play: 88/85/88 % for BtFist+Steel+Tool1 at RenaB levels 1/7/12,
+#   60/62 % at 49/50; failures lose all three.)
+# result: the new arm (arm number as above). dev_exp: taken off the engineer's EXP to next
+# level (wEngineerExp) below level 50; see dev_level_exp.txt. (Play: Hammer 5, Pliers 10.)
+#
+#   id  pct  result  dev_exp
+   1.1   80       2        5  # BtFist + Steel -> PwrHnd
+   1.2   80       2        5  # BtFist + Silver -> PwrHnd
+   1.3  255       1        1  # BtFist + Gold
+   1.4   80       2        5  # BtFist + Tngstn -> PwrHnd
+   1.5  255       1        1  # BtFist + Platnm
+   1.6   80       2        5  # BtFist + Mithrl -> PwrHnd
+   1.7   80       2        5  # BtFist + Slmndr -> PwrHnd
+   1.8  255       1        1  # BtFist + Dryad
+   1.9  255       1        1  # BtFist + Undine
+  1.10   80       2        5  # BtFist + Sylph -> PwrHnd
+  1.11  255       1        1  # BtFist + Gnome
+  1.12   80       2        5  # BtFist + Hirokn -> PwrHnd
+  1.13  255       1        1  # BtFist + Oricon
+  1.14   80       2        5  # BtFist + Zeus -> PwrHnd
+  1.15  255       1        1  # BtFist + Hades
+   2.1  255       2        1  # PwrHnd + Steel
+   2.2  255       2        1  # PwrHnd + Silver
+   2.3  255       2        1  # PwrHnd + Gold
+   2.4   30       3       10  # PwrHnd + Tngstn -> ArmHnd
+   2.5  255       2        1  # PwrHnd + Platnm
+   2.6   30       3       10  # PwrHnd + Mithrl -> ArmHnd
+   2.7   30       3       10  # PwrHnd + Slmndr -> ArmHnd
+   2.8  255       2        1  # PwrHnd + Dryad
+   2.9  255       2        1  # PwrHnd + Undine
+  2.10   30       3       10  # PwrHnd + Sylph -> ArmHnd
+  2.11  255       2        1  # PwrHnd + Gnome
+  2.12   30       3       10  # PwrHnd + Hirokn -> ArmHnd
+  2.13  255       2        1  # PwrHnd + Oricon
+  2.14   30       3       10  # PwrHnd + Zeus -> ArmHnd
+  2.15  255       2        1  # PwrHnd + Hades
+   3.1  255       3        1  # ArmHnd + Steel
+   3.2  255       3        1  # ArmHnd + Silver
+   3.3  255       3        1  # ArmHnd + Gold
+   3.4  255       3        1  # ArmHnd + Tngstn
+   3.5  255       3        1  # ArmHnd + Platnm
+   3.6  255       3        1  # ArmHnd + Mithrl
+   3.7  255       3        1  # ArmHnd + Slmndr
+   3.8  255       3        1  # ArmHnd + Dryad
+   3.9  255       3        1  # ArmHnd + Undine
+  3.10  255       3        1  # ArmHnd + Sylph
+  3.11  255       3        1  # ArmHnd + Gnome
+  3.12  255       3        1  # ArmHnd + Hirokn
+  3.13  255       3        1  # ArmHnd + Oricon
+  3.14  255       3        1  # ArmHnd + Zeus
+  3.15  255       3        1  # ArmHnd + Hades
+   4.1  255       4        1  # SlkHnd + Steel
+   4.2   80       5        5  # SlkHnd + Silver -> OakHnd
+   4.3   80       5        5  # SlkHnd + Gold -> OakHnd
+   4.4  255       4        1  # SlkHnd + Tngstn
+   4.5   80       5        5  # SlkHnd + Platnm -> OakHnd
+   4.6   80       5        5  # SlkHnd + Mithrl -> OakHnd
+   4.7  255       4        1  # SlkHnd + Slmndr
+   4.8   80       5        5  # SlkHnd + Dryad -> OakHnd
+   4.9  255       4        1  # SlkHnd + Undine
+  4.10  255       4        1  # SlkHnd + Sylph
+  4.11   80       5        5  # SlkHnd + Gnome -> OakHnd
+  4.12  255       4        1  # SlkHnd + Hirokn
+  4.13   80       5        5  # SlkHnd + Oricon -> OakHnd
+  4.14   80       5        5  # SlkHnd + Zeus -> OakHnd
+  4.15  255       4        1  # SlkHnd + Hades
+   5.1  255       5        1  # OakHnd + Steel
+   5.2  255       5        1  # OakHnd + Silver
+   5.3  255       5        1  # OakHnd + Gold
+   5.4  255       5        1  # OakHnd + Tngstn
+   5.5   30       6       10  # OakHnd + Platnm -> Crssbw
+   5.6   30       6       10  # OakHnd + Mithrl -> Crssbw
+   5.7  255       5        1  # OakHnd + Slmndr
+   5.8   30       6       10  # OakHnd + Dryad -> Crssbw
+   5.9  255       5        1  # OakHnd + Undine
+  5.10  255       5        1  # OakHnd + Sylph
+  5.11   30       6       10  # OakHnd + Gnome -> Crssbw
+  5.12  255       5        1  # OakHnd + Hirokn
+  5.13   30       6       10  # OakHnd + Oricon -> Crssbw
+  5.14   30       6       10  # OakHnd + Zeus -> Crssbw
+  5.15  255       5        1  # OakHnd + Hades
+   6.1  255       6        1  # Crssbw + Steel
+   6.2  255       6        1  # Crssbw + Silver
+   6.3  255       6        1  # Crssbw + Gold
+   6.4  255       6        1  # Crssbw + Tngstn
+   6.5  255       6        1  # Crssbw + Platnm
+   6.6  255       6        1  # Crssbw + Mithrl
+   6.7  255       6        1  # Crssbw + Slmndr
+   6.8  255       6        1  # Crssbw + Dryad
+   6.9  255       6        1  # Crssbw + Undine
+  6.10  255       6        1  # Crssbw + Sylph
+  6.11  255       6        1  # Crssbw + Gnome
+  6.12  255       6        1  # Crssbw + Hirokn
+  6.13  255       6        1  # Crssbw + Oricon
+  6.14  255       6        1  # Crssbw + Zeus
+  6.15  255       6        1  # Crssbw + Hades
+   7.1  255       7        1  # H-Gun + Steel
+   7.2   80       8        5  # H-Gun + Silver -> IceBlw
+   7.3   80       8        5  # H-Gun + Gold -> IceBlw
+   7.4  255       7        1  # H-Gun + Tngstn
+   7.5   80       8        5  # H-Gun + Platnm -> IceBlw
+   7.6   80       8        5  # H-Gun + Mithrl -> IceBlw
+   7.7  255       7        1  # H-Gun + Slmndr
+   7.8   80       8        5  # H-Gun + Dryad -> IceBlw
+   7.9   80       8        5  # H-Gun + Undine -> IceBlw
+  7.10  255       7        1  # H-Gun + Sylph
+  7.11  255       7        1  # H-Gun + Gnome
+  7.12  255       7        1  # H-Gun + Hirokn
+  7.13   80       8        5  # H-Gun + Oricon -> IceBlw
+  7.14   80       8        5  # H-Gun + Zeus -> IceBlw
+  7.15  255       7        1  # H-Gun + Hades
+   8.1  255       8        1  # IceBlw + Steel
+   8.2  255       8        1  # IceBlw + Silver
+   8.3  255       8        1  # IceBlw + Gold
+   8.4  255       8        1  # IceBlw + Tngstn
+   8.5   30       9       10  # IceBlw + Platnm -> Hydro
+   8.6   30       9       10  # IceBlw + Mithrl -> Hydro
+   8.7  255       8        1  # IceBlw + Slmndr
+   8.8   30       9       10  # IceBlw + Dryad -> Hydro
+   8.9   30       9       10  # IceBlw + Undine -> Hydro
+  8.10  255       8        1  # IceBlw + Sylph
+  8.11  255       8        1  # IceBlw + Gnome
+  8.12  255       8        1  # IceBlw + Hirokn
+  8.13   30       9       10  # IceBlw + Oricon -> Hydro
+  8.14   30       9       10  # IceBlw + Zeus -> Hydro
+  8.15  255       8        1  # IceBlw + Hades
+   9.1  255       9        1  # Hydro + Steel
+   9.2  255       9        1  # Hydro + Silver
+   9.3  255       9        1  # Hydro + Gold
+   9.4  255       9        1  # Hydro + Tngstn
+   9.5  255       9        1  # Hydro + Platnm
+   9.6  255       9        1  # Hydro + Mithrl
+   9.7  255       9        1  # Hydro + Slmndr
+   9.8  255       9        1  # Hydro + Dryad
+   9.9  255       9        1  # Hydro + Undine
+  9.10  255       9        1  # Hydro + Sylph
+  9.11  255       9        1  # Hydro + Gnome
+  9.12  255       9        1  # Hydro + Hirokn
+  9.13  255       9        1  # Hydro + Oricon
+  9.14  255       9        1  # Hydro + Zeus
+  9.15  255       9        1  # Hydro + Hades
+  10.1  255      10        1  # Hawk + Steel
+  10.2   80      11        5  # Hawk + Silver -> AirHnd
+  10.3   80      11        5  # Hawk + Gold -> AirHnd
+  10.4  255      10        1  # Hawk + Tngstn
+  10.5   80      11        5  # Hawk + Platnm -> AirHnd
+  10.6   80      11        5  # Hawk + Mithrl -> AirHnd
+  10.7  255      10        1  # Hawk + Slmndr
+  10.8  255      10        1  # Hawk + Dryad
+  10.9   80      11        5  # Hawk + Undine -> AirHnd
+ 10.10   80      11        5  # Hawk + Sylph -> AirHnd
+ 10.11  255      10        1  # Hawk + Gnome
+ 10.12  255      10        1  # Hawk + Hirokn
+ 10.13   80      11        5  # Hawk + Oricon -> AirHnd
+ 10.14   80      11        5  # Hawk + Zeus -> AirHnd
+ 10.15  255      10        1  # Hawk + Hades
+  11.1  255      11        1  # AirHnd + Steel
+  11.2  255      11        1  # AirHnd + Silver
+  11.3  255      11        1  # AirHnd + Gold
+  11.4  255      11        1  # AirHnd + Tngstn
+  11.5   30      12       10  # AirHnd + Platnm -> Killer
+  11.6   30      12       10  # AirHnd + Mithrl -> Killer
+  11.7  255      11        1  # AirHnd + Slmndr
+  11.8  255      11        1  # AirHnd + Dryad
+  11.9   30      12       10  # AirHnd + Undine -> Killer
+ 11.10   30      12       10  # AirHnd + Sylph -> Killer
+ 11.11  255      11        1  # AirHnd + Gnome
+ 11.12  255      11        1  # AirHnd + Hirokn
+ 11.13   30      12       10  # AirHnd + Oricon -> Killer
+ 11.14   30      12       10  # AirHnd + Zeus -> Killer
+ 11.15  255      11        1  # AirHnd + Hades
+  12.1  255      12        1  # Killer + Steel
+  12.2  255      12        1  # Killer + Silver
+  12.3  255      12        1  # Killer + Gold
+  12.4  255      12        1  # Killer + Tngstn
+  12.5  255      12        1  # Killer + Platnm
+  12.6  255      12        1  # Killer + Mithrl
+  12.7  255      12        1  # Killer + Slmndr
+  12.8  255      12        1  # Killer + Dryad
+  12.9  255      12        1  # Killer + Undine
+ 12.10  255      12        1  # Killer + Sylph
+ 12.11  255      12        1  # Killer + Gnome
+ 12.12  255      12        1  # Killer + Hirokn
+ 12.13  255      12        1  # Killer + Oricon
+ 12.14  255      12        1  # Killer + Zeus
+ 12.15  255      12        1  # Killer + Hades
+  13.1   80      14        5  # Ogre + Steel -> Golem
+  13.2   80      14        5  # Ogre + Silver -> Golem
+  13.3  255      13        1  # Ogre + Gold
+  13.4   80      14        5  # Ogre + Tngstn -> Golem
+  13.5  255      13        1  # Ogre + Platnm
+  13.6   80      14        5  # Ogre + Mithrl -> Golem
+  13.7   80      14        5  # Ogre + Slmndr -> Golem
+  13.8  255      13        1  # Ogre + Dryad
+  13.9  255      13        1  # Ogre + Undine
+ 13.10  255      13        1  # Ogre + Sylph
+ 13.11   80      14        5  # Ogre + Gnome -> Golem
+ 13.12   80      14        5  # Ogre + Hirokn -> Golem
+ 13.13  255      13        1  # Ogre + Oricon
+ 13.14   80      14        5  # Ogre + Zeus -> Golem
+ 13.15  255      13        1  # Ogre + Hades
+  14.1  255      14        1  # Golem + Steel
+  14.2  255      14        1  # Golem + Silver
+  14.3  255      14        1  # Golem + Gold
+  14.4   30      15       10  # Golem + Tngstn -> Giant
+  14.5  255      14        1  # Golem + Platnm
+  14.6   30      15       10  # Golem + Mithrl -> Giant
+  14.7   30      15       10  # Golem + Slmndr -> Giant
+  14.8  255      14        1  # Golem + Dryad
+  14.9  255      14        1  # Golem + Undine
+ 14.10  255      14        1  # Golem + Sylph
+ 14.11   30      15       10  # Golem + Gnome -> Giant
+ 14.12   30      15       10  # Golem + Hirokn -> Giant
+ 14.13  255      14        1  # Golem + Oricon
+ 14.14   30      15       10  # Golem + Zeus -> Giant
+ 14.15  255      14        1  # Golem + Hades
+  15.1  255      15        1  # Giant + Steel
+  15.2  255      15        1  # Giant + Silver
+  15.3  255      15        1  # Giant + Gold
+  15.4  255      15        1  # Giant + Tngstn
+  15.5  255      15        1  # Giant + Platnm
+  15.6  255      15        1  # Giant + Mithrl
+  15.7  255      15        1  # Giant + Slmndr
+  15.8  255      15        1  # Giant + Dryad
+  15.9  255      15        1  # Giant + Undine
+ 15.10  255      15        1  # Giant + Sylph
+ 15.11  255      15        1  # Giant + Gnome
+ 15.12  255      15        1  # Giant + Hirokn
+ 15.13  255      15        1  # Giant + Oricon
+ 15.14  255      15        1  # Giant + Zeus
+ 15.15  255      15        1  # Giant + Hades
+  16.1   80      17        5  # Magma + Steel -> Binder
+  16.2   80      21        5  # Magma + Silver -> Driver
+  16.3   80      18        5  # Magma + Gold -> Hammer
+  16.4   80      17        5  # Magma + Tngstn -> Binder
+  16.5   80      21        5  # Magma + Platnm -> Driver
+  16.6   80      18        5  # Magma + Mithrl -> Hammer
+  16.7  255      16        1  # Magma + Slmndr
+  16.8  255      16        1  # Magma + Dryad
+  16.9  255      16        1  # Magma + Undine
+ 16.10  255      16        1  # Magma + Sylph
+ 16.11  255      16        1  # Magma + Gnome
+ 16.12  255      16        1  # Magma + Hirokn
+ 16.13  255      16        1  # Magma + Oricon
+ 16.14  255      16        1  # Magma + Zeus
+ 16.15  255      16        1  # Magma + Hades
+  17.1  255      17        1  # Binder + Steel
+  17.2  255      17        1  # Binder + Silver
+  17.3  255      17        1  # Binder + Gold
+  17.4  255      17        1  # Binder + Tngstn
+  17.5   30      20       10  # Binder + Platnm -> Blade
+  17.6   30      20       10  # Binder + Mithrl -> Blade
+  17.7  255      17        1  # Binder + Slmndr
+  17.8   30      20       10  # Binder + Dryad -> Blade
+  17.9   30      20       10  # Binder + Undine -> Blade
+ 17.10   30      20       10  # Binder + Sylph -> Blade
+ 17.11  255      17        1  # Binder + Gnome
+ 17.12  255      17        1  # Binder + Hirokn
+ 17.13  255      17        1  # Binder + Oricon
+ 17.14   30      20       10  # Binder + Zeus -> Blade
+ 17.15  255      17        1  # Binder + Hades
+  18.1  255      18        1  # Hammer + Steel
+  18.2  255      18        1  # Hammer + Silver
+  18.3  255      18        1  # Hammer + Gold
+  18.4   30      19       10  # Hammer + Tngstn -> Pliers
+  18.5   30      19       10  # Hammer + Platnm -> Pliers
+  18.6  255      18        1  # Hammer + Mithrl
+  18.7   30      19       10  # Hammer + Slmndr -> Pliers
+  18.8  255      18        1  # Hammer + Dryad
+  18.9   30      19       10  # Hammer + Undine -> Pliers
+ 18.10  255      18        1  # Hammer + Sylph
+ 18.11   30      19       10  # Hammer + Gnome -> Pliers
+ 18.12  255      18        1  # Hammer + Hirokn
+ 18.13  255      18        1  # Hammer + Oricon
+ 18.14   30      19       10  # Hammer + Zeus -> Pliers
+ 18.15  255      18        1  # Hammer + Hades
+  19.1  255      19        1  # Pliers + Steel
+  19.2  255      19        1  # Pliers + Silver
+  19.3  255      19        1  # Pliers + Gold
+  19.4  255      19        1  # Pliers + Tngstn
+  19.5  255      19        1  # Pliers + Platnm
+  19.6  255      19        1  # Pliers + Mithrl
+  19.7  255      19        1  # Pliers + Slmndr
+  19.8  255      19        1  # Pliers + Dryad
+  19.9  255      19        1  # Pliers + Undine
+ 19.10  255      19        1  # Pliers + Sylph
+ 19.11  255      19        1  # Pliers + Gnome
+ 19.12  255      19        1  # Pliers + Hirokn
+ 19.13   10      23       15  # Pliers + Oricon -> GrvHmr
+ 19.14   10      23       15  # Pliers + Zeus -> GrvHmr
+ 19.15  255      19        1  # Pliers + Hades
+  20.1  255      20        1  # Blade + Steel
+  20.2  255      20        1  # Blade + Silver
+  20.3  255      20        1  # Blade + Gold
+  20.4  255      20        1  # Blade + Tngstn
+  20.5  255      20        1  # Blade + Platnm
+  20.6  255      20        1  # Blade + Mithrl
+  20.7  255      20        1  # Blade + Slmndr
+  20.8  255      20        1  # Blade + Dryad
+  20.9  255      20        1  # Blade + Undine
+ 20.10  255      20        1  # Blade + Sylph
+ 20.11  255      20        1  # Blade + Gnome
+ 20.12   10      24       15  # Blade + Hirokn -> Cutter
+ 20.13  255      20        1  # Blade + Oricon
+ 20.14   10      24       15  # Blade + Zeus -> Cutter
+ 20.15  255      20        1  # Blade + Hades
+  21.1  255      21        1  # Driver + Steel
+  21.2  255      21        1  # Driver + Silver
+  21.3  255      21        1  # Driver + Gold
+  21.4   30      22       10  # Driver + Tngstn -> Drill
+  21.5  255      21        1  # Driver + Platnm
+  21.6   30      22       10  # Driver + Mithrl -> Drill
+  21.7  255      21        1  # Driver + Slmndr
+  21.8   30      22       10  # Driver + Dryad -> Drill
+  21.9  255      21        1  # Driver + Undine
+ 21.10   30      22       10  # Driver + Sylph -> Drill
+ 21.11   30      22       10  # Driver + Gnome -> Drill
+ 21.12  255      21        1  # Driver + Hirokn
+ 21.13  255      21        1  # Driver + Oricon
+ 21.14   30      22       10  # Driver + Zeus -> Drill
+ 21.15  255      21        1  # Driver + Hades
+  22.1  255      22        1  # Drill + Steel
+  22.2  255      22        1  # Drill + Silver
+  22.3  255      22        1  # Drill + Gold
+  22.4  255      22        1  # Drill + Tngstn
+  22.5  255      22        1  # Drill + Platnm
+  22.6  255      22        1  # Drill + Mithrl
+  22.7  255      22        1  # Drill + Slmndr
+  22.8  255      22        1  # Drill + Dryad
+  22.9  255      22        1  # Drill + Undine
+ 22.10  255      22        1  # Drill + Sylph
+ 22.11  255      22        1  # Drill + Gnome
+ 22.12  255      22        1  # Drill + Hirokn
+ 22.13   10      25       15  # Drill + Oricon -> 3DDvr
+ 22.14   10      25       15  # Drill + Zeus -> 3DDvr
+ 22.15  255      22        1  # Drill + Hades
+  23.1  255      23        1  # GrvHmr + Steel
+  23.2  255      23        1  # GrvHmr + Silver
+  23.3  255      23        1  # GrvHmr + Gold
+  23.4  255      23        1  # GrvHmr + Tngstn
+  23.5  255      23        1  # GrvHmr + Platnm
+  23.6  255      23        1  # GrvHmr + Mithrl
+  23.7  255      23        1  # GrvHmr + Slmndr
+  23.8  255      23        1  # GrvHmr + Dryad
+  23.9  255      23        1  # GrvHmr + Undine
+ 23.10  255      23        1  # GrvHmr + Sylph
+ 23.11  255      23        1  # GrvHmr + Gnome
+ 23.12  255      23        1  # GrvHmr + Hirokn
+ 23.13  255      23        1  # GrvHmr + Oricon
+ 23.14  255      23        1  # GrvHmr + Zeus
+ 23.15  255      23        1  # GrvHmr + Hades
+  24.1  255      24        1  # Cutter + Steel
+  24.2  255      24        1  # Cutter + Silver
+  24.3  255      24        1  # Cutter + Gold
+  24.4  255      24        1  # Cutter + Tngstn
+  24.5  255      24        1  # Cutter + Platnm
+  24.6  255      24        1  # Cutter + Mithrl
+  24.7  255      24        1  # Cutter + Slmndr
+  24.8  255      24        1  # Cutter + Dryad
+  24.9  255      24        1  # Cutter + Undine
+ 24.10  255      24        1  # Cutter + Sylph
+ 24.11  255      24        1  # Cutter + Gnome
+ 24.12  255      24        1  # Cutter + Hirokn
+ 24.13  255      24        1  # Cutter + Oricon
+ 24.14  255      24        1  # Cutter + Zeus
+ 24.15  255      24        1  # Cutter + Hades
+  25.1  255      25        1  # 3DDvr + Steel
+  25.2  255      25        1  # 3DDvr + Silver
+  25.3  255      25        1  # 3DDvr + Gold
+  25.4  255      25        1  # 3DDvr + Tngstn
+  25.5  255      25        1  # 3DDvr + Platnm
+  25.6  255      25        1  # 3DDvr + Mithrl
+  25.7  255      25        1  # 3DDvr + Slmndr
+  25.8  255      25        1  # 3DDvr + Dryad
+  25.9  255      25        1  # 3DDvr + Undine
+ 25.10  255      25        1  # 3DDvr + Sylph
+ 25.11  255      25        1  # 3DDvr + Gnome
+ 25.12  255      25        1  # 3DDvr + Hirokn
+ 25.13  255      25        1  # 3DDvr + Oricon
+ 25.14  255      25        1  # 3DDvr + Zeus
+ 25.15  255      25        1  # 3DDvr + Hades
+  26.1   80      28        5  # Rapier + Steel -> Dirk
+  26.2   80      27        5  # Rapier + Silver -> Sabre
+  26.3  255      26        1  # Rapier + Gold
+  26.4   80      28        5  # Rapier + Tngstn -> Dirk
+  26.5   80      27        5  # Rapier + Platnm -> Sabre
+  26.6  255      26        1  # Rapier + Mithrl
+  26.7  255      26        1  # Rapier + Slmndr
+  26.8  255      26        1  # Rapier + Dryad
+  26.9  255      26        1  # Rapier + Undine
+ 26.10  255      26        1  # Rapier + Sylph
+ 26.11  255      26        1  # Rapier + Gnome
+ 26.12   80      28        5  # Rapier + Hirokn -> Dirk
+ 26.13   80      27        5  # Rapier + Oricon -> Sabre
+ 26.14  255      26        1  # Rapier + Zeus
+ 26.15  255      26        1  # Rapier + Hades
+  27.1  255      27        1  # Sabre + Steel
+  27.2  255      27        1  # Sabre + Silver
+  27.3  255      27        1  # Sabre + Gold
+  27.4  255      27        1  # Sabre + Tngstn
+  27.5   30      29       10  # Sabre + Platnm -> Sabre+
+  27.6   30      29       10  # Sabre + Mithrl -> Sabre+
+  27.7  255      27        1  # Sabre + Slmndr
+  27.8   30      29       10  # Sabre + Dryad -> Sabre+
+  27.9  255      27        1  # Sabre + Undine
+ 27.10   30      29       10  # Sabre + Sylph -> Sabre+
+ 27.11  255      27        1  # Sabre + Gnome
+ 27.12  255      27        1  # Sabre + Hirokn
+ 27.13   30      29       10  # Sabre + Oricon -> Sabre+
+ 27.14   30      29       10  # Sabre + Zeus -> Sabre+
+ 27.15  255      27        1  # Sabre + Hades
+  28.1  255      28        1  # Dirk + Steel
+  28.2  255      28        1  # Dirk + Silver
+  28.3  255      28        1  # Dirk + Gold
+  28.4   30      30       10  # Dirk + Tngstn -> Gradus
+  28.5  255      28        1  # Dirk + Platnm
+  28.6   30      30       10  # Dirk + Mithrl -> Gradus
+  28.7  255      28        1  # Dirk + Slmndr
+  28.8  255      28        1  # Dirk + Dryad
+  28.9   30      30       10  # Dirk + Undine -> Gradus
+ 28.10  255      28        1  # Dirk + Sylph
+ 28.11   30      30       10  # Dirk + Gnome -> Gradus
+ 28.12   30      30       10  # Dirk + Hirokn -> Gradus
+ 28.13  255      28        1  # Dirk + Oricon
+ 28.14   30      30       10  # Dirk + Zeus -> Gradus
+ 28.15  255      28        1  # Dirk + Hades
+  29.1  255      29        1  # Sabre+ + Steel
+  29.2  255      29        1  # Sabre+ + Silver
+  29.3  255      29        1  # Sabre+ + Gold
+  29.4  255      29        1  # Sabre+ + Tngstn
+  29.5  255      29        1  # Sabre+ + Platnm
+  29.6  255      29        1  # Sabre+ + Mithrl
+  29.7   10      33       15  # Sabre+ + Slmndr -> Wyndia
+  29.8   10      31       15  # Sabre+ + Dryad -> Gram
+  29.9   10      33       15  # Sabre+ + Undine -> Wyndia
+ 29.10   10      33       15  # Sabre+ + Sylph -> Wyndia
+ 29.11   10      31       15  # Sabre+ + Gnome -> Gram
+ 29.12   10      33       15  # Sabre+ + Hirokn -> Wyndia
+ 29.13   10      31       15  # Sabre+ + Oricon -> Gram
+ 29.14  255      29        1  # Sabre+ + Zeus
+ 29.15  255      29        1  # Sabre+ + Hades
+  30.1  255      30        1  # Gradus + Steel
+  30.2  255      30        1  # Gradus + Silver
+  30.3  255      30        1  # Gradus + Gold
+  30.4  255      30        1  # Gradus + Tngstn
+  30.5  255      30        1  # Gradus + Platnm
+  30.6  255      30        1  # Gradus + Mithrl
+  30.7   10      32       15  # Gradus + Slmndr -> Lavatn
+  30.8  255      30        1  # Gradus + Dryad
+  30.9  255      30        1  # Gradus + Undine
+ 30.10  255      30        1  # Gradus + Sylph
+ 30.11   10      32       15  # Gradus + Gnome -> Lavatn
+ 30.12   10      32       15  # Gradus + Hirokn -> Lavatn
+ 30.13  255      30        1  # Gradus + Oricon
+ 30.14   10      32       15  # Gradus + Zeus -> Lavatn
+ 30.15  255      30        1  # Gradus + Hades
+  31.1  255      31        1  # Gram + Steel
+  31.2  255      31        1  # Gram + Silver
+  31.3  255      31        1  # Gram + Gold
+  31.4  255      31        1  # Gram + Tngstn
+  31.5  255      31        1  # Gram + Platnm
+  31.6  255      31        1  # Gram + Mithrl
+  31.7  255      31        1  # Gram + Slmndr
+  31.8  255      31        1  # Gram + Dryad
+  31.9  255      31        1  # Gram + Undine
+ 31.10  255      31        1  # Gram + Sylph
+ 31.11  255      31        1  # Gram + Gnome
+ 31.12  255      31        1  # Gram + Hirokn
+ 31.13  255      31        1  # Gram + Oricon
+ 31.14    5      35       30  # Gram + Zeus -> Crsadr
+ 31.15  255      31        1  # Gram + Hades
+  32.1  255      32        1  # Lavatn + Steel
+  32.2  255      32        1  # Lavatn + Silver
+  32.3  255      32        1  # Lavatn + Gold
+  32.4  255      32        1  # Lavatn + Tngstn
+  32.5  255      32        1  # Lavatn + Platnm
+  32.6  255      32        1  # Lavatn + Mithrl
+  32.7  255      32        1  # Lavatn + Slmndr
+  32.8  255      32        1  # Lavatn + Dryad
+  32.9  255      32        1  # Lavatn + Undine
+ 32.10  255      32        1  # Lavatn + Sylph
+ 32.11  255      32        1  # Lavatn + Gnome
+ 32.12  255      32        1  # Lavatn + Hirokn
+ 32.13  255      32        1  # Lavatn + Oricon
+ 32.14  255      32        1  # Lavatn + Zeus
+ 32.15    5      34       30  # Lavatn + Hades -> Demon
+  33.1  255      33        1  # Wyndia + Steel
+  33.2  255      33        1  # Wyndia + Silver
+  33.3  255      33        1  # Wyndia + Gold
+  33.4  255      33        1  # Wyndia + Tngstn
+  33.5  255      33        1  # Wyndia + Platnm
+  33.6  255      33        1  # Wyndia + Mithrl
+  33.7  255      33        1  # Wyndia + Slmndr
+  33.8  255      33        1  # Wyndia + Dryad
+  33.9  255      33        1  # Wyndia + Undine
+ 33.10  255      33        1  # Wyndia + Sylph
+ 33.11  255      33        1  # Wyndia + Gnome
+ 33.12  255      33        1  # Wyndia + Hirokn
+ 33.13  255      33        1  # Wyndia + Oricon
+ 33.14  255      33        1  # Wyndia + Zeus
+ 33.15  255      33        1  # Wyndia + Hades
+  34.1  255      34        1  # Demon + Steel
+  34.2  255      34        1  # Demon + Silver
+  34.3  255      34        1  # Demon + Gold
+  34.4  255      34        1  # Demon + Tngstn
+  34.5  255      34        1  # Demon + Platnm
+  34.6  255      34        1  # Demon + Mithrl
+  34.7  255      34        1  # Demon + Slmndr
+  34.8  255      34        1  # Demon + Dryad
+  34.9  255      34        1  # Demon + Undine
+ 34.10  255      34        1  # Demon + Sylph
+ 34.11  255      34        1  # Demon + Gnome
+ 34.12  255      34        1  # Demon + Hirokn
+ 34.13  255      34        1  # Demon + Oricon
+ 34.14  255      34        1  # Demon + Zeus
+ 34.15  255      34        1  # Demon + Hades
+  35.1  255      35        1  # Crsadr + Steel
+  35.2  255      35        1  # Crsadr + Silver
+  35.3  255      35        1  # Crsadr + Gold
+  35.4  255      35        1  # Crsadr + Tngstn
+  35.5  255      35        1  # Crsadr + Platnm
+  35.6  255      35        1  # Crsadr + Mithrl
+  35.7  255      35        1  # Crsadr + Slmndr
+  35.8  255      35        1  # Crsadr + Dryad
+  35.9  255      35        1  # Crsadr + Undine
+ 35.10  255      35        1  # Crsadr + Sylph
+ 35.11  255      35        1  # Crsadr + Gnome
+ 35.12  255      35        1  # Crsadr + Hirokn
+ 35.13  255      35        1  # Crsadr + Oricon
+ 35.14  255      35        1  # Crsadr + Zeus
+ 35.15  255      35        1  # Crsadr + Hades
+  36.1   80      37        5  # HndAxe + Steel -> BtlAxe
+  36.2   80      38        5  # HndAxe + Silver -> Tomhwk
+  36.3  255      36        1  # HndAxe + Gold
+  36.4   80      37        5  # HndAxe + Tngstn -> BtlAxe
+  36.5   80      38        5  # HndAxe + Platnm -> Tomhwk
+  36.6   80      38        5  # HndAxe + Mithrl -> Tomhwk
+  36.7  255      36        1  # HndAxe + Slmndr
+  36.8  255      36        1  # HndAxe + Dryad
+  36.9  255      36        1  # HndAxe + Undine
+ 36.10   80      38        5  # HndAxe + Sylph -> Tomhwk
+ 36.11   80      37        5  # HndAxe + Gnome -> BtlAxe
+ 36.12   80      37        5  # HndAxe + Hirokn -> BtlAxe
+ 36.13   80      38        5  # HndAxe + Oricon -> Tomhwk
+ 36.14  255      36        1  # HndAxe + Zeus
+ 36.15  255      36        1  # HndAxe + Hades
+  37.1  255      37        1  # BtlAxe + Steel
+  37.2  255      37        1  # BtlAxe + Silver
+  37.3  255      37        1  # BtlAxe + Gold
+  37.4   30      39       10  # BtlAxe + Tngstn -> 2Edge
+  37.5  255      37        1  # BtlAxe + Platnm
+  37.6   30      39       10  # BtlAxe + Mithrl -> 2Edge
+  37.7   30      39       10  # BtlAxe + Slmndr -> 2Edge
+  37.8   30      39       10  # BtlAxe + Dryad -> 2Edge
+  37.9  255      37        1  # BtlAxe + Undine
+ 37.10  255      37        1  # BtlAxe + Sylph
+ 37.11   30      39       10  # BtlAxe + Gnome -> 2Edge
+ 37.12   30      39       10  # BtlAxe + Hirokn -> 2Edge
+ 37.13  255      37        1  # BtlAxe + Oricon
+ 37.14   30      39       10  # BtlAxe + Zeus -> 2Edge
+ 37.15  255      37        1  # BtlAxe + Hades
+  38.1  255      38        1  # Tomhwk + Steel
+  38.2  255      38        1  # Tomhwk + Silver
+  38.3  255      38        1  # Tomhwk + Gold
+  38.4  255      38        1  # Tomhwk + Tngstn
+  38.5  255      38        1  # Tomhwk + Platnm
+  38.6  255      38        1  # Tomhwk + Mithrl
+  38.7  255      38        1  # Tomhwk + Slmndr
+  38.8  255      38        1  # Tomhwk + Dryad
+  38.9  255      38        1  # Tomhwk + Undine
+ 38.10  255      38        1  # Tomhwk + Sylph
+ 38.11  255      38        1  # Tomhwk + Gnome
+ 38.12  255      38        1  # Tomhwk + Hirokn
+ 38.13  255      38        1  # Tomhwk + Oricon
+ 38.14  255      38        1  # Tomhwk + Zeus
+ 38.15  255      38        1  # Tomhwk + Hades
+  39.1  255      39        1  # 2Edge + Steel
+  39.2  255      39        1  # 2Edge + Silver
+  39.3  255      39        1  # 2Edge + Gold
+  39.4  255      39        1  # 2Edge + Tngstn
+  39.5  255      39        1  # 2Edge + Platnm
+  39.6  255      39        1  # 2Edge + Mithrl
+  39.7   10      40       15  # 2Edge + Slmndr -> Break
+  39.8  255      39        1  # 2Edge + Dryad
+  39.9  255      39        1  # 2Edge + Undine
+ 39.10  255      39        1  # 2Edge + Sylph
+ 39.11   10      40       15  # 2Edge + Gnome -> Break
+ 39.12   10      40       15  # 2Edge + Hirokn -> Break
+ 39.13  255      39        1  # 2Edge + Oricon
+ 39.14   10      40       15  # 2Edge + Zeus -> Break
+ 39.15  255      39        1  # 2Edge + Hades
+  40.1  255      40        1  # Break + Steel
+  40.2  255      40        1  # Break + Silver
+  40.3  255      40        1  # Break + Gold
+  40.4  255      40        1  # Break + Tngstn
+  40.5  255      40        1  # Break + Platnm
+  40.6  255      40        1  # Break + Mithrl
+  40.7  255      40        1  # Break + Slmndr
+  40.8  255      40        1  # Break + Dryad
+  40.9  255      40        1  # Break + Undine
+ 40.10  255      40        1  # Break + Sylph
+ 40.11  255      40        1  # Break + Gnome
+ 40.12  255      40        1  # Break + Hirokn
+ 40.13  255      40        1  # Break + Oricon
+ 40.14  255      40        1  # Break + Zeus
+ 40.15  255      40        1  # Break + Hades
+  41.1   80      42        5  # BllArm + Steel -> MgaBll
+  41.2   80      43        5  # BllArm + Silver -> NoWire
+  41.3  255      41        1  # BllArm + Gold
+  41.4   80      42        5  # BllArm + Tngstn -> MgaBll
+  41.5  255      41        1  # BllArm + Platnm
+  41.6   80      43        5  # BllArm + Mithrl -> NoWire
+  41.7   80      43        5  # BllArm + Slmndr -> NoWire
+  41.8   80      42        5  # BllArm + Dryad -> MgaBll
+  41.9  255      41        1  # BllArm + Undine
+ 41.10   80      43        5  # BllArm + Sylph -> NoWire
+ 41.11   80      42        5  # BllArm + Gnome -> MgaBll
+ 41.12   80      42        5  # BllArm + Hirokn -> MgaBll
+ 41.13   80      43        5  # BllArm + Oricon -> NoWire
+ 41.14  255      41        1  # BllArm + Zeus
+ 41.15  255      41        1  # BllArm + Hades
+  42.1  255      42        1  # MgaBll + Steel
+  42.2  255      42        1  # MgaBll + Silver
+  42.3  255      42        1  # MgaBll + Gold
+  42.4   30      44       10  # MgaBll + Tngstn -> Crushr
+  42.5  255      42        1  # MgaBll + Platnm
+  42.6  255      42        1  # MgaBll + Mithrl
+  42.7  255      42        1  # MgaBll + Slmndr
+  42.8   30      44       10  # MgaBll + Dryad -> Crushr
+  42.9  255      42        1  # MgaBll + Undine
+ 42.10  255      42        1  # MgaBll + Sylph
+ 42.11   30      44       10  # MgaBll + Gnome -> Crushr
+ 42.12   30      44       10  # MgaBll + Hirokn -> Crushr
+ 42.13  255      42        1  # MgaBll + Oricon
+ 42.14   30      44       10  # MgaBll + Zeus -> Crushr
+ 42.15  255      42        1  # MgaBll + Hades
+  43.1  255      43        1  # NoWire + Steel
+  43.2  255      43        1  # NoWire + Silver
+  43.3  255      43        1  # NoWire + Gold
+  43.4  255      43        1  # NoWire + Tngstn
+  43.5  255      43        1  # NoWire + Platnm
+  43.6   30      45       10  # NoWire + Mithrl -> Sthrn+
+  43.7   30      45       10  # NoWire + Slmndr -> Sthrn+
+  43.8  255      43        1  # NoWire + Dryad
+  43.9  255      43        1  # NoWire + Undine
+ 43.10   30      45       10  # NoWire + Sylph -> Sthrn+
+ 43.11  255      43        1  # NoWire + Gnome
+ 43.12  255      43        1  # NoWire + Hirokn
+ 43.13   30      45       10  # NoWire + Oricon -> Sthrn+
+ 43.14   30      45       10  # NoWire + Zeus -> Sthrn+
+ 43.15  255      43        1  # NoWire + Hades
+  44.1  255      44        1  # Crushr + Steel
+  44.2  255      44        1  # Crushr + Silver
+  44.3  255      44        1  # Crushr + Gold
+  44.4  255      44        1  # Crushr + Tngstn
+  44.5  255      44        1  # Crushr + Platnm
+  44.6  255      44        1  # Crushr + Mithrl
+  44.7  255      44        1  # Crushr + Slmndr
+  44.8  255      44        1  # Crushr + Dryad
+  44.9  255      44        1  # Crushr + Undine
+ 44.10  255      44        1  # Crushr + Sylph
+ 44.11  255      44        1  # Crushr + Gnome
+ 44.12  255      44        1  # Crushr + Hirokn
+ 44.13  255      44        1  # Crushr + Oricon
+ 44.14  255      44        1  # Crushr + Zeus
+ 44.15  255      44        1  # Crushr + Hades
+  45.1  255      45        1  # Sthrn+ + Steel
+  45.2  255      45        1  # Sthrn+ + Silver
+  45.3  255      45        1  # Sthrn+ + Gold
+  45.4  255      45        1  # Sthrn+ + Tngstn
+  45.5  255      45        1  # Sthrn+ + Platnm
+  45.6  255      45        1  # Sthrn+ + Mithrl
+  45.7  255      45        1  # Sthrn+ + Slmndr
+  45.8  255      45        1  # Sthrn+ + Dryad
+  45.9  255      45        1  # Sthrn+ + Undine
+ 45.10  255      45        1  # Sthrn+ + Sylph
+ 45.11  255      45        1  # Sthrn+ + Gnome
+ 45.12  255      45        1  # Sthrn+ + Hirokn
+ 45.13  255      45        1  # Sthrn+ + Oricon
+ 45.14  255      45        1  # Sthrn+ + Zeus
+ 45.15  255      45        1  # Sthrn+ + Hades
+  46.1   80      47        5  # Lancer + Steel -> DrlArm
+  46.2   80      48        5  # Lancer + Silver -> Pierce
+  46.3  255      46        1  # Lancer + Gold
+  46.4   80      47        5  # Lancer + Tngstn -> DrlArm
+  46.5  255      46        1  # Lancer + Platnm
+  46.6   80      48        5  # Lancer + Mithrl -> Pierce
+  46.7  255      46        1  # Lancer + Slmndr
+  46.8  255      46        1  # Lancer + Dryad
+  46.9   80      48        5  # Lancer + Undine -> Pierce
+ 46.10   80      47        5  # Lancer + Sylph -> DrlArm
+ 46.11  255      46        1  # Lancer + Gnome
+ 46.12   80      47        5  # Lancer + Hirokn -> DrlArm
+ 46.13   80      48        5  # Lancer + Oricon -> Pierce
+ 46.14  255      46        1  # Lancer + Zeus
+ 46.15  255      46        1  # Lancer + Hades
+  47.1  255      47        1  # DrlArm + Steel
+  47.2  255      47        1  # DrlArm + Silver
+  47.3  255      47        1  # DrlArm + Gold
+  47.4  255      47        1  # DrlArm + Tngstn
+  47.5  255      47        1  # DrlArm + Platnm
+  47.6   30      49       10  # DrlArm + Mithrl -> Trnado
+  47.7  255      47        1  # DrlArm + Slmndr
+  47.8  255      47        1  # DrlArm + Dryad
+  47.9  255      47        1  # DrlArm + Undine
+ 47.10   30      49       10  # DrlArm + Sylph -> Trnado
+ 47.11  255      47        1  # DrlArm + Gnome
+ 47.12   30      49       10  # DrlArm + Hirokn -> Trnado
+ 47.13  255      47        1  # DrlArm + Oricon
+ 47.14   30      49       10  # DrlArm + Zeus -> Trnado
+ 47.15  255      47        1  # DrlArm + Hades
+  48.1  255      48        1  # Pierce + Steel
+  48.2  255      48        1  # Pierce + Silver
+  48.3  255      48        1  # Pierce + Gold
+  48.4  255      48        1  # Pierce + Tngstn
+  48.5   30      50       10  # Pierce + Platnm -> Spiral
+  48.6  255      48        1  # Pierce + Mithrl
+  48.7  255      48        1  # Pierce + Slmndr
+  48.8  255      48        1  # Pierce + Dryad
+  48.9   30      50       10  # Pierce + Undine -> Spiral
+ 48.10  255      48        1  # Pierce + Sylph
+ 48.11  255      48        1  # Pierce + Gnome
+ 48.12  255      48        1  # Pierce + Hirokn
+ 48.13   30      50       10  # Pierce + Oricon -> Spiral
+ 48.14   30      50       10  # Pierce + Zeus -> Spiral
+ 48.15  255      48        1  # Pierce + Hades
+  49.1  255      49        1  # Trnado + Steel
+  49.2  255      49        1  # Trnado + Silver
+  49.3  255      49        1  # Trnado + Gold
+  49.4  255      49        1  # Trnado + Tngstn
+  49.5  255      49        1  # Trnado + Platnm
+  49.6  255      49        1  # Trnado + Mithrl
+  49.7  255      49        1  # Trnado + Slmndr
+  49.8  255      49        1  # Trnado + Dryad
+  49.9  255      49        1  # Trnado + Undine
+ 49.10  255      49        1  # Trnado + Sylph
+ 49.11  255      49        1  # Trnado + Gnome
+ 49.12  255      49        1  # Trnado + Hirokn
+ 49.13  255      49        1  # Trnado + Oricon
+ 49.14  255      49        1  # Trnado + Zeus
+ 49.15  255      49        1  # Trnado + Hades
+  50.1  255      50        1  # Spiral + Steel
+  50.2  255      50        1  # Spiral + Silver
+  50.3  255      50        1  # Spiral + Gold
+  50.4  255      50        1  # Spiral + Tngstn
+  50.5  255      50        1  # Spiral + Platnm
+  50.6  255      50        1  # Spiral + Mithrl
+  50.7  255      50        1  # Spiral + Slmndr
+  50.8  255      50        1  # Spiral + Dryad
+  50.9  255      50        1  # Spiral + Undine
+ 50.10  255      50        1  # Spiral + Sylph
+ 50.11  255      50        1  # Spiral + Gnome
+ 50.12  255      50        1  # Spiral + Hirokn
+ 50.13  255      50        1  # Spiral + Oricon
+ 50.14  255      50        1  # Spiral + Zeus
+ 50.15  255      50        1  # Spiral + Hades
+  51.1   80      52        5  # Hook + Steel -> LogHk
+  51.2   80      52        5  # Hook + Silver -> LogHk
+  51.3  255      51        1  # Hook + Gold
+  51.4   80      52        5  # Hook + Tngstn -> LogHk
+  51.5  255      51        1  # Hook + Platnm
+  51.6   80      52        5  # Hook + Mithrl -> LogHk
+  51.7  255      51        1  # Hook + Slmndr
+  51.8   80      52        5  # Hook + Dryad -> LogHk
+  51.9  255      51        1  # Hook + Undine
+ 51.10  255      51        1  # Hook + Sylph
+ 51.11   80      52        5  # Hook + Gnome -> LogHk
+ 51.12   80      52        5  # Hook + Hirokn -> LogHk
+ 51.13  255      51        1  # Hook + Oricon
+ 51.14   80      52        5  # Hook + Zeus -> LogHk
+ 51.15  255      51        1  # Hook + Hades
+  52.1  255      52        1  # LogHk + Steel
+  52.2  255      52        1  # LogHk + Silver
+  52.3  255      52        1  # LogHk + Gold
+  52.4   30      53       10  # LogHk + Tngstn -> BtlHk
+  52.5  255      52        1  # LogHk + Platnm
+  52.6   30      53       10  # LogHk + Mithrl -> BtlHk
+  52.7   30      53       10  # LogHk + Slmndr -> BtlHk
+  52.8  255      52        1  # LogHk + Dryad
+  52.9  255      52        1  # LogHk + Undine
+ 52.10  255      52        1  # LogHk + Sylph
+ 52.11   30      53       10  # LogHk + Gnome -> BtlHk
+ 52.12   30      53       10  # LogHk + Hirokn -> BtlHk
+ 52.13  255      52        1  # LogHk + Oricon
+ 52.14   30      53       10  # LogHk + Zeus -> BtlHk
+ 52.15  255      52        1  # LogHk + Hades
+  53.1  255      53        1  # BtlHk + Steel
+  53.2  255      53        1  # BtlHk + Silver
+  53.3  255      53        1  # BtlHk + Gold
+  53.4  255      53        1  # BtlHk + Tngstn
+  53.5  255      53        1  # BtlHk + Platnm
+  53.6  255      53        1  # BtlHk + Mithrl
+  53.7  255      53        1  # BtlHk + Slmndr
+  53.8  255      53        1  # BtlHk + Dryad
+  53.9   10      54       15  # BtlHk + Undine -> IceClw
+ 53.10  255      53        1  # BtlHk + Sylph
+ 53.11   10      55       15  # BtlHk + Gnome -> DvlClw
+ 53.12  255      53        1  # BtlHk + Hirokn
+ 53.13  255      53        1  # BtlHk + Oricon
+ 53.14  255      53        1  # BtlHk + Zeus
+ 53.15   10      55       15  # BtlHk + Hades -> DvlClw
+  54.1  255      54        1  # IceClw + Steel
+  54.2  255      54        1  # IceClw + Silver
+  54.3  255      54        1  # IceClw + Gold
+  54.4  255      54        1  # IceClw + Tngstn
+  54.5  255      54        1  # IceClw + Platnm
+  54.6  255      54        1  # IceClw + Mithrl
+  54.7  255      54        1  # IceClw + Slmndr
+  54.8  255      54        1  # IceClw + Dryad
+  54.9  255      54        1  # IceClw + Undine
+ 54.10  255      54        1  # IceClw + Sylph
+ 54.11  255      54        1  # IceClw + Gnome
+ 54.12  255      54        1  # IceClw + Hirokn
+ 54.13  255      54        1  # IceClw + Oricon
+ 54.14  255      54        1  # IceClw + Zeus
+ 54.15  255      54        1  # IceClw + Hades
+  55.1  255      55        1  # DvlClw + Steel
+  55.2  255      55        1  # DvlClw + Silver
+  55.3  255      55        1  # DvlClw + Gold
+  55.4  255      55        1  # DvlClw + Tngstn
+  55.5  255      55        1  # DvlClw + Platnm
+  55.6  255      55        1  # DvlClw + Mithrl
+  55.7  255      55        1  # DvlClw + Slmndr
+  55.8  255      55        1  # DvlClw + Dryad
+  55.9  255      55        1  # DvlClw + Undine
+ 55.10  255      55        1  # DvlClw + Sylph
+ 55.11  255      55        1  # DvlClw + Gnome
+ 55.12  255      55        1  # DvlClw + Hirokn
+ 55.13  255      55        1  # DvlClw + Oricon
+ 55.14  255      55        1  # DvlClw + Zeus
+ 55.15  255      55        1  # DvlClw + Hades
+  56.1  255      56        1  # Whip + Steel
+  56.2   80      57        5  # Whip + Silver -> Whip+
+  56.3   80      57        5  # Whip + Gold -> Whip+
+  56.4  255      56        1  # Whip + Tngstn
+  56.5   80      57        5  # Whip + Platnm -> Whip+
+  56.6   80      57        5  # Whip + Mithrl -> Whip+
+  56.7   80      57        5  # Whip + Slmndr -> Whip+
+  56.8  255      56        1  # Whip + Dryad
+  56.9  255      56        1  # Whip + Undine
+ 56.10  255      56        1  # Whip + Sylph
+ 56.11   80      57        5  # Whip + Gnome -> Whip+
+ 56.12   80      57        5  # Whip + Hirokn -> Whip+
+ 56.13  255      56        1  # Whip + Oricon
+ 56.14   80      57        5  # Whip + Zeus -> Whip+
+ 56.15  255      56        1  # Whip + Hades
+  57.1  255      57        1  # Whip+ + Steel
+  57.2  255      57        1  # Whip+ + Silver
+  57.3  255      57        1  # Whip+ + Gold
+  57.4  255      57        1  # Whip+ + Tngstn
+  57.5  255      57        1  # Whip+ + Platnm
+  57.6  255      57        1  # Whip+ + Mithrl
+  57.7   10      58       15  # Whip+ + Slmndr -> FBoot
+  57.8  255      57        1  # Whip+ + Dryad
+  57.9  255      57        1  # Whip+ + Undine
+ 57.10  255      57        1  # Whip+ + Sylph
+ 57.11   10      60       15  # Whip+ + Gnome -> EBoot
+ 57.12   10      59       15  # Whip+ + Hirokn -> 9Tail
+ 57.13  255      57        1  # Whip+ + Oricon
+ 57.14  255      57        1  # Whip+ + Zeus
+ 57.15  255      57        1  # Whip+ + Hades
+  58.1  255      58        1  # FBoot + Steel
+  58.2  255      58        1  # FBoot + Silver
+  58.3  255      58        1  # FBoot + Gold
+  58.4  255      58        1  # FBoot + Tngstn
+  58.5  255      58        1  # FBoot + Platnm
+  58.6  255      58        1  # FBoot + Mithrl
+  58.7  255      58        1  # FBoot + Slmndr
+  58.8  255      58        1  # FBoot + Dryad
+  58.9  255      58        1  # FBoot + Undine
+ 58.10  255      58        1  # FBoot + Sylph
+ 58.11  255      58        1  # FBoot + Gnome
+ 58.12  255      58        1  # FBoot + Hirokn
+ 58.13  255      58        1  # FBoot + Oricon
+ 58.14  255      58        1  # FBoot + Zeus
+ 58.15  255      58        1  # FBoot + Hades
+  59.1  255      59        1  # 9Tail + Steel
+  59.2  255      59        1  # 9Tail + Silver
+  59.3  255      59        1  # 9Tail + Gold
+  59.4  255      59        1  # 9Tail + Tngstn
+  59.5  255      59        1  # 9Tail + Platnm
+  59.6  255      59        1  # 9Tail + Mithrl
+  59.7  255      59        1  # 9Tail + Slmndr
+  59.8  255      59        1  # 9Tail + Dryad
+  59.9  255      59        1  # 9Tail + Undine
+ 59.10  255      59        1  # 9Tail + Sylph
+ 59.11  255      59        1  # 9Tail + Gnome
+ 59.12  255      59        1  # 9Tail + Hirokn
+ 59.13  255      59        1  # 9Tail + Oricon
+ 59.14  255      59        1  # 9Tail + Zeus
+ 59.15  255      59        1  # 9Tail + Hades
+  60.1  255      60        1  # EBoot + Steel
+  60.2  255      60        1  # EBoot + Silver
+  60.3  255      60        1  # EBoot + Gold
+  60.4  255      60        1  # EBoot + Tngstn
+  60.5  255      60        1  # EBoot + Platnm
+  60.6  255      60        1  # EBoot + Mithrl
+  60.7  255      60        1  # EBoot + Slmndr
+  60.8  255      60        1  # EBoot + Dryad
+  60.9  255      60        1  # EBoot + Undine
+ 60.10  255      60        1  # EBoot + Sylph
+ 60.11  255      60        1  # EBoot + Gnome
+ 60.12  255      60        1  # EBoot + Hirokn
+ 60.13  255      60        1  # EBoot + Oricon
+ 60.14  255      60        1  # EBoot + Zeus
+ 60.15  255      60        1  # EBoot + Hades
+  61.1   80      63        5  # Fork + Steel -> Tridnt
+  61.2   80      63        5  # Fork + Silver -> Tridnt
+  61.3  255      61        1  # Fork + Gold
+  61.4   80      63        5  # Fork + Tngstn -> Tridnt
+  61.5  255      61        1  # Fork + Platnm
+  61.6   80      63        5  # Fork + Mithrl -> Tridnt
+  61.7  255      61        1  # Fork + Slmndr
+  61.8  255      61        1  # Fork + Dryad
+  61.9   80      63        5  # Fork + Undine -> Tridnt
+ 61.10  255      61        1  # Fork + Sylph
+ 61.11  255      61        1  # Fork + Gnome
+ 61.12   80      63        5  # Fork + Hirokn -> Tridnt
+ 61.13  255      61        1  # Fork + Oricon
+ 61.14   80      63        5  # Fork + Zeus -> Tridnt
+ 61.15  255      61        1  # Fork + Hades
+  62.1  255      62        1  # HkClaw + Steel
+  62.2   80      64        5  # HkClaw + Silver -> WlfClw
+  62.3   80      64        5  # HkClaw + Gold -> WlfClw
+  62.4  255      62        1  # HkClaw + Tngstn
+  62.5   80      64        5  # HkClaw + Platnm -> WlfClw
+  62.6   80      64        5  # HkClaw + Mithrl -> WlfClw
+  62.7  255      62        1  # HkClaw + Slmndr
+  62.8  255      62        1  # HkClaw + Dryad
+  62.9  255      62        1  # HkClaw + Undine
+ 62.10   80      64        5  # HkClaw + Sylph -> WlfClw
+ 62.11  255      62        1  # HkClaw + Gnome
+ 62.12  255      62        1  # HkClaw + Hirokn
+ 62.13   80      64        5  # HkClaw + Oricon -> WlfClw
+ 62.14   80      64        5  # HkClaw + Zeus -> WlfClw
+ 62.15  255      62        1  # HkClaw + Hades
+  63.1  255      63        1  # Tridnt + Steel
+  63.2  255      63        1  # Tridnt + Silver
+  63.3  255      63        1  # Tridnt + Gold
+  63.4  255      63        1  # Tridnt + Tngstn
+  63.5  255      63        1  # Tridnt + Platnm
+  63.6  255      63        1  # Tridnt + Mithrl
+  63.7  255      63        1  # Tridnt + Slmndr
+  63.8  255      63        1  # Tridnt + Dryad
+  63.9  255      63        1  # Tridnt + Undine
+ 63.10  255      63        1  # Tridnt + Sylph
+ 63.11  255      63        1  # Tridnt + Gnome
+ 63.12  255      63        1  # Tridnt + Hirokn
+ 63.13  255      63        1  # Tridnt + Oricon
+ 63.14  255      63        1  # Tridnt + Zeus
+ 63.15  255      63        1  # Tridnt + Hades
+  64.1  255      64        1  # WlfClw + Steel
+  64.2  255      64        1  # WlfClw + Silver
+  64.3  255      64        1  # WlfClw + Gold
+  64.4  255      64        1  # WlfClw + Tngstn
+  64.5  255      64        1  # WlfClw + Platnm
+  64.6  255      64        1  # WlfClw + Mithrl
+  64.7  255      64        1  # WlfClw + Slmndr
+  64.8  255      64        1  # WlfClw + Dryad
+  64.9  255      64        1  # WlfClw + Undine
+ 64.10   10      65       15  # WlfClw + Sylph -> TgrClw
+ 64.11  255      64        1  # WlfClw + Gnome
+ 64.12   10      65       15  # WlfClw + Hirokn -> TgrClw
+ 64.13  255      64        1  # WlfClw + Oricon
+ 64.14   10      65       15  # WlfClw + Zeus -> TgrClw
+ 64.15  255      64        1  # WlfClw + Hades
+  65.1  255      65        1  # TgrClw + Steel
+  65.2  255      65        1  # TgrClw + Silver
+  65.3  255      65        1  # TgrClw + Gold
+  65.4  255      65        1  # TgrClw + Tngstn
+  65.5  255      65        1  # TgrClw + Platnm
+  65.6  255      65        1  # TgrClw + Mithrl
+  65.7  255      65        1  # TgrClw + Slmndr
+  65.8  255      65        1  # TgrClw + Dryad
+  65.9  255      65        1  # TgrClw + Undine
+ 65.10  255      65        1  # TgrClw + Sylph
+ 65.11  255      65        1  # TgrClw + Gnome
+ 65.12  255      65        1  # TgrClw + Hirokn
+ 65.13  255      65        1  # TgrClw + Oricon
+ 65.14  255      65        1  # TgrClw + Zeus
+ 65.15  255      65        1  # TgrClw + Hades
+  66.1   80      67        5  # Disc + Steel -> SpikeD
+  66.2   80      68        5  # Disc + Silver -> RingD
+  66.3  255      66        1  # Disc + Gold
+  66.4   80      67        5  # Disc + Tngstn -> SpikeD
+  66.5  255      66        1  # Disc + Platnm
+  66.6   80      68        5  # Disc + Mithrl -> RingD
+  66.7   80      68        5  # Disc + Slmndr -> RingD
+  66.8  255      66        1  # Disc + Dryad
+  66.9  255      66        1  # Disc + Undine
+ 66.10  255      66        1  # Disc + Sylph
+ 66.11   80      67        5  # Disc + Gnome -> SpikeD
+ 66.12   80      67        5  # Disc + Hirokn -> SpikeD
+ 66.13   80      68        5  # Disc + Oricon -> RingD
+ 66.14  255      66        1  # Disc + Zeus
+ 66.15  255      66        1  # Disc + Hades
+  67.1  255      67        1  # SpikeD + Steel
+  67.2  255      67        1  # SpikeD + Silver
+  67.3  255      67        1  # SpikeD + Gold
+  67.4   30      69       10  # SpikeD + Tngstn -> Disc+
+  67.5  255      67        1  # SpikeD + Platnm
+  67.6  255      67        1  # SpikeD + Mithrl
+  67.7  255      67        1  # SpikeD + Slmndr
+  67.8  255      67        1  # SpikeD + Dryad
+  67.9  255      67        1  # SpikeD + Undine
+ 67.10   30      69       10  # SpikeD + Sylph -> Disc+
+ 67.11   30      69       10  # SpikeD + Gnome -> Disc+
+ 67.12   30      69       10  # SpikeD + Hirokn -> Disc+
+ 67.13  255      67        1  # SpikeD + Oricon
+ 67.14   30      69       10  # SpikeD + Zeus -> Disc+
+ 67.15  255      67        1  # SpikeD + Hades
+  68.1  255      68        1  # RingD + Steel
+  68.2  255      68        1  # RingD + Silver
+  68.3  255      68        1  # RingD + Gold
+  68.4  255      68        1  # RingD + Tngstn
+  68.5  255      68        1  # RingD + Platnm
+  68.6   30      70       10  # RingD + Mithrl -> AirD
+  68.7   30      70       10  # RingD + Slmndr -> AirD
+  68.8  255      68        1  # RingD + Dryad
+  68.9  255      68        1  # RingD + Undine
+ 68.10   30      70       10  # RingD + Sylph -> AirD
+ 68.11  255      68        1  # RingD + Gnome
+ 68.12  255      68        1  # RingD + Hirokn
+ 68.13   30      70       10  # RingD + Oricon -> AirD
+ 68.14   30      70       10  # RingD + Zeus -> AirD
+ 68.15  255      68        1  # RingD + Hades
+  69.1  255      69        1  # Disc+ + Steel
+  69.2  255      69        1  # Disc+ + Silver
+  69.3  255      69        1  # Disc+ + Gold
+  69.4  255      69        1  # Disc+ + Tngstn
+  69.5  255      69        1  # Disc+ + Platnm
+  69.6  255      69        1  # Disc+ + Mithrl
+  69.7  255      69        1  # Disc+ + Slmndr
+  69.8  255      69        1  # Disc+ + Dryad
+  69.9  255      69        1  # Disc+ + Undine
+ 69.10  255      69        1  # Disc+ + Sylph
+ 69.11  255      69        1  # Disc+ + Gnome
+ 69.12  255      69        1  # Disc+ + Hirokn
+ 69.13  255      69        1  # Disc+ + Oricon
+ 69.14  255      69        1  # Disc+ + Zeus
+ 69.15  255      69        1  # Disc+ + Hades
+  70.1  255      70        1  # AirD + Steel
+  70.2  255      70        1  # AirD + Silver
+  70.3  255      70        1  # AirD + Gold
+  70.4  255      70        1  # AirD + Tngstn
+  70.5  255      70        1  # AirD + Platnm
+  70.6  255      70        1  # AirD + Mithrl
+  70.7  255      70        1  # AirD + Slmndr
+  70.8  255      70        1  # AirD + Dryad
+  70.9  255      70        1  # AirD + Undine
+ 70.10  255      70        1  # AirD + Sylph
+ 70.11  255      70        1  # AirD + Gnome
+ 70.12  255      70        1  # AirD + Hirokn
+ 70.13  255      70        1  # AirD + Oricon
+ 70.14  255      70        1  # AirD + Zeus
+ 70.15  255      70        1  # AirD + Hades
+  71.1   80      73        5  # EWire + Steel -> Tangle
+  71.2  255      71        1  # EWire + Silver
+  71.3   80      72        5  # EWire + Gold -> ArmWre
+  71.4   80      73        5  # EWire + Tngstn -> Tangle
+  71.5  255      71        1  # EWire + Platnm
+  71.6   80      72        5  # EWire + Mithrl -> ArmWre
+  71.7  255      71        1  # EWire + Slmndr
+  71.8   80      73        5  # EWire + Dryad -> Tangle
+  71.9  255      71        1  # EWire + Undine
+ 71.10   80      72        5  # EWire + Sylph -> ArmWre
+ 71.11  255      71        1  # EWire + Gnome
+ 71.12   80      73        5  # EWire + Hirokn -> Tangle
+ 71.13   80      72        5  # EWire + Oricon -> ArmWre
+ 71.14  255      71        1  # EWire + Zeus
+ 71.15  255      71        1  # EWire + Hades
+  72.1  255      72        1  # ArmWre + Steel
+  72.2  255      72        1  # ArmWre + Silver
+  72.3  255      72        1  # ArmWre + Gold
+  72.4  255      72        1  # ArmWre + Tngstn
+  72.5  255      72        1  # ArmWre + Platnm
+  72.6   30      74       10  # ArmWre + Mithrl -> Lghtng
+  72.7  255      72        1  # ArmWre + Slmndr
+  72.8  255      72        1  # ArmWre + Dryad
+  72.9   30      74       10  # ArmWre + Undine -> Lghtng
+ 72.10   30      74       10  # ArmWre + Sylph -> Lghtng
+ 72.11  255      72        1  # ArmWre + Gnome
+ 72.12  255      72        1  # ArmWre + Hirokn
+ 72.13   30      74       10  # ArmWre + Oricon -> Lghtng
+ 72.14   30      74       10  # ArmWre + Zeus -> Lghtng
+ 72.15  255      72        1  # ArmWre + Hades
+  73.1  255      73        1  # Tangle + Steel
+  73.2  255      73        1  # Tangle + Silver
+  73.3  255      73        1  # Tangle + Gold
+  73.4  255      73        1  # Tangle + Tngstn
+  73.5  255      73        1  # Tangle + Platnm
+  73.6  255      73        1  # Tangle + Mithrl
+  73.7  255      73        1  # Tangle + Slmndr
+  73.8  255      73        1  # Tangle + Dryad
+  73.9  255      73        1  # Tangle + Undine
+ 73.10  255      73        1  # Tangle + Sylph
+ 73.11  255      73        1  # Tangle + Gnome
+ 73.12  255      73        1  # Tangle + Hirokn
+ 73.13  255      73        1  # Tangle + Oricon
+ 73.14  255      73        1  # Tangle + Zeus
+ 73.15  255      73        1  # Tangle + Hades
+  74.1  255      74        1  # Lghtng + Steel
+  74.2  255      74        1  # Lghtng + Silver
+  74.3  255      74        1  # Lghtng + Gold
+  74.4  255      74        1  # Lghtng + Tngstn
+  74.5  255      74        1  # Lghtng + Platnm
+  74.6  255      74        1  # Lghtng + Mithrl
+  74.7  255      74        1  # Lghtng + Slmndr
+  74.8  255      74        1  # Lghtng + Dryad
+  74.9  255      74        1  # Lghtng + Undine
+ 74.10  255      74        1  # Lghtng + Sylph
+ 74.11  255      74        1  # Lghtng + Gnome
+ 74.12  255      74        1  # Lghtng + Hirokn
+ 74.13   10      75       15  # Lghtng + Oricon -> Coil
+ 74.14   10      75       15  # Lghtng + Zeus -> Coil
+ 74.15  255      74        1  # Lghtng + Hades
+  75.1  255      75        1  # Coil + Steel
+  75.2  255      75        1  # Coil + Silver
+  75.3  255      75        1  # Coil + Gold
+  75.4  255      75        1  # Coil + Tngstn
+  75.5  255      75        1  # Coil + Platnm
+  75.6  255      75        1  # Coil + Mithrl
+  75.7  255      75        1  # Coil + Slmndr
+  75.8  255      75        1  # Coil + Dryad
+  75.9  255      75        1  # Coil + Undine
+ 75.10  255      75        1  # Coil + Sylph
+ 75.11  255      75        1  # Coil + Gnome
+ 75.12  255      75        1  # Coil + Hirokn
+ 75.13  255      75        1  # Coil + Oricon
+ 75.14  255      75        1  # Coil + Zeus
+ 75.15  255      75        1  # Coil + Hades
+  76.1  255      76        1  # Mage + Steel
+  76.2   80      77        5  # Mage + Silver -> Wizard
+  76.3   80      77        5  # Mage + Gold -> Wizard
+  76.4  255      76        1  # Mage + Tngstn
+  76.5   80      77        5  # Mage + Platnm -> Wizard
+  76.6   80      77        5  # Mage + Mithrl -> Wizard
+  76.7  255      76        1  # Mage + Slmndr
+  76.8   80      77        5  # Mage + Dryad -> Wizard
+  76.9  255      76        1  # Mage + Undine
+ 76.10   80      77        5  # Mage + Sylph -> Wizard
+ 76.11  255      76        1  # Mage + Gnome
+ 76.12  255      76        1  # Mage + Hirokn
+ 76.13   80      77        5  # Mage + Oricon -> Wizard
+ 76.14   80      77        5  # Mage + Zeus -> Wizard
+ 76.15  255      76        1  # Mage + Hades
+  77.1  255      77        1  # Wizard + Steel
+  77.2  255      77        1  # Wizard + Silver
+  77.3  255      77        1  # Wizard + Gold
+  77.4  255      77        1  # Wizard + Tngstn
+  77.5   30      78       10  # Wizard + Platnm -> Warlok
+  77.6   30      78       10  # Wizard + Mithrl -> Warlok
+  77.7  255      77        1  # Wizard + Slmndr
+  77.8   30      78       10  # Wizard + Dryad -> Warlok
+  77.9  255      77        1  # Wizard + Undine
+ 77.10   30      78       10  # Wizard + Sylph -> Warlok
+ 77.11  255      77        1  # Wizard + Gnome
+ 77.12  255      77        1  # Wizard + Hirokn
+ 77.13   30      78       10  # Wizard + Oricon -> Warlok
+ 77.14   30      78       10  # Wizard + Zeus -> Warlok
+ 77.15  255      77        1  # Wizard + Hades
+  78.1  255      78        1  # Warlok + Steel
+  78.2  255      78        1  # Warlok + Silver
+  78.3  255      78        1  # Warlok + Gold
+  78.4  255      78        1  # Warlok + Tngstn
+  78.5  255      78        1  # Warlok + Platnm
+  78.6  255      78        1  # Warlok + Mithrl
+  78.7  255      78        1  # Warlok + Slmndr
+  78.8  255      78        1  # Warlok + Dryad
+  78.9  255      78        1  # Warlok + Undine
+ 78.10  255      78        1  # Warlok + Sylph
+ 78.11  255      78        1  # Warlok + Gnome
+ 78.12  255      78        1  # Warlok + Hirokn
+ 78.13   10      79       15  # Warlok + Oricon -> ArchMg
+ 78.14   10      79       15  # Warlok + Zeus -> ArchMg
+ 78.15  255      78        1  # Warlok + Hades
+  79.1  255      79        1  # ArchMg + Steel
+  79.2  255      79        1  # ArchMg + Silver
+  79.3  255      79        1  # ArchMg + Gold
+  79.4  255      79        1  # ArchMg + Tngstn
+  79.5  255      79        1  # ArchMg + Platnm
+  79.6  255      79        1  # ArchMg + Mithrl
+  79.7  255      79        1  # ArchMg + Slmndr
+  79.8  255      79        1  # ArchMg + Dryad
+  79.9  255      79        1  # ArchMg + Undine
+ 79.10  255      79        1  # ArchMg + Sylph
+ 79.11  255      79        1  # ArchMg + Gnome
+ 79.12  255      79        1  # ArchMg + Hirokn
+ 79.13  255      79        1  # ArchMg + Oricon
+ 79.14    5      80       30  # ArchMg + Zeus -> GodHnd
+ 79.15  255      79        1  # ArchMg + Hades
+  80.1  255      80        1  # GodHnd + Steel
+  80.2  255      80        1  # GodHnd + Silver
+  80.3  255      80        1  # GodHnd + Gold
+  80.4  255      80        1  # GodHnd + Tngstn
+  80.5  255      80        1  # GodHnd + Platnm
+  80.6  255      80        1  # GodHnd + Mithrl
+  80.7  255      80        1  # GodHnd + Slmndr
+  80.8  255      80        1  # GodHnd + Dryad
+  80.9  255      80        1  # GodHnd + Undine
+ 80.10  255      80        1  # GodHnd + Sylph
+ 80.11  255      80        1  # GodHnd + Gnome
+ 80.12  255      80        1  # GodHnd + Hirokn
+ 80.13  255      80        1  # GodHnd + Oricon
+ 80.14  255      80        1  # GodHnd + Zeus
+ 80.15  255      80        1  # GodHnd + Hades
+  81.1  255      81        1  # Skull + Steel
+  81.2   80      82        5  # Skull + Silver -> DgnHed
+  81.3   80      83        5  # Skull + Gold -> DrkClw
+  81.4  255      81        1  # Skull + Tngstn
+  81.5   80      83        5  # Skull + Platnm -> DrkClw
+  81.6   80      82        5  # Skull + Mithrl -> DgnHed
+  81.7   80      82        5  # Skull + Slmndr -> DgnHed
+  81.8  255      81        1  # Skull + Dryad
+  81.9   80      83        5  # Skull + Undine -> DrkClw
+ 81.10   80      82        5  # Skull + Sylph -> DgnHed
+ 81.11   80      83        5  # Skull + Gnome -> DrkClw
+ 81.12   80      83        5  # Skull + Hirokn -> DrkClw
+ 81.13   80      82        5  # Skull + Oricon -> DgnHed
+ 81.14  255      81        1  # Skull + Zeus
+ 81.15  255      81        1  # Skull + Hades
+  82.1  255      82        1  # DgnHed + Steel
+  82.2  255      82        1  # DgnHed + Silver
+  82.3  255      82        1  # DgnHed + Gold
+  82.4  255      82        1  # DgnHed + Tngstn
+  82.5  255      82        1  # DgnHed + Platnm
+  82.6   30      84       10  # DgnHed + Mithrl -> Cursed
+  82.7   30      84       10  # DgnHed + Slmndr -> Cursed
+  82.8  255      82        1  # DgnHed + Dryad
+  82.9  255      82        1  # DgnHed + Undine
+ 82.10  255      82        1  # DgnHed + Sylph
+ 82.11   30      84       10  # DgnHed + Gnome -> Cursed
+ 82.12  255      82        1  # DgnHed + Hirokn
+ 82.13   30      84       10  # DgnHed + Oricon -> Cursed
+ 82.14   30      84       10  # DgnHed + Zeus -> Cursed
+ 82.15   30      84       10  # DgnHed + Hades -> Cursed
+  83.1  255      83        1  # DrkClw + Steel
+  83.2  255      83        1  # DrkClw + Silver
+  83.3  255      83        1  # DrkClw + Gold
+  83.4  255      83        1  # DrkClw + Tngstn
+  83.5  255      83        1  # DrkClw + Platnm
+  83.6  255      83        1  # DrkClw + Mithrl
+  83.7  255      83        1  # DrkClw + Slmndr
+  83.8  255      83        1  # DrkClw + Dryad
+  83.9  255      83        1  # DrkClw + Undine
+ 83.10  255      83        1  # DrkClw + Sylph
+ 83.11  255      83        1  # DrkClw + Gnome
+ 83.12  255      83        1  # DrkClw + Hirokn
+ 83.13  255      83        1  # DrkClw + Oricon
+ 83.14  255      83        1  # DrkClw + Zeus
+ 83.15  255      83        1  # DrkClw + Hades
+  84.1  255      84        1  # Cursed + Steel
+  84.2  255      84        1  # Cursed + Silver
+  84.3  255      84        1  # Cursed + Gold
+  84.4  255      84        1  # Cursed + Tngstn
+  84.5  255      84        1  # Cursed + Platnm
+  84.6  255      84        1  # Cursed + Mithrl
+  84.7   10      85       15  # Cursed + Slmndr -> Infrno
+  84.8  255      84        1  # Cursed + Dryad
+  84.9  255      84        1  # Cursed + Undine
+ 84.10  255      84        1  # Cursed + Sylph
+ 84.11   10      85       15  # Cursed + Gnome -> Infrno
+ 84.12  255      84        1  # Cursed + Hirokn
+ 84.13   10      85       15  # Cursed + Oricon -> Infrno
+ 84.14   10      85       15  # Cursed + Zeus -> Infrno
+ 84.15   10      85       15  # Cursed + Hades -> Infrno
+  85.1  255      85        1  # Infrno + Steel
+  85.2  255      85        1  # Infrno + Silver
+  85.3  255      85        1  # Infrno + Gold
+  85.4  255      85        1  # Infrno + Tngstn
+  85.5  255      85        1  # Infrno + Platnm
+  85.6  255      85        1  # Infrno + Mithrl
+  85.7  255      85        1  # Infrno + Slmndr
+  85.8  255      85        1  # Infrno + Dryad
+  85.9  255      85        1  # Infrno + Undine
+ 85.10  255      85        1  # Infrno + Sylph
+ 85.11  255      85        1  # Infrno + Gnome
+ 85.12  255      85        1  # Infrno + Hirokn
+ 85.13  255      85        1  # Infrno + Oricon
+ 85.14  255      85        1  # Infrno + Zeus
+ 85.15  255      85        1  # Infrno + Hades
+  86.1   80      87        5  # Spring + Steel -> Curler
+  86.2   80      88        5  # Spring + Silver -> Snaker
+  86.3  255      86        1  # Spring + Gold
+  86.4   80      87        5  # Spring + Tngstn -> Curler
+  86.5  255      86        1  # Spring + Platnm
+  86.6   80      88        5  # Spring + Mithrl -> Snaker
+  86.7  255      86        1  # Spring + Slmndr
+  86.8   80      88        5  # Spring + Dryad -> Snaker
+  86.9  255      86        1  # Spring + Undine
+ 86.10  255      86        1  # Spring + Sylph
+ 86.11   80      87        5  # Spring + Gnome -> Curler
+ 86.12   80      87        5  # Spring + Hirokn -> Curler
+ 86.13   80      88        5  # Spring + Oricon -> Snaker
+ 86.14  255      86        1  # Spring + Zeus
+ 86.15  255      86        1  # Spring + Hades
+  87.1  255      87        1  # Curler + Steel
+  87.2  255      87        1  # Curler + Silver
+  87.3  255      87        1  # Curler + Gold
+  87.4   30      89       10  # Curler + Tngstn -> Zoomer
+  87.5  255      87        1  # Curler + Platnm
+  87.6  255      87        1  # Curler + Mithrl
+  87.7  255      87        1  # Curler + Slmndr
+  87.8   30      89       10  # Curler + Dryad -> Zoomer
+  87.9  255      87        1  # Curler + Undine
+ 87.10  255      87        1  # Curler + Sylph
+ 87.11   30      89       10  # Curler + Gnome -> Zoomer
+ 87.12   30      89       10  # Curler + Hirokn -> Zoomer
+ 87.13  255      87        1  # Curler + Oricon
+ 87.14   30      89       10  # Curler + Zeus -> Zoomer
+ 87.15  255      87        1  # Curler + Hades
+  88.1  255      88        1  # Snaker + Steel
+  88.2  255      88        1  # Snaker + Silver
+  88.3  255      88        1  # Snaker + Gold
+  88.4  255      88        1  # Snaker + Tngstn
+  88.5  255      88        1  # Snaker + Platnm
+  88.6  255      88        1  # Snaker + Mithrl
+  88.7  255      88        1  # Snaker + Slmndr
+  88.8  255      88        1  # Snaker + Dryad
+  88.9  255      88        1  # Snaker + Undine
+ 88.10  255      88        1  # Snaker + Sylph
+ 88.11  255      88        1  # Snaker + Gnome
+ 88.12  255      88        1  # Snaker + Hirokn
+ 88.13  255      88        1  # Snaker + Oricon
+ 88.14  255      88        1  # Snaker + Zeus
+ 88.15  255      88        1  # Snaker + Hades
+  89.1  255      89        1  # Zoomer + Steel
+  89.2  255      89        1  # Zoomer + Silver
+  89.3  255      89        1  # Zoomer + Gold
+  89.4  255      89        1  # Zoomer + Tngstn
+  89.5  255      89        1  # Zoomer + Platnm
+  89.6  255      89        1  # Zoomer + Mithrl
+  89.7  255      89        1  # Zoomer + Slmndr
+  89.8  255      89        1  # Zoomer + Dryad
+  89.9  255      89        1  # Zoomer + Undine
+ 89.10  255      89        1  # Zoomer + Sylph
+ 89.11   10      90       15  # Zoomer + Gnome -> Buster
+ 89.12   10      90       15  # Zoomer + Hirokn -> Buster
+ 89.13  255      89        1  # Zoomer + Oricon
+ 89.14   10      90       15  # Zoomer + Zeus -> Buster
+ 89.15  255      89        1  # Zoomer + Hades
+  90.1  255      90        1  # Buster + Steel
+  90.2  255      90        1  # Buster + Silver
+  90.3  255      90        1  # Buster + Gold
+  90.4  255      90        1  # Buster + Tngstn
+  90.5  255      90        1  # Buster + Platnm
+  90.6  255      90        1  # Buster + Mithrl
+  90.7  255      90        1  # Buster + Slmndr
+  90.8  255      90        1  # Buster + Dryad
+  90.9  255      90        1  # Buster + Undine
+ 90.10  255      90        1  # Buster + Sylph
+ 90.11  255      90        1  # Buster + Gnome
+ 90.12  255      90        1  # Buster + Hirokn
+ 90.13  255      90        1  # Buster + Oricon
+ 90.14  255      90        1  # Buster + Zeus
+ 90.15  255      90        1  # Buster + Hades
+  91.1   80      92        5  # Claw + Steel -> Triger
+  91.2  255      91        1  # Claw + Silver
+  91.3   80      92        5  # Claw + Gold -> Triger
+  91.4   80      92        5  # Claw + Tngstn -> Triger
+  91.5   80      92        5  # Claw + Platnm -> Triger
+  91.6  255      91        1  # Claw + Mithrl
+  91.7   80      92        5  # Claw + Slmndr -> Triger
+  91.8  255      91        1  # Claw + Dryad
+  91.9  255      91        1  # Claw + Undine
+ 91.10   80      92        5  # Claw + Sylph -> Triger
+ 91.11  255      91        1  # Claw + Gnome
+ 91.12   80      92        5  # Claw + Hirokn -> Triger
+ 91.13  255      91        1  # Claw + Oricon
+ 91.14   80      92        5  # Claw + Zeus -> Triger
+ 91.15  255      91        1  # Claw + Hades
+  92.1  255      92        1  # Triger + Steel
+  92.2  255      92        1  # Triger + Silver
+  92.3  255      92        1  # Triger + Gold
+  92.4   30      93       10  # Triger + Tngstn -> Qatar
+  92.5  255      92        1  # Triger + Platnm
+  92.6   30      93       10  # Triger + Mithrl -> Qatar
+  92.7   30      93       10  # Triger + Slmndr -> Qatar
+  92.8  255      92        1  # Triger + Dryad
+  92.9  255      92        1  # Triger + Undine
+ 92.10   30      93       10  # Triger + Sylph -> Qatar
+ 92.11  255      92        1  # Triger + Gnome
+ 92.12  255      92        1  # Triger + Hirokn
+ 92.13   30      93       10  # Triger + Oricon -> Qatar
+ 92.14   30      93       10  # Triger + Zeus -> Qatar
+ 92.15  255      92        1  # Triger + Hades
+  93.1  255      93        1  # Qatar + Steel
+  93.2  255      93        1  # Qatar + Silver
+  93.3  255      93        1  # Qatar + Gold
+  93.4  255      93        1  # Qatar + Tngstn
+  93.5  255      93        1  # Qatar + Platnm
+  93.6  255      93        1  # Qatar + Mithrl
+  93.7   10      95       15  # Qatar + Slmndr -> Agni
+  93.8  255      93        1  # Qatar + Dryad
+  93.9  255      93        1  # Qatar + Undine
+ 93.10   10      94       15  # Qatar + Sylph -> Indra
+ 93.11  255      93        1  # Qatar + Gnome
+ 93.12  255      93        1  # Qatar + Hirokn
+ 93.13  255      93        1  # Qatar + Oricon
+ 93.14  255      93        1  # Qatar + Zeus
+ 93.15  255      93        1  # Qatar + Hades
+  94.1  255      94        1  # Indra + Steel
+  94.2  255      94        1  # Indra + Silver
+  94.3  255      94        1  # Indra + Gold
+  94.4  255      94        1  # Indra + Tngstn
+  94.5  255      94        1  # Indra + Platnm
+  94.6  255      94        1  # Indra + Mithrl
+  94.7  255      94        1  # Indra + Slmndr
+  94.8  255      94        1  # Indra + Dryad
+  94.9  255      94        1  # Indra + Undine
+ 94.10  255      94        1  # Indra + Sylph
+ 94.11  255      94        1  # Indra + Gnome
+ 94.12  255      94        1  # Indra + Hirokn
+ 94.13  255      94        1  # Indra + Oricon
+ 94.14  255      94        1  # Indra + Zeus
+ 94.15  255      94        1  # Indra + Hades
+  95.1  255      95        1  # Agni + Steel
+  95.2  255      95        1  # Agni + Silver
+  95.3  255      95        1  # Agni + Gold
+  95.4  255      95        1  # Agni + Tngstn
+  95.5  255      95        1  # Agni + Platnm
+  95.6  255      95        1  # Agni + Mithrl
+  95.7  255      95        1  # Agni + Slmndr
+  95.8  255      95        1  # Agni + Dryad
+  95.9  255      95        1  # Agni + Undine
+ 95.10  255      95        1  # Agni + Sylph
+ 95.11  255      95        1  # Agni + Gnome
+ 95.12  255      95        1  # Agni + Hirokn
+ 95.13  255      95        1  # Agni + Oricon
+ 95.14  255      95        1  # Agni + Zeus
+ 95.15  255      95        1  # Agni + Hades
+  96.1   80      97        5  # Maxi + Steel -> Twin
+  96.2  255      96        1  # Maxi + Silver
+  96.3   80      97        5  # Maxi + Gold -> Twin
+  96.4   80      97        5  # Maxi + Tngstn -> Twin
+  96.5   80      97        5  # Maxi + Platnm -> Twin
+  96.6  255      96        1  # Maxi + Mithrl
+  96.7   80      97        5  # Maxi + Slmndr -> Twin
+  96.8  255      96        1  # Maxi + Dryad
+  96.9   80      97        5  # Maxi + Undine -> Twin
+ 96.10  255      96        1  # Maxi + Sylph
+ 96.11  255      96        1  # Maxi + Gnome
+ 96.12   80      97        5  # Maxi + Hirokn -> Twin
+ 96.13  255      96        1  # Maxi + Oricon
+ 96.14   80      97        5  # Maxi + Zeus -> Twin
+ 96.15  255      96        1  # Maxi + Hades
+  97.1  255      97        1  # Twin + Steel
+  97.2  255      97        1  # Twin + Silver
+  97.3  255      97        1  # Twin + Gold
+  97.4  255      97        1  # Twin + Tngstn
+  97.5  255      97        1  # Twin + Platnm
+  97.6  255      97        1  # Twin + Mithrl
+  97.7   30      98       10  # Twin + Slmndr -> FPlse
+  97.8  255      97        1  # Twin + Dryad
+  97.9   30      99       10  # Twin + Undine -> IcePls
+ 97.10  255      97        1  # Twin + Sylph
+ 97.11  255      97        1  # Twin + Gnome
+ 97.12  255      97        1  # Twin + Hirokn
+ 97.13  255      97        1  # Twin + Oricon
+ 97.14  255      97        1  # Twin + Zeus
+ 97.15  255      97        1  # Twin + Hades
+  98.1  255      98        1  # FPlse + Steel
+  98.2  255      98        1  # FPlse + Silver
+  98.3  255      98        1  # FPlse + Gold
+  98.4  255      98        1  # FPlse + Tngstn
+  98.5  255      98        1  # FPlse + Platnm
+  98.6  255      98        1  # FPlse + Mithrl
+  98.7   10     100       15  # FPlse + Slmndr -> Ashra
+  98.8  255      98        1  # FPlse + Dryad
+  98.9  255      98        1  # FPlse + Undine
+ 98.10  255      98        1  # FPlse + Sylph
+ 98.11  255      98        1  # FPlse + Gnome
+ 98.12  255      98        1  # FPlse + Hirokn
+ 98.13   10     100       15  # FPlse + Oricon -> Ashra
+ 98.14   10     100       15  # FPlse + Zeus -> Ashra
+ 98.15  255      98        1  # FPlse + Hades
+  99.1  255      99        1  # IcePls + Steel
+  99.2  255      99        1  # IcePls + Silver
+  99.3  255      99        1  # IcePls + Gold
+  99.4  255      99        1  # IcePls + Tngstn
+  99.5  255      99        1  # IcePls + Platnm
+  99.6  255      99        1  # IcePls + Mithrl
+  99.7  255      99        1  # IcePls + Slmndr
+  99.8  255      99        1  # IcePls + Dryad
+  99.9  255      99        1  # IcePls + Undine
+ 99.10  255      99        1  # IcePls + Sylph
+ 99.11  255      99        1  # IcePls + Gnome
+ 99.12  255      99        1  # IcePls + Hirokn
+ 99.13  255      99        1  # IcePls + Oricon
+ 99.14  255      99        1  # IcePls + Zeus
+ 99.15  255      99        1  # IcePls + Hades
+ 100.1  255     100        1  # Ashra + Steel
+ 100.2  255     100        1  # Ashra + Silver
+ 100.3  255     100        1  # Ashra + Gold
+ 100.4  255     100        1  # Ashra + Tngstn
+ 100.5  255     100        1  # Ashra + Platnm
+ 100.6  255     100        1  # Ashra + Mithrl
+ 100.7  255     100        1  # Ashra + Slmndr
+ 100.8  255     100        1  # Ashra + Dryad
+ 100.9  255     100        1  # Ashra + Undine
+100.10  255     100        1  # Ashra + Sylph
+100.11  255     100        1  # Ashra + Gnome
+100.12  255     100        1  # Ashra + Hirokn
+100.13  255     100        1  # Ashra + Oricon
+100.14  255     100        1  # Ashra + Zeus
+100.15  255     100        1  # Ashra + Hades
+ 101.1   80     102        5  # Bazoka + Steel -> SDisc
+ 101.2   80     103        5  # Bazoka + Silver -> Chnsaw
+ 101.3  255     101        1  # Bazoka + Gold
+ 101.4   80     102        5  # Bazoka + Tngstn -> SDisc
+ 101.5  255     101        1  # Bazoka + Platnm
+ 101.6   80     103        5  # Bazoka + Mithrl -> Chnsaw
+ 101.7  255     101        1  # Bazoka + Slmndr
+ 101.8   80     103        5  # Bazoka + Dryad -> Chnsaw
+ 101.9  255     101        1  # Bazoka + Undine
+101.10   80     102        5  # Bazoka + Sylph -> SDisc
+101.11  255     101        1  # Bazoka + Gnome
+101.12   80     102        5  # Bazoka + Hirokn -> SDisc
+101.13   80     103        5  # Bazoka + Oricon -> Chnsaw
+101.14  255     101        1  # Bazoka + Zeus
+101.15  255     101        1  # Bazoka + Hades
+ 102.1  255     102        1  # SDisc + Steel
+ 102.2  255     102        1  # SDisc + Silver
+ 102.3  255     102        1  # SDisc + Gold
+ 102.4  255     102        1  # SDisc + Tngstn
+ 102.5  255     102        1  # SDisc + Platnm
+ 102.6  255     102        1  # SDisc + Mithrl
+ 102.7  255     102        1  # SDisc + Slmndr
+ 102.8  255     102        1  # SDisc + Dryad
+ 102.9  255     102        1  # SDisc + Undine
+102.10  255     102        1  # SDisc + Sylph
+102.11  255     102        1  # SDisc + Gnome
+102.12  255     102        1  # SDisc + Hirokn
+102.13  255     102        1  # SDisc + Oricon
+102.14  255     102        1  # SDisc + Zeus
+102.15  255     102        1  # SDisc + Hades
+ 103.1  255     103        1  # Chnsaw + Steel
+ 103.2  255     103        1  # Chnsaw + Silver
+ 103.3  255     103        1  # Chnsaw + Gold
+ 103.4   30     104       10  # Chnsaw + Tngstn -> Saw
+ 103.5  255     103        1  # Chnsaw + Platnm
+ 103.6  255     103        1  # Chnsaw + Mithrl
+ 103.7  255     103        1  # Chnsaw + Slmndr
+ 103.8   30     104       10  # Chnsaw + Dryad -> Saw
+ 103.9  255     103        1  # Chnsaw + Undine
+103.10  255     103        1  # Chnsaw + Sylph
+103.11  255     103        1  # Chnsaw + Gnome
+103.12   30     104       10  # Chnsaw + Hirokn -> Saw
+103.13  255     103        1  # Chnsaw + Oricon
+103.14   30     104       10  # Chnsaw + Zeus -> Saw
+103.15  255     103        1  # Chnsaw + Hades
+ 104.1  255     104        1  # Saw + Steel
+ 104.2  255     104        1  # Saw + Silver
+ 104.3  255     104        1  # Saw + Gold
+ 104.4  255     104        1  # Saw + Tngstn
+ 104.5  255     104        1  # Saw + Platnm
+ 104.6  255     104        1  # Saw + Mithrl
+ 104.7  255     104        1  # Saw + Slmndr
+ 104.8  255     104        1  # Saw + Dryad
+ 104.9  255     104        1  # Saw + Undine
+104.10  255     104        1  # Saw + Sylph
+104.11  255     104        1  # Saw + Gnome
+104.12   10     105       15  # Saw + Hirokn -> Hacker
+104.13  255     104        1  # Saw + Oricon
+104.14   10     105       15  # Saw + Zeus -> Hacker
+104.15  255     104        1  # Saw + Hades
+ 105.1  255     105        1  # Hacker + Steel
+ 105.2  255     105        1  # Hacker + Silver
+ 105.3  255     105        1  # Hacker + Gold
+ 105.4  255     105        1  # Hacker + Tngstn
+ 105.5  255     105        1  # Hacker + Platnm
+ 105.6  255     105        1  # Hacker + Mithrl
+ 105.7  255     105        1  # Hacker + Slmndr
+ 105.8  255     105        1  # Hacker + Dryad
+ 105.9  255     105        1  # Hacker + Undine
+105.10  255     105        1  # Hacker + Sylph
+105.11  255     105        1  # Hacker + Gnome
+105.12  255     105        1  # Hacker + Hirokn
+105.13  255     105        1  # Hacker + Oricon
+105.14  255     105        1  # Hacker + Zeus
+105.15  255     105        1  # Hacker + Hades
+ 106.1   80     107        5  # Knukle + Steel -> Gloves
+ 106.2   80     108        5  # Knukle + Silver -> Rocket
+ 106.3  255     106        1  # Knukle + Gold
+ 106.4   80     107        5  # Knukle + Tngstn -> Gloves
+ 106.5  255     106        1  # Knukle + Platnm
+ 106.6   80     108        5  # Knukle + Mithrl -> Rocket
+ 106.7   80     108        5  # Knukle + Slmndr -> Rocket
+ 106.8  255     106        1  # Knukle + Dryad
+ 106.9  255     106        1  # Knukle + Undine
+106.10  255     106        1  # Knukle + Sylph
+106.11   80     107        5  # Knukle + Gnome -> Gloves
+106.12   80     107        5  # Knukle + Hirokn -> Gloves
+106.13   80     108        5  # Knukle + Oricon -> Rocket
+106.14  255     106        1  # Knukle + Zeus
+106.15  255     106        1  # Knukle + Hades
+ 107.1  255     107        1  # Gloves + Steel
+ 107.2  255     107        1  # Gloves + Silver
+ 107.3  255     107        1  # Gloves + Gold
+ 107.4   30     109       10  # Gloves + Tngstn -> Mail
+ 107.5  255     107        1  # Gloves + Platnm
+ 107.6  255     107        1  # Gloves + Mithrl
+ 107.7  255     107        1  # Gloves + Slmndr
+ 107.8  255     107        1  # Gloves + Dryad
+ 107.9  255     107        1  # Gloves + Undine
+107.10  255     107        1  # Gloves + Sylph
+107.11   30     109       10  # Gloves + Gnome -> Mail
+107.12   30     109       10  # Gloves + Hirokn -> Mail
+107.13  255     107        1  # Gloves + Oricon
+107.14   30     109       10  # Gloves + Zeus -> Mail
+107.15  255     107        1  # Gloves + Hades
+ 108.1  255     108        1  # Rocket + Steel
+ 108.2  255     108        1  # Rocket + Silver
+ 108.3  255     108        1  # Rocket + Gold
+ 108.4  255     108        1  # Rocket + Tngstn
+ 108.5  255     108        1  # Rocket + Platnm
+ 108.6  255     108        1  # Rocket + Mithrl
+ 108.7  255     108        1  # Rocket + Slmndr
+ 108.8  255     108        1  # Rocket + Dryad
+ 108.9  255     108        1  # Rocket + Undine
+108.10  255     108        1  # Rocket + Sylph
+108.11  255     108        1  # Rocket + Gnome
+108.12  255     108        1  # Rocket + Hirokn
+108.13  255     108        1  # Rocket + Oricon
+108.14  255     108        1  # Rocket + Zeus
+108.15  255     108        1  # Rocket + Hades
+ 109.1  255     109        1  # Mail + Steel
+ 109.2  255     109        1  # Mail + Silver
+ 109.3  255     109        1  # Mail + Gold
+ 109.4  255     109        1  # Mail + Tngstn
+ 109.5  255     109        1  # Mail + Platnm
+ 109.6  255     109        1  # Mail + Mithrl
+ 109.7  255     109        1  # Mail + Slmndr
+ 109.8  255     109        1  # Mail + Dryad
+ 109.9  255     109        1  # Mail + Undine
+109.10  255     109        1  # Mail + Sylph
+109.11   10     110       15  # Mail + Gnome -> Plate
+109.12   10     110       15  # Mail + Hirokn -> Plate
+109.13  255     109        1  # Mail + Oricon
+109.14   10     110       15  # Mail + Zeus -> Plate
+109.15  255     109        1  # Mail + Hades
+ 110.1  255     110        1  # Plate + Steel
+ 110.2  255     110        1  # Plate + Silver
+ 110.3  255     110        1  # Plate + Gold
+ 110.4  255     110        1  # Plate + Tngstn
+ 110.5  255     110        1  # Plate + Platnm
+ 110.6  255     110        1  # Plate + Mithrl
+ 110.7  255     110        1  # Plate + Slmndr
+ 110.8  255     110        1  # Plate + Dryad
+ 110.9  255     110        1  # Plate + Undine
+110.10  255     110        1  # Plate + Sylph
+110.11  255     110        1  # Plate + Gnome
+110.12  255     110        1  # Plate + Hirokn
+110.13  255     110        1  # Plate + Oricon
+110.14  255     110        1  # Plate + Zeus
+110.15  255     110        1  # Plate + Hades
+ 111.1  255     111        1  # Troopr + Steel
+ 111.2   80     112        5  # Troopr + Silver -> Scorp
+ 111.3   80     112        5  # Troopr + Gold -> Scorp
+ 111.4  255     111        1  # Troopr + Tngstn
+ 111.5   80     112        5  # Troopr + Platnm -> Scorp
+ 111.6   80     112        5  # Troopr + Mithrl -> Scorp
+ 111.7  255     111        1  # Troopr + Slmndr
+ 111.8   80     112        5  # Troopr + Dryad -> Scorp
+ 111.9   80     112        5  # Troopr + Undine -> Scorp
+111.10  255     111        1  # Troopr + Sylph
+111.11  255     111        1  # Troopr + Gnome
+111.12  255     111        1  # Troopr + Hirokn
+111.13   80     112        5  # Troopr + Oricon -> Scorp
+111.14   80     112        5  # Troopr + Zeus -> Scorp
+111.15  255     111        1  # Troopr + Hades
+ 112.1  255     112        1  # Scorp + Steel
+ 112.2  255     112        1  # Scorp + Silver
+ 112.3  255     112        1  # Scorp + Gold
+ 112.4  255     112        1  # Scorp + Tngstn
+ 112.5   30     113       10  # Scorp + Platnm -> Spider
+ 112.6   30     114       10  # Scorp + Mithrl -> Mantis
+ 112.7  255     112        1  # Scorp + Slmndr
+ 112.8   30     114       10  # Scorp + Dryad -> Mantis
+ 112.9   30     113       10  # Scorp + Undine -> Spider
+112.10  255     112        1  # Scorp + Sylph
+112.11  255     112        1  # Scorp + Gnome
+112.12   30     114       10  # Scorp + Hirokn -> Mantis
+112.13   30     113       10  # Scorp + Oricon -> Spider
+112.14  255     112        1  # Scorp + Zeus
+112.15  255     112        1  # Scorp + Hades
+ 113.1  255     113        1  # Spider + Steel
+ 113.2  255     113        1  # Spider + Silver
+ 113.3  255     113        1  # Spider + Gold
+ 113.4  255     113        1  # Spider + Tngstn
+ 113.5  255     113        1  # Spider + Platnm
+ 113.6  255     113        1  # Spider + Mithrl
+ 113.7  255     113        1  # Spider + Slmndr
+ 113.8   10     115       15  # Spider + Dryad -> RedClw
+ 113.9   10     115       15  # Spider + Undine -> RedClw
+113.10  255     113        1  # Spider + Sylph
+113.11  255     113        1  # Spider + Gnome
+113.12  255     113        1  # Spider + Hirokn
+113.13   10     115       15  # Spider + Oricon -> RedClw
+113.14   10     115       15  # Spider + Zeus -> RedClw
+113.15  255     113        1  # Spider + Hades
+ 114.1  255     114        1  # Mantis + Steel
+ 114.2  255     114        1  # Mantis + Silver
+ 114.3  255     114        1  # Mantis + Gold
+ 114.4  255     114        1  # Mantis + Tngstn
+ 114.5  255     114        1  # Mantis + Platnm
+ 114.6  255     114        1  # Mantis + Mithrl
+ 114.7  255     114        1  # Mantis + Slmndr
+ 114.8  255     114        1  # Mantis + Dryad
+ 114.9  255     114        1  # Mantis + Undine
+114.10  255     114        1  # Mantis + Sylph
+114.11  255     114        1  # Mantis + Gnome
+114.12  255     114        1  # Mantis + Hirokn
+114.13  255     114        1  # Mantis + Oricon
+114.14  255     114        1  # Mantis + Zeus
+114.15  255     114        1  # Mantis + Hades
+ 115.1  255     115        1  # RedClw + Steel
+ 115.2  255     115        1  # RedClw + Silver
+ 115.3  255     115        1  # RedClw + Gold
+ 115.4  255     115        1  # RedClw + Tngstn
+ 115.5  255     115        1  # RedClw + Platnm
+ 115.6  255     115        1  # RedClw + Mithrl
+ 115.7  255     115        1  # RedClw + Slmndr
+ 115.8  255     115        1  # RedClw + Dryad
+ 115.9  255     115        1  # RedClw + Undine
+115.10  255     115        1  # RedClw + Sylph
+115.11  255     115        1  # RedClw + Gnome
+115.12  255     115        1  # RedClw + Hirokn
+115.13  255     115        1  # RedClw + Oricon
+115.14  255     115        1  # RedClw + Zeus
+115.15  255     115        1  # RedClw + Hades
+ 116.1  255     116        1  # HndGun + Steel
+ 116.2   80     117        5  # HndGun + Silver -> Vulcan
+ 116.3   80     118        5  # HndGun + Gold -> Lncher
+ 116.4  255     116        1  # HndGun + Tngstn
+ 116.5   80     118        5  # HndGun + Platnm -> Lncher
+ 116.6   80     117        5  # HndGun + Mithrl -> Vulcan
+ 116.7   80     118        5  # HndGun + Slmndr -> Lncher
+ 116.8  255     116        1  # HndGun + Dryad
+ 116.9  255     116        1  # HndGun + Undine
+116.10   80     117        5  # HndGun + Sylph -> Vulcan
+116.11  255     116        1  # HndGun + Gnome
+116.12   80     118        5  # HndGun + Hirokn -> Lncher
+116.13   80     117        5  # HndGun + Oricon -> Vulcan
+116.14  255     116        1  # HndGun + Zeus
+116.15  255     116        1  # HndGun + Hades
+ 117.1  255     117        1  # Vulcan + Steel
+ 117.2  255     117        1  # Vulcan + Silver
+ 117.3  255     117        1  # Vulcan + Gold
+ 117.4   30     119       10  # Vulcan + Tngstn -> Gatlng
+ 117.5  255     117        1  # Vulcan + Platnm
+ 117.6  255     117        1  # Vulcan + Mithrl
+ 117.7  255     117        1  # Vulcan + Slmndr
+ 117.8  255     117        1  # Vulcan + Dryad
+ 117.9  255     117        1  # Vulcan + Undine
+117.10   30     119       10  # Vulcan + Sylph -> Gatlng
+117.11  255     117        1  # Vulcan + Gnome
+117.12   30     119       10  # Vulcan + Hirokn -> Gatlng
+117.13  255     117        1  # Vulcan + Oricon
+117.14   30     119       10  # Vulcan + Zeus -> Gatlng
+117.15  255     117        1  # Vulcan + Hades
+ 118.1  255     118        1  # Lncher + Steel
+ 118.2  255     118        1  # Lncher + Silver
+ 118.3  255     118        1  # Lncher + Gold
+ 118.4  255     118        1  # Lncher + Tngstn
+ 118.5   30     120       10  # Lncher + Platnm -> Phalnx
+ 118.6  255     118        1  # Lncher + Mithrl
+ 118.7   30     120       10  # Lncher + Slmndr -> Phalnx
+ 118.8  255     118        1  # Lncher + Dryad
+ 118.9  255     118        1  # Lncher + Undine
+118.10  255     118        1  # Lncher + Sylph
+118.11  255     118        1  # Lncher + Gnome
+118.12   30     120       10  # Lncher + Hirokn -> Phalnx
+118.13  255     118        1  # Lncher + Oricon
+118.14   30     120       10  # Lncher + Zeus -> Phalnx
+118.15  255     118        1  # Lncher + Hades
+ 119.1  255     119        1  # Gatlng + Steel
+ 119.2  255     119        1  # Gatlng + Silver
+ 119.3  255     119        1  # Gatlng + Gold
+ 119.4  255     119        1  # Gatlng + Tngstn
+ 119.5  255     119        1  # Gatlng + Platnm
+ 119.6  255     119        1  # Gatlng + Mithrl
+ 119.7  255     119        1  # Gatlng + Slmndr
+ 119.8  255     119        1  # Gatlng + Dryad
+ 119.9  255     119        1  # Gatlng + Undine
+119.10  255     119        1  # Gatlng + Sylph
+119.11  255     119        1  # Gatlng + Gnome
+119.12  255     119        1  # Gatlng + Hirokn
+119.13  255     119        1  # Gatlng + Oricon
+119.14  255     119        1  # Gatlng + Zeus
+119.15  255     119        1  # Gatlng + Hades
+ 120.1  255     120        1  # Phalnx + Steel
+ 120.2  255     120        1  # Phalnx + Silver
+ 120.3  255     120        1  # Phalnx + Gold
+ 120.4  255     120        1  # Phalnx + Tngstn
+ 120.5  255     120        1  # Phalnx + Platnm
+ 120.6  255     120        1  # Phalnx + Mithrl
+ 120.7  255     120        1  # Phalnx + Slmndr
+ 120.8  255     120        1  # Phalnx + Dryad
+ 120.9  255     120        1  # Phalnx + Undine
+120.10  255     120        1  # Phalnx + Sylph
+120.11  255     120        1  # Phalnx + Gnome
+120.12  255     120        1  # Phalnx + Hirokn
+120.13  255     120        1  # Phalnx + Oricon
+120.14  255     120        1  # Phalnx + Zeus
+120.15  255     120        1  # Phalnx + Hades
+ 121.1   80     122        5  # Cannon + Steel -> 2Barrl
+ 121.2   80     123        5  # Cannon + Silver -> LineGn
+ 121.3  255     121        1  # Cannon + Gold
+ 121.4   80     122        5  # Cannon + Tngstn -> 2Barrl
+ 121.5  255     121        1  # Cannon + Platnm
+ 121.6   80     123        5  # Cannon + Mithrl -> LineGn
+ 121.7   80     123        5  # Cannon + Slmndr -> LineGn
+ 121.8  255     121        1  # Cannon + Dryad
+ 121.9  255     121        1  # Cannon + Undine
+121.10   80     122        5  # Cannon + Sylph -> 2Barrl
+121.11  255     121        1  # Cannon + Gnome
+121.12   80     122        5  # Cannon + Hirokn -> 2Barrl
+121.13   80     123        5  # Cannon + Oricon -> LineGn
+121.14  255     121        1  # Cannon + Zeus
+121.15  255     121        1  # Cannon + Hades
+ 122.1  255     122        1  # 2Barrl + Steel
+ 122.2  255     122        1  # 2Barrl + Silver
+ 122.3  255     122        1  # 2Barrl + Gold
+ 122.4  255     122        1  # 2Barrl + Tngstn
+ 122.5  255     122        1  # 2Barrl + Platnm
+ 122.6  255     122        1  # 2Barrl + Mithrl
+ 122.7  255     122        1  # 2Barrl + Slmndr
+ 122.8  255     122        1  # 2Barrl + Dryad
+ 122.9  255     122        1  # 2Barrl + Undine
+122.10  255     122        1  # 2Barrl + Sylph
+122.11  255     122        1  # 2Barrl + Gnome
+122.12  255     122        1  # 2Barrl + Hirokn
+122.13  255     122        1  # 2Barrl + Oricon
+122.14  255     122        1  # 2Barrl + Zeus
+122.15  255     122        1  # 2Barrl + Hades
+ 123.1  255     123        1  # LineGn + Steel
+ 123.2  255     123        1  # LineGn + Silver
+ 123.3  255     123        1  # LineGn + Gold
+ 123.4   30     124       10  # LineGn + Tngstn -> XGun
+ 123.5  255     123        1  # LineGn + Platnm
+ 123.6  255     123        1  # LineGn + Mithrl
+ 123.7   30     124       10  # LineGn + Slmndr -> XGun
+ 123.8  255     123        1  # LineGn + Dryad
+ 123.9  255     123        1  # LineGn + Undine
+123.10  255     123        1  # LineGn + Sylph
+123.11  255     123        1  # LineGn + Gnome
+123.12   30     124       10  # LineGn + Hirokn -> XGun
+123.13  255     123        1  # LineGn + Oricon
+123.14   30     124       10  # LineGn + Zeus -> XGun
+123.15  255     123        1  # LineGn + Hades
+ 124.1  255     124        1  # XGun + Steel
+ 124.2  255     124        1  # XGun + Silver
+ 124.3  255     124        1  # XGun + Gold
+ 124.4  255     124        1  # XGun + Tngstn
+ 124.5  255     124        1  # XGun + Platnm
+ 124.6  255     124        1  # XGun + Mithrl
+ 124.7   10     125       15  # XGun + Slmndr -> RailGn
+ 124.8  255     124        1  # XGun + Dryad
+ 124.9  255     124        1  # XGun + Undine
+124.10  255     124        1  # XGun + Sylph
+124.11  255     124        1  # XGun + Gnome
+124.12   10     125       15  # XGun + Hirokn -> RailGn
+124.13  255     124        1  # XGun + Oricon
+124.14   10     125       15  # XGun + Zeus -> RailGn
+124.15  255     124        1  # XGun + Hades
+ 125.1  255     125        1  # RailGn + Steel
+ 125.2  255     125        1  # RailGn + Silver
+ 125.3  255     125        1  # RailGn + Gold
+ 125.4  255     125        1  # RailGn + Tngstn
+ 125.5  255     125        1  # RailGn + Platnm
+ 125.6  255     125        1  # RailGn + Mithrl
+ 125.7  255     125        1  # RailGn + Slmndr
+ 125.8  255     125        1  # RailGn + Dryad
+ 125.9  255     125        1  # RailGn + Undine
+125.10  255     125        1  # RailGn + Sylph
+125.11  255     125        1  # RailGn + Gnome
+125.12  255     125        1  # RailGn + Hirokn
+125.13  255     125        1  # RailGn + Oricon
+125.14  255     125        1  # RailGn + Zeus
+125.15  255     125        1  # RailGn + Hades
+ 126.1  255     126        1  # Flint + Steel
+ 126.2  255     126        1  # Flint + Silver
+ 126.3  255     126        1  # Flint + Gold
+ 126.4  255     126        1  # Flint + Tngstn
+ 126.5  255     126        1  # Flint + Platnm
+ 126.6  255     126        1  # Flint + Mithrl
+ 126.7  255     126        1  # Flint + Slmndr
+ 126.8  255     126        1  # Flint + Dryad
+ 126.9  255     126        1  # Flint + Undine
+126.10  255     126        1  # Flint + Sylph
+126.11  255     126        1  # Flint + Gnome
+126.12  255     126        1  # Flint + Hirokn
+126.13  255     126        1  # Flint + Oricon
+126.14  255     126        1  # Flint + Zeus
+126.15  255     126        1  # Flint + Hades
+ 127.1  255     127        1  # Sword + Steel
+ 127.2  255     127        1  # Sword + Silver
+ 127.3  255     127        1  # Sword + Gold
+ 127.4  255     127        1  # Sword + Tngstn
+ 127.5  255     127        1  # Sword + Platnm
+ 127.6  255     127        1  # Sword + Mithrl
+ 127.7  255     127        1  # Sword + Slmndr
+ 127.8  255     127        1  # Sword + Dryad
+ 127.9  255     127        1  # Sword + Undine
+127.10  255     127        1  # Sword + Sylph
+127.11  255     127        1  # Sword + Gnome
+127.12  255     127        1  # Sword + Hirokn
+127.13  255     127        1  # Sword + Oricon
+127.14  255     127        1  # Sword + Zeus
+127.15  255     127        1  # Sword + Hades
+ 128.1  255     128        1  # Kama + Steel
+ 128.2  255     128        1  # Kama + Silver
+ 128.3  255     128        1  # Kama + Gold
+ 128.4  255     128        1  # Kama + Tngstn
+ 128.5  255     128        1  # Kama + Platnm
+ 128.6  255     128        1  # Kama + Mithrl
+ 128.7  255     128        1  # Kama + Slmndr
+ 128.8  255     128        1  # Kama + Dryad
+ 128.9  255     128        1  # Kama + Undine
+128.10  255     128        1  # Kama + Sylph
+128.11  255     128        1  # Kama + Gnome
+128.12  255     128        1  # Kama + Hirokn
+128.13  255     128        1  # Kama + Oricon
+128.14  255     128        1  # Kama + Zeus
+128.15  255     128        1  # Kama + Hades
+ 129.1  255     129        1  # TgrHnd + Steel
+ 129.2  255     129        1  # TgrHnd + Silver
+ 129.3  255     129        1  # TgrHnd + Gold
+ 129.4  255     129        1  # TgrHnd + Tngstn
+ 129.5  255     129        1  # TgrHnd + Platnm
+ 129.6  255     129        1  # TgrHnd + Mithrl
+ 129.7  255     129        1  # TgrHnd + Slmndr
+ 129.8  255     129        1  # TgrHnd + Dryad
+ 129.9  255     129        1  # TgrHnd + Undine
+129.10  255     129        1  # TgrHnd + Sylph
+129.11  255     129        1  # TgrHnd + Gnome
+129.12  255     129        1  # TgrHnd + Hirokn
+129.13  255     129        1  # TgrHnd + Oricon
+129.14  255     129        1  # TgrHnd + Zeus
+129.15  255     129        1  # TgrHnd + Hades
+ 130.1  255     130        1  # MoleHd + Steel
+ 130.2  255     130        1  # MoleHd + Silver
+ 130.3  255     130        1  # MoleHd + Gold
+ 130.4  255     130        1  # MoleHd + Tngstn
+ 130.5  255     130        1  # MoleHd + Platnm
+ 130.6  255     130        1  # MoleHd + Mithrl
+ 130.7  255     130        1  # MoleHd + Slmndr
+ 130.8  255     130        1  # MoleHd + Dryad
+ 130.9  255     130        1  # MoleHd + Undine
+130.10  255     130        1  # MoleHd + Sylph
+130.11  255     130        1  # MoleHd + Gnome
+130.12  255     130        1  # MoleHd + Hirokn
+130.13  255     130        1  # MoleHd + Oricon
+130.14  255     130        1  # MoleHd + Zeus
+130.15  255     130        1  # MoleHd + Hades
+ 131.1  255     131        1  # Stunr + Steel
+ 131.2  255     131        1  # Stunr + Silver
+ 131.3  255     131        1  # Stunr + Gold
+ 131.4  255     131        1  # Stunr + Tngstn
+ 131.5  255     131        1  # Stunr + Platnm
+ 131.6  255     131        1  # Stunr + Mithrl
+ 131.7  255     131        1  # Stunr + Slmndr
+ 131.8  255     131        1  # Stunr + Dryad
+ 131.9  255     131        1  # Stunr + Undine
+131.10  255     131        1  # Stunr + Sylph
+131.11  255     131        1  # Stunr + Gnome
+131.12  255     131        1  # Stunr + Hirokn
+131.13  255     131        1  # Stunr + Oricon
+131.14  255     131        1  # Stunr + Zeus
+131.15  255     131        1  # Stunr + Hades
+ 132.1  255     132        1  # Needle + Steel
+ 132.2  255     132        1  # Needle + Silver
+ 132.3  255     132        1  # Needle + Gold
+ 132.4  255     132        1  # Needle + Tngstn
+ 132.5  255     132        1  # Needle + Platnm
+ 132.6  255     132        1  # Needle + Mithrl
+ 132.7  255     132        1  # Needle + Slmndr
+ 132.8  255     132        1  # Needle + Dryad
+ 132.9  255     132        1  # Needle + Undine
+132.10  255     132        1  # Needle + Sylph
+132.11  255     132        1  # Needle + Gnome
+132.12  255     132        1  # Needle + Hirokn
+132.13  255     132        1  # Needle + Oricon
+132.14  255     132        1  # Needle + Zeus
+132.15  255     132        1  # Needle + Hades
+ 133.1  255     133        1  # Pole + Steel
+ 133.2  255     133        1  # Pole + Silver
+ 133.3  255     133        1  # Pole + Gold
+ 133.4  255     133        1  # Pole + Tngstn
+ 133.5  255     133        1  # Pole + Platnm
+ 133.6  255     133        1  # Pole + Mithrl
+ 133.7  255     133        1  # Pole + Slmndr
+ 133.8  255     133        1  # Pole + Dryad
+ 133.9  255     133        1  # Pole + Undine
+133.10  255     133        1  # Pole + Sylph
+133.11  255     133        1  # Pole + Gnome
+133.12  255     133        1  # Pole + Hirokn
+133.13  255     133        1  # Pole + Oricon
+133.14  255     133        1  # Pole + Zeus
+133.15  255     133        1  # Pole + Hades

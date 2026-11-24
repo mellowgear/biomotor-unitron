@@ -1,0 +1,12 @@
+# chest_odds: 7 entries, one line per id (keep the order and count).
+# Chance (%) of column c1..c7 of chests.txt; must add up to 100 (the pick walks down
+# the list with a random 0-99).
+#
+# id  pct
+   1   30
+   2   25
+   3   15
+   4   12
+   5   10
+   6    5
+   7    3

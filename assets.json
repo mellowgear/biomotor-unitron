@@ -24,16 +24,30 @@
   "file": "gfx/pal/225C45.pal4",
   "size": 4
  },
- "2493F8": {
+ "228649": {
   "kind": "pal",
-  "file": "gfx/pal/2493F8.pal",
+  "file": "gfx/pal/228649.pal",
   "size": 120
  },
- "24940C": {
+ "2286C1": {
   "kind": "pal4",
-  "file": "gfx/pal/24940C.pal4",
-  "size": 4,
-  "shares_bytes_with_previous": true
+  "file": "gfx/pal/2286C1.pal4",
+  "size": 4
+ },
+ "2286C5": {
+  "kind": "pal",
+  "file": "gfx/pal/2286C5.pal",
+  "size": 120
+ },
+ "22873D": {
+  "kind": "pal4",
+  "file": "gfx/pal/22873D.pal4",
+  "size": 4
+ },
+ "26FD9F": {
+  "kind": "pal",
+  "file": "gfx/pal/26FD9F.pal",
+  "size": 56
  },
  "26FDD7": {
   "kind": "pal",
@@ -2517,11 +2531,6 @@
   "size": 1819,
   "raw_sha": "0ca3db8c0231b265dba59e52cdaae091d1c07685"
  },
- "2C7B6E": {
-  "kind": "pal",
-  "file": "gfx/pal/2C7B6E.pal",
-  "size": 80
- },
  "2C82AE": {
   "kind": "pal",
   "file": "gfx/pal/2C82AE.pal",
@@ -3019,6 +3028,14 @@
   "out": "tables/enemy_scaling.EnemyScaling",
   "size": 224
  },
+ "22464A": {
+  "kind": "table",
+  "table": "affinity",
+  "label": "AffinityTable",
+  "file": "tables/affinity.txt",
+  "out": "tables/affinity.AffinityTable",
+  "size": 162
+ },
  "2253D3": {
   "kind": "table",
   "table": "exp_level_diff",
@@ -3091,6 +3108,190 @@
   "out": "tables/level_bonus.LevelBonus",
   "size": 40
  },
+ "21BA31": {
+  "kind": "table",
+  "table": "recipes",
+  "label": "Recipes",
+  "file": "tables/recipes.txt",
+  "out": "tables/recipes.Recipes",
+  "size": 5985
+ },
+ "25E5E3": {
+  "kind": "table",
+  "table": "dev_level_bonus",
+  "label": "DevLevelBonusMale",
+  "file": "tables/dev_level_bonus.txt",
+  "out": "tables/dev_level_bonus.DevLevelBonusMale",
+  "size": 51
+ },
+ "25E616": {
+  "kind": "table",
+  "table": "dev_level_bonus",
+  "label": "DevLevelBonusFemale",
+  "file": "tables/dev_level_bonus.txt",
+  "out": "tables/dev_level_bonus.DevLevelBonusFemale",
+  "size": 51
+ },
+ "25E649": {
+  "kind": "table",
+  "table": "dev_level_exp",
+  "label": "DevLevelExpMale",
+  "file": "tables/dev_level_exp.txt",
+  "out": "tables/dev_level_exp.DevLevelExpMale",
+  "size": 50
+ },
+ "25E67B": {
+  "kind": "table",
+  "table": "dev_level_exp",
+  "label": "DevLevelExpFemale",
+  "file": "tables/dev_level_exp.txt",
+  "out": "tables/dev_level_exp.DevLevelExpFemale",
+  "size": 50
+ },
+ "25E6AD": {
+  "kind": "table",
+  "table": "dev_partner_bonus",
+  "label": "DevPartnerBonus",
+  "file": "tables/dev_partner_bonus.txt",
+  "out": "tables/dev_partner_bonus.DevPartnerBonus",
+  "size": 10
+ },
+ "2495EC": {
+  "kind": "table",
+  "table": "chests",
+  "label": "WorldChests",
+  "file": "tables/chests.txt",
+  "out": "tables/chests.WorldChests",
+  "size": 196
+ },
+ "24974E": {
+  "kind": "table",
+  "table": "chest_odds",
+  "label": "ChestOdds",
+  "file": "tables/chest_odds.txt",
+  "out": "tables/chest_odds.ChestOdds",
+  "size": 7
+ },
+ "2496B0": {
+  "kind": "table",
+  "table": "mine_chests",
+  "label": "MineChests",
+  "file": "tables/mine_chests.txt",
+  "out": "tables/mine_chests.MineChests",
+  "size": 30
+ },
+ "2496CE": {
+  "kind": "table",
+  "table": "chest_gold",
+  "label": "ChestGold",
+  "file": "tables/chest_gold.txt",
+  "out": "tables/chest_gold.ChestGold",
+  "size": 32
+ },
+ "2496EE": {
+  "kind": "table",
+  "table": "chest_gold",
+  "label": "ChestGoldText",
+  "file": "tables/chest_gold.txt",
+  "out": "tables/chest_gold.ChestGoldText",
+  "size": 96
+ },
+ "24A212": {
+  "kind": "table",
+  "table": "stage_arena_rank",
+  "label": "StageArenaRank",
+  "file": "tables/stage_arena_rank.txt",
+  "out": "tables/stage_arena_rank.StageArenaRank",
+  "size": 12
+ },
+ "24A21E": {
+  "kind": "table",
+  "table": "stage_flags",
+  "label": "StageFlags",
+  "file": "tables/stage_flags.txt",
+  "out": "tables/stage_flags.StageFlags",
+  "size": 10
+ },
+ "24A1DC": {
+  "kind": "table",
+  "table": "stage_stat_bonus",
+  "label": "StageStatBonus",
+  "file": "tables/stage_stat_bonus.txt",
+  "out": "tables/stage_stat_bonus.StageStatBonus",
+  "size": 32
+ },
+ "2275C0": {
+  "kind": "table",
+  "table": "encounter_chance",
+  "label": "EncounterChance",
+  "file": "tables/encounter_chance.txt",
+  "out": "tables/encounter_chance.EncounterChance",
+  "size": 25
+ },
+ "22426F": {
+  "kind": "table",
+  "table": "arm_effects",
+  "label": "ArmEffects",
+  "file": "tables/arm_effects.txt",
+  "out": "tables/arm_effects.ArmEffects",
+  "size": 931
+ },
+ "224612": {
+  "kind": "table",
+  "table": "battle_item_effects",
+  "label": "BattleItemEffects",
+  "file": "tables/battle_item_effects.txt",
+  "out": "tables/battle_item_effects.BattleItemEffects",
+  "size": 56
+ },
+ "2253F5": {
+  "kind": "table",
+  "table": "status_recovery",
+  "label": "StatusRecovery",
+  "file": "tables/status_recovery.txt",
+  "out": "tables/status_recovery.StatusRecovery",
+  "size": 22
+ },
+ "2247CC": {
+  "kind": "table",
+  "table": "damage",
+  "label": "DamageTable",
+  "file": "tables/damage.txt",
+  "out": "tables/damage.DamageTable",
+  "size": 2020
+ },
+ "2253BD": {
+  "kind": "table",
+  "table": "level_rolls",
+  "label": "LevelRolls",
+  "file": "tables/level_rolls.txt",
+  "out": "tables/level_rolls.LevelRolls",
+  "size": 22
+ },
+ "224FB0": {
+  "kind": "table",
+  "table": "level_gap_chances",
+  "label": "LevelGapCrit",
+  "file": "tables/level_gap_chances.txt",
+  "out": "tables/level_gap_chances.LevelGapCrit",
+  "size": 23
+ },
+ "224FC7": {
+  "kind": "table",
+  "table": "level_gap_chances",
+  "label": "LevelGapStatus",
+  "file": "tables/level_gap_chances.txt",
+  "out": "tables/level_gap_chances.LevelGapStatus",
+  "size": 23
+ },
+ "224FDE": {
+  "kind": "table",
+  "table": "level_gap_chances",
+  "label": "LevelGapFlee",
+  "file": "tables/level_gap_chances.txt",
+  "out": "tables/level_gap_chances.LevelGapFlee",
+  "size": 23
+ },
  "222466": {
   "kind": "table",
   "table": "attack_names",
@@ -3114,6 +3315,14 @@
   "file": "tables/items.txt",
   "out": "tables/items.ItemDescs",
   "size": 1349
+ },
+ "25B4DF": {
+  "kind": "table",
+  "table": "items",
+  "label": "ItemPrices",
+  "file": "tables/items.txt",
+  "out": "tables/items.ItemPrices",
+  "size": 284
  },
  "27188C": {
   "kind": "table",
@@ -3291,60 +3500,60 @@
  },
  "2652A5": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/btfist.png",
+  "file": "gfx/parts/arm_r/btfist.png",
   "size": 96,
   "raw_sha": "a81b18dc592b01e2f3813e2f23c60fa80ea049ce",
-  "name": "arm_l_btfist",
+  "name": "arm_r_btfist",
   "used_by": [
    "BtFist"
   ]
  },
  "26538C": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/slkhnd.png",
+  "file": "gfx/parts/arm_r/slkhnd.png",
   "size": 118,
   "raw_sha": "623509de50cd8284ddb17c1a66c59182190f6622",
-  "name": "arm_l_slkhnd",
+  "name": "arm_r_slkhnd",
   "used_by": [
    "SlkHnd"
   ]
  },
  "265471": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/h_gun.png",
+  "file": "gfx/parts/arm_r/h_gun.png",
   "size": 160,
   "raw_sha": "29d11872e4fabc786c1a261a83ee85c63da70a0c",
-  "name": "arm_l_h_gun",
+  "name": "arm_r_h_gun",
   "used_by": [
    "H-Gun"
   ]
  },
  "2655CD": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/hawk.png",
+  "file": "gfx/parts/arm_r/hawk.png",
   "size": 192,
   "raw_sha": "a4ad75bfbd0cb8bfbf48bd8e8904bece17f80e43",
-  "name": "arm_l_hawk",
+  "name": "arm_r_hawk",
   "used_by": [
    "Hawk"
   ]
  },
  "265777": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/ogre.png",
+  "file": "gfx/parts/arm_r/ogre.png",
   "size": 265,
   "raw_sha": "7b43d41e86b49db94efa2832c834562f43bd6f57",
-  "name": "arm_l_ogre",
+  "name": "arm_r_ogre",
   "used_by": [
    "Ogre"
   ]
  },
  "2659C8": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/lancer.png",
+  "file": "gfx/parts/arm_r/lancer.png",
   "size": 197,
   "raw_sha": "1fd0c65c3ae2e64423a927cdd172c707edf358e9",
-  "name": "arm_l_lancer",
+  "name": "arm_r_lancer",
   "used_by": [
    "Lancer",
    "Pierce"
@@ -3352,10 +3561,10 @@
  },
  "265B6D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/drlarm.png",
+  "file": "gfx/parts/arm_r/drlarm.png",
   "size": 197,
   "raw_sha": "fac4f8cd9691059203802d9a5ba07eee8a2feba1",
-  "name": "arm_l_drlarm",
+  "name": "arm_r_drlarm",
   "used_by": [
    "DrlArm",
    "Trnado",
@@ -3364,10 +3573,10 @@
  },
  "265CF0": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/bazoka.png",
+  "file": "gfx/parts/arm_r/bazoka.png",
   "size": 221,
   "raw_sha": "913b27b744103a261765e8845bdea6b73830cf71",
-  "name": "arm_l_bazoka",
+  "name": "arm_r_bazoka",
   "used_by": [
    "Bazoka",
    "SDisc"
@@ -3375,10 +3584,10 @@
  },
  "265ED2": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/chnsaw.png",
+  "file": "gfx/parts/arm_r/chnsaw.png",
   "size": 292,
   "raw_sha": "28bd17ac1b7d630de6596f61bbf3504b59749a85",
-  "name": "arm_l_chnsaw",
+  "name": "arm_r_chnsaw",
   "used_by": [
    "Chnsaw",
    "Saw",
@@ -3387,27 +3596,27 @@
  },
  "266137": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/unused_10.png",
+  "file": "gfx/parts/arm_r/unused_10.png",
   "size": 177,
   "raw_sha": "bf0b60638dd8a84a0fa7d3ffbc15f8835ec362cd",
-  "name": "arm_l_unused_10"
+  "name": "arm_r_unused_10"
  },
  "266358": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/pwrhnd.png",
+  "file": "gfx/parts/arm_r/pwrhnd.png",
   "size": 166,
   "raw_sha": "3df32d646f79a16795a96bf6efac8b2e7782c7ed",
-  "name": "arm_l_pwrhnd",
+  "name": "arm_r_pwrhnd",
   "used_by": [
    "PwrHnd"
   ]
  },
  "2664B0": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/hkclaw.png",
+  "file": "gfx/parts/arm_r/hkclaw.png",
   "size": 210,
   "raw_sha": "17bca9b068d540be2c2b0d3ebb8d924dc2a55106",
-  "name": "arm_l_hkclaw",
+  "name": "arm_r_hkclaw",
   "used_by": [
    "HkClaw",
    "WlfClw",
@@ -3416,30 +3625,30 @@
  },
  "266666": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/pole.png",
+  "file": "gfx/parts/arm_r/pole.png",
   "size": 168,
   "raw_sha": "c61318bf6c6e84b4d66cc53bbe9cefab0ac2c49b",
-  "name": "arm_l_pole",
+  "name": "arm_r_pole",
   "used_by": [
    "Pole"
   ]
  },
  "266807": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/rapier.png",
+  "file": "gfx/parts/arm_r/rapier.png",
   "size": 209,
   "raw_sha": "d4d66511c2787cba6db90063b8df554931359298",
-  "name": "arm_l_rapier",
+  "name": "arm_r_rapier",
   "used_by": [
    "Rapier"
   ]
  },
  "2669C8": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/btlhk.png",
+  "file": "gfx/parts/arm_r/btlhk.png",
   "size": 228,
   "raw_sha": "7f30c4d72c58a5c154352b4a687c675afc4b9063",
-  "name": "arm_l_btlhk",
+  "name": "arm_r_btlhk",
   "used_by": [
    "BtlHk",
    "IceClw",
@@ -3448,10 +3657,10 @@
  },
  "266BA7": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/whip.png",
+  "file": "gfx/parts/arm_r/whip.png",
   "size": 211,
   "raw_sha": "3760cd6316b89bd9c9f8974dd70ffcf1b94b9e40",
-  "name": "arm_l_whip",
+  "name": "arm_r_whip",
   "used_by": [
    "Whip",
    "FBoot"
@@ -3459,10 +3668,10 @@
  },
  "266D50": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/whip_plus.png",
+  "file": "gfx/parts/arm_r/whip_plus.png",
   "size": 275,
   "raw_sha": "3331f926ed9d1ced9b1efc11ef1a4721db080162",
-  "name": "arm_l_whip_plus",
+  "name": "arm_r_whip_plus",
   "used_by": [
    "Whip+",
    "9Tail",
@@ -3475,20 +3684,20 @@
  },
  "266F67": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/armhnd.png",
+  "file": "gfx/parts/arm_r/armhnd.png",
   "size": 261,
   "raw_sha": "b5bc1cc8673d1f76a834cf17bfd5eff1a179e461",
-  "name": "arm_l_armhnd",
+  "name": "arm_r_armhnd",
   "used_by": [
    "ArmHnd"
   ]
  },
  "26717D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/disc.png",
+  "file": "gfx/parts/arm_r/disc.png",
   "size": 198,
   "raw_sha": "746548339a2b626c3050ac9e2afb05dc7ccdc075",
-  "name": "arm_l_disc",
+  "name": "arm_r_disc",
   "used_by": [
    "Disc",
    "RingD",
@@ -3497,10 +3706,10 @@
  },
  "26731F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/spiked.png",
+  "file": "gfx/parts/arm_r/spiked.png",
   "size": 315,
   "raw_sha": "ed35c790a5ca419cb5f1d47738db43331b5b11a4",
-  "name": "arm_l_spiked",
+  "name": "arm_r_spiked",
   "used_by": [
    "SpikeD",
    "Disc+"
@@ -3508,10 +3717,10 @@
  },
  "2675C0": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/warlok.png",
+  "file": "gfx/parts/arm_r/warlok.png",
   "size": 314,
   "raw_sha": "d373c06963c47f9ee14a9a5cc13e1c0dd8881cd8",
-  "name": "arm_l_warlok",
+  "name": "arm_r_warlok",
   "used_by": [
    "Warlok",
    "ArchMg"
@@ -3519,70 +3728,70 @@
  },
  "267862": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/godhnd.png",
+  "file": "gfx/parts/arm_r/godhnd.png",
   "size": 333,
   "raw_sha": "56bfae6119feefd72056ab40001d4a91bf866489",
-  "name": "arm_l_godhnd",
+  "name": "arm_r_godhnd",
   "used_by": [
    "GodHnd"
   ]
  },
  "267B12": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/troopr.png",
+  "file": "gfx/parts/arm_r/troopr.png",
   "size": 165,
   "raw_sha": "10ea67c1298d6d2997fc39449c03d055755b0113",
-  "name": "arm_l_troopr",
+  "name": "arm_r_troopr",
   "used_by": [
    "Troopr"
   ]
  },
  "267C86": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/mantis.png",
+  "file": "gfx/parts/arm_r/mantis.png",
   "size": 269,
   "raw_sha": "5cd5cedb33b8f31e7e79bfb83652ce5a0707c595",
-  "name": "arm_l_mantis",
+  "name": "arm_r_mantis",
   "used_by": [
    "Mantis"
   ]
  },
  "267ECD": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/golem.png",
+  "file": "gfx/parts/arm_r/golem.png",
   "size": 180,
   "raw_sha": "0e08ce02570560c50d63764d9923712092e07ff4",
-  "name": "arm_l_golem",
+  "name": "arm_r_golem",
   "used_by": [
    "Golem"
   ]
  },
  "26802A": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/hydro.png",
+  "file": "gfx/parts/arm_r/hydro.png",
   "size": 417,
   "raw_sha": "03d66f6358677e8fbe329caf3c2475f8e7b9c126",
-  "name": "arm_l_hydro",
+  "name": "arm_r_hydro",
   "used_by": [
    "Hydro"
   ]
  },
  "268389": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/snaker.png",
+  "file": "gfx/parts/arm_r/snaker.png",
   "size": 394,
   "raw_sha": "626261952dd0b438431a9379fa9f334f9cddd499",
-  "name": "arm_l_snaker",
+  "name": "arm_r_snaker",
   "used_by": [
    "Snaker"
   ]
  },
  "2686FF": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/scorp.png",
+  "file": "gfx/parts/arm_r/scorp.png",
   "size": 219,
   "raw_sha": "cc83947051cdb2aecb4ae92b1b24c97990e40419",
-  "name": "arm_l_scorp",
+  "name": "arm_r_scorp",
   "used_by": [
    "Scorp",
    "Spider"
@@ -3590,30 +3799,30 @@
  },
  "2688BF": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/redclw.png",
+  "file": "gfx/parts/arm_r/redclw.png",
   "size": 334,
   "raw_sha": "f48c6a8e0c4613cc8be808b5cf1ed3e911dc07a6",
-  "name": "arm_l_redclw",
+  "name": "arm_r_redclw",
   "used_by": [
    "RedClw"
   ]
  },
  "268B3D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/crssbw.png",
+  "file": "gfx/parts/arm_r/crssbw.png",
   "size": 195,
   "raw_sha": "aa0355dc4fc333914bba20abf0b370fb9690be20",
-  "name": "arm_l_crssbw",
+  "name": "arm_r_crssbw",
   "used_by": [
    "Crssbw"
   ]
  },
  "268CCA": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/sabre.png",
+  "file": "gfx/parts/arm_r/sabre.png",
   "size": 135,
   "raw_sha": "eef6eb8a472215ec17fb001966b6827e59444152",
-  "name": "arm_l_sabre",
+  "name": "arm_r_sabre",
   "used_by": [
    "Sabre",
    "Gram"
@@ -3621,10 +3830,10 @@
  },
  "268DDD": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/sabre_plus.png",
+  "file": "gfx/parts/arm_r/sabre_plus.png",
   "size": 169,
   "raw_sha": "a4a75d14cdcf56b879dabe151ac349d253363a99",
-  "name": "arm_l_sabre_plus",
+  "name": "arm_r_sabre_plus",
   "used_by": [
    "Sabre+",
    "Wyndia"
@@ -3632,10 +3841,10 @@
  },
  "268F2F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/hndaxe.png",
+  "file": "gfx/parts/arm_r/hndaxe.png",
   "size": 253,
   "raw_sha": "0de9b465ee3d50d5b5026b65a76c8604162ee6f5",
-  "name": "arm_l_hndaxe",
+  "name": "arm_r_hndaxe",
   "used_by": [
    "HndAxe",
    "Tomhwk"
@@ -3643,10 +3852,10 @@
  },
  "26913F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/btlaxe.png",
+  "file": "gfx/parts/arm_r/btlaxe.png",
   "size": 303,
   "raw_sha": "f80b505d9a4ef5e1720d8093a779fd09dad8caae",
-  "name": "arm_l_btlaxe",
+  "name": "arm_r_btlaxe",
   "used_by": [
    "BtlAxe",
    "2Edge",
@@ -3655,10 +3864,10 @@
  },
  "2693A2": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/mgabll.png",
+  "file": "gfx/parts/arm_r/mgabll.png",
   "size": 252,
   "raw_sha": "e44d12cdf1f9bcf48bd23857aa2028a325e10f41",
-  "name": "arm_l_mgabll",
+  "name": "arm_r_mgabll",
   "used_by": [
    "MgaBll",
    "Crushr"
@@ -3666,10 +3875,10 @@
  },
  "2695C7": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/curler.png",
+  "file": "gfx/parts/arm_r/curler.png",
   "size": 279,
   "raw_sha": "4b03710c6674bde34d949c8fa1236f9331f6e04d",
-  "name": "arm_l_curler",
+  "name": "arm_r_curler",
   "used_by": [
    "Curler",
    "Buster"
@@ -3677,10 +3886,10 @@
  },
  "269806": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/spring.png",
+  "file": "gfx/parts/arm_r/spring.png",
   "size": 229,
   "raw_sha": "46faec42d752bc661fae103f43b3eb8fde4979c6",
-  "name": "arm_l_spring",
+  "name": "arm_r_spring",
   "used_by": [
    "Spring",
    "Zoomer"
@@ -3688,10 +3897,10 @@
  },
  "2699D3": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/mage.png",
+  "file": "gfx/parts/arm_r/mage.png",
   "size": 229,
   "raw_sha": "74333ace805afa4f2da18c49c1cc8afe1c2261a1",
-  "name": "arm_l_mage",
+  "name": "arm_r_mage",
   "used_by": [
    "Mage",
    "Wizard"
@@ -3699,10 +3908,10 @@
  },
  "269BB3": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/gradus.png",
+  "file": "gfx/parts/arm_r/gradus.png",
   "size": 149,
   "raw_sha": "d88f1047f65c6c9ee902199b9b3a12e1ddb755f0",
-  "name": "arm_l_gradus",
+  "name": "arm_r_gradus",
   "used_by": [
    "Gradus",
    "Lavatn",
@@ -3711,10 +3920,10 @@
  },
  "269D20": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/dirk.png",
+  "file": "gfx/parts/arm_r/dirk.png",
   "size": 172,
   "raw_sha": "14d54f5d91f335da246272b3f1b0ef6d29470645",
-  "name": "arm_l_dirk",
+  "name": "arm_r_dirk",
   "used_by": [
    "Dirk",
    "Demon"
@@ -3722,10 +3931,10 @@
  },
  "269EA8": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/linegn.png",
+  "file": "gfx/parts/arm_r/linegn.png",
   "size": 241,
   "raw_sha": "e03220005406c8c8dde20f103259036135545c34",
-  "name": "arm_l_linegn",
+  "name": "arm_r_linegn",
   "used_by": [
    "LineGn",
    "RailGn"
@@ -3733,30 +3942,30 @@
  },
  "26A0C8": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/cannon.png",
+  "file": "gfx/parts/arm_r/cannon.png",
   "size": 279,
   "raw_sha": "6109cd51e3de093653e3169eec4dc76fe17a9469",
-  "name": "arm_l_cannon",
+  "name": "arm_r_cannon",
   "used_by": [
    "Cannon"
   ]
  },
  "26A30D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/hndgun.png",
+  "file": "gfx/parts/arm_r/hndgun.png",
   "size": 226,
   "raw_sha": "6b5e9ed2c7fbcb901d2af950ea4799b6d36a2cfd",
-  "name": "arm_l_hndgun",
+  "name": "arm_r_hndgun",
   "used_by": [
    "HndGun"
   ]
  },
  "26A4D9": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/vulcan.png",
+  "file": "gfx/parts/arm_r/vulcan.png",
   "size": 278,
   "raw_sha": "71ab038724084ec4aff57edfc3bdcadf67895681",
-  "name": "arm_l_vulcan",
+  "name": "arm_r_vulcan",
   "used_by": [
    "Vulcan",
    "Gatlng"
@@ -3764,10 +3973,10 @@
  },
  "26A712": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/2barrl.png",
+  "file": "gfx/parts/arm_r/2barrl.png",
   "size": 272,
   "raw_sha": "ddb1457b1d75fcf41135b55db82a534d94e25adc",
-  "name": "arm_l_2barrl",
+  "name": "arm_r_2barrl",
   "used_by": [
    "2Barrl",
    "XGun"
@@ -3775,10 +3984,10 @@
  },
  "26A951": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/lncher.png",
+  "file": "gfx/parts/arm_r/lncher.png",
   "size": 244,
   "raw_sha": "0b58883ca2f21098a96e6e41c56d80b821a5db5c",
-  "name": "arm_l_lncher",
+  "name": "arm_r_lncher",
   "used_by": [
    "Lncher",
    "Phalnx"
@@ -3786,40 +3995,40 @@
  },
  "26AB33": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/binder.png",
+  "file": "gfx/parts/arm_r/binder.png",
   "size": 223,
   "raw_sha": "abfe85987176a44ad5b834702514d90bffbdfb36",
-  "name": "arm_l_binder",
+  "name": "arm_r_binder",
   "used_by": [
    "Binder"
   ]
  },
  "26AD1F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/magma.png",
+  "file": "gfx/parts/arm_r/magma.png",
   "size": 236,
   "raw_sha": "1e4a8cd46ac9f2de0062152a8aed1bf1d8233c62",
-  "name": "arm_l_magma",
+  "name": "arm_r_magma",
   "used_by": [
    "Magma"
   ]
  },
  "26AF04": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/pliers.png",
+  "file": "gfx/parts/arm_r/pliers.png",
   "size": 313,
   "raw_sha": "1161e90b621e65630645a271f1ce0669b39eda46",
-  "name": "arm_l_pliers",
+  "name": "arm_r_pliers",
   "used_by": [
    "Pliers"
   ]
  },
  "26B16E": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/blade.png",
+  "file": "gfx/parts/arm_r/blade.png",
   "size": 278,
   "raw_sha": "7f533f88f29d804fb4aa22de77b353386a35085e",
-  "name": "arm_l_blade",
+  "name": "arm_r_blade",
   "used_by": [
    "Blade",
    "Cutter"
@@ -3827,10 +4036,10 @@
  },
  "26B3C7": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/driver.png",
+  "file": "gfx/parts/arm_r/driver.png",
   "size": 210,
   "raw_sha": "de0d2832822dc2d423447a4862eb66a1a695cdfc",
-  "name": "arm_l_driver",
+  "name": "arm_r_driver",
   "used_by": [
    "Driver",
    "3DDvr"
@@ -3838,20 +4047,20 @@
  },
  "26B5C3": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/drill.png",
+  "file": "gfx/parts/arm_r/drill.png",
   "size": 215,
   "raw_sha": "31cfc845c166785056acd76e077ea8b7887ac5e5",
-  "name": "arm_l_drill",
+  "name": "arm_r_drill",
   "used_by": [
    "Drill"
   ]
  },
  "26B7BF": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/maxi.png",
+  "file": "gfx/parts/arm_r/maxi.png",
   "size": 199,
   "raw_sha": "962eabc14b28c6c491c0bb11055dfb61f1257d6d",
-  "name": "arm_l_maxi",
+  "name": "arm_r_maxi",
   "used_by": [
    "Maxi",
    "FPlse",
@@ -3860,10 +4069,10 @@
  },
  "26B94C": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/twin.png",
+  "file": "gfx/parts/arm_r/twin.png",
   "size": 274,
   "raw_sha": "39fd8ea761d80a6bd65e51cd39bb8a1a6308b322",
-  "name": "arm_l_twin",
+  "name": "arm_r_twin",
   "used_by": [
    "Twin",
    "Ashra"
@@ -3871,10 +4080,10 @@
  },
  "26BB9C": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/skull.png",
+  "file": "gfx/parts/arm_r/skull.png",
   "size": 270,
   "raw_sha": "8fb8a0f7f6c56a04447e8e1d83c3753bacb2db57",
-  "name": "arm_l_skull",
+  "name": "arm_r_skull",
   "used_by": [
    "Skull",
    "DrkClw"
@@ -3882,10 +4091,10 @@
  },
  "26BDE4": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/dgnhed.png",
+  "file": "gfx/parts/arm_r/dgnhed.png",
   "size": 334,
   "raw_sha": "94ef23ab1c829574dd4764f37ab54971cd033302",
-  "name": "arm_l_dgnhed",
+  "name": "arm_r_dgnhed",
   "used_by": [
    "DgnHed",
    "Cursed",
@@ -3894,10 +4103,10 @@
  },
  "26C084": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/ewire.png",
+  "file": "gfx/parts/arm_r/ewire.png",
   "size": 251,
   "raw_sha": "ab823972d3d60e30b4b743683357a86484b6fd35",
-  "name": "arm_l_ewire",
+  "name": "arm_r_ewire",
   "used_by": [
    "EWire",
    "Tangle"
@@ -3905,10 +4114,10 @@
  },
  "26C27B": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/armwre.png",
+  "file": "gfx/parts/arm_r/armwre.png",
   "size": 367,
   "raw_sha": "5f5eaa6641c7d644a6061dcff0c5426926679fb7",
-  "name": "arm_l_armwre",
+  "name": "arm_r_armwre",
   "used_by": [
    "ArmWre",
    "Lghtng",
@@ -3917,30 +4126,30 @@
  },
  "26C574": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/airhnd.png",
+  "file": "gfx/parts/arm_r/airhnd.png",
   "size": 174,
   "raw_sha": "af169e5d45d0a8ba253f0089db10a83188345bd3",
-  "name": "arm_l_airhnd",
+  "name": "arm_r_airhnd",
   "used_by": [
    "AirHnd"
   ]
  },
  "26C6E9": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/iceblw.png",
+  "file": "gfx/parts/arm_r/iceblw.png",
   "size": 192,
   "raw_sha": "c06fb13e28694d78e7907626e284c2735ab2f777",
-  "name": "arm_l_iceblw",
+  "name": "arm_r_iceblw",
   "used_by": [
    "IceBlw"
   ]
  },
  "26C880": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/hook.png",
+  "file": "gfx/parts/arm_r/hook.png",
   "size": 182,
   "raw_sha": "464d3a5c1a6fe852f86ae8ea7c8fb5060a652837",
-  "name": "arm_l_hook",
+  "name": "arm_r_hook",
   "used_by": [
    "Hook",
    "LogHk"
@@ -3948,60 +4157,60 @@
  },
  "26C9EB": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/giant.png",
+  "file": "gfx/parts/arm_r/giant.png",
   "size": 197,
   "raw_sha": "099187a05064682c296d90f9e0ea7c105032570c",
-  "name": "arm_l_giant",
+  "name": "arm_r_giant",
   "used_by": [
    "Giant"
   ]
  },
  "26CB85": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/molehd.png",
+  "file": "gfx/parts/arm_r/molehd.png",
   "size": 228,
   "raw_sha": "6ecd81fcb5eec19b2b0ebfe7342a9647b2c49d14",
-  "name": "arm_l_molehd",
+  "name": "arm_r_molehd",
   "used_by": [
    "MoleHd"
   ]
  },
  "26CD72": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/claw.png",
+  "file": "gfx/parts/arm_r/claw.png",
   "size": 180,
   "raw_sha": "aa53b6169651bbc7c000c28a91dd0ceaef62957d",
-  "name": "arm_l_claw",
+  "name": "arm_r_claw",
   "used_by": [
    "Claw"
   ]
  },
  "26CEEE": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/triger.png",
+  "file": "gfx/parts/arm_r/triger.png",
   "size": 216,
   "raw_sha": "f4d36c7724433b6ab84ab1b2d4b92f25206af6f0",
-  "name": "arm_l_triger",
+  "name": "arm_r_triger",
   "used_by": [
    "Triger"
   ]
  },
  "26D0B0": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/killer.png",
+  "file": "gfx/parts/arm_r/killer.png",
   "size": 214,
   "raw_sha": "53fc374c83ae8d65d6f445419410a5c9b5c392cd",
-  "name": "arm_l_killer",
+  "name": "arm_r_killer",
   "used_by": [
    "Killer"
   ]
  },
  "26D26A": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/knukle.png",
+  "file": "gfx/parts/arm_r/knukle.png",
   "size": 205,
   "raw_sha": "2b51bd44dfaa53da2c0f211fb574624914cf621e",
-  "name": "arm_l_knukle",
+  "name": "arm_r_knukle",
   "used_by": [
    "Knukle",
    "Rocket"
@@ -4009,10 +4218,10 @@
  },
  "26D3E6": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/gloves.png",
+  "file": "gfx/parts/arm_r/gloves.png",
   "size": 250,
   "raw_sha": "b3321752624a3931851f0d62a50acfb05acaa360",
-  "name": "arm_l_gloves",
+  "name": "arm_r_gloves",
   "used_by": [
    "Gloves",
    "Mail",
@@ -4021,40 +4230,40 @@
  },
  "26D5CD": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/bllarm.png",
+  "file": "gfx/parts/arm_r/bllarm.png",
   "size": 126,
   "raw_sha": "b0dce834bbf179f2a21f53b30001b9aedfedd124",
-  "name": "arm_l_bllarm",
+  "name": "arm_r_bllarm",
   "used_by": [
    "BllArm"
   ]
  },
  "26D6CC": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/tgrhnd.png",
+  "file": "gfx/parts/arm_r/tgrhnd.png",
   "size": 203,
   "raw_sha": "8e207f7db695e87b0db7228033edf399979aa609",
-  "name": "arm_l_tgrhnd",
+  "name": "arm_r_tgrhnd",
   "used_by": [
    "TgrHnd"
   ]
  },
  "26D856": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/oakhnd.png",
+  "file": "gfx/parts/arm_r/oakhnd.png",
   "size": 185,
   "raw_sha": "66e80e8d2b1f1eb3a85c67b9db5f331d58e249c1",
-  "name": "arm_l_oakhnd",
+  "name": "arm_r_oakhnd",
   "used_by": [
    "OakHnd"
   ]
  },
  "26D9BA": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/nowire.png",
+  "file": "gfx/parts/arm_r/nowire.png",
   "size": 195,
   "raw_sha": "791f80317217df28d599da29f055137d3484418e",
-  "name": "arm_l_nowire",
+  "name": "arm_r_nowire",
   "used_by": [
    "NoWire",
    "Sthrn+"
@@ -4062,10 +4271,10 @@
  },
  "26DB53": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/hammer.png",
+  "file": "gfx/parts/arm_r/hammer.png",
   "size": 248,
   "raw_sha": "bff6e9c8aa14cbeca820ff7a338de2f9796892bb",
-  "name": "arm_l_hammer",
+  "name": "arm_r_hammer",
   "used_by": [
    "Hammer",
    "GrvHmr"
@@ -4073,10 +4282,10 @@
  },
  "26DD58": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/qatar.png",
+  "file": "gfx/parts/arm_r/qatar.png",
   "size": 195,
   "raw_sha": "5ac40fa7612e5e6725bf65752c8e7d994061ad3b",
-  "name": "arm_l_qatar",
+  "name": "arm_r_qatar",
   "used_by": [
    "Qatar",
    "Indra",
@@ -4085,10 +4294,10 @@
  },
  "26DF17": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/fork.png",
+  "file": "gfx/parts/arm_r/fork.png",
   "size": 235,
   "raw_sha": "4aabbaf956fbe92490b91babc49de94ba6c2e0a0",
-  "name": "arm_l_fork",
+  "name": "arm_r_fork",
   "used_by": [
    "Fork",
    "Tridnt"
@@ -4096,110 +4305,110 @@
  },
  "26E124": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/needle.png",
+  "file": "gfx/parts/arm_r/needle.png",
   "size": 263,
   "raw_sha": "e07c626f7d67bb9ec91b223b467b183bcc98864c",
-  "name": "arm_l_needle",
+  "name": "arm_r_needle",
   "used_by": [
    "Needle"
   ]
  },
  "26E33A": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/sword.png",
+  "file": "gfx/parts/arm_r/sword.png",
   "size": 252,
   "raw_sha": "cf36b2b4ff10c9ebee258121bc7e8aefd690ffdc",
-  "name": "arm_l_sword",
+  "name": "arm_r_sword",
   "used_by": [
    "Sword"
   ]
  },
  "26E53F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/kama.png",
+  "file": "gfx/parts/arm_r/kama.png",
   "size": 220,
   "raw_sha": "6d8fbf8cd3c741620b09c55bdadd9770a01c0aa7",
-  "name": "arm_l_kama",
+  "name": "arm_r_kama",
   "used_by": [
    "Kama"
   ]
  },
  "26E721": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/flint.png",
+  "file": "gfx/parts/arm_r/flint.png",
   "size": 238,
   "raw_sha": "b56ff2fc31dfd561ffd0418503f4172c76ddcfa3",
-  "name": "arm_l_flint",
+  "name": "arm_r_flint",
   "used_by": [
    "Flint"
   ]
  },
  "26E90E": {
   "kind": "img4",
-  "file": "gfx/parts/arm_l/stunr.png",
+  "file": "gfx/parts/arm_r/stunr.png",
   "size": 303,
   "raw_sha": "1cf56fa243e018a1232cbe8588f492694aa8b5f7",
-  "name": "arm_l_stunr",
+  "name": "arm_r_stunr",
   "used_by": [
    "Stunr"
   ]
  },
  "265305": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/btfist.png",
+  "file": "gfx/parts/arm_l/btfist.png",
   "size": 135,
   "raw_sha": "00a2c73c57d153f0af58449b8140ed1df69776e7",
-  "name": "arm_r_btfist",
+  "name": "arm_l_btfist",
   "used_by": [
    "BtFist"
   ]
  },
  "265402": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/slkhnd.png",
+  "file": "gfx/parts/arm_l/slkhnd.png",
   "size": 111,
   "raw_sha": "571cf079e633aff1248f05faae8d939f43f8a3de",
-  "name": "arm_r_slkhnd",
+  "name": "arm_l_slkhnd",
   "used_by": [
    "SlkHnd"
   ]
  },
  "265511": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/h_gun.png",
+  "file": "gfx/parts/arm_l/h_gun.png",
   "size": 188,
   "raw_sha": "12c9a3c6d19f3fbf6fe34fc19ed0617ab13c0bb2",
-  "name": "arm_r_h_gun",
+  "name": "arm_l_h_gun",
   "used_by": [
    "H-Gun"
   ]
  },
  "26568D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/hawk.png",
+  "file": "gfx/parts/arm_l/hawk.png",
   "size": 234,
   "raw_sha": "e9395a5f8e3817fb3c9120dcf5467447f4dd3537",
-  "name": "arm_r_hawk",
+  "name": "arm_l_hawk",
   "used_by": [
    "Hawk"
   ]
  },
  "265880": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/ogre.png",
+  "file": "gfx/parts/arm_l/ogre.png",
   "size": 328,
   "raw_sha": "7d805f792da6b6d6b5a95a0613104d3d66e38b52",
-  "name": "arm_r_ogre",
+  "name": "arm_l_ogre",
   "used_by": [
    "Ogre"
   ]
  },
  "265A8D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/lancer.png",
+  "file": "gfx/parts/arm_l/lancer.png",
   "size": 224,
   "raw_sha": "b88b8391f4cf8c02862d890273d513038a8fb5ef",
-  "name": "arm_r_lancer",
+  "name": "arm_l_lancer",
   "used_by": [
    "Lancer",
    "Pierce"
@@ -4207,10 +4416,10 @@
  },
  "265C32": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/drlarm.png",
+  "file": "gfx/parts/arm_l/drlarm.png",
   "size": 190,
   "raw_sha": "5b2b438baf2c07c78446858017f61d0b71552833",
-  "name": "arm_r_drlarm",
+  "name": "arm_l_drlarm",
   "used_by": [
    "DrlArm",
    "Trnado",
@@ -4219,10 +4428,10 @@
  },
  "265DCD": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/bazoka.png",
+  "file": "gfx/parts/arm_l/bazoka.png",
   "size": 261,
   "raw_sha": "099cd51ca9354476b29f68469d90c79a1b3ce4e8",
-  "name": "arm_r_bazoka",
+  "name": "arm_l_bazoka",
   "used_by": [
    "Bazoka",
    "SDisc"
@@ -4230,10 +4439,10 @@
  },
  "265FF6": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/chnsaw.png",
+  "file": "gfx/parts/arm_l/chnsaw.png",
   "size": 321,
   "raw_sha": "174253c6393a58fa9c95a34929c868d6ed0c7ac0",
-  "name": "arm_r_chnsaw",
+  "name": "arm_l_chnsaw",
   "used_by": [
    "Chnsaw",
    "Saw",
@@ -4242,10 +4451,10 @@
  },
  "2661E8": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/unused_10.png",
+  "file": "gfx/parts/arm_l/unused_10.png",
   "size": 368,
   "raw_sha": "ecbc036109ec50e5f86552276d2cb416b014f95c",
-  "name": "arm_r_unused_10",
+  "name": "arm_l_unused_10",
   "tail": {
    "at": 364,
    "bytes": "34"
@@ -4253,20 +4462,20 @@
  },
  "2663FE": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/pwrhnd.png",
+  "file": "gfx/parts/arm_l/pwrhnd.png",
   "size": 178,
   "raw_sha": "de467c3ae62c4711b1f288197245e3a2fb22151a",
-  "name": "arm_r_pwrhnd",
+  "name": "arm_l_pwrhnd",
   "used_by": [
    "PwrHnd"
   ]
  },
  "266582": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/hkclaw.png",
+  "file": "gfx/parts/arm_l/hkclaw.png",
   "size": 228,
   "raw_sha": "8d8446fb4e2e8dcddee974296c5f2745f3f92ad5",
-  "name": "arm_r_hkclaw",
+  "name": "arm_l_hkclaw",
   "used_by": [
    "HkClaw",
    "WlfClw",
@@ -4275,30 +4484,30 @@
  },
  "26670E": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/pole.png",
+  "file": "gfx/parts/arm_l/pole.png",
   "size": 249,
   "raw_sha": "16a392111d6268ff6d0c8c2329fc0f818187e690",
-  "name": "arm_r_pole",
+  "name": "arm_l_pole",
   "used_by": [
    "Pole"
   ]
  },
  "2668D8": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/rapier.png",
+  "file": "gfx/parts/arm_l/rapier.png",
   "size": 240,
   "raw_sha": "92dd16661467c111cd9723552207854b30956539",
-  "name": "arm_r_rapier",
+  "name": "arm_l_rapier",
   "used_by": [
    "Rapier"
   ]
  },
  "266AAC": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/btlhk.png",
+  "file": "gfx/parts/arm_l/btlhk.png",
   "size": 251,
   "raw_sha": "f8d85f020c39c4365db9a0bbad49ba7cf88846eb",
-  "name": "arm_r_btlhk",
+  "name": "arm_l_btlhk",
   "used_by": [
    "BtlHk",
    "IceClw",
@@ -4307,10 +4516,10 @@
  },
  "266C7A": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/whip.png",
+  "file": "gfx/parts/arm_l/whip.png",
   "size": 214,
   "raw_sha": "6aa0a2ff909956053e4d81ac85ffc7936ca2fea5",
-  "name": "arm_r_whip",
+  "name": "arm_l_whip",
   "used_by": [
    "Whip",
    "FBoot"
@@ -4322,10 +4531,10 @@
  },
  "266E63": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/whip_plus.png",
+  "file": "gfx/parts/arm_l/whip_plus.png",
   "size": 260,
   "raw_sha": "f1c057c9c73e5df63a4ae18ea1f71bcd8e71f395",
-  "name": "arm_r_whip_plus",
+  "name": "arm_l_whip_plus",
   "used_by": [
    "Whip+",
    "9Tail",
@@ -4338,20 +4547,20 @@
  },
  "26706C": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/armhnd.png",
+  "file": "gfx/parts/arm_l/armhnd.png",
   "size": 273,
   "raw_sha": "c827fdded393463da67623305fe083e242842609",
-  "name": "arm_r_armhnd",
+  "name": "arm_l_armhnd",
   "used_by": [
    "ArmHnd"
   ]
  },
  "267243": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/disc.png",
+  "file": "gfx/parts/arm_l/disc.png",
   "size": 220,
   "raw_sha": "5bbcf7b5b5ea8222fc87fe61ba7c0e450a4cbc2f",
-  "name": "arm_r_disc",
+  "name": "arm_l_disc",
   "used_by": [
    "Disc",
    "RingD",
@@ -4360,10 +4569,10 @@
  },
  "26745A": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/spiked.png",
+  "file": "gfx/parts/arm_l/spiked.png",
   "size": 358,
   "raw_sha": "05facf342b80e00533c506dd12be521ecd03b6f3",
-  "name": "arm_r_spiked",
+  "name": "arm_l_spiked",
   "used_by": [
    "SpikeD",
    "Disc+"
@@ -4371,10 +4580,10 @@
  },
  "2676FA": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/warlok.png",
+  "file": "gfx/parts/arm_l/warlok.png",
   "size": 360,
   "raw_sha": "133e1b3aaed6430575129dd734b8d612799e569d",
-  "name": "arm_r_warlok",
+  "name": "arm_l_warlok",
   "used_by": [
    "Warlok",
    "ArchMg"
@@ -4386,10 +4595,10 @@
  },
  "2679AF": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/godhnd.png",
+  "file": "gfx/parts/arm_l/godhnd.png",
   "size": 355,
   "raw_sha": "3027ae93b150f55b11365fabf9af97ee7644440d",
-  "name": "arm_r_godhnd",
+  "name": "arm_l_godhnd",
   "used_by": [
    "GodHnd"
   ],
@@ -4400,40 +4609,40 @@
  },
  "267BB7": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/troopr.png",
+  "file": "gfx/parts/arm_l/troopr.png",
   "size": 207,
   "raw_sha": "e46d89c41e62a9136d7e3e2a546b336db44283ff",
-  "name": "arm_r_troopr",
+  "name": "arm_l_troopr",
   "used_by": [
    "Troopr"
   ]
  },
  "267D93": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/mantis.png",
+  "file": "gfx/parts/arm_l/mantis.png",
   "size": 314,
   "raw_sha": "12521efeb0d3e99a98218cd769b71d682f868e43",
-  "name": "arm_r_mantis",
+  "name": "arm_l_mantis",
   "used_by": [
    "Mantis"
   ]
  },
  "267F81": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/golem.png",
+  "file": "gfx/parts/arm_l/golem.png",
   "size": 169,
   "raw_sha": "d95e984626afdbb38ca022e6850e12f9bae48a78",
-  "name": "arm_r_golem",
+  "name": "arm_l_golem",
   "used_by": [
    "Golem"
   ]
  },
  "2681CB": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/hydro.png",
+  "file": "gfx/parts/arm_l/hydro.png",
   "size": 446,
   "raw_sha": "85d38620acb9b1ea741f5e86d16d401588229229",
-  "name": "arm_r_hydro",
+  "name": "arm_l_hydro",
   "used_by": [
    "Hydro"
   ],
@@ -4444,20 +4653,20 @@
  },
  "268513": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/snaker.png",
+  "file": "gfx/parts/arm_l/snaker.png",
   "size": 492,
   "raw_sha": "df5a685225e273a7780a8e9a9f773196abc341f2",
-  "name": "arm_r_snaker",
+  "name": "arm_l_snaker",
   "used_by": [
    "Snaker"
   ]
  },
  "2687DA": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/scorp.png",
+  "file": "gfx/parts/arm_l/scorp.png",
   "size": 229,
   "raw_sha": "48960b580f85e037115b0e1dd57654ec7dfde899",
-  "name": "arm_r_scorp",
+  "name": "arm_l_scorp",
   "used_by": [
    "Scorp",
    "Spider"
@@ -4465,30 +4674,30 @@
  },
  "268A0D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/redclw.png",
+  "file": "gfx/parts/arm_l/redclw.png",
   "size": 304,
   "raw_sha": "dbc7b8717d9c68177cc67eb18aa923d399a5b930",
-  "name": "arm_r_redclw",
+  "name": "arm_l_redclw",
   "used_by": [
    "RedClw"
   ]
  },
  "268C00": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/crssbw.png",
+  "file": "gfx/parts/arm_l/crssbw.png",
   "size": 202,
   "raw_sha": "afe0f3573c975e987ba9a2b3b3969d6051e6c68d",
-  "name": "arm_r_crssbw",
+  "name": "arm_l_crssbw",
   "used_by": [
    "Crssbw"
   ]
  },
  "268D51": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/sabre.png",
+  "file": "gfx/parts/arm_l/sabre.png",
   "size": 140,
   "raw_sha": "8fa61c41ff199046d523e073c4bcf5e48f206b4e",
-  "name": "arm_r_sabre",
+  "name": "arm_l_sabre",
   "used_by": [
    "Sabre",
    "Gram"
@@ -4496,10 +4705,10 @@
  },
  "268E86": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/sabre_plus.png",
+  "file": "gfx/parts/arm_l/sabre_plus.png",
   "size": 169,
   "raw_sha": "b18f2dda6e7babe3f2e48cd529c9c91d11969132",
-  "name": "arm_r_sabre_plus",
+  "name": "arm_l_sabre_plus",
   "used_by": [
    "Sabre+",
    "Wyndia"
@@ -4507,10 +4716,10 @@
  },
  "26902C": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/hndaxe.png",
+  "file": "gfx/parts/arm_l/hndaxe.png",
   "size": 275,
   "raw_sha": "71ca65f3ccb533bce0fbcef77c4cec1bdda4f1f2",
-  "name": "arm_r_hndaxe",
+  "name": "arm_l_hndaxe",
   "used_by": [
    "HndAxe",
    "Tomhwk"
@@ -4518,10 +4727,10 @@
  },
  "26926E": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/btlaxe.png",
+  "file": "gfx/parts/arm_l/btlaxe.png",
   "size": 308,
   "raw_sha": "4996e3ff2aa8c16cf96fe78fec30543daa3b4631",
-  "name": "arm_r_btlaxe",
+  "name": "arm_l_btlaxe",
   "used_by": [
    "BtlAxe",
    "2Edge",
@@ -4530,10 +4739,10 @@
  },
  "26949E": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/mgabll.png",
+  "file": "gfx/parts/arm_l/mgabll.png",
   "size": 297,
   "raw_sha": "2c61ff789d173d18d47bc08e168ce0b35d086e27",
-  "name": "arm_r_mgabll",
+  "name": "arm_l_mgabll",
   "used_by": [
    "MgaBll",
    "Crushr"
@@ -4541,10 +4750,10 @@
  },
  "2696DE": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/curler.png",
+  "file": "gfx/parts/arm_l/curler.png",
   "size": 296,
   "raw_sha": "a93c297499de114aea30c5c437b6b1321a2e59cf",
-  "name": "arm_r_curler",
+  "name": "arm_l_curler",
   "used_by": [
    "Curler",
    "Buster"
@@ -4552,10 +4761,10 @@
  },
  "2698EB": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/spring.png",
+  "file": "gfx/parts/arm_l/spring.png",
   "size": 232,
   "raw_sha": "ba26df8f5e19c4617cf9f7a45498625f7d04068d",
-  "name": "arm_r_spring",
+  "name": "arm_l_spring",
   "used_by": [
    "Spring",
    "Zoomer"
@@ -4563,10 +4772,10 @@
  },
  "269AB8": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/mage.png",
+  "file": "gfx/parts/arm_l/mage.png",
   "size": 251,
   "raw_sha": "71ba5faea271aaff9c9dc282375d820c7a1b14a1",
-  "name": "arm_r_mage",
+  "name": "arm_l_mage",
   "used_by": [
    "Mage",
    "Wizard"
@@ -4574,10 +4783,10 @@
  },
  "269C48": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/gradus.png",
+  "file": "gfx/parts/arm_l/gradus.png",
   "size": 216,
   "raw_sha": "f972b960d4a64aedb3cb18acc96bd2339ca3cc15",
-  "name": "arm_r_gradus",
+  "name": "arm_l_gradus",
   "used_by": [
    "Gradus",
    "Lavatn",
@@ -4586,10 +4795,10 @@
  },
  "269DCC": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/dirk.png",
+  "file": "gfx/parts/arm_l/dirk.png",
   "size": 220,
   "raw_sha": "3b09c08815db5d4f630043e944623d441c8aeaaa",
-  "name": "arm_r_dirk",
+  "name": "arm_l_dirk",
   "used_by": [
    "Dirk",
    "Demon"
@@ -4597,10 +4806,10 @@
  },
  "269F99": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/linegn.png",
+  "file": "gfx/parts/arm_l/linegn.png",
   "size": 303,
   "raw_sha": "875a1203a43ab44e8cbf358e144c24146329a8c3",
-  "name": "arm_r_linegn",
+  "name": "arm_l_linegn",
   "used_by": [
    "LineGn",
    "RailGn"
@@ -4612,30 +4821,30 @@
  },
  "26A1DF": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/cannon.png",
+  "file": "gfx/parts/arm_l/cannon.png",
   "size": 302,
   "raw_sha": "2ac42bd38e05f1a5a6f3e31478affa56285f2ff3",
-  "name": "arm_r_cannon",
+  "name": "arm_l_cannon",
   "used_by": [
    "Cannon"
   ]
  },
  "26A3EF": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/hndgun.png",
+  "file": "gfx/parts/arm_l/hndgun.png",
   "size": 234,
   "raw_sha": "3e21eea993079d7b8a7ac98e513e6bb6bbc4ae50",
-  "name": "arm_r_hndgun",
+  "name": "arm_l_hndgun",
   "used_by": [
    "HndGun"
   ]
  },
  "26A5EF": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/vulcan.png",
+  "file": "gfx/parts/arm_l/vulcan.png",
   "size": 291,
   "raw_sha": "9cab206b21280c085701bebbdd1a995b496b8877",
-  "name": "arm_r_vulcan",
+  "name": "arm_l_vulcan",
   "used_by": [
    "Vulcan",
    "Gatlng"
@@ -4643,10 +4852,10 @@
  },
  "26A822": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/2barrl.png",
+  "file": "gfx/parts/arm_l/2barrl.png",
   "size": 303,
   "raw_sha": "987df0ddce94c983c5f07b25a5c960d327669b7c",
-  "name": "arm_r_2barrl",
+  "name": "arm_l_2barrl",
   "used_by": [
    "2Barrl",
    "XGun"
@@ -4654,10 +4863,10 @@
  },
  "26AA45": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/lncher.png",
+  "file": "gfx/parts/arm_l/lncher.png",
   "size": 238,
   "raw_sha": "eac6f9a029b4d91414a8246334e37c45c80afea7",
-  "name": "arm_r_lncher",
+  "name": "arm_l_lncher",
   "used_by": [
    "Lncher",
    "Phalnx"
@@ -4665,40 +4874,40 @@
  },
  "26AC12": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/binder.png",
+  "file": "gfx/parts/arm_l/binder.png",
   "size": 269,
   "raw_sha": "aaa2e1921ee9c9610ed787970a0af44b9618888c",
-  "name": "arm_r_binder",
+  "name": "arm_l_binder",
   "used_by": [
    "Binder"
   ]
  },
  "26AE0B": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/magma.png",
+  "file": "gfx/parts/arm_l/magma.png",
   "size": 249,
   "raw_sha": "af4d422ed0e674d236095d46853dd23277fd3524",
-  "name": "arm_r_magma",
+  "name": "arm_l_magma",
   "used_by": [
    "Magma"
   ]
  },
  "26B03D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/pliers.png",
+  "file": "gfx/parts/arm_l/pliers.png",
   "size": 305,
   "raw_sha": "a542d0d5a4fc8a696d6943011fd113e73e479b04",
-  "name": "arm_r_pliers",
+  "name": "arm_l_pliers",
   "used_by": [
    "Pliers"
   ]
  },
  "26B284": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/blade.png",
+  "file": "gfx/parts/arm_l/blade.png",
   "size": 323,
   "raw_sha": "a0e23701a34cd4e9d39477164bf2f4a8de19cb39",
-  "name": "arm_r_blade",
+  "name": "arm_l_blade",
   "used_by": [
    "Blade",
    "Cutter"
@@ -4706,10 +4915,10 @@
  },
  "26B499": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/driver.png",
+  "file": "gfx/parts/arm_l/driver.png",
   "size": 298,
   "raw_sha": "0f1c75c3f8aa417705e2c8986ca553b3ef035121",
-  "name": "arm_r_driver",
+  "name": "arm_l_driver",
   "used_by": [
    "Driver",
    "3DDvr"
@@ -4721,10 +4930,10 @@
  },
  "26B69A": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/drill.png",
+  "file": "gfx/parts/arm_l/drill.png",
   "size": 293,
   "raw_sha": "90573cf42aff7396ab9482417706937404a7a7a1",
-  "name": "arm_r_drill",
+  "name": "arm_l_drill",
   "used_by": [
    "Drill"
   ],
@@ -4735,10 +4944,10 @@
  },
  "26B886": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/maxi.png",
+  "file": "gfx/parts/arm_l/maxi.png",
   "size": 198,
   "raw_sha": "a2c4ced0373f2dd74c6de5dab60c271b24e1f1e0",
-  "name": "arm_r_maxi",
+  "name": "arm_l_maxi",
   "used_by": [
    "Maxi",
    "FPlse",
@@ -4747,10 +4956,10 @@
  },
  "26BA5E": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/twin.png",
+  "file": "gfx/parts/arm_l/twin.png",
   "size": 318,
   "raw_sha": "5fedb111ab54af3ea9dbbcdc4cb515250b00b89e",
-  "name": "arm_r_twin",
+  "name": "arm_l_twin",
   "used_by": [
    "Twin",
    "Ashra"
@@ -4762,10 +4971,10 @@
  },
  "26BCAA": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/skull.png",
+  "file": "gfx/parts/arm_l/skull.png",
   "size": 314,
   "raw_sha": "fd37de2b27387d6329366743ce91905adfa02d7c",
-  "name": "arm_r_skull",
+  "name": "arm_l_skull",
   "used_by": [
    "Skull",
    "DrkClw"
@@ -4773,10 +4982,10 @@
  },
  "26BF32": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/dgnhed.png",
+  "file": "gfx/parts/arm_l/dgnhed.png",
   "size": 338,
   "raw_sha": "9bd7a98167b8cee210ab0dc1f968b48555ccf1d7",
-  "name": "arm_r_dgnhed",
+  "name": "arm_l_dgnhed",
   "used_by": [
    "DgnHed",
    "Cursed",
@@ -4785,10 +4994,10 @@
  },
  "26C17F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/ewire.png",
+  "file": "gfx/parts/arm_l/ewire.png",
   "size": 252,
   "raw_sha": "c133a9e317cd5da926885781094b89521e996371",
-  "name": "arm_r_ewire",
+  "name": "arm_l_ewire",
   "used_by": [
    "EWire",
    "Tangle"
@@ -4796,10 +5005,10 @@
  },
  "26C3EA": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/armwre.png",
+  "file": "gfx/parts/arm_l/armwre.png",
   "size": 394,
   "raw_sha": "bfd117f43ea7e691f0f1319392cc1779ee25be9c",
-  "name": "arm_r_armwre",
+  "name": "arm_l_armwre",
   "used_by": [
    "ArmWre",
    "Lghtng",
@@ -4808,30 +5017,30 @@
  },
  "26C622": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/airhnd.png",
+  "file": "gfx/parts/arm_l/airhnd.png",
   "size": 199,
   "raw_sha": "32b5ad36aba3268a03061fd39313beeee5791a96",
-  "name": "arm_r_airhnd",
+  "name": "arm_l_airhnd",
   "used_by": [
    "AirHnd"
   ]
  },
  "26C7A9": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/iceblw.png",
+  "file": "gfx/parts/arm_l/iceblw.png",
   "size": 215,
   "raw_sha": "df97d524e6e1fa00d00914f0ebd0b4748350b438",
-  "name": "arm_r_iceblw",
+  "name": "arm_l_iceblw",
   "used_by": [
    "IceBlw"
   ]
  },
  "26C936": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/hook.png",
+  "file": "gfx/parts/arm_l/hook.png",
   "size": 181,
   "raw_sha": "e1f3900deb7d6f8231c29a44e46bfcca9eefebed",
-  "name": "arm_r_hook",
+  "name": "arm_l_hook",
   "used_by": [
    "Hook",
    "LogHk"
@@ -4839,60 +5048,60 @@
  },
  "26CAB0": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/giant.png",
+  "file": "gfx/parts/arm_l/giant.png",
   "size": 213,
   "raw_sha": "3c3a66a57cf9b317fc43d5916f768cc7ea74c3ae",
-  "name": "arm_r_giant",
+  "name": "arm_l_giant",
   "used_by": [
    "Giant"
   ]
  },
  "26CC69": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/molehd.png",
+  "file": "gfx/parts/arm_l/molehd.png",
   "size": 265,
   "raw_sha": "369d451924155dab9af1ec7b1bb7e4d1033ff2c5",
-  "name": "arm_r_molehd",
+  "name": "arm_l_molehd",
   "used_by": [
    "MoleHd"
   ]
  },
  "26CE26": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/claw.png",
+  "file": "gfx/parts/arm_l/claw.png",
   "size": 200,
   "raw_sha": "d88ed7f4b58d8761ca360d6815ba813edc8c7401",
-  "name": "arm_r_claw",
+  "name": "arm_l_claw",
   "used_by": [
    "Claw"
   ]
  },
  "26CFC6": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/triger.png",
+  "file": "gfx/parts/arm_l/triger.png",
   "size": 234,
   "raw_sha": "74c26a7ed5a80b0cf89115a1a93869aa4edb17ad",
-  "name": "arm_r_triger",
+  "name": "arm_l_triger",
   "used_by": [
    "Triger"
   ]
  },
  "26D186": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/killer.png",
+  "file": "gfx/parts/arm_l/killer.png",
   "size": 228,
   "raw_sha": "5f88685653fac33f4879d9441908d98aac7ad4df",
-  "name": "arm_r_killer",
+  "name": "arm_l_killer",
   "used_by": [
    "Killer"
   ]
  },
  "26D337": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/knukle.png",
+  "file": "gfx/parts/arm_l/knukle.png",
   "size": 175,
   "raw_sha": "5f13a653438caa992cafca6e67e85416a174672e",
-  "name": "arm_r_knukle",
+  "name": "arm_l_knukle",
   "used_by": [
    "Knukle",
    "Rocket"
@@ -4900,10 +5109,10 @@
  },
  "26D4E0": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/gloves.png",
+  "file": "gfx/parts/arm_l/gloves.png",
   "size": 237,
   "raw_sha": "b50e641a17e1e2c3e651083c68327756bcdc1569",
-  "name": "arm_r_gloves",
+  "name": "arm_l_gloves",
   "used_by": [
    "Gloves",
    "Mail",
@@ -4912,40 +5121,40 @@
  },
  "26D64B": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/bllarm.png",
+  "file": "gfx/parts/arm_l/bllarm.png",
   "size": 129,
   "raw_sha": "9b9aceaa0d5cd1b7494bbdaf4958bda8f811dfc8",
-  "name": "arm_r_bllarm",
+  "name": "arm_l_bllarm",
   "used_by": [
    "BllArm"
   ]
  },
  "26D797": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/tgrhnd.png",
+  "file": "gfx/parts/arm_l/tgrhnd.png",
   "size": 191,
   "raw_sha": "f75cf1ea34dd20900e3740a80f14d50c8ed0b4b0",
-  "name": "arm_r_tgrhnd",
+  "name": "arm_l_tgrhnd",
   "used_by": [
    "TgrHnd"
   ]
  },
  "26D90F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/oakhnd.png",
+  "file": "gfx/parts/arm_l/oakhnd.png",
   "size": 171,
   "raw_sha": "86e9acc46062ae05d4a01ef698e8cfdf5d465bd9",
-  "name": "arm_r_oakhnd",
+  "name": "arm_l_oakhnd",
   "used_by": [
    "OakHnd"
   ]
  },
  "26DA7D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/nowire.png",
+  "file": "gfx/parts/arm_l/nowire.png",
   "size": 214,
   "raw_sha": "064ad474531a5ada83579250b0decb64043f95a4",
-  "name": "arm_r_nowire",
+  "name": "arm_l_nowire",
   "used_by": [
    "NoWire",
    "Sthrn+"
@@ -4953,10 +5162,10 @@
  },
  "26DC4B": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/hammer.png",
+  "file": "gfx/parts/arm_l/hammer.png",
   "size": 269,
   "raw_sha": "56b92a964db5e2915cc539a3a3c92db36d26d025",
-  "name": "arm_r_hammer",
+  "name": "arm_l_hammer",
   "used_by": [
    "Hammer",
    "GrvHmr"
@@ -4964,10 +5173,10 @@
  },
  "26DE1B": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/qatar.png",
+  "file": "gfx/parts/arm_l/qatar.png",
   "size": 252,
   "raw_sha": "109907b78344a5f38aec7e9d15143693e2342ce8",
-  "name": "arm_r_qatar",
+  "name": "arm_l_qatar",
   "used_by": [
    "Qatar",
    "Indra",
@@ -4976,10 +5185,10 @@
  },
  "26E002": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/fork.png",
+  "file": "gfx/parts/arm_l/fork.png",
   "size": 290,
   "raw_sha": "ab43def2923049d8b191d6da2f45e7172976d907",
-  "name": "arm_r_fork",
+  "name": "arm_l_fork",
   "used_by": [
    "Fork",
    "Tridnt"
@@ -4987,50 +5196,50 @@
  },
  "26E22B": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/needle.png",
+  "file": "gfx/parts/arm_l/needle.png",
   "size": 271,
   "raw_sha": "1e4b35a741b543bbfc62d0bda8492a688efba818",
-  "name": "arm_r_needle",
+  "name": "arm_l_needle",
   "used_by": [
    "Needle"
   ]
  },
  "26E436": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/sword.png",
+  "file": "gfx/parts/arm_l/sword.png",
   "size": 265,
   "raw_sha": "023f430d4bbd8af9101c144806102cd30b22bb99",
-  "name": "arm_r_sword",
+  "name": "arm_l_sword",
   "used_by": [
    "Sword"
   ]
  },
  "26E61B": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/kama.png",
+  "file": "gfx/parts/arm_l/kama.png",
   "size": 262,
   "raw_sha": "813137f61888a3ce52424bef2fb2c528bcd2794e",
-  "name": "arm_r_kama",
+  "name": "arm_l_kama",
   "used_by": [
    "Kama"
   ]
  },
  "26E80F": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/flint.png",
+  "file": "gfx/parts/arm_l/flint.png",
   "size": 255,
   "raw_sha": "e0ec5e2afd82386223e8b683a077c6847bd755b1",
-  "name": "arm_r_flint",
+  "name": "arm_l_flint",
   "used_by": [
    "Flint"
   ]
  },
  "26EA3D": {
   "kind": "img4",
-  "file": "gfx/parts/arm_r/stunr.png",
+  "file": "gfx/parts/arm_l/stunr.png",
   "size": 344,
   "raw_sha": "c57bd4374bf97691f4c8257f464b8b94f0992b3e",
-  "name": "arm_r_stunr",
+  "name": "arm_l_stunr",
   "used_by": [
    "Stunr"
   ]
@@ -7013,12 +7222,11 @@
    "227555": "BuriedDeepInTheText"
   }
  },
- "24974F": {
+ "249757": {
   "kind": "text",
-  "file": "text/yoljec.s",
-  "size": 50,
+  "file": "text/camp.s",
+  "size": 42,
   "labels": {
-   "24974F": "YoljecText",
    "249757": "CampText",
    "24975E": "ItemText",
    "249765": "StatsText",
