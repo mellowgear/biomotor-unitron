@@ -1,0 +1,483 @@
+# enemy_attacks: 472 entries, one line per id (keep the order and count).
+# GetEnemyAttackSlots 0x2082EB: 4 slots of 15 bytes per enemy (line id = enemy.slot).
+# attack: id in attack_names.txt (255 = empty slot). power: base damage, scaled by the
+# area's ap % for scaled enemies. action: battle handler table 0x20B4E5 [action + 1]
+# (255 = handler 0, plain attack; 11/12 = use the robot's left/right arm weapon instead).
+# ep: EP cost; the enemy picks the default attack
+# 0x22540B when its EP is below the cost. affinity: element bit, compared with the target's.
+# pct: chance to pick this slot, tried in order (100 = always, 101 = only below half HP).
+# rest: not read yet. `empty` = unused slot (15 x FF).
+#
+#  id  attack  power  action     ep  affinity  pct  rest
+  1.1      34     15     255      3         2  100  0001ffffffffff  # Stump: Tackle
+  1.2   empty  # Stump
+  1.3   empty  # Stump
+  1.4   empty  # Stump
+  2.1       9     15     255      3         2  100  0011ffffffffff  # Spidey: Gnaw
+  2.2   empty  # Spidey
+  2.3   empty  # Spidey
+  2.4   empty  # Spidey
+  3.1       9     45     255      3         2   70  001204ffffffff  # Squirm: Gnaw
+  3.2      45     30       1      5         2   30  0024ffffffffff  # Squirm: Needle
+  3.3   empty  # Squirm
+  3.4   empty  # Squirm
+  4.1      59     30     255      3         2   70  0010ffffffffff  # Crabby: Pinch
+  4.2      45     20       1      5         2   30  0024ffffffffff  # Crabby: Needle
+  4.3   empty  # Crabby
+  4.4   empty  # Crabby
+  5.1      29     30     255      3         2   70  001affffffffff  # Pumper: Feeler
+  5.2      61     45       4      5        64   30  0173bf430cffff  # Pumper: Makeup
+  5.3   empty  # Pumper
+  5.4   empty  # Pumper
+  6.1      36     15     255      3         2  100  0012ffffffffff  # Trappr: Stomp
+  6.2   empty  # Trappr
+  6.3   empty  # Trappr
+  6.4   empty  # Trappr
+  7.1       9     30     255      3         2  100  000fffffffffff  # Coyote: Gnaw
+  7.2   empty  # Coyote
+  7.3   empty  # Coyote
+  7.4   empty  # Coyote
+  8.1      64     45     255      3         2  100  000101ffffffff  # Firey: Slash
+  8.2   empty  # Firey
+  8.3   empty  # Firey
+  8.4   empty  # Firey
+  9.1      29     15     255      3         2  100  001affffffffff  # Iil: Feeler
+  9.2   empty  # Iil
+  9.3   empty  # Iil
+  9.4   empty  # Iil
+ 10.1      36     30     255      3         2  100  000cffffffffff  # Flower: Stomp
+ 10.2   empty  # Flower
+ 10.3   empty  # Flower
+ 10.4   empty  # Flower
+ 11.1      74     15     255      3         2   70  016cb80dffffff  # Bulby: Seed
+ 11.2      46     10       2      5         2   30  016cb80dffffff  # Bulby: Spore
+ 11.3   empty  # Bulby
+ 11.4   empty  # Bulby
+ 12.1      74     30     255      3         2   70  016cb80dffffff  # Bulbet: Seed
+ 12.2      46     25       2      5         2   30  016cb80dffffff  # Bulbet: Spore
+ 12.3   empty  # Bulbet
+ 12.4   empty  # Bulbet
+ 13.1       8     30     255      3         2   70  0017ffffffffff  # Scythr: Scythe
+ 13.2      45     35       1      5         2   30  0024ffffffffff  # Scythr: Needle
+ 13.3   empty  # Scythr
+ 13.4   empty  # Scythr
+ 14.1       9     45     255      3         2   60  000f01ffffffff  # Wolfen: Gnaw
+ 14.2      38     50     255      5         2   40  001bffffffffff  # Wolfen: Claws
+ 14.3   empty  # Wolfen
+ 14.4   empty  # Wolfen
+ 15.1       9     15     255      3         2   60  0011ffffffffff  # Viney: Gnaw
+ 15.2      29     20     255      5         2   40  001affffffffff  # Viney: Feeler
+ 15.3   empty  # Viney
+ 15.4   empty  # Viney
+ 16.1       6     30     255      3         2   80  0001ffffffffff  # Wooden: Staff
+ 16.2      55  65535       5      0         0   20  ffffffffffffff  # Wooden: Flee
+ 16.3   empty  # Wooden
+ 16.4   empty  # Wooden
+ 17.1      34     45     255      3         2   60  00020dffffffff  # Borey: Tackle
+ 17.2      14     50     255      5         2   40  0013ffffffffff  # Borey: Fang
+ 17.3   empty  # Borey
+ 17.4   empty  # Borey
+ 18.1      35     45       3      3         2   60  000702ffffffff  # Mamoth: Thrust
+ 18.2      68     50     255      5         2   40  00020effffffff  # Mamoth: Crush
+ 18.3   empty  # Mamoth
+ 18.4   empty  # Mamoth
+ 19.1      29     45     255      3         4   70  001affffffffff  # Squido: Feeler
+ 19.2      79     40       4      5         4   30  0172beffffffff  # Squido: Flute
+ 19.3   empty  # Squido
+ 19.4   empty  # Squido
+ 20.1      47     15     255      3         4  100  0026ffffffffff  # Horsee: Spike
+ 20.2   empty  # Horsee
+ 20.3   empty  # Horsee
+ 20.4   empty  # Horsee
+ 21.1      35     30       3      3         4  100  0007ffffffffff  # Narl: Thrust
+ 21.2   empty  # Narl
+ 21.3   empty  # Narl
+ 21.4   empty  # Narl
+ 22.1       9     45     255      3         4   60  001103ffffffff  # Orka: Gnaw
+ 22.2      39     50     255      5         4   40  00030effffffff  # Orka: Tail
+ 22.3   empty  # Orka
+ 22.4   empty  # Orka
+ 23.1       9     30     255      3         4  100  0010ffffffffff  # Seel: Gnaw
+ 23.2   empty  # Seel
+ 23.3   empty  # Seel
+ 23.4   empty  # Seel
+ 24.1       9     30     255      3         4   70  0010ffffffffff  # Barby: Gnaw
+ 24.2      31     40     255      5         4   30  016db975ffffff  # Barby: Flow
+ 24.3   empty  # Barby
+ 24.4   empty  # Barby
+ 25.1      31     15     255      3         4   80  016db975ffffff  # Fishen: Flow
+ 25.2      55  65535       5      0         0   20  ffffffffffffff  # Fishen: Flee
+ 25.3   empty  # Fishen
+ 25.4   empty  # Fishen
+ 26.1       9     45     255      3         4   60  000f01ffffffff  # Aquan: Gnaw
+ 26.2      77     40       1      5         4   40  000cffffffffff  # Aquan: Hold
+ 26.3   empty  # Aquan
+ 26.4   empty  # Aquan
+ 27.1       9     45     255      3         4   50  000f01ffffffff  # Drake: Gnaw
+ 27.2      38     50     255      5         4   30  001cffffffffff  # Drake: Claws
+ 27.3      31     55     255      3         4   20  0170bc75ffffff  # Drake: Flow
+ 27.4   empty  # Drake
+ 28.1      31     30     255      3         4   70  016db975ffffff  # Rocky: Flow
+ 28.2      65     35       1      5         4   30  0170bcce52ffff  # Rocky: Freeze
+ 28.3   empty  # Rocky
+ 28.4   empty  # Rocky
+ 29.1      31     15     255      3         4   70  016db975ffffff  # Fountn: Flow
+ 29.2      80     20       4      5         4   30  0170bcceffffff  # Fountn: Mist
+ 29.3   empty  # Fountn
+ 29.4   empty  # Fountn
+ 30.1      85     15     255      3         4   70  0171bd52ffffff  # Snoman: Snow
+ 30.2      65     25       1      5         4   30  0170bcce52ffff  # Snoman: Freeze
+ 30.3   empty  # Snoman
+ 30.4   empty  # Snoman
+ 31.1       9     30     255      3         4   70  000fffffffffff  # Merman: Gnaw
+ 31.2      31     40     255      5         4   30  016db975ffffff  # Merman: Flow
+ 31.3   empty  # Merman
+ 31.4   empty  # Merman
+ 32.1       9     45     255      3         4   70  001001ffffffff  # Marman: Gnaw
+ 32.2      65     50       1      5         4   30  0170bcce52ffff  # Marman: Freeze
+ 32.3   empty  # Marman
+ 32.4   empty  # Marman
+ 33.1      39     15     255      3         4  100  000101ffffffff  # Deep1: Tail
+ 33.2   empty  # Deep1
+ 33.3   empty  # Deep1
+ 33.4   empty  # Deep1
+ 34.1      13     30     255      3         4   60  0001ffffffffff  # Froggy: Kick
+ 34.2      57     35       2      5         4   40  0003ffffffffff  # Froggy: Lure
+ 34.3   empty  # Froggy
+ 34.4   empty  # Froggy
+ 35.1      13     45     255      3         4   60  0002ffffffffff  # Froggr: Kick
+ 35.2      57     50       2      5         4   20  000303ffffffff  # Froggr: Lure
+ 35.3      65     50       1      3         4   20  0170bcce52ffff  # Froggr: Freeze
+ 35.4   empty  # Froggr
+ 36.1      29     15     255      3         4   70  0017ffffffffff  # Nauti: Feeler
+ 36.2      48  65535       6      5         0   30  02deffffffffff  # Nauti: Grab
+ 36.3   empty  # Nauti
+ 36.4   empty  # Nauti
+ 37.1      62     15     255      3        16  100  0001ffffffffff  # Skully: Punch
+ 37.2   empty  # Skully
+ 37.3   empty  # Skully
+ 37.4   empty  # Skully
+ 38.1      62     30     255      3        16   80  0002ffffffffff  # Skullt: Punch
+ 38.2      76     40     255      5        16   20  002727ffffffff  # Skullt: Snap
+ 38.3   empty  # Skullt
+ 38.4   empty  # Skullt
+ 39.1      75     45     255      3        16   70  0017ffffffffff  # Mummy: Wrap
+ 39.2      74     40       2      5        16   30  016cb80dffffff  # Mummy: Seed
+ 39.3   empty  # Mummy
+ 39.4   empty  # Mummy
+ 40.1      34     45     255      3        16   70  00020dffffffff  # Zombit: Tackle
+ 40.2      49     50     255      5        16   20  000effffffffff  # Zombit: Unique
+ 40.3      55  65535       5      0         0   10  ffffffffffffff  # Zombit: Flee
+ 40.4   empty  # Zombit
+ 41.1      68     15     255      3        16   70  000101ffffffff  # Walley: Crush
+ 41.2      18  65535       6      5         0   30  02deffffffffff  # Walley: Harden
+ 41.3   empty  # Walley
+ 41.4   empty  # Walley
+ 42.1      35     15       3      3        16   70  0007ffffffffff  # Crystl: Thrust
+ 42.2      54     20       4      5        32   30  0182c708ffffff  # Crystl: Ray
+ 42.3   empty  # Crystl
+ 42.4   empty  # Crystl
+ 43.1      29     45     255      3        16   70  001801ffffffff  # Iworm: Feeler
+ 43.2      26     50       1      5        64   30  0183c807ffffff  # Iworm: Stare
+ 43.3   empty  # Iworm
+ 43.4   empty  # Iworm
+ 44.1       9     30     255      3        16   70  0011ffffffffff  # Moworm: Gnaw
+ 44.2      45     35       1      5        16   30  0028ffffffffff  # Moworm: Needle
+ 44.3   empty  # Moworm
+ 44.4   empty  # Moworm
+ 45.1       9     45     255      3        16   80  000f02ffffffff  # Bonryu: Gnaw
+ 45.2      19  65535       7      5         0   20  02e0ffffffffff  # Bonryu: Revive
+ 45.3   empty  # Bonryu
+ 45.4   empty  # Bonryu
+ 46.1      41     45     255      3        16   80  000202ffffffff  # Agolem: Fist
+ 46.2      63     55     255      5        32   20  0184c905ffffff  # Agolem: Beam
+ 46.3   empty  # Agolem
+ 46.4   empty  # Agolem
+ 47.1      41     30     255      3        16  100  000102ffffffff  # Golem: Fist
+ 47.2   empty  # Golem
+ 47.3   empty  # Golem
+ 47.4   empty  # Golem
+ 48.1      34     45     255      3        16   70  00020dffffffff  # Zhuga: Tackle
+ 48.2      53     40       4      5        64   30  0172beffffffff  # Zhuga: Dance
+ 48.3   empty  # Zhuga
+ 48.4   empty  # Zhuga
+ 49.1      34     30     255      3        16   70  0002ffffffffff  # Zhaga: Tackle
+ 49.2      53     25       4      5        64   30  0172beffffffff  # Zhaga: Dance
+ 49.3   empty  # Zhaga
+ 49.4   empty  # Zhaga
+ 50.1       9     15     255      3        16  100  000fffffffffff  # Lickin: Gnaw
+ 50.2   empty  # Lickin
+ 50.3   empty  # Lickin
+ 50.4   empty  # Lickin
+ 51.1       9     15     255      3        16   70  000fffffffffff  # Curly: Gnaw
+ 51.2      48  65535       6      5         0   30  02deffffffffff  # Curly: Grab
+ 51.3   empty  # Curly
+ 51.4   empty  # Curly
+ 52.1       9     30     255      3        16   70  0010ffffffffff  # Whirly: Gnaw
+ 52.2      56     35       2      5         4   10  000bffffffffff  # Whirly: Gum
+ 52.3      48  65535       6      3         0   20  02deffffffffff  # Whirly: Grab
+ 52.4   empty  # Whirly
+ 53.1      73     30     255      3        16   80  013db223ffffff  # Pengun: Gun
+ 53.2      81     40     255      5         1   20  002828ffffffff  # Pengun: Shoot
+ 53.3   empty  # Pengun
+ 53.4   empty  # Pengun
+ 54.1      72     15     255      3        16   20  0002ffffffffff  # Dedhed: Tongue
+ 54.2      56     20       2      5         4   10  000bffffffffff  # Dedhed: Gum
+ 54.3      55  65535       5      0         0   70  ffffffffffffff  # Dedhed: Flee
+ 54.4   empty  # Dedhed
+ 55.1       9     45     255      3         8   60  001101ffffffff  # Toris: Gnaw
+ 55.2      38     50     255      5         1   30  001effffffffff  # Toris: Claws
+ 55.3       7     50       1      3        64   10  0170bc0effffff  # Toris: Gas
+ 55.4   empty  # Toris
+ 56.1      16     45     255      3         8   60  0027ffffffffff  # Mrice: Peck
+ 56.2      38     50     255      5         1   30  001effffffffff  # Mrice: Claws
+ 56.3       7     50       1      3        64   10  0170bc0effffff  # Mrice: Gas
+ 56.4   empty  # Mrice
+ 57.1      16     30     255      3         8   70  0023ffffffffff  # Trice: Peck
+ 57.2       7     35       1      5        16   30  0170bc0effffff  # Trice: Gas
+ 57.3   empty  # Trice
+ 57.4   empty  # Trice
+ 58.1       9     45     255      3         8   80  0011ffffffffff  # Chimer: Gnaw
+ 58.2      70     55     255      5         1   20  016eba48ffffff  # Chimer: Flare
+ 58.3   empty  # Chimer
+ 58.4   empty  # Chimer
+ 59.1      29     15     255      3         8  100  0013ffffffffff  # Mutan: Feeler
+ 59.2   empty  # Mutan
+ 59.3   empty  # Mutan
+ 59.4   empty  # Mutan
+ 60.1      34     15     255      3         8  100  0001ffffffffff  # Eyefly: Tackle
+ 60.2   empty  # Eyefly
+ 60.3   empty  # Eyefly
+ 60.4   empty  # Eyefly
+ 61.1       9     45     255      3         8   70  001001ffffffff  # Whyrm: Gnaw
+ 61.2      77     40       1      5         8   30  000cffffffffff  # Whyrm: Hold
+ 61.3   empty  # Whyrm
+ 61.4   empty  # Whyrm
+ 62.1      87     30     255      3         8   60  0007ffffffffff  # Hornd: Horn
+ 62.2      38     35     255      5         8   30  001effffffffff  # Hornd: Claws
+ 62.3      55  65535       5      0         0   10  ffffffffffffff  # Hornd: Flee
+ 62.4   empty  # Hornd
+ 63.1      38     45     255      3         8   70  001cffffffffff  # Harpy: Claws
+ 63.2      84     40       4      5         8   30  0174c00dffffff  # Harpy: Tempt
+ 63.3   empty  # Harpy
+ 63.4   empty  # Harpy
+ 64.1      38     30     255      3         8   60  001dffffffffff  # Darpy: Claws
+ 64.2      16     35       3      5         8   40  0023ffffffffff  # Darpy: Peck
+ 64.3   empty  # Darpy
+ 64.4   empty  # Darpy
+ 65.1      16     30     255      3         8   60  0023ffffffffff  # Grifon: Peck
+ 65.2      67     35       3      5         8   40  0178c154ffffff  # Grifon: Tickle
+ 65.3   empty  # Grifon
+ 65.4   empty  # Grifon
+ 66.1       9     45     255      3         8   70  0010ffffffffff  # Coatl: Gnaw
+ 66.2      44     50       1      5         8   30  00100bffffffff  # Coatl: Poison
+ 66.3   empty  # Coatl
+ 66.4   empty  # Coatl
+ 67.1      17     15       4      3         8   60  030affffffffff  # Jyster: Vision
+ 67.2      58     30     255      5         1   40  000d0effffffff  # Jyster: Bomb
+ 67.3   empty  # Jyster
+ 67.4   empty  # Jyster
+ 68.1      34     15     255      3         8  100  0001ffffffffff  # Smoky: Tackle
+ 68.2   empty  # Smoky
+ 68.3   empty  # Smoky
+ 68.4   empty  # Smoky
+ 69.1      34     30     255      3         8   60  0002ffffffffff  # Feyt: Tackle
+ 69.2      38     35     255      5         8   40  001effffffffff  # Feyt: Claws
+ 69.3   empty  # Feyt
+ 69.4   empty  # Feyt
+ 70.1      34     15     255      3         8   60  0001ffffffffff  # Beasty: Tackle
+ 70.2      38     20     255      5         8   40  001effffffffff  # Beasty: Claws
+ 70.3   empty  # Beasty
+ 70.4   empty  # Beasty
+ 71.1      34     30     255      3         8  100  0002ffffffffff  # Hyoi: Tackle
+ 71.2   empty  # Hyoi
+ 71.3   empty  # Hyoi
+ 71.4   empty  # Hyoi
+ 72.1      34     15     255      3         8   70  0001ffffffffff  # Eeek: Tackle
+ 72.2      10     10       4      5         8   30  030affffffffff  # Eeek: Scream
+ 72.3   empty  # Eeek
+ 72.4   empty  # Eeek
+ 73.1      78     30     255      3         8   70  017ac30effffff  # Hippie: Magick
+ 73.2      20     20       1      5         8   30  030bffffffffff  # Hippie: Hypno
+ 73.3   empty  # Hippie
+ 73.4   empty  # Hippie
+ 74.1       9     30     255      3         1   70  0010ffffffffff  # Cerebn: Gnaw
+ 74.2      70     40     255      5         1   30  016eba47ffffff  # Cerebn: Flare
+ 74.3   empty  # Cerebn
+ 74.4   empty  # Cerebn
+ 75.1      35     45       3      3         2   60  000601ffffffff  # Unicon: Thrust
+ 75.2      68     50     255      5         2   40  00020effffffff  # Unicon: Crush
+ 75.3   empty  # Unicon
+ 75.4   empty  # Unicon
+ 76.1      78     45     255      3        16   70  017ac30effffff  # Faroh: Magick
+ 76.2       4     50       4      5        16   30  0185ca0cffffff  # Faroh: Liten
+ 76.3   empty  # Faroh
+ 76.4   empty  # Faroh
+ 77.1      77     45       1      3         4   70  000cffffffffff  # Lamia: Hold
+ 77.2      84     40       4      5         4   30  0174c00dffffff  # Lamia: Tempt
+ 77.3   empty  # Lamia
+ 77.4   empty  # Lamia
+ 78.1      29     30     255      3         2   70  001affffffffff  # Ratta: Feeler
+ 78.2      45     35       1      5         2   30  00250bffffffff  # Ratta: Needle
+ 78.3   empty  # Ratta
+ 78.4   empty  # Ratta
+ 79.1      34     30     255      3         2   70  0002ffffffffff  # Elice: Tackle
+ 79.2      65     35       1      5         2   30  0170bcce52ffff  # Elice: Freeze
+ 79.3   empty  # Elice
+ 79.4   empty  # Elice
+ 80.1      59     30     255      3         4   70  000fffffffffff  # Jakko: Pinch
+ 80.2      45     35       1      5         4   30  00250bffffffff  # Jakko: Needle
+ 80.3   empty  # Jakko
+ 80.4   empty  # Jakko
+ 81.1       9     45     255      3         1   60  0010ffffffffff  # Dragon: Gnaw
+ 81.2      38     50     255      5         1   30  001cffffffffff  # Dragon: Claws
+ 81.3      70     55     255     10         1   10  016eba47ffffff  # Dragon: Flare
+ 81.4   empty  # Dragon
+ 82.1      38     45     255      3        16   70  001cffffffffff  # Sphinx: Claws
+ 82.2      52     40       4      5        64   30  0173bf0cffffff  # Sphinx: Riddle
+ 82.3   empty  # Sphinx
+ 82.4   empty  # Sphinx
+ 83.1      35     45     255      3        16   70  000601ffffffff  # Niten: Thrust
+ 83.2      18  65535       6      5         0   30  02deffffffffff  # Niten: Harden
+ 83.3   empty  # Niten
+ 83.4   empty  # Niten
+ 84.1       9     45     255      3        16   60  0010ffffffffff  # Scaley: Gnaw
+ 84.2      77     40       1      5        16   20  000cffffffffff  # Scaley: Hold
+ 84.3      19  65535       7     10         0   20  02d4ffffffffff  # Scaley: Revive
+ 84.4   empty  # Scaley
+ 85.1       9     30     255      3         4   70  000fffffffffff  # Misynk: Gnaw
+ 85.2      77     25       1      5         4   30  000cffffffffff  # Misynk: Hold
+ 85.3   empty  # Misynk
+ 85.4   empty  # Misynk
+ 86.1      29     30     255      3         4   70  001affffffffff  # Octpod: Feeler
+ 86.2      79     25       4      5         4   30  0172beffffffff  # Octpod: Flute
+ 86.3   empty  # Octpod
+ 86.4   empty  # Octpod
+ 87.1      34     45     255      3         2   60  00020effffffff  # Mibore: Tackle
+ 87.2      14     40     255      5         2   40  00010113ffffff  # Mibore: Fang
+ 87.3   empty  # Mibore
+ 87.4   empty  # Mibore
+ 88.1      34     30     255      3         2   70  0002ffffffffff  # Cabra: Tackle
+ 88.2      74     25       2      5         2   30  016cb80dffffff  # Cabra: Seed
+ 88.3   empty  # Cabra
+ 88.4   empty  # Cabra
+ 89.1      36    450     255     30         2   60  000cffffffffff  # Ent: Stomp
+ 89.2      37    500     255     40         2   30  001a2affffffff  # Ent: Whip
+ 89.3      23    600       4     50         2   10  0136ab2727ffff  # Ent: Sprout
+ 89.4   empty  # Ent
+ 90.1      34    450     255     30         4   60  00030effffffff  # Kraken: Tackle
+ 90.2      31    500     255     40         4   30  0170bc75ffffff  # Kraken: Flow
+ 90.3       5    600       2     50         4   10  03755effffffff  # Kraken: Swirl
+ 90.4   empty  # Kraken
+ 91.1      38    450     255     30         8   60  001effffffffff  # Roc: Claws
+ 91.2      16    500     255     40         8   30  00270effffffff  # Roc: Peck
+ 91.3      60    600       3     50         8   10  03775cffffffff  # Roc: Gust
+ 91.4   empty  # Roc
+ 92.1      34    450     255     30        16   60  00020effffffff  # Behemt: Tackle
+ 92.2       9    500     255     40        16   30  00020210ffffff  # Behemt: Gnaw
+ 92.3      69    600       1     50        16   10  0184c953ffffff  # Behemt: EyeRay
+ 92.4   empty  # Behemt
+ 93.1      36    350     255     15         2   60  000cffffffffff  # Trifid: Stomp
+ 93.2      37    400     255     25         2   30  001a1affffffff  # Trifid: Whip
+ 93.3      28    500       2     30         2   10  0182c70effffff  # Trifid: Spit
+ 93.4   empty  # Trifid
+ 94.1      34    350     255     15         4   60  00030effffffff  # Squidl: Tackle
+ 94.2      31    400     255     25         4   30  0170bc75ffffff  # Squidl: Flow
+ 94.3       3    500       4     30         4   10  0170bc0e0effff  # Squidl: Smoke
+ 94.4   empty  # Squidl
+ 95.1      38    350     255     15         8   60  001effffffffff  # Simrug: Claws
+ 95.2      16    400     255     25         8   30  00270effffffff  # Simrug: Peck
+ 95.3      51    500       3     30         8   10  03755cffffffff  # Simrug: Twist
+ 95.4   empty  # Simrug
+ 96.1      34    350     255     15        16   60  00020effffffff  # Catble: Tackle
+ 96.2       9    400     255     25        16   30  00010111ffffff  # Catble: Gnaw
+ 96.3      26    500       1     30        16   10  0183c80affffff  # Catble: Stare
+ 96.4   empty  # Catble
+ 97.1      21    700       1    100        32   10  0366624d504aff  # Uniti: Judge
+ 97.2      83    700       4    100        64   10  0365694448ffff  # Uniti: Geddon
+ 97.3      22    500     255     15         1   60  01a6cb2727ffff  # Uniti: SunRay
+ 97.4      30  65535      10     30         0   20  02dfd48effffff  # Uniti: Repair
+ 98.1     255      0      11  65535       255   50  ffffffffffffff  # Alex
+ 98.2     255      0      12  65535       255   50  ffffffffffffff  # Alex
+ 98.3   empty  # Alex
+ 98.4   empty  # Alex
+ 99.1     255      0      11  65535       255   50  ffffffffffffff  # Crofrd
+ 99.2     255      0      12  65535       255   50  ffffffffffffff  # Crofrd
+ 99.3   empty  # Crofrd
+ 99.4   empty  # Crofrd
+100.1     255      0      11  65535       255   50  ffffffffffffff  # Lester
+100.2     255      0      12  65535       255   50  ffffffffffffff  # Lester
+100.3   empty  # Lester
+100.4   empty  # Lester
+101.1     255      0      11  65535       255   50  ffffffffffffff  # Kaldrl
+101.2     255      0      12  65535       255   50  ffffffffffffff  # Kaldrl
+101.3   empty  # Kaldrl
+101.4   empty  # Kaldrl
+102.1     255      0      11  65535       255   50  ffffffffffffff  # Fandel
+102.2     255      0      12  65535       255   50  ffffffffffffff  # Fandel
+102.3   empty  # Fandel
+102.4   empty  # Fandel
+103.1     255      0      11  65535       255   50  ffffffffffffff  # Leygos
+103.2     255      0      12  65535       255   50  ffffffffffffff  # Leygos
+103.3   empty  # Leygos
+103.4   empty  # Leygos
+104.1     255      0      11  65535       255   50  ffffffffffffff  # Loxia
+104.2     255      0      12  65535       255   50  ffffffffffffff  # Loxia
+104.3   empty  # Loxia
+104.4   empty  # Loxia
+105.1     255      0      11  65535       255   50  ffffffffffffff  # Legaea
+105.2     255      0      12  65535       255   50  ffffffffffffff  # Legaea
+105.3   empty  # Legaea
+105.4   empty  # Legaea
+106.1     255      0      11  65535       255   50  ffffffffffffff  # Palten
+106.2     255      0      12  65535       255   50  ffffffffffffff  # Palten
+106.3   empty  # Palten
+106.4   empty  # Palten
+107.1     255      0      11  65535       255   50  ffffffffffffff  # Hawki
+107.2     255      0      12  65535       255   50  ffffffffffffff  # Hawki
+107.3   empty  # Hawki
+107.4   empty  # Hawki
+108.1     255      0      11  65535       255   50  ffffffffffffff  # Crawel
+108.2     255      0      12  65535       255   50  ffffffffffffff  # Crawel
+108.3   empty  # Crawel
+108.4   empty  # Crawel
+109.1     255      0      11  65535       255   50  ffffffffffffff  # Eegle
+109.2     255      0      12  65535       255   50  ffffffffffffff  # Eegle
+109.3   empty  # Eegle
+109.4   empty  # Eegle
+110.1     255      0      11  65535       255   50  ffffffffffffff  # MJ
+110.2     255      0      12  65535       255   50  ffffffffffffff  # MJ
+110.3   empty  # MJ
+110.4   empty  # MJ
+111.1     255      0      11  65535       255   50  ffffffffffffff  # Vasky
+111.2     255      0      12  65535       255   50  ffffffffffffff  # Vasky
+111.3   empty  # Vasky
+111.4   empty  # Vasky
+112.1     255      0      11  65535       255   50  ffffffffffffff  # Dupon
+112.2     255      0      12  65535       255   50  ffffffffffffff  # Dupon
+112.3   empty  # Dupon
+112.4   empty  # Dupon
+113.1      11     50     255      5        16   60  000f01ffffffff  # Fenril: Bite
+113.2      24     75     255     10        16   30  0003030fffffff  # Fenril: Tusk
+113.3      25    100       4     20        64   10  0002100cffffff  # Fenril: Necro
+113.4   empty  # Fenril
+114.1      66    120     255      5         8   60  000503ffffffff  # Domino: Dagger
+114.2       2    180     255     10         8   30  005458ffffffff  # Domino: Cutter
+114.3      27  65535       8     20        32   10  02e0ffffffffff  # Domino: Purify
+114.4   empty  # Domino
+115.1      32    150     255      5         4   60  001313ffffffff  # Neptun: Slicer
+115.2       1    200     255     10         4   30  0170bc52ffffff  # Neptun: IceEye
+115.3      50    250       3     20         4   10  000631ffffffff  # Neptun: Drain
+115.4   empty  # Neptun
+116.1      82    250     255      5         2   60  00670effffffff  # Oberon: Chrge+
+116.2      12    300     255     10         2   30  00670effffffff  # Oberon: Charge
+116.3      15    350       2     20         2   10  0185ca0e31ffff  # Oberon: Acid
+116.4   empty  # Oberon
+117.1      71    300     255      5         1   60  000243ffffffff  # Balrok: Blow
+117.2      70    350     255     10         1   30  016eba47ffffff  # Balrok: Flare
+117.3      42    450     255     20        64   10  016fbbcd48ffff  # Balrok: Breath
+117.4   empty  # Balrok
+118.1      43  65535       9     10         0  101  02e1e2e0e7e4ff  # Satana: Return
+118.2      33    300     255     10        64   60  007f20ffffffff  # Satana: Blade
+118.3      40    400     255     25        64   30  0179c25dffffff  # Satana: Wing
+118.4      86    500       1     50        64   10  03cd61654d50ff  # Satana: Dark

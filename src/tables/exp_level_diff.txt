@@ -1,0 +1,21 @@
+# exp_level_diff: 11 entries, one line per id (keep the order and count).
+# EXP per kill, by how the enemy's level compares with yours (swp_208A36):
+#   exp gained = enemy exp (enemies.txt) x exp_pct / 100, rounded up.
+# Line 1 = enemy 5 or more levels below you ... line 6 = same level ... line 11 = enemy
+# 5 or more above you (difference clamped to -5..+5).
+# Checked in play: 46 of 46 kills matched (e.g. exp 10: enemy -2 levels -> 8, +6 -> 13).
+# Together with exp_curves.txt (a flat 150 EXP per level) this is the whole EXP system: the
+# cost of a level never changes, the EXP per kill does.
+#
+# id  exp_pct
+   1       10  # enemy 5+ levels below you
+   2       25  # enemy 4 levels below you
+   3       50  # enemy 3 levels below you
+   4       75  # enemy 2 levels below you
+   5       90  # enemy 1 level below you
+   6      100  # enemy same level
+   7      110  # enemy 1 level above you
+   8      115  # enemy 2 levels above you
+   9      120  # enemy 3 levels above you
+  10      125  # enemy 4 levels above you
+  11      130  # enemy 5+ levels above you

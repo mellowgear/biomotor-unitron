@@ -1,0 +1,1416 @@
+{
+ "21F21D": {
+  "kind": "text",
+  "file": "text/qar.s",
+  "size": 38,
+  "strings": 3,
+  "labels": {
+   "21F21D": "QarText",
+   "21F223": "OQOQaramaqText",
+   "21F231": "MQQQbqText"
+  }
+ },
+ "21F665": {
+  "kind": "text",
+  "file": "text/v_partner_w_w.s",
+  "size": 76,
+  "strings": 4,
+  "labels": {
+   "21F665": "VPartnerWWText",
+   "21F683": "XXYYayavayText",
+   "21F691": "UYYayayYText",
+   "21F6A3": "XXYYayavayText2"
+  }
+ },
+ "225423": {
+  "kind": "text",
+  "file": "text/attack_item_charge.s",
+  "size": 35,
+  "strings": 4,
+  "labels": {
+   "225423": "AttackItemChargeText",
+   "225439": "FleeText",
+   "22543E": "QuitText",
+   "225443": "TText"
+  }
+ },
+ "2254B2": {
+  "kind": "text",
+  "file": "text/player_s_special_attack.s",
+  "size": 1248,
+  "strings": 58,
+  "labels": {
+   "2254B2": "PlayerSSpecialAttackText",
+   "2254CB": "PlayerSSpecialAttackText2",
+   "2254E4": "PlayerTakesDamageText",
+   "2254F9": "TakesDamageText",
+   "22550E": "TakesDamageText2",
+   "225523": "CriticalHitText",
+   "225533": "CriticalHitText2",
+   "225543": "YouDodgedTheAttackText",
+   "22555D": "YouMissedText",
+   "22556C": "DodgedTheAttackText",
+   "225584": "YouTookNoDamageText",
+   "22559B": "YouCantDamageText",
+   "2255B1": "TookNoDamageText",
+   "2255C6": "YouveBeenParalyzedText",
+   "2255E0": "IsParalyzedText",
+   "2255F3": "YourUNITRONRustedText",
+   "22560B": "RustedText",
+   "225618": "YoureLeakingEnergyText",
+   "225632": "IsLeakingEnergyText",
+   "22564A": "YouveBecomeConfusedText",
+   "225665": "IsConfusedText",
+   "225677": "YouDodgedTheExtraText",
+   "225697": "DodgedTheExtraAttackText",
+   "2256B5": "YoureTotallyRustedText",
+   "2256CF": "IsTotallyRustedText",
+   "2256E6": "YoureLeakingEnergyText2",
+   "225700": "IsLeakingEnergyText2",
+   "225717": "YouLostEPText",
+   "225729": "LostEPText",
+   "225739": "YoureConfusedText",
+   "22574D": "IsConfusedText2",
+   "22575F": "YoureParalyzedText",
+   "225774": "IsParalyzedText2",
+   "225787": "YouCantAttackText",
+   "22579C": "CantAttackText",
+   "2257AF": "YouUsedText",
+   "2257BE": "YouGainedHPText",
+   "2257D2": "GainedHPText",
+   "2257E4": "YourHPAreFullyText",
+   "225803": "SHPAreFullyText",
+   "225821": "YourStatusReturnedToText",
+   "225843": "SStatusReturnedToText",
+   "225864": "YouRechargedYourEnergyText",
+   "225882": "RechargedItsEnergyText",
+   "22589C": "YouGainedEPText",
+   "2258B0": "GainedEPText",
+   "2258C2": "YourEPAreFullyText",
+   "2258E1": "SEPAreFullyText",
+   "2258FF": "APWentUpText",
+   "22590D": "SPWentUpText",
+   "22591B": "RPWentUpText",
+   "225929": "MPWentUpText",
+   "225937": "SPWentUpText2",
+   "225945": "APWentDownText",
+   "225955": "SPWentDownText",
+   "225965": "RPWentDownText",
+   "225975": "MPWentDownText",
+   "225985": "YouFledText"
+  }
+ },
+ "2259C9": {
+  "kind": "text",
+  "file": "text/but_chases_you.s",
+  "size": 177,
+  "strings": 9,
+  "labels": {
+   "2259C9": "ButChasesYouText",
+   "2259DE": "ButYouAreAbleText",
+   "2259FF": "YouGaveUpText",
+   "225A11": "YouWinText",
+   "225A1F": "YouAreUnableToText",
+   "225A3C": "YouLostText",
+   "225A4B": "YouGainEXPText",
+   "225A5C": "YouGotGPText",
+   "225A6B": "YouFoundText"
+  }
+ },
+ "225A7C": {
+  "kind": "text",
+  "file": "text/you_gained_a_level.s",
+  "size": 302,
+  "strings": 12,
+  "labels": {
+   "225A7C": "YouGainedALevelText",
+   "225AA5": "NotEnoughEPText",
+   "225AB7": "NotEnoughEPText2",
+   "225AC9": "FullyChargedEPCostsText",
+   "225AF2": "NoEffectText",
+   "225B00": "NoEffectText2",
+   "225B0E": "NoEffectText3",
+   "225B1C": "AirbagActivatedDamageIsText",
+   "225B42": "RecvrActivatedAutoRecoverText",
+   "225B6C": "TimeStoppedCantMoveText",
+   "225B8A": "CantAttackText2",
+   "225B9D": "EPAtMaxText"
+  }
+ },
+ "225BE2": {
+  "kind": "text",
+  "file": "text/where_do_you_go.s",
+  "size": 91,
+  "strings": 8,
+  "labels": {
+   "225BE2": "WhereDoYouGoText",
+   "225BF4": "NoUNITRONYouCantText",
+   "225C13": "StreetText",
+   "225C1A": "WorksText",
+   "225C21": "ShopText",
+   "225C28": "ArenaText",
+   "225C2F": "SquareText",
+   "225C36": "WMapText"
+  }
+ },
+ "225C49": {
+  "kind": "text",
+  "file": "text/it_all_began_with.s",
+  "size": 3812,
+  "strings": 8,
+  "labels": {
+   "225C49": "ItAllBeganWithText",
+   "225E62": "TheseCrystalsCalledUniText",
+   "2260FC": "BIOMOTORUNITRONPLANNINGText",
+   "226440": "TOBECONTINUEDText",
+   "226457": "WithTheDestructionOfText",
+   "2266A4": "TheSunBeganToText",
+   "2268E6": "ItWasTheEndText",
+   "226B22": "GAMEOVERText"
+  }
+ },
+ "226C15": {
+  "kind": "text",
+  "file": "text/cancel_yes_no.s",
+  "size": 70,
+  "strings": 4,
+  "labels": {
+   "226C15": "CancelYesNOText",
+   "226C2A": "PlayerText",
+   "226C32": "PartnerText",
+   "226C3B": "SelectPlayerSelectText"
+  }
+ },
+ "226C84": {
+  "kind": "text",
+  "file": "text/human.s",
+  "size": 53,
+  "strings": 5,
+  "labels": {
+   "226C84": "HumanText",
+   "226C8D": "ForesterText",
+   "226C98": "MarinerText",
+   "226CA3": "BirdianText",
+   "226CAE": "LizardmanText"
+  }
+ },
+ "226CE5": {
+  "kind": "text",
+  "file": "text/rod.s",
+  "size": 111,
+  "strings": 13,
+  "labels": {
+   "226CE5": "RodText",
+   "226CEA": "RenaText",
+   "226CF0": "ChrisText",
+   "226CF7": "LeafText",
+   "226CFD": "ZappaText",
+   "226D04": "SheraText",
+   "226D0B": "FezarText",
+   "226D12": "ShilfeText",
+   "226D1A": "CarlText",
+   "226D20": "PinkyText",
+   "226D27": "EnterYourNameText",
+   "226D37": "EnterPartnerNameText",
+   "226D4A": "CancelEndText"
+  }
+ },
+ "22748C": {
+  "kind": "text",
+  "file": "text/town.s",
+  "size": 75,
+  "strings": 5,
+  "labels": {
+   "22748C": "TownText",
+   "227493": "ForestOfVerdureText",
+   "2274A5": "CorridorOfBlueText",
+   "2274B7": "RuinsOfWindText",
+   "2274C7": "MazeOfStoneText"
+  }
+ },
+ "2274ED": {
+  "kind": "text",
+  "file": "text/dungeon_made_of_trees.s",
+  "size": 147,
+  "strings": 4,
+  "labels": {
+   "2274ED": "DungeonMadeOfTreesText",
+   "227513": "CaveOnSeaFloorText",
+   "227536": "FloatingRuinsWindAffinityText",
+   "227555": "BuriedDeepInTheText"
+  }
+ },
+ "24974F": {
+  "kind": "text",
+  "file": "text/yoljec.s",
+  "size": 50,
+  "strings": 7,
+  "labels": {
+   "24974F": "YoljecText",
+   "249757": "CampText",
+   "24975E": "ItemText",
+   "249765": "StatsText",
+   "24976C": "LeaveText",
+   "249773": "CloseText",
+   "24977A": "ItemText2"
+  }
+ },
+ "2497D0": {
+  "kind": "text",
+  "file": "text/30hp_restored.s",
+  "size": 90,
+  "strings": 6,
+  "labels": {
+   "2497D0": "T30HPRestoredText",
+   "2497DF": "T50HPRestoredText",
+   "2497ED": "T100HPRestoredText",
+   "2497FC": "T150HPRestoredText",
+   "24980B": "AllHPRestoredText",
+   "24981B": "StatusClearedText"
+  }
+ },
+ "24984C": {
+  "kind": "text",
+  "file": "text/status.s",
+  "size": 102,
+  "strings": 8,
+  "labels": {
+   "24984C": "StatusText",
+   "249854": "NormalText",
+   "24985B": "RustedText2",
+   "249862": "LeaveOKYesNoText",
+   "249873": "DoYouOpenYesText",
+   "24988D": "ItsEmptyText",
+   "24989C": "FoundText",
+   "2498A5": "YouFoundText2"
+  }
+ },
+ "2498D3": {
+  "kind": "text",
+  "file": "text/area0.s",
+  "size": 48,
+  "strings": 8,
+  "labels": {
+   "2498D3": "Area0Text",
+   "2498D9": "Area1Text",
+   "2498DF": "Area2Text",
+   "2498E5": "Area3Text",
+   "2498EB": "Area4Text",
+   "2498F1": "Area5Text",
+   "2498F7": "Area6Text",
+   "2498FD": "Area7Text"
+  }
+ },
+ "249BD1": {
+  "kind": "text",
+  "file": "text/ranke.s",
+  "size": 42,
+  "strings": 6,
+  "labels": {
+   "249BD1": "RankEText",
+   "249BD8": "RankDText",
+   "249BDF": "RankCText",
+   "249BE6": "RankBText",
+   "249BED": "RankAText",
+   "249BF4": "RankSText"
+  }
+ },
+ "249C87": {
+  "kind": "text",
+  "file": "text/cost.s",
+  "size": 49,
+  "strings": 7,
+  "labels": {
+   "249C87": "CostText",
+   "249C8E": "Round1Text",
+   "249C95": "Round2Text",
+   "249C9C": "Round3Text",
+   "249CA3": "Round4Text",
+   "249CAA": "Round5Text",
+   "249CB1": "FinalText"
+  }
+ },
+ "249E82": {
+  "kind": "text",
+  "file": "text/pub.s",
+  "size": 41,
+  "strings": 6,
+  "labels": {
+   "249E82": "PubText",
+   "249E88": "DTownText",
+   "249E8F": "ForestText",
+   "249E96": "SpringText",
+   "249E9D": "WorksText2",
+   "249EA4": "ShopText2"
+  }
+ },
+ "249EF1": {
+  "kind": "text",
+  "file": "text/d_town.s",
+  "size": 117,
+  "strings": 18,
+  "labels": {
+   "249EF1": "DTownText2",
+   "249EF8": "ForestText2",
+   "249EFF": "SpringText2",
+   "249F06": "TalkWithWhoText",
+   "249F18": "JonText",
+   "249F1C": "LilyText",
+   "249F21": "CyriusText",
+   "249F28": "GalbText",
+   "249F2D": "LanaText",
+   "249F32": "WyseText",
+   "249F37": "ZiggyText",
+   "249F3D": "CeusText",
+   "249F42": "HelmutText",
+   "249F49": "AldaText",
+   "249F4E": "CamilText",
+   "249F54": "MeeseText",
+   "249F5A": "CollaText",
+   "249F60": "TetisText"
+  }
+ },
+ "249FF4": {
+  "kind": "text",
+  "file": "text/nova.s",
+  "size": 140,
+  "strings": 20,
+  "labels": {
+   "249FF4": "NovaText",
+   "249FFB": "BurstText",
+   "24A002": "RagnokText",
+   "24A009": "GigaText",
+   "24A010": "RootsText",
+   "24A017": "ReedText",
+   "24A01E": "LeafText2",
+   "24A025": "AugustText",
+   "24A02C": "EdgeText",
+   "24A033": "MazeText",
+   "24A03A": "WallText",
+   "24A041": "AquaText",
+   "24A048": "SliceText",
+   "24A04F": "CloudText",
+   "24A056": "JoltText",
+   "24A05D": "VaporText",
+   "24A064": "GashText",
+   "24A06B": "ShieldText",
+   "24A072": "TeethText",
+   "24A079": "BreathText"
+  }
+ },
+ "24A348": {
+  "kind": "text",
+  "file": "text/abc_i_am_ent.s",
+  "size": 4146,
+  "strings": 18,
+  "labels": {
+   "24A348": "AbcIAmEntText",
+   "24A466": "TheAnswerHasBeenText",
+   "24A499": "YourTaskIsToText",
+   "24A520": "YouHaveDefeatedMeText",
+   "24A594": "IAmKrakenIText",
+   "24A6AB": "YouHaveDefeatedMeText2",
+   "24A71D": "IAmRocIText",
+   "24A827": "YouHaveDefeatedMeText3",
+   "24A898": "IAmBehemothIText",
+   "24A9C1": "YouHaveDefeatedMeText4",
+   "24AA34": "WhoAreYouThisText",
+   "24AADC": "ISmellALivingText",
+   "24AB54": "WhoALivingBeingText",
+   "24ABB5": "YouYouHaveKilledText",
+   "24AC73": "IAmTheSourceText",
+   "24B012": "FoolishMortalAllYouText",
+   "24B045": "YouHaveMadeTheText",
+   "24B0FB": "HowHowIsThisText"
+  }
+ },
+ "24B3EE": {
+  "kind": "text",
+  "file": "text/d_4_d_r.s",
+  "size": 7017,
+  "strings": 33,
+  "labels": {
+   "24B3EE": "D4DRText",
+   "24B45D": "WhatDoYouWantText",
+   "24B477": "YoureGettingPrettyGoodText",
+   "24B502": "ThatsItThatsOurText",
+   "24B56F": "CloseButNoCigarText",
+   "24B5C4": "IfItIsntPlayerText",
+   "24B611": "LooksLikeYouMadeText",
+   "24B66E": "WellPickYourRankText",
+   "24B686": "AllRightThenComeText",
+   "24B6AC": "GotItHeresTheText",
+   "24B6DF": "WhoopsSorryButYouText",
+   "24B718": "AllRightGoInText",
+   "24B748": "YouWantToQuitText",
+   "24B786": "WelcomeToTheArenaText",
+   "24B8E2": "WereStillNotReadyText",
+   "24B913": "HeyTherePlayerYoureText",
+   "24BFF4": "GoodWorkPlayerHeresText",
+   "24C08B": "CongratulationsPlayerThatWasText",
+   "24C11A": "HeyPlayerNotBadText",
+   "24C1B7": "PlayerNiceJobLooksText",
+   "24C217": "PlayerWayToGoText",
+   "24C330": "YouDidItPlayerText",
+   "24C3A0": "WayToGoPlayerText",
+   "24C4F7": "IKnowWhatYoureText",
+   "24C545": "YouDidItPlayerText2",
+   "24C59A": "PlayerFirstLetMeText",
+   "24C7EC": "WellPlayerYouWonText",
+   "24C916": "OhHelloPlayerCongratulationsText",
+   "24CA37": "CongratulationsOnWinningRankText",
+   "24CAE6": "YouDidItPlayerText3",
+   "24CBA4": "PlayerYoullNeverBelieveText",
+   "24CE82": "WhoCouldHaveImaginedText",
+   "24CF08": "HeyPlayerWereGettingText"
+  }
+ },
+ "24CF5A": {
+  "kind": "text",
+  "file": "text/text.s",
+  "size": 427,
+  "strings": 5,
+  "labels": {
+   "24CF5A": "TText2",
+   "24CF5D": "LilyPlayerIsntThatText",
+   "24CF82": "PlayerWhatsGoingOnText",
+   "24CFAD": "PlayerWhyWhyAmText",
+   "24D0B9": "UhOhPlayerSatanachiasText"
+  }
+ },
+ "24D18F": {
+  "kind": "text",
+  "file": "text/i_am_the_guardian.s",
+  "size": 270,
+  "strings": 1,
+  "labels": {
+   "24D18F": "IAmTheGuardianText"
+  }
+ },
+ "24D2A4": {
+  "kind": "text",
+  "file": "text/wow_player_that_was.s",
+  "size": 3095,
+  "strings": 19,
+  "labels": {
+   "24D2A4": "WowPlayerThatWasText",
+   "24D311": "JonSatanachiaspilotIsSheText",
+   "24D33F": "JonWhatAboutSatanachiaspilotText",
+   "24D37A": "OhHerShesAText",
+   "24D3FF": "ThatsAReliefImText",
+   "24D431": "ThatsGoodNewsIText",
+   "24D45F": "StillIWasSurprisedText",
+   "24D5A6": "ThanksJonComeOnText",
+   "24D5D0": "HeyChampOutForText",
+   "24D63D": "PlayerTheresAProblemText",
+   "24D9B8": "YouCanGetToText",
+   "24D9EC": "LongTimeNoSeeText",
+   "24DB19": "ThatsTheChampYouText",
+   "24DC2E": "HowWasRankXText",
+   "24DCEE": "HeyPlayerYoureLookingText",
+   "24DD6B": "HuhNoWereStillText",
+   "24DDBA": "LooksLikeYoureAText",
+   "24DDE4": "ItIsFinishedYourText",
+   "24DE79": "PlayerPlayerWhatsTheText"
+  }
+ },
+ "24E075": {
+  "kind": "text",
+  "file": "text/well_hello_there_hows.s",
+  "size": 1610,
+  "strings": 28,
+  "labels": {
+   "24E075": "WellHelloThereHowsText",
+   "24E0EB": "TheresNothingMoreIText",
+   "24E113": "ImHappyYoudComeText",
+   "24E165": "HaHaIMustText",
+   "24E1BA": "HowsTheTrainingGoingText",
+   "24E22C": "AllRightLookIntoText",
+   "24E280": "HumphLooksLikeYouText",
+   "24E2C3": "LooksLikeYouveBeenText",
+   "24E35A": "ThisOneBurnsYourText",
+   "24E37F": "ThisOneUsesCoreText",
+   "24E3AD": "ThisOneSendsOutText",
+   "24E3D1": "ThisOneUsesCoreText2",
+   "24E3FF": "ThisOneIsAText",
+   "24E420": "ThisWoodBasedOneText",
+   "24E44B": "ThisWoodBasedOneText2",
+   "24E47B": "ThisOneStopsYourText",
+   "24E4A7": "ThisWaterBasedOneText",
+   "24E4D6": "ThisWaterBasedOneText2",
+   "24E506": "ThisWaterBasedOneText3",
+   "24E530": "ThisOneRevivesYouText",
+   "24E55C": "ThisWindBasedOneText",
+   "24E585": "ThisWindBasedOneText2",
+   "24E5B0": "ThisWindBasedOneText3",
+   "24E5DA": "ThisWindBasedOneText4",
+   "24E60B": "ThisEarthBasedOneText",
+   "24E639": "ThisEarthBasedOneText2",
+   "24E665": "ThisEarthBasedOneText3",
+   "24E694": "ThisEarthBasedOneText4"
+  }
+ },
+ "24E6D8": {
+  "kind": "text",
+  "file": "text/all_right_what_do.s",
+  "size": 3126,
+  "strings": 20,
+  "labels": {
+   "24E6D8": "AllRightWhatDoText",
+   "24E6FD": "VeryWellIHerebyText",
+   "24E72C": "PlayerYouMustRememberText",
+   "24E7A6": "ComeBackAnyTimeText",
+   "24E7D0": "DoNotBecomeOverdependentText",
+   "24E827": "HmmWhyWontItText",
+   "24E9C1": "IdStayAwayFromText",
+   "24E9EB": "GoodToSeeYouText",
+   "24EBCB": "HowGoesTheTrainingText",
+   "24EC38": "HowsItGoingPlayerText",
+   "24EC84": "IWasJustRememberingText",
+   "24ECFA": "IveHeardAboutYourText",
+   "24EDB3": "SoYoureALordText",
+   "24EE65": "GarlHasBeenDefeatedText",
+   "24EF7C": "WellWellItsTheText",
+   "24F049": "AndSoTheFightText",
+   "24F1A7": "IDidntExpectToText",
+   "24F26E": "HeyPlayerIFoundText",
+   "24F2BC": "WellTryNotToText",
+   "24F2DD": "OhItsYouImText"
+  }
+ },
+ "24F319": {
+  "kind": "text",
+  "file": "text/i_said_im_busy.s",
+  "size": 2848,
+  "strings": 13,
+  "labels": {
+   "24F319": "ISaidImBusyText",
+   "24F32F": "YoureLookingPrettyGoodText",
+   "24F39C": "RememberPlayerIfYouText",
+   "24F3E6": "StillUsingThatUNITRONText",
+   "24F454": "WouldYouBeInterestedText",
+   "24F495": "HmYouWantSomethingText",
+   "24F696": "ComeSeeMeAnytimeText",
+   "24F6AD": "YouThereYoureAText",
+   "24F85E": "HeyPlayerHowsTheText",
+   "24F9E5": "HeyWhoreYouWhatText",
+   "24FB39": "HowYouDoingPlayerText",
+   "24FC83": "YouAgainWhatDoText",
+   "24FCF5": "HeyPlayerHeardYoureText"
+  }
+ },
+ "24FEC0": {
+  "kind": "text",
+  "file": "text/listen_to_me_must.s",
+  "size": 3054,
+  "strings": 13,
+  "labels": {
+   "24FEC0": "ListenToMeMustText",
+   "24FEE6": "PlayerGuessWhatIText",
+   "250025": "IBetYouKnowText",
+   "250168": "WowPlayerYoureAmazingText",
+   "250265": "HaveYouHeardAboutText",
+   "250307": "IfItIsntTheText",
+   "250490": "YouDidItMasterText",
+   "2505AE": "PlayerJustThePersonText",
+   "2506FB": "IveGotABadText",
+   "2507DE": "PlayerWhereveYouBeenText",
+   "2508C4": "IsThatYouPlayerText",
+   "250989": "IveBeenFindingAText",
+   "250A6D": "IFoundSomeNiceText"
+  }
+ },
+ "250AE0": {
+  "kind": "text",
+  "file": "text/here_it_is.s",
+  "size": 3541,
+  "strings": 40,
+  "labels": {
+   "250AE0": "HereItIsText",
+   "250AEF": "SoWhatDoYouText",
+   "250B0E": "DoYouWantToText",
+   "250B31": "ThanksIllLetYouText",
+   "250B61": "OhAllRightThenText",
+   "250B88": "HuhLooksLikeYouText",
+   "250BB7": "YouveAlreadyGotMoreText",
+   "250BE5": "ItsPlayerHeyGotText",
+   "250C12": "BeingAKidsBoringText",
+   "250C5A": "WellHelloPlayerCareText",
+   "250C8C": "IWonderMaybeMyText",
+   "250CCF": "HelloPlayerWhyDontText",
+   "250D0D": "MusicIsWonderfulTheText",
+   "250D3D": "NiceWeatherWereHavingText",
+   "250D7F": "DoYouLikeFlowersText",
+   "250DA3": "ItsPlayerHowAreText",
+   "250DC5": "YouKnowWhatIveText",
+   "250E2A": "HiTherePlayerHowText",
+   "250E46": "ImMakingASongText",
+   "250EB4": "HelloPlayerYouLookText",
+   "250F24": "OhIJustRememberedText",
+   "250F86": "WellWellThatsAnText",
+   "25130A": "ISeeYouveCollectedText",
+   "2513AA": "ISeeIfYouText",
+   "2513DC": "ThanksThisMeansImText",
+   "251435": "SoWhatDoYouText2",
+   "2514A5": "ThatsTooBadTellText",
+   "2514D8": "IsThisWhatYouText",
+   "2514EF": "OhWellWhatDoText",
+   "25150E": "AllRightThenThanksText",
+   "25152F": "ISeeYouveGotText",
+   "251573": "OhIfYouChangeText",
+   "2515A2": "YouCanTakeAnythingText",
+   "2515E3": "ThatsTooBadLetText",
+   "251614": "IsThisWhatYouText2",
+   "25162B": "AllRightThenWhichText",
+   "251655": "OKHereYouGoText",
+   "251676": "HiThereAreYouText",
+   "251728": "HelloHaventSeenYouText",
+   "251865": "HiTherePlayerGotText"
+  }
+ },
+ "251970": {
+  "kind": "text",
+  "file": "text/see_you_might_be.s",
+  "size": 283,
+  "strings": 2,
+  "labels": {
+   "251970": "SeeYouMightBeText",
+   "2519C2": "HelloPlayerHowAreText"
+  }
+ },
+ "251A8D": {
+  "kind": "text",
+  "file": "text/tell_me_a_story.s",
+  "size": 9124,
+  "strings": 61,
+  "labels": {
+   "251A8D": "TellMeAStoryText",
+   "251B1A": "DidMyPredictionComeText",
+   "251C03": "HelloPlayerCongratulationsOnText",
+   "251D04": "IHeardYouWonText",
+   "251D60": "YourePlayerArentYouText",
+   "251EBA": "CongratulationsOnBecomingViscountText",
+   "251FCF": "MarquisPlayerMarquisPlayerText",
+   "252049": "IGuessCyriusIsntText",
+   "2521B6": "CongratulationsOnBecomingMarquisText",
+   "252258": "PlayerHowComeYouText",
+   "25233D": "WasIRightNoText",
+   "25242B": "YoureADukeNowText",
+   "252533": "PlayerItsAboutLilyText",
+   "2525FC": "HelloPlayerGoodToText",
+   "2527DE": "LilyStillHasntComeText",
+   "252830": "HelloPlayerYoureLookingText",
+   "252A4D": "ICantBelieveItText",
+   "252B17": "CongratulationsYouMustBeText",
+   "252D0D": "ImScaredWhatIsText",
+   "252D97": "AndSoItHasText",
+   "252F8A": "IMayNotBeText",
+   "253017": "ItsPlayerPlayerPlayerText",
+   "25309F": "WellLongTimeNoText",
+   "2531CC": "GoodToSeeYouText2",
+   "2532F1": "LooksLikeYouDontText",
+   "253345": "HelloHowsItGoingText",
+   "253372": "YoureReallyStrongArentText",
+   "2533BC": "HowsItGoingPlayerText2",
+   "2533FE": "ImYourBiggestFanText",
+   "253422": "SayYourePlayerArentText",
+   "25357B": "ViscountPlayerThatHasText",
+   "2535D6": "GoodLuckInYourText",
+   "253609": "MarquisPlayerWowImText",
+   "25366F": "KeepUpTheGoodText",
+   "25369D": "HowDoesItFeelText",
+   "25370B": "YourOpponentsAreGettingText",
+   "253751": "HowAreYouTodayText",
+   "2537CB": "BeCarefulAndTryText",
+   "2537F2": "ItsHighMasterPlayerText",
+   "253857": "TheresOnlyOneThingText",
+   "2538B7": "WellItsBeenAText",
+   "253A04": "YoureGoingArentYouText",
+   "253AA8": "HelloAgainPlayerIText",
+   "253B25": "ThisIs2IveText",
+   "253B4E": "ThisMakes3IText",
+   "253B7C": "ThanksThisIs4Text",
+   "253BA4": "AllRight5DownText",
+   "253BC2": "YayThisIs6Text",
+   "253BE2": "WhoopsIAlmostForgotText",
+   "253C8E": "YouGotProplrText",
+   "253CA4": "AsAThankYouText",
+   "253CC9": "AsAThankYouText2",
+   "253CEE": "AsAThankYouText3",
+   "253D13": "AsAThankYouText4",
+   "253D38": "AsAThankYouText5",
+   "253D5B": "AsAThankYouText6",
+   "253D7F": "AsAThankYouText7",
+   "253DA4": "AsAThankYouText8",
+   "253DC8": "AsAThankYouText9",
+   "253DED": "AsAThankYouText10",
+   "253E12": "ThanksAgainSeeYouText"
+  }
+ },
+ "2543C1": {
+  "kind": "text",
+  "file": "text/hi_can_i_get.s",
+  "size": 141,
+  "strings": 3,
+  "labels": {
+   "2543C1": "HiCanIGetText",
+   "25440D": "HuhWhatDoYouText",
+   "254426": "HicWhaOhItsText"
+  }
+ },
+ "254457": {
+  "kind": "text",
+  "file": "text/think_i_had_one.s",
+  "size": 1442,
+  "strings": 15,
+  "labels": {
+   "254457": "ThinkIHadOneText",
+   "254475": "HiPlayerWhatDoText",
+   "2544D2": "SighIWonderWhyText",
+   "25452A": "SayPlayerHowsItText",
+   "254579": "UNITRONsAreFascinatingArentText",
+   "2545F5": "HiTherePlayerWantText",
+   "254613": "HowAboutABananaText",
+   "254631": "HeyPlayerHicHowsaboutText",
+   "2546B8": "IveGivenUpGamblingText",
+   "25474B": "HiTherePlayerYoureText",
+   "2547D5": "SorryImBusyRightText",
+   "254806": "HowreThingsGoingPlayerText",
+   "254856": "LookingAtYouMakesText",
+   "25489A": "HiThereOhThisText",
+   "254927": "HuhWhoreYouHicText"
+  }
+ },
+ "254B0B": {
+  "kind": "text",
+  "file": "text/i_dont_really_know.s",
+  "size": 70,
+  "strings": 1,
+  "labels": {
+   "254B0B": "IDontReallyKnowText"
+  }
+ },
+ "254BB5": {
+  "kind": "text",
+  "file": "text/why_why_cant_i.s",
+  "size": 4312,
+  "strings": 11,
+  "labels": {
+   "254BB5": "WhyWhyCantIText",
+   "254C74": "HiTherePlayerCongratulationsText",
+   "254E9E": "PlayerILostAgainText",
+   "254F2B": "HmYoureYourePlayerText",
+   "25518C": "HiTherePlayerCongratulationsText2",
+   "255369": "HicItsNoUseText",
+   "2553B7": "HelloPlayerLooksLikeText",
+   "255575": "WellHiTherePlayerText",
+   "25562C": "HelloPlayerCongratulationsOnText2",
+   "2557A2": "HuhPlayerIveHadText",
+   "255858": "HelloTherePlayerIText"
+  }
+ },
+ "255D73": {
+  "kind": "text",
+  "file": "text/wonder_what_cake_i.s",
+  "size": 2274,
+  "strings": 7,
+  "labels": {
+   "255D73": "WonderWhatCakeIText",
+   "255D9A": "PlayerIMadeUpText",
+   "255E20": "CongratulationsOnYourVictoryText",
+   "256095": "CongratulationsPlayerIKnewText",
+   "256222": "HicHuhPlayerWellText",
+   "2562F9": "CongratulationsPlayerYouveMadeText",
+   "256599": "HiPlayerCongratulationsOnText"
+  }
+ },
+ "2567F4": {
+  "kind": "text",
+  "file": "text/are_you_all_right.s",
+  "size": 1358,
+  "strings": 5,
+  "labels": {
+   "2567F4": "AreYouAllRightText",
+   "256892": "HaHaTheChampText",
+   "25697E": "INeverImaginedThatText",
+   "256AEC": "MyCrystalBallDidntText",
+   "256BD1": "CongratulationsOnBecomingChampionText"
+  }
+ },
+ "256D47": {
+  "kind": "text",
+  "file": "text/hic_hey_its_player.s",
+  "size": 6336,
+  "strings": 21,
+  "labels": {
+   "256D47": "HicHeyItsPlayerText",
+   "256DF7": "WellDoneYouAndText",
+   "256F02": "GoodJobPlayerIText",
+   "257006": "INeverImaginedIText",
+   "2570B1": "PlayerWhatIsThatText",
+   "257103": "AreYouScaredSoText",
+   "257260": "MyCrystalBallToldText",
+   "2572EF": "IsThatYouPlayerText2",
+   "25739C": "HicHuhWellWellText",
+   "2573EE": "WellIfItIsntText",
+   "25750A": "PlayerIveBeenWaitingText",
+   "2575C2": "GoodMorningSleepWellText",
+   "257793": "SorryItsGoingToText",
+   "257816": "AhThereYouAreText",
+   "2579AC": "AhThereYouAreText2",
+   "257B1A": "ThatWasAGoodText",
+   "257D91": "ThatWasAGoodText2",
+   "257FA7": "OhItsYouSorryText",
+   "258001": "WelcomeBackIJustText",
+   "25804F": "HelloPlayerImSorryText",
+   "2585EB": "LilyYoureSafeNowText"
+  }
+ },
+ "258615": {
+  "kind": "text",
+  "file": "text/text_2.s",
+  "size": 3654,
+  "strings": 24,
+  "labels": {
+   "258615": "TText3",
+   "258618": "WhatsThatText",
+   "258628": "ThatsTheProtectorThatsText",
+   "25870C": "IDontWantYouText",
+   "258802": "NoPlayerDontGoText",
+   "25891F": "ImSoSorryPlayerText",
+   "258943": "ItsNotYourFaultText",
+   "25898D": "ItsNotYourFaultText2",
+   "2589F1": "ItsBeenAWhileText",
+   "258A7B": "ItsBeenAWhileText2",
+   "258B09": "WelcomeToLakesHaventText",
+   "258BC5": "WhatOhACustomerText",
+   "258C73": "ImSorryMyHusText",
+   "258D8B": "HmOhForgotSomethingText",
+   "258E5B": "WellThatsASurpriseText",
+   "258F07": "HelloImSorryWereText",
+   "258F51": "GoodJobPlayerOrText",
+   "258FDD": "IKnewTheMomentText",
+   "259040": "KeepUpTheGoodText2",
+   "259063": "OhHiPlayerImText",
+   "2590DB": "AtTheCapitalOfText",
+   "2590FB": "ItHasBeen10Text",
+   "25929E": "OneYearLaterAtText",
+   "2592D0": "TheTimeHasComeText"
+  }
+ },
+ "259743": {
+  "kind": "text",
+  "file": "text/welcome_back_everything_heres.s",
+  "size": 5225,
+  "strings": 104,
+  "labels": {
+   "259743": "WelcomeBackEverythingHeresText",
+   "25976E": "WelcomeBackIJustText2",
+   "259794": "GoodMorningHowDoText",
+   "2597C9": "GoodMorningPlayerIText",
+   "2597F5": "ImGladToSeeText",
+   "25982E": "ImSoGladToText",
+   "259861": "WhatDoYouWantText2",
+   "25987B": "ThisLetsYouSeeText",
+   "2598AE": "ThisLetsYouSeeText2",
+   "2598E0": "ThisLetsYouSaveText",
+   "25990A": "IfYouAttachAText",
+   "259938": "YouCanChangeYourText",
+   "259964": "YouCanMakeNewText",
+   "259982": "ThisTakesYouBackText",
+   "2599A5": "WhatDoYouWantText3",
+   "2599C2": "ThisIsYourStatusText",
+   "2599D9": "ThisIsMyStatusText",
+   "2599EE": "ThisIsYourUNITRONsText",
+   "259A0F": "FinishedText",
+   "259A1B": "HeresTheItemDataText",
+   "259A38": "WhichPartsDoYouText",
+   "259A5C": "HeresTheDataListText",
+   "259A74": "WhichItemDoYouText",
+   "259A97": "YouWantToEditText",
+   "259AC2": "DoYouWantToText2",
+   "259AE1": "YouWantToTradeText",
+   "259B0F": "CheckingText",
+   "259B1D": "LooksLikeTheresNoText",
+   "259B3E": "LooksLikeTheresNoText2",
+   "259B8C": "ReadyToTradeText",
+   "259B9E": "WhatItemDoYouText",
+   "259BC0": "WhichPartDoYouText",
+   "259BDC": "WhichDoYouChooseText",
+   "259BF3": "WhichItemDoYouText2",
+   "259C0F": "AreYouSureText",
+   "259C1F": "WaitAMinuteText",
+   "259C32": "BeginTheTradeText",
+   "259C45": "DoYouWantToText3",
+   "259C5E": "AllRightHereWeText",
+   "259C77": "TradeCompleteText",
+   "259C89": "UhOhTheresAText",
+   "259CB9": "DoYouWantToText4",
+   "259CDC": "ReadyToQuitIllText",
+   "259D08": "YouWantToEquipText",
+   "259D43": "WhatDoYouWantText4",
+   "259D5D": "ChooseAPartText",
+   "259D6E": "OKLetsGoBackText",
+   "259D88": "YouWantToDevelopText",
+   "259DAA": "WhatDoYouWantText5",
+   "259DC9": "WhatDoYouWantText6",
+   "259DE4": "DoYouWantToText5",
+   "259E2C": "SelectAToolText",
+   "259E3D": "AllRightWereReadyText",
+   "259E70": "HereWeGoText",
+   "259E7E": "TheNewArmIsText",
+   "259E96": "ImSorryButIText",
+   "259EC8": "SorryItDidntWorkText",
+   "259EE1": "DoYouWantToText6",
+   "259EFC": "AllForNowLetText",
+   "259F3A": "SeeYouLaterTakeText",
+   "259F63": "JustThePersonIText",
+   "25A012": "JustThePersonIText2",
+   "25A107": "IveGotSomeGoodText",
+   "25A1E9": "IveGotSomeGoodText2",
+   "25A30B": "WhewImGladToText",
+   "25A3A8": "PartnerSExperiencePointsText",
+   "25A3C9": "PartnerSDevelopmentLevelText",
+   "25A3EA": "TheTradeWasSuccessfulText",
+   "25A406": "TradingCompleteText",
+   "25A41A": "LooksLikeItsNotText",
+   "25A45B": "TransmissionErrorTryAgainText",
+   "25A47C": "YouHaveTooManyText",
+   "25A4B2": "YouCantMakeAnText",
+   "25A4F2": "DisplaysHelpFilesText",
+   "25A509": "OpeningHelpFilesText",
+   "25A521": "HelloLookingForSomethingText",
+   "25A541": "HiThereHowCanText",
+   "25A567": "HeresWhatWeveGotText",
+   "25A592": "WhichListAreYouText",
+   "25A5B6": "WhatDoYouWantText7",
+   "25A5D2": "WhatDoYouHaveText",
+   "25A5EF": "ChooseAnItemText",
+   "25A601": "AreYouSureText2",
+   "25A611": "AreYouSureText3",
+   "25A621": "ThanksText",
+   "25A62B": "ThanksText2",
+   "25A635": "SorryYouDontHaveText",
+   "25A663": "WhoopsYouCantCarryText",
+   "25A687": "LooksLikeYoureShortText",
+   "25A6AD": "UmmIThinkItsText",
+   "25A6DD": "ThankYouText",
+   "25A6EA": "ItDoesntLookLikeText",
+   "25A717": "YouDontHaveThatText",
+   "25A72E": "ThanksComeBackSoonText",
+   "25A748": "ThanksComeAgainText",
+   "25A75E": "OhItsYouYouText",
+   "25A7B9": "HiThereYoureInText",
+   "25A814": "HiTherePlayerIText",
+   "25A89C": "BeCarefulPlayerYourText",
+   "25A929": "DontWorryPlayerYouText",
+   "25A963": "HaveYouHeardWhatText",
+   "25AAA1": "PlayerIsThatYouText",
+   "25AAFA": "LetHimBeNoText",
+   "25AB87": "WhyDontYouDoText"
+  }
+ },
+ "25ABD6": {
+  "kind": "text",
+  "file": "text/darkct.s",
+  "size": 119,
+  "strings": 17,
+  "labels": {
+   "25ABD6": "DarkCtText",
+   "25ABDD": "MirrCtText",
+   "25ABE4": "Radar5Text",
+   "25ABEB": "Radar8Text",
+   "25ABF2": "Radr10Text",
+   "25ABF9": "Cycl10Text",
+   "25AC00": "Cycl20Text",
+   "25AC07": "Cycl30Text",
+   "25AC0E": "Panl15Text",
+   "25AC15": "Panl30Text",
+   "25AC1C": "Panl50Text",
+   "25AC23": "Armr25Text",
+   "25AC2A": "Armr50Text",
+   "25AC31": "Armr80Text",
+   "25AC38": "Tank15Text",
+   "25AC3F": "Tank30Text",
+   "25AC46": "Tank60Text"
+  }
+ },
+ "25AC77": {
+  "kind": "text",
+  "file": "text/axel10.s",
+  "size": 97,
+  "strings": 14,
+  "labels": {
+   "25AC77": "Axel10Text",
+   "25AC7E": "Axel20Text",
+   "25AC85": "Axel30Text",
+   "25AC8C": "Burn10Text",
+   "25AC93": "Burn20Text",
+   "25AC9A": "Burn30Text",
+   "25ACA1": "AutoRpText",
+   "25ACA8": "ProplrText",
+   "25ACAF": "FixIt1Text",
+   "25ACB6": "FixIt2Text",
+   "25ACBD": "FixIt3Text",
+   "25ACC4": "FixIt4Text",
+   "25ACCB": "FullFxText",
+   "25ACD2": "ClearText"
+  }
+ },
+ "25ACD9": {
+  "kind": "text",
+  "file": "text/powdrv.s",
+  "size": 27,
+  "strings": 4,
+  "labels": {
+   "25ACD9": "PowDrvText",
+   "25ACE0": "EFieldText",
+   "25ACE7": "SitClrText",
+   "25ACEE": "TurboText"
+  }
+ },
+ "25ACF5": {
+  "kind": "text",
+  "file": "text/absorb.s",
+  "size": 34,
+  "strings": 5,
+  "labels": {
+   "25ACF5": "AbsorbText",
+   "25ACFC": "AcidBmText",
+   "25AD03": "JammerText",
+   "25AD0A": "MagFlrText",
+   "25AD11": "Tool1Text"
+  }
+ },
+ "25AFC4": {
+  "kind": "text",
+  "file": "text/transponder_10rp.s",
+  "size": 72,
+  "strings": 4,
+  "labels": {
+   "25AFC4": "Transponder10RPText",
+   "25AFD7": "Transponder20RPText",
+   "25AFEA": "Transponder30RPText",
+   "25AFFD": "Subunit10MPText"
+  }
+ },
+ "25B6FC": {
+  "kind": "text",
+  "file": "text/birdan.s",
+  "size": 55,
+  "strings": 8,
+  "labels": {
+   "25B6FC": "BirdanText",
+   "25B703": "KnightText",
+   "25B70A": "PaladnText",
+   "25B711": "ForestText3",
+   "25B718": "MarbleText",
+   "25B71F": "ObsednText",
+   "25B726": "JesterText",
+   "25B72D": "KalonText"
+  }
+ },
+ "25B742": {
+  "kind": "text",
+  "file": "text/dolphn.s",
+  "size": 47,
+  "strings": 7,
+  "labels": {
+   "25B742": "DolphnText",
+   "25B749": "SerpntText",
+   "25B750": "LizardText",
+   "25B757": "TurtleText",
+   "25B75E": "FightrText",
+   "25B765": "DragonText",
+   "25B76C": "HeroText"
+  }
+ },
+ "25B78F": {
+  "kind": "text",
+  "file": "text/flier1.s",
+  "size": 34,
+  "strings": 5,
+  "labels": {
+   "25B78F": "Flier1Text",
+   "25B796": "Flier2Text",
+   "25B79D": "Scout1Text",
+   "25B7A4": "Scout2Text",
+   "25B7AB": "Worm1Text"
+  }
+ },
+ "25B7B9": {
+  "kind": "text",
+  "file": "text/boost1.s",
+  "size": 26,
+  "strings": 4,
+  "labels": {
+   "25B7B9": "Boost1Text",
+   "25B7C0": "Boost2Text",
+   "25B7C7": "CraftrText",
+   "25B7CE": "WingText"
+  }
+ },
+ "25B7FF": {
+  "kind": "text",
+  "file": "text/centar.s",
+  "size": 26,
+  "strings": 4,
+  "labels": {
+   "25B7FF": "CentarText",
+   "25B806": "SaurusText",
+   "25B80D": "TntaclText",
+   "25B814": "CrabText"
+  }
+ },
+ "25B925": {
+  "kind": "text",
+  "file": "text/binder.s",
+  "size": 27,
+  "strings": 4,
+  "labels": {
+   "25B925": "BinderText",
+   "25B92C": "HammerText",
+   "25B933": "PliersText",
+   "25B93A": "BladeText"
+  }
+ },
+ "25B9A3": {
+  "kind": "text",
+  "file": "text/crsadr.s",
+  "size": 34,
+  "strings": 5,
+  "labels": {
+   "25B9A3": "CrsadrText",
+   "25B9AA": "HndAxeText",
+   "25B9B1": "BtlAxeText",
+   "25B9B8": "TomhwkText",
+   "25B9BF": "T2EdgeText"
+  }
+ },
+ "25B9CD": {
+  "kind": "text",
+  "file": "text/bllarm.s",
+  "size": 28,
+  "strings": 4,
+  "labels": {
+   "25B9CD": "BllArmText",
+   "25B9D4": "MgaBllText",
+   "25B9DB": "NoWireText",
+   "25B9E2": "CrushrText"
+  }
+ },
+ "25B9F0": {
+  "kind": "text",
+  "file": "text/lancer.s",
+  "size": 40,
+  "strings": 6,
+  "labels": {
+   "25B9F0": "LancerText",
+   "25B9F7": "DrlArmText",
+   "25B9FE": "PierceText",
+   "25BA05": "TrnadoText",
+   "25BA0C": "SpiralText",
+   "25BA13": "HookText"
+  }
+ },
+ "25BAC9": {
+  "kind": "text",
+  "file": "text/wizard.s",
+  "size": 34,
+  "strings": 5,
+  "labels": {
+   "25BAC9": "WizardText",
+   "25BAD0": "WarlokText",
+   "25BAD7": "ArchMgText",
+   "25BADE": "GodHndText",
+   "25BAE5": "SkullText"
+  }
+ },
+ "25BAFA": {
+  "kind": "text",
+  "file": "text/cursed.s",
+  "size": 54,
+  "strings": 8,
+  "labels": {
+   "25BAFA": "CursedText",
+   "25BB01": "InfrnoText",
+   "25BB08": "SpringText3",
+   "25BB0F": "CurlerText",
+   "25BB16": "SnakerText",
+   "25BB1D": "ZoomerText",
+   "25BB24": "BusterText",
+   "25BB2B": "ClawText"
+  }
+ },
+ "25BB8D": {
+  "kind": "text",
+  "file": "text/hacker.s",
+  "size": 33,
+  "strings": 5,
+  "labels": {
+   "25BB8D": "HackerText",
+   "25BB94": "KnukleText",
+   "25BB9B": "GlovesText",
+   "25BBA2": "RocketText",
+   "25BBA9": "MailText"
+  }
+ },
+ "25BBC5": {
+  "kind": "text",
+  "file": "text/spider.s",
+  "size": 82,
+  "strings": 12,
+  "labels": {
+   "25BBC5": "SpiderText",
+   "25BBCC": "MantisText",
+   "25BBD3": "RedClwText",
+   "25BBDA": "HndGunText",
+   "25BBE1": "VulcanText",
+   "25BBE8": "LncherText",
+   "25BBEF": "GatlngText",
+   "25BBF6": "PhalnxText",
+   "25BBFD": "CannonText",
+   "25BC04": "T2BarrlText",
+   "25BC0B": "LineGnText",
+   "25BC12": "XGunText"
+  }
+ },
+ "25BC6B": {
+  "kind": "text",
+  "file": "text/hs_2nd_stage_body.s",
+  "size": 53,
+  "strings": 3,
+  "labels": {
+   "25BC6B": "Hs2ndStageBodyText",
+   "25BC7E": "Hs3rdStageBodyText",
+   "25BC91": "FsBasicBodyText"
+  }
+ },
+ "25BCA4": {
+  "kind": "text",
+  "file": "text/fs_2nd_stage_body.s",
+  "size": 53,
+  "strings": 3,
+  "labels": {
+   "25BCA4": "Fs2ndStageBodyText",
+   "25BCB7": "Fs3rdStageBodyText",
+   "25BCCA": "MsBasicBodyText"
+  }
+ },
+ "25BCDD": {
+  "kind": "text",
+  "file": "text/ms_2nd_stage_body.s",
+  "size": 53,
+  "strings": 3,
+  "labels": {
+   "25BCDD": "Ms2ndStageBodyText",
+   "25BCF0": "Ms3rdStageBodyText",
+   "25BD03": "BsBasicBodyText"
+  }
+ },
+ "25BD16": {
+  "kind": "text",
+  "file": "text/bs_2nd_stage_body.s",
+  "size": 53,
+  "strings": 3,
+  "labels": {
+   "25BD16": "Bs2ndStageBodyText",
+   "25BD29": "Bs3rdStageBodyText",
+   "25BD3C": "LsBasicBodyText"
+  }
+ },
+ "25BD4F": {
+  "kind": "text",
+  "file": "text/ls_2nd_stage_body.s",
+  "size": 53,
+  "strings": 3,
+  "labels": {
+   "25BD4F": "Ls2ndStageBodyText",
+   "25BD62": "Ls3rdStageBodyText",
+   "25BD75": "OldUsedCoreText"
+  }
+ },
+ "25BE0D": {
+  "kind": "text",
+  "file": "text/hyper_quality_core.s",
+  "size": 54,
+  "strings": 3,
+  "labels": {
+   "25BE0D": "HyperQualityCoreText",
+   "25BE20": "OriginalCorePartText",
+   "25BE33": "EfreetsSymbolText"
+  }
+ },
+ "25BF17": {
+  "kind": "text",
+  "file": "text/jester_pattern_leg.s",
+  "size": 54,
+  "strings": 3,
+  "labels": {
+   "25BF17": "JesterPatternLegText",
+   "25BF2A": "ReaperPatternLegText",
+   "25BF3D": "MarinerLegSetText"
+  }
+ },
+ "25C6CF": {
+  "kind": "text",
+  "file": "text/spear_w_sharp_tip.s",
+  "size": 68,
+  "strings": 4,
+  "labels": {
+   "25C6CF": "SpearWSharpTipText",
+   "25C6E2": "DrillWindAffinText",
+   "25C6F5": "DrillWaterAffinText",
+   "25C708": "ClawedArmText"
+  }
+ },
+ "25E45E": {
+  "kind": "text",
+  "file": "text/rookie.s",
+  "size": 26,
+  "strings": 4,
+  "labels": {
+   "25E45E": "RookieText",
+   "25E465": "ViscntText",
+   "25E46C": "MarqisText",
+   "25E473": "DukeText"
+  }
+ },
+ "25E49D": {
+  "kind": "text",
+  "file": "text/forest.s",
+  "size": 28,
+  "strings": 4,
+  "labels": {
+   "25E49D": "ForestText4",
+   "25E4A4": "MarinrText",
+   "25E4AB": "BirdanText2",
+   "25E4B2": "LizardText2"
+  }
+ },
+ "25E6DF": {
+  "kind": "text",
+  "file": "text/unitron_status_hp_hit.s",
+  "size": 182,
+  "strings": 1,
+  "labels": {
+   "25E6DF": "UNITRONStatusHPHitText"
+  }
+ },
+ "25E83B": {
+  "kind": "text",
+  "file": "text/affinities_2_strength_weakness.s",
+  "size": 1813,
+  "strings": 8,
+  "labels": {
+   "25E83B": "Affinities2StrengthWeaknessText",
+   "25E918": "Dungeons1ForestOfText",
+   "25EA08": "Dungeons2PressingBText",
+   "25EAEF": "Battle1BattleCommandsText",
+   "25EBBE": "Battle2StatusChangesText",
+   "25EC7D": "Battle3RestoringHPText",
+   "25ED5F": "Development1NewArmsText",
+   "25EE66": "Development2TheChanceText"
+  }
+ }
+}

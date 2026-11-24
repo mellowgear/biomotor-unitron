@@ -1,0 +1,370 @@
+; 217DD3-2181D8
+.org 0x217DD3
+sub_217DD3:
+    LD        A,5                                [2]
+    LD        (0x614A),A                         [4]
+    LD        A,5                                [2]
+    LD        (0x614B),A                         [4]
+    LD        XHL,0x217DA6                       [5]
+    LD        (0x614C),XHL                       [4]
+    LD        XHL,0x217DC4                       [5]
+    LD        (0x6150),XHL                       [4]
+    LD        XHL,0x217DCE                       [5]
+    LD        (0x6154),XHL                       [4]
+    JP        loc_2179E0                         [4]
+    .db 33 01 16 05 FF
+    PUSH      IX                                 [1]
+    RETD      1025                               [3]
+    .db FF 25 18 09 14 FF 00 00 FE 7D 21 00 00 01 03 7E
+    .db 21 00 00 08 08 7E 21 00 00 00 00 01 00 08 00 01
+    .db FF
+sub_217E28:
+    LD        A,3                                [2]
+    LD        (0x614A),A                         [4]
+    LD        A,3                                [2]
+    LD        (0x614B),A                         [4]
+    LD        XHL,0x217E0D                       [5]
+    LD        (0x614C),XHL                       [4]
+    LD        XHL,0x217E1F                       [5]
+    LD        (0x6150),XHL                       [4]
+    LD        XHL,0x217E25                       [5]
+    LD        (0x6154),XHL                       [4]
+    JP        loc_2179E0                         [4]
+sub_217E53:
+    XOR       XWA,XWA                            [2]
+    LD        (0x617E),XWA                       [4]
+    LD        (0x6176),XWA                       [4]
+    CALL      sub_217F12                         [4]
+    LD        XHL,swp_217FA0                     [5]
+    CALL      dyn_206324                         [4]
+    RET                                          [1]
+sub_217E6B:
+    RET                                          [1]
+swp_217E6C:
+    LD        XWA,(0x6176)                       [4]
+    OR        XWA,XWA                            [2]
+    RET                                          [1]
+swp_217E73:
+    LD        (0x617E),A                         [4]
+    XOR       XWA,XWA                            [2]
+    LD        (0x6176),XWA                       [4]
+    RET                                          [1]
+swp_217E7E:
+    LD        A,1                                [2]
+    JP        swp_217E73                         [4]
+swp_217E84:
+    LD        A,2                                [2]
+    JP        swp_217E73                         [4]
+swp_217E8A:
+    LD        A,3                                [2]
+    JP        swp_217E73                         [4]
+swp_217E90:
+    LD        A,4                                [2]
+    JP        swp_217E73                         [4]
+swp_217E96:
+    LD        A,5                                [2]
+    JP        swp_217E73                         [4]
+swp_217E9C:
+    LD        A,6                                [2]
+    JP        swp_217E73                         [4]
+sub_217EA2:
+    POP       XHL                                [1]
+    LD        (0x617A),XHL                       [4]
+loc_217EA7:
+    LD        XWA,(0x6176)                       [4]
+    OR        XWA,XWA                            [2]
+    JR        NZ,loc_217EB5                      [2]
+    CALL      sub_2171A8                         [4]
+    JR        loc_217EA7                         [2]
+loc_217EB5:
+    CALL      sub_2171A8                         [4]
+    LD        XWA,(0x6176)                       [4]
+    LD        XHL,(0x617A)                       [4]
+    JP        (XHL)                              [2]
+loc_217EC3:
+    LD        (0x617E),A                         [4]
+    POP       XHL                                [1]
+    LD        (0x617A),XHL                       [4]
+    XOR       XWA,XWA                            [2]
+    LD        (0x6176),XWA                       [4]
+loc_217ED2:
+    LD        XWA,(0x6176)                       [4]
+    OR        XWA,XWA                            [2]
+    JR        NZ,loc_217EE0                      [2]
+    CALL      sub_2171A8                         [4]
+    JR        loc_217ED2                         [2]
+loc_217EE0:
+    CALL      sub_2171A8                         [4]
+    LD        XWA,(0x6176)                       [4]
+    LD        XHL,(0x617A)                       [4]
+    JP        (XHL)                              [2]
+loc_217EEE:
+    LD        A,1                                [2]
+    JP        loc_217EC3                         [4]
+swp_217EF4:
+    LD        A,2                                [2]
+    JP        loc_217EC3                         [4]
+sub_217EFA:
+    LD        A,3                                [2]
+    JP        loc_217EC3                         [4]
+sub_217F00:
+    LD        A,4                                [2]
+    JP        loc_217EC3                         [4]
+sub_217F06:
+    LD        A,5                                [2]
+    JP        loc_217EC3                         [4]
+sub_217F0C:
+    LD        A,6                                [2]
+    JP        loc_217EC3                         [4]
+sub_217F12:
+    LD        A,3                                [2]
+    LD        C,0xC                              [2]
+    LD        E,0xE                              [2]
+    LD        HL,0x7E                            [3]
+    CALL      dyn_207494                         [4]
+    RET                                          [1]
+swp_217F20:
+    LD        WA,0                               [2]
+    LD        C,0                                [2]
+    LD        E,0                                [2]
+    LD        B,0xC                              [2]
+    LD        D,0xE                              [2]
+    CALL      swp_20677A                         [4]
+    LD        WA,0x7E                            [3]
+    LD        QA,0                               [3]
+    LD        BC,0x1C2                           [3]
+    CALL      FillTiles                          [4]
+    LD        A,3                                [2]
+    LD        C,0xC                              [2]
+    LD        E,0xE                              [2]
+    LD        HL,0x7E                            [3]
+    CALL      dyn_207494                         [4]
+    LD        A,3                                [2]
+    CALL      dyn_2075CC                         [4]
+    LD        A,3                                [2]
+    LD        C,0                                [2]
+    LD        E,0                                [2]
+    CALL      dyn_2074C0                         [4]
+    RET                                          [1]
+swp_217F59:
+    PUSH      BC                                 [1]
+    PUSH      DE                                 [1]
+    LD        XHL,0x217F6D                       [5]
+    LD{1}     B,D                                [2]
+    LD{1}     C,E                                [2]
+    LD        A,3                                [2]
+    CALL      swp_2171DF                         [4]
+    POP       DE                                 [1]
+    POP       BC                                 [1]
+    RET                                          [1]
+    .db 00 00 00 00 00 00 00 00 00 00 FF
+sub_217F78:
+    PUSH      WA                                 [1]
+    PUSH      BC                                 [1]
+    PUSH      XHL                                [1]
+    CALL      swp_2171DF                         [4]
+    POP       XHL                                [1]
+    CALL      swp_2171AD                         [4]
+    POP       BC                                 [1]
+    ADD       B,A                                [2]
+    LD        XHL,0x217F97                       [5]
+    LDA       XHL,XHL+A                          [5]
+    POP       WA                                 [1]
+    CALL      swp_2171DF                         [4]
+    RET                                          [1]
+    .db 00 00 00 00 00 00 00 00 FF
+swp_217FA0:
+    XOR       WA,WA                              [2]
+    LD        (0x615B),WA                        [4]
+    LD        (0x615D),A                         [4]
+    LD        (0x615E),A                         [4]
+loc_217FAE:
+    LD        A,(0x617E)                         [4]
+    CP        A,8                                [3]
+    JR        NC,loc_217FE6                      [2]
+    LD        XHL,0x217FC6                       [5]
+    SLL       2,A                                [3]
+    LD        XHL,(XHL+A)                        [5]
+    JP        (XHL)                              [2]
+    .db F8 7F 21 00 04 80 21 00 72 81 21 00 18 80 21 00
+    .db 47 80 21 00 2C 80 21 00 4F 81 21 00 F8 7F 21 00
+loc_217FE6:
+    LD        WA,0xFFFF                          [3]
+    LDB       (0x617E),0                         [5]
+    OR        XWA,0xFFFF0000                     [6]
+    LD        (0x6176),XWA                       [4]
+    CALL      sub_2171A8                         [4]
+    CALL      sub_2181B4                         [4]
+    JP        loc_217FAE                         [4]
+swp_218004:
+    XOR       A,A                                [2]
+    LD        (0x615E),A                         [4]
+    LD        (0x6158),A                         [4]
+    LD        (0x6159),A                         [4]
+    XOR       WA,WA                              [2]
+    JP        0x217FE9                           [4]
+swp_218018:
+    LD        A,3                                [2]
+    CALL      swp_2175B6                         [4]
+    LD        XHL,(0x6162)                       [4]
+    CALL      swp_21717A                         [4]
+    XOR       WA,WA                              [2]
+    JP        0x217FE9                           [4]
+swp_21802C:
+    LD        A,(0x615E)                         [4]
+    OR        A,A                                [2]
+    JR        NZ,loc_218041                      [2]
+    CALL      swp_2175A8                         [4]
+    CALL      sub_2181A1                         [4]
+    LDB       (0x615E),1                         [5]
+loc_218041:
+    XOR       WA,WA                              [2]
+    JP        0x217FE9                           [4]
+swp_218047:
+    CALL      sub_2181A1                         [4]
+    CALL      swp_2175A8                         [4]
+loc_21804F:
+    CALL      sub_2171A8                         [4]
+    LD        A,(wJoyPressed)                    [4]
+    BIT       4,A                                [3]
+    JP        NZ,loc_21808B                      [5]
+    BIT       5,A                                [3]
+    JP        NZ,loc_2180BB                      [5]
+    BIT       1,A                                [3]
+    JP        NZ,loc_2180C9                      [5]
+    BIT       0,A                                [3]
+    JP        NZ,loc_2180DF                      [5]
+    BIT       3,A                                [3]
+    JP        NZ,loc_2180F5                      [5]
+    BIT       2,A                                [3]
+    JP        NZ,loc_21810B                      [5]
+    JP        loc_218134                         [4]
+loc_21808B:
+    LD        XHL,(0x616E)                       [4]
+    CALL      swp_21717A                         [4]
+    JR        NC,loc_2180B0                      [2]
+    LD        WA,0x81                            [3]
+    CALL      sub_21990C                         [4]
+    LD        L,(0x6158)                         [4]
+    MUL       HL,(0x615F)                        [4]
+    LD        A,(0x6159)                         [4]
+    EXTZ      WA                                 [2]
+    ADD       WA,HL                              [2]
+    JP        loc_21813C                         [4]
+loc_2180B0:
+    LD        WA,0x83                            [3]
+    CALL      sub_21990C                         [4]
+    JP        loc_218134                         [4]
+loc_2180BB:
+    LD        WA,0x82                            [3]
+    CALL      sub_21990C                         [4]
+    LD        WA,0xFFFF                          [3]
+    JP        loc_21813C                         [4]
+loc_2180C9:
+    LD        A,(0x6159)                         [4]
+    INC       1,A                                [2]
+    CP        A,(0x615F)                         [4]
+    JR        C,loc_2180D7                       [2]
+    XOR       A,A                                [2]
+loc_2180D7:
+    LD        (0x6159),A                         [4]
+    JP        loc_218125                         [4]
+loc_2180DF:
+    LD        A,(0x6159)                         [4]
+    DEC       1,A                                [2]
+    JR        PL,loc_2180ED                      [2]
+    LD        A,(0x615F)                         [4]
+    DEC       1,A                                [2]
+loc_2180ED:
+    LD        (0x6159),A                         [4]
+    JP        loc_218125                         [4]
+loc_2180F5:
+    LD        A,(0x6158)                         [4]
+    INC       1,A                                [2]
+    CP        A,(0x6161)                         [4]
+    JR        C,loc_218103                       [2]
+    XOR       A,A                                [2]
+loc_218103:
+    LD        (0x6158),A                         [4]
+    JP        loc_21811D                         [4]
+loc_21810B:
+    LD        A,(0x6158)                         [4]
+    DEC       1,A                                [2]
+    JR        PL,loc_218119                      [2]
+    LD        A,(0x6161)                         [4]
+    DEC       1,A                                [2]
+loc_218119:
+    LD        (0x6158),A                         [4]
+loc_21811D:
+    LD        XHL,(0x6162)                       [4]
+    CALL      swp_21717A                         [4]
+loc_218125:
+    LD        XHL,(0x616A)                       [4]
+    CALL      swp_21717A                         [4]
+    LD        WA,0x80                            [3]
+    CALL      sub_21990C                         [4]
+loc_218134:
+    CALL      sub_2181A1                         [4]
+    JP        loc_21804F                         [4]
+loc_21813C:
+    LD        (0x615B),WA                        [4]
+    LDB       (0x615D),0xFF                      [5]
+    CALL      swp_2175AF                         [4]
+    XOR       WA,WA                              [2]
+    JP        0x217FE9                           [4]
+swp_21814F:
+    LD        A,(0x615E)                         [4]
+    OR        A,A                                [2]
+    JR        Z,loc_218160                       [2]
+    CALL      swp_2175AF                         [4]
+    LDB       (0x615E),0                         [5]
+loc_218160:
+    XOR       WA,WA                              [2]
+    JP        0x217FE9                           [4]
+swp_218166:
+    CALL      sub_2181B4                         [4]
+    CALL      sub_2171A8                         [4]
+    JP        loc_217FAE                         [4]
+swp_218172:
+    LD        XWA,0xFFFF0000                     [5]
+    LD        WA,(0x615B)                        [4]
+    LD        (0x6176),XWA                       [4]
+    CALL      dyn_206369                         [4]
+    RET                                          [1]
+swp_218184:
+    LD        A,(0x6159)                         [4]
+    CP        A,(0x615F)                         [4]
+    JR        NC,loc_2181A0                      [2]
+    ADD       A,A                                [2]
+    LD        XHL,(0x6172)                       [4]
+    LDA       XHL,XHL+A                          [5]
+    LD        B,(XHL+)                           [3]
+    LD        C,(XHL+)                           [3]
+    SCF                                          [1]
+loc_2181A0:
+    RET                                          [1]
+sub_2181A1:
+    CALL      swp_218184                         [4]
+    JR        NC,loc_2181B3                      [2]
+    PUSH      BC                                 [1]
+    LD        A,3                                [2]
+    CALL      swp_2175B6                         [4]
+    POP       BC                                 [1]
+    CALL      swp_2175BB                         [4]
+loc_2181B3:
+    RET                                          [1]
+sub_2181B4:
+    CPB       (0x615E),0                         [5]
+    JR        Z,loc_2181CE                       [2]
+    CPB       (0x615D),0                         [5]
+    JR        Z,loc_2181CE                       [2]
+    CALL      swp_218184                         [4]
+    JR        NC,loc_2181CE                      [2]
+    LD        A,3                                [2]
+    CALL      swp_21722F                         [4]
+loc_2181CE:
+    RET                                          [1]
+sub_2181CF:
+    LD        XHL,(0x616A)                       [4]
+    CALL      swp_21717A                         [4]
+    RET                                          [1]

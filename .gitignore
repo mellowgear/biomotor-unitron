@@ -1,0 +1,7 @@
+# never commit the game itself or generated output
+*.ngp
+build/
+__pycache__/
+*.pyc
+# TLCS-900 manual page scans: reference only, not needed to build
+tlcs900/manual_pages/
