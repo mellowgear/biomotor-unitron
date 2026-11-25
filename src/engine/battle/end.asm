@@ -7,7 +7,7 @@ BattleVictory:
 	ld	XHL,ShakeScr2Amp8Task
 	call	StartTask
 	ldw	(XHL+0xE),0xF
-	ld	XHL,Data_22541A
+	ld	XHL,BattleEndEffects
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
@@ -125,7 +125,7 @@ BattleDefeat:
 	ld	XHL,ShakeScr1Amp8Task
 	call	StartTask
 	ldw	(XHL+0xE),0xF
-	ld	XHL,Data_22541A
+	ld	XHL,BattleEndEffects
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask

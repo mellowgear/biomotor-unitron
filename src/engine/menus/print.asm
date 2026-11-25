@@ -207,8 +207,8 @@ PrintHex.skip2:
 
 c_21735D	section	code abs=0x21735D
 
-; [code] PrintStringAt XHL, then B += StringLength and PrintStringAt of BlankText2 + 2 * length (the six 0 bytes + 0xFF after the ret: 6 - 2 * length blanks, so it only lands on the blanks up to 3 chars); no callers
-swp_21735D:
+; [code] PrintStringAt XHL, then B += StringLength and PrintStringAt of BlankText2 + 2 * length (the six 0 bytes + 0xFF after the ret: 6 - 2 * length blanks, so it only lands on the blanks up to 3 chars); no callers (was swp_21735D)
+PrintStringPadded:
 	push	WA
 	push	BC
 	push	XHL

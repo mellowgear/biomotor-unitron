@@ -2,12 +2,12 @@
 
 c_21717C	section	code abs=0x21717C
 
-; [code] XWA = XWA + XBC + carry as 4 packed-BCD bytes (adc + daa per byte through 0x60FE / 0x6102)
+; [code] XWA = XWA + XBC + carry as 4 packed-BCD bytes (adc + daa per byte through wBcdSumA / wBcdSumB)
 AddBCD32:
-	ld	(0x60FE),XWA
-	ld	(0x6102),XBC
-	ld	XHL,0x60FE
-	ld	XDE,0x6102
+	ld	(wBcdSumA),XWA
+	ld	(wBcdSumB),XBC
+	ld	XHL,wBcdSumA
+	ld	XDE,wBcdSumB
 	ld	B,4
 AddBCD32.loop:
 	ld	A,(XHL)
@@ -17,8 +17,8 @@ AddBCD32.loop:
 	inc	1,XHL
 	inc	1,XDE
 	djnz	B,AddBCD32.loop
-	ld	XWA,(0x60FE)
-	ld	XBC,(0x6102)
+	ld	XWA,(wBcdSumA)
+	ld	XBC,(wBcdSumB)
 	ret
 
 c_2174D9	section	code abs=0x2174D9
@@ -109,10 +109,10 @@ AddGPBCD:
 	push	XBC
 	rcf
 AddGPBCD.carryIn:
-	ld	(0x61E2),XWA
+	ld	(wGPBcdAddend),XWA
 	push	XHL
 	push	XDE
-	ld	XHL,0x61E2
+	ld	XHL,wGPBcdAddend
 	ld	XDE,wGP
 	ld	B,4
 AddGPBCD.loop:
@@ -147,7 +147,7 @@ SubtractGPBCD:
 
 c_21AC2E	section	code abs=0x21AC2E
 
-; [code] A = mode: RunWorksScreen with the entry pointer 0x621A = ShopTalk instead of WorksScreenEntry (jumps into RunWorksScreen after its first instruction); caller StreetGoShop (A = 1)
+; [code] A = mode: RunWorksScreen with the entry pointer wWorksScreenEntry = ShopTalk instead of WorksScreenEntry (jumps into RunWorksScreen after its first instruction); caller StreetGoShop (A = 1)
 RunShopScreen:
 	ld	XHL,ShopTalk
 	jp	RunWorksScreen.withEntry
@@ -405,10 +405,10 @@ ShopMainMenu.skip:
 	ld	A,(wMenuChoice)
 	or	A,A
 	jp	MI,ShopMainMenu.loop
-	ld	(0x621F),A
+	ld	(wShopCategory),A
 	call	OpenListBox
 	call	ClearTextBox2Home
-	ld	A,(0x621F)
+	ld	A,(wShopCategory)
 	call	SetupShopBuyPartList
 ShopMainMenu.loop3:
 	call	RedrawListPage
@@ -424,28 +424,28 @@ ShopMainMenu.loop3:
 	ld	WA,(wListChoice)
 	or	WA,WA
 	jp	MI,ShopMainMenu.loop2
-	ld	W,(0x621F)
+	ld	W,(wShopCategory)
 	inc	1,W
 	inc	1,A
-	ld	(0x6220),WA
+	ld	(wShopEntry),WA
 	ld	XHL,AreYouSureText3
 	ld	XDE,AreYouSureText2
 	call	PickShopClerkText
 	call	AskYesNo
 	or	A,A
 	jr	NZ,ShopMainMenu.loop3
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetEntryCountBy
 	and	A,0x7F
 	cp	A,9
 	jr	NC,ShopMainMenu.skip2
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetEntryPrice
 	cp	(wGP),XWA
 	jr	C,ShopMainMenu.skip3
 	call	SubtractGPBCD
 	call	DrawGP
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	AddItemByCategory
 	ld	WA,0x8E
 	call	CallSoundCommand
@@ -484,10 +484,10 @@ ShopMainMenu.skip4:
 	ld	A,(wMenuChoice)
 	or	A,A
 	jp	MI,ShopMainMenu.loop
-	ld	(0x621F),A
+	ld	(wShopCategory),A
 	call	OpenListBox
 	call	ClearTextBox2Home
-	ld	A,(0x621F)
+	ld	A,(wShopCategory)
 	call	SetupShopBuyItemList
 ShopMainMenu.loop5:
 	call	RedrawListPage
@@ -503,28 +503,28 @@ ShopMainMenu.loop5:
 	ld	WA,(wListChoice)
 	or	WA,WA
 	jp	MI,ShopMainMenu.loop4
-	ld	W,(0x621F)
+	ld	W,(wShopCategory)
 	inc	1,W
 	inc	1,A
-	ld	(0x6220),WA
+	ld	(wShopEntry),WA
 	ld	XHL,AreYouSureText3
 	ld	XDE,AreYouSureText2
 	call	PickShopClerkText
 	call	AskYesNo
 	or	A,A
 	jr	NZ,ShopMainMenu.loop5
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetItemCountBy
 	and	A,0x7F
 	cp	A,9
 	jr	NC,ShopMainMenu.skip5
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetItemPriceBy
 	cp	(wGP),XWA
 	jr	C,ShopMainMenu.skip6
 	call	SubtractGPBCD
 	call	DrawGP
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	AddGroupItem
 	ld	WA,0x8E
 	call	CallSoundCommand
@@ -584,10 +584,10 @@ ShopMainMenu.skip8:
 	ld	A,(wMenuChoice)
 	or	A,A
 	jp	MI,ShopMainMenu.loop6
-	ld	(0x621F),A
+	ld	(wShopCategory),A
 	call	OpenListBox
 	call	ClearTextBox2Home
-	ld	A,(0x621F)
+	ld	A,(wShopCategory)
 	call	SetupShopSellPartList
 ShopMainMenu.loop8:
 	call	RedrawListPage
@@ -603,25 +603,25 @@ ShopMainMenu.loop8:
 	ld	WA,(wListChoice)
 	or	WA,WA
 	jr	MI,ShopMainMenu.loop7
-	ld	W,(0x621F)
+	ld	W,(wShopCategory)
 	inc	1,W
 	inc	1,A
-	ld	(0x6220),WA
+	ld	(wShopEntry),WA
 	ld	XHL,AreYouSureText3
 	ld	XDE,AreYouSureText2
 	call	PickShopClerkText
 	call	AskYesNo
 	or	A,A
 	jr	NZ,ShopMainMenu.loop8
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetEntryCountBy
 	and	A,0x7F
 	jr	Z,ShopMainMenu.skip9
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetEntrySellPrice
 	call	AddGPBCD
 	call	DrawGP
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	RemoveItemByCategory
 	ld	WA,0x8E
 	call	CallSoundCommand
@@ -652,10 +652,10 @@ ShopMainMenu.skip10:
 	ld	A,(wMenuChoice)
 	or	A,A
 	jp	MI,ShopMainMenu.loop6
-	ld	(0x621F),A
+	ld	(wShopCategory),A
 	call	OpenListBox
 	call	ClearTextBox2Home
-	ld	A,(0x621F)
+	ld	A,(wShopCategory)
 	call	SetupShopSellItemList
 ShopMainMenu.loop10:
 	call	RedrawListPage
@@ -671,25 +671,25 @@ ShopMainMenu.loop10:
 	ld	WA,(wListChoice)
 	or	WA,WA
 	jp	MI,ShopMainMenu.loop9
-	ld	W,(0x621F)
+	ld	W,(wShopCategory)
 	inc	1,W
 	inc	1,A
-	ld	(0x6220),WA
+	ld	(wShopEntry),WA
 	ld	XHL,AreYouSureText3
 	ld	XDE,AreYouSureText2
 	call	PickShopClerkText
 	call	AskYesNo
 	or	A,A
 	jr	NZ,ShopMainMenu.loop10
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetItemCountBy
 	and	A,0x7F
 	jr	Z,ShopMainMenu.skip11
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	GetItemSellPrice
 	call	AddGPBCD
 	call	DrawGP
-	ld	WA,(0x6220)
+	ld	WA,(wShopEntry)
 	call	RemoveGroupItem
 	ld	WA,0x8E
 	call	CallSoundCommand

@@ -19,34 +19,34 @@ GetFontGlyph.skip:
 
 c_2072CD	section	code abs=0x2072CD
 
-; [code] text box tiles 0x2C8569, Pal_21F010/MonoPal_21F018, all 8 wTextBoxes reset (speed = wOptionMessageSpeed)
+; [code] text box tiles 0x2C8569, TextBoxPal/TextBoxMonoPal, all 8 wTextBoxes reset (speed = wOptionMessageSpeed)
 InitTextBoxes:
 	ld	WA,1
 	ld	XHL,RawTiles_2C8569
 	call	LoadRawTiles
 	ld	A,1
 	ld	C,1
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	call	LoadMonoPalettes
 	ld	A,3
 	ld	C,1
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	call	LoadMonoPalettes
 	ld	A,5
 	ld	C,1
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	call	LoadMonoPalettes
 	ld	A,0xF
 	ld	C,1
-	ld	XHL,Pal_21F010
+	ld	XHL,TextBoxPal
 	call	LoadPalettes
 	ld	A,0x1F
 	ld	C,1
-	ld	XHL,Pal_21F010
+	ld	XHL,TextBoxPal
 	call	LoadPalettes
 	ld	A,0x2F
 	ld	C,1
-	ld	XHL,Pal_21F010
+	ld	XHL,TextBoxPal
 	call	LoadPalettes
 	ld	A,8
 	ld	XHL,wTextBoxes
@@ -435,12 +435,13 @@ DrawTextChar.skip:
 	scf
 	ret
 DrawTextCharJumps:
-	dl	swp_2076DE,TextCmd_Newline,TextCmd_Page,DrawPlayerName
-	dl	DrawPartnerName,swp_2076DE
+	dl	TextCmd_Nop,TextCmd_Newline,TextCmd_Page,DrawPlayerName
+	dl	DrawPartnerName,TextCmd_Nop
 
 c_2076DE	section	code abs=0x2076DE
 
-swp_2076DE:
+; [code] ret: DrawTextCharJumps entries 0 and 5 (control codes that draw nothing) (was swp_2076DE)
+TextCmd_Nop:
 	ret
 
 c_2076DF	section	code abs=0x2076DF

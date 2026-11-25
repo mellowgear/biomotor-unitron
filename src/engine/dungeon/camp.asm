@@ -651,7 +651,7 @@ CampItemMenuDispatch.done:
 
 c_2122A6	section	code abs=0x2122A6
 
-; [code] CampMenuDispatch state 3: the whole 4-row camp menu (task +0x20 = row, U/D wrap 0-3, cursor at y 0x1C + 8 * row, B -> row 3); A: row 0 "Item" -> DrawCampItemSubmenu, state 4; row 1 "Stats" -> 0x620A = 4, child CampWorksScreenTask, state 6; row 2 "Leave" -> "Camp" / "Leave" + OpenLeaveOKBox, state 5 (CampLeavePrompt); row 3 "Close" -> EndDungeonCamp (was CampMenuInput: only row 2 leaves)
+; [code] CampMenuDispatch state 3: the whole 4-row camp menu (task +0x20 = row, U/D wrap 0-3, cursor at y 0x1C + 8 * row, B -> row 3); A: row 0 "Item" -> DrawCampItemSubmenu, state 4; row 1 "Stats" -> wCampWorksMode = 4, child CampWorksScreenTask, state 6; row 2 "Leave" -> "Camp" / "Leave" + OpenLeaveOKBox, state 5 (CampLeavePrompt); row 3 "Close" -> EndDungeonCamp (was CampMenuInput: only row 2 leaves)
 CampMenuInput:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -862,7 +862,7 @@ CampLeavePrompt.done:
 
 c_212476	section	code abs=0x212476
 
-; [code] CampMenuDispatch state 4: rows Use 0 / List 1 / (blank row 2 skipped) / Exit 3 drawn by DrawCampItemSubmenu, B -> Exit; A: Use -> ShowCampItemList (heal item list), state 8; List -> 0x620A = 5, child CampWorksScreenTask, state 7; Exit -> DrawCampMenu, back to state 3 at the saved row
+; [code] CampMenuDispatch state 4: rows Use 0 / List 1 / (blank row 2 skipped) / Exit 3 drawn by DrawCampItemSubmenu, B -> Exit; A: Use -> ShowCampItemList (heal item list), state 8; List -> wCampWorksMode = 5, child CampWorksScreenTask, state 7; Exit -> DrawCampMenu, back to state 3 at the saved row
 ; [play] Use / List / (blank) / Exit; Down Use-List-Exit, the blank row is never selected; B runs Exit at once
 ; (same as A on Exit: back to the Camp menu on Item)
 CampItemSubmenuInput:

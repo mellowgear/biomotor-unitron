@@ -178,7 +178,8 @@ GetPartRecord:
 
 c_208362	section	code abs=0x208362
 
-loc_208362:
+; [code] HL = part id (1-based) -> XHL = PartStats + 24 * (id - 1); tail of GetPartRecord and the Get*Record category routines (was loc_208362)
+GetPartRecordHL:
 	dec	1,HL
 	mul	XHL,0x18
 	add	XHL,PartStats
@@ -191,7 +192,7 @@ GetBodyRecord:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart)
-	jp	loc_208362
+	jp	GetPartRecordHL
 
 c_20837C	section	code abs=0x20837C
 
@@ -199,7 +200,7 @@ GetCoreRecord:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x2)
-	jp	loc_208362
+	jp	GetPartRecordHL
 
 c_208389	section	code abs=0x208389
 
@@ -207,7 +208,7 @@ GetLegsRecord:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x4)
-	jp	loc_208362
+	jp	GetPartRecordHL
 
 c_208396	section	code abs=0x208396
 
@@ -215,7 +216,7 @@ GetBackRecord:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x6)
-	jp	loc_208362
+	jp	GetPartRecordHL
 
 c_2083A3	section	code abs=0x2083A3
 
@@ -223,7 +224,7 @@ GetArmRecord:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x8)
-	jp	loc_208362
+	jp	GetPartRecordHL
 
 c_2083BF	section	code abs=0x2083BF
 

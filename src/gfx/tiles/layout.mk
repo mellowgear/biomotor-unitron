@@ -300,7 +300,7 @@ build/gfx/tiles/2C8306.2bpp.lz: src/gfx/maps/2C82DE.tilemap
 build/gfx/tiles/2DE3A7.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2DE033.tilemap --count 65
 build/gfx/tiles/2DE3A7.2bpp.lz: src/gfx/maps/2DE033.tilemap
 # IntroPlanetGraphics: Map_2DE660 (the planet, SCR1), then the IntroMeteorTask sprite maps
-# (Data_226B59: Map_2DE95A, 2DE980, 2DE9A6) and the IntroImpactTask SCR2 maps (Data_226B69:
+# (IntroMeteorFrames: Map_2DE95A, 2DE980, 2DE9A6) and the IntroImpactTask SCR2 maps (IntroImpactMaps:
 # Map_2DE9CC ... 2DEAA2); Pal_2DE648 (3 palettes) in all three planes
 build/gfx/tiles/2DEB58.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2DE660.tilemap --count 262
 build/gfx/tiles/2DEB58.2bpp.lz: src/gfx/maps/2DE660.tilemap

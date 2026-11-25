@@ -275,11 +275,11 @@ GetPlaceEntryTalkRow:
 	cp	A,5
 	jr	Z,WorksEntryTalkRow
 	cp	A,6
-	jrl	Z,loc_2154B2
+	jrl	Z,ShopEntryTalkRow
 	cp	A,7
 	jrl	Z,Place7EntryTalkRow
 	cp	A,8
-	jrl	Z,loc_2154F3
+	jrl	Z,Place8EntryTalkRow
 	ld	W,0xFF
 	jrl	GetPlaceEntryTalkRowDone
 
@@ -289,9 +289,9 @@ c_215379	section	code abs=0x215379
 WorksEntryTalkRow:
 	call	GetStoryStage
 	cp	A,0xA
-	jrl	Z,loc_21549F
+	jrl	Z,WorksEntryTalkRowStageA
 	cp	A,8
-	jr	Z,loc_215403
+	jr	Z,WorksEntryTalkRowStage8
 	cp	A,0
 	jr	Z,WorksEntryTalkRowStage0
 	ld	W,0xFF
@@ -304,7 +304,7 @@ WorksEntryTalkRowStage0:
 	ld	HL,EVENT_TALKED_RENAB
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_2153FE
+	jr	Z,WorksEntryTalkRow0
 	ld	HL,EVENT_TALKED_JON
 	call	CheckEventFlag
 	cp	L,0
@@ -349,119 +349,123 @@ WorksEntryTalkRow1:
 
 c_2153FE	section	code abs=0x2153FE
 
-loc_2153FE:
+; [code] WorksEntryTalkRowStage0 with EVENT_TALKED_RENAB clear: W = 0 (was loc_2153FE)
+WorksEntryTalkRow0:
 	ld	W,0
 	jrl	GetPlaceEntryTalkRowDone
 
 c_215403	section	code abs=0x215403
 
-loc_215403:
+; [code] WorksEntryTalkRow at story stage 8: row 3 while EVENT_TALKED_RENAB is clear, 5 when the 13 EVENT_TALKED flags (Renab ... Tetis) are all set, else 4 (was loc_215403)
+WorksEntryTalkRowStage8:
 	ld	HL,EVENT_TALKED_RENAB
 	call	CheckEventFlag
 	cp	L,0
-	jrl	Z,loc_215403.skip2
+	jrl	Z,WorksEntryTalkRowStage8.skip2
 	ld	HL,EVENT_TALKED_JON
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_CYRIUS
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_SHOP
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_WYSE
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_ZIGGY
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_CEUS
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_HELMUT
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_ALDA
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_CAMIL
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_MEESE
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_COLLA
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	HL,EVENT_TALKED_TETIS
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_215403.skip
+	jr	Z,WorksEntryTalkRowStage8.skip
 	ld	W,5
 	jr	GetPlaceEntryTalkRowDone
-loc_215403.skip:
+WorksEntryTalkRowStage8.skip:
 	ld	W,4
 	jr	GetPlaceEntryTalkRowDone
-loc_215403.skip2:
+WorksEntryTalkRowStage8.skip2:
 	ld	W,3
 	jr	GetPlaceEntryTalkRowDone
 
 c_21549F	section	code abs=0x21549F
 
-loc_21549F:
+; [code] WorksEntryTalkRow at story stage 0xA: row 0xE while EVENT_TALKED_RENAB is clear, else 0xFF (was loc_21549F)
+WorksEntryTalkRowStageA:
 	ld	HL,EVENT_TALKED_RENAB
 	call	CheckEventFlag
 	cp	L,0
-	jr	Z,loc_21549F.skip
+	jr	Z,WorksEntryTalkRowStageA.skip
 	ld	W,0xFF
 	jr	GetPlaceEntryTalkRowDone
-loc_21549F.skip:
+WorksEntryTalkRowStageA.skip:
 	ld	W,0xE
 	jr	GetPlaceEntryTalkRowDone
 
 c_2154B2	section	code abs=0x2154B2
 
-loc_2154B2:
+; [code] GetPlaceEntryTalkRow for place 6 (Shop): EVENT_TALKED_SHOP clear -> stage 0 row 0, stage 8 row 4; set -> stage 0 row 3, stage 8 row 7; other stages 0xFF (was loc_2154B2)
+ShopEntryTalkRow:
 	ld	HL,EVENT_TALKED_SHOP
 	call	CheckEventFlag
 	cp	L,1
-	jr	Z,loc_2154B2.skip3
+	jr	Z,ShopEntryTalkRow.skip3
 	call	GetStoryStage
 	cp	A,8
-	jr	Z,loc_2154B2.skip2
+	jr	Z,ShopEntryTalkRow.skip2
 	cp	A,0
-	jr	Z,loc_2154B2.skip
+	jr	Z,ShopEntryTalkRow.skip
 	ld	W,0xFF
 	jr	GetPlaceEntryTalkRowDone
-loc_2154B2.skip:
+ShopEntryTalkRow.skip:
 	ld	W,0
 	jr	GetPlaceEntryTalkRowDone
-loc_2154B2.skip2:
+ShopEntryTalkRow.skip2:
 	ld	W,4
 	jr	GetPlaceEntryTalkRowDone
-loc_2154B2.skip3:
+ShopEntryTalkRow.skip3:
 	call	GetStoryStage
 	cp	A,8
-	jr	Z,loc_2154B2.skip5
+	jr	Z,ShopEntryTalkRow.skip5
 	cp	A,0
-	jr	Z,loc_2154B2.skip4
+	jr	Z,ShopEntryTalkRow.skip4
 	ld	W,0xFF
 	jr	GetPlaceEntryTalkRowDone
-loc_2154B2.skip4:
+ShopEntryTalkRow.skip4:
 	ld	W,3
 	jr	GetPlaceEntryTalkRowDone
-loc_2154B2.skip5:
+ShopEntryTalkRow.skip5:
 	ld	W,7
 	jr	GetPlaceEntryTalkRowDone
 
@@ -474,7 +478,8 @@ Place7EntryTalkRow:
 
 c_2154F3	section	code abs=0x2154F3
 
-loc_2154F3:
+; [code] GetPlaceEntryTalkRow for place 8: W = 0 (was loc_2154F3)
+Place8EntryTalkRow:
 	ld	W,0
 	jr	GetPlaceEntryTalkRowDone
 
@@ -601,7 +606,7 @@ NpcTalkRowNext:
 	calr	GetCurrentTalkRow
 	ld	A,(XHL+3)
 	cp	A,0xFF
-	jrl	Z,loc_21572F
+	jrl	Z,NpcTalkEnd
 	cp	A,0xFD
 	jrl	Z,TalkNextLeavePlace
 	cp	A,0xFB
@@ -621,41 +626,41 @@ NpcTalkRowNext:
 	cp	A,0xF0
 	jr	Z,TalkNextPictureRow1
 	cp	A,0xEF
-	jr	Z,loc_2156A8
+	jr	Z,TalkNextWorksRow0
 	cp	A,0xEE
-	jr	Z,loc_2156B5
+	jr	Z,TalkNextWorksRowE
 	cp	A,0xED
-	jr	Z,loc_2156C1
+	jr	Z,TalkNextProtectorStep0
 	cp	A,0xEC
-	jr	Z,loc_2156C6
+	jr	Z,TalkNextProtector
 	cp	A,0xEB
-	jr	Z,loc_2156CD
+	jr	Z,TalkNextCollaStep1
 	cp	A,0xEA
-	jr	Z,loc_2156D2
+	jr	Z,TalkNextColla
 	cp	A,0xE9
-	jr	Z,loc_2156D9
+	jr	Z,TalkNextTetisByItemCount
 	cp	A,0xE8
-	jrl	Z,loc_2156F5
+	jrl	Z,TalkNextTetisByStage
 	cp	A,0xE7
-	jrl	Z,loc_215704
+	jrl	Z,TalkNextTetisIfItem
 	cp	A,0xE6
-	jrl	Z,loc_21571A
+	jrl	Z,TalkNextTetisGift
 	ld	(XIZ+0x12),A
-	jrl	loc_21572F.skip
+	jrl	NpcTalkEnd.skip
 NpcTalkRowNext.skip:
 	ld	A,0
 	ld	(XIZ+0x27),A
 NpcTalkRowNext.skip2:
 	ld	A,7
 	ld	(XIZ+TASK_ARG),A
-	jrl	loc_21572F.skip
+	jrl	NpcTalkEnd.skip
 NpcTalkRowNext.skip3:
 	ld	A,0
 	ld	(XIZ+0x27),A
 NpcTalkRowNext.skip4:
 	ld	A,8
 	ld	(XIZ+TASK_ARG),A
-	jrl	loc_21572F.skip
+	jrl	NpcTalkEnd.skip
 
 c_21569B	section	code abs=0x21569B
 
@@ -665,95 +670,105 @@ TalkNextPictureRow1:
 	ld	(XIZ+0x11),A
 	ld	A,8
 	ld	(XIZ+0xF),A
-	jrl	loc_21572F.skip
+	jrl	NpcTalkEnd.skip
 
 c_2156A8	section	code abs=0x2156A8
 
-loc_2156A8:
+; [code] talk next 0xEF: +0x11 = 0xEF, talk state 8 (TownTalkFadeOut, then TalkGoToWorksRow0) (was loc_2156A8)
+TalkNextWorksRow0:
 	ld	A,0xEF
 	ld	(XIZ+0x11),A
 	ld	A,8
 	ld	(XIZ+0xF),A
-	jrl	loc_21572F.skip
+	jrl	NpcTalkEnd.skip
 
 c_2156B5	section	code abs=0x2156B5
 
-loc_2156B5:
+; [code] talk next 0xEE: +0x11 = 0xEE, talk state 8 (TownTalkFadeOut, then TalkGoToWorksRowE) (was loc_2156B5)
+TalkNextWorksRowE:
 	ld	A,0xEE
 	ld	(XIZ+0x11),A
 	ld	A,8
 	ld	(XIZ+0xF),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_2156C1	section	code abs=0x2156C1
 
-loc_2156C1:
+; [code] talk next 0xED: +0x27 = 0, then TalkNextProtector (was loc_2156C1)
+TalkNextProtectorStep0:
 	ld	A,0
 	ld	(XIZ+0x27),A
 
 c_2156C6	section	code abs=0x2156C6
 
-loc_2156C6:
+; [code] talk next 0xEC: TASK_ARG 9 (WorksProtectorScene) (was loc_2156C6)
+TalkNextProtector:
 	ld	A,9
 	ld	(XIZ+TASK_ARG),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_2156CD	section	code abs=0x2156CD
 
-loc_2156CD:
+; [code] talk next 0xEB: +0x27 = 1, then TalkNextColla (was loc_2156CD)
+TalkNextCollaStep1:
 	ld	A,1
 	ld	(XIZ+0x27),A
 
 c_2156D2	section	code abs=0x2156D2
 
-loc_2156D2:
+; [code] talk next 0xEA: TASK_ARG 0xA (Colla) (was loc_2156D2)
+TalkNextColla:
 	ld	A,0xA
 	ld	(XIZ+TASK_ARG),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_2156D9	section	code abs=0x2156D9
 
-loc_2156D9:
+; [code] talk next 0xE9: item 0xFF count (GetInventoryByte) 2-6 -> next row 0x4E-0x52, else NpcTalkEnd (was loc_2156D9)
+TalkNextTetisByItemCount:
 	push	W
 	ld	WA,0xFF
 	call	GetInventoryByte
 	pop	W
 	sub	A,2
-	jr	C,loc_21572F
+	jr	C,NpcTalkEnd
 	cp	A,5
-	jr	NC,loc_21572F
+	jr	NC,NpcTalkEnd
 	add	A,0x4E
 	ld	(XIZ+0x12),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_2156F5	section	code abs=0x2156F5
 
-loc_2156F5:
+; [code] talk next 0xE8: next row = 0x49 + story stage - 3 (was loc_2156F5)
+TalkNextTetisByStage:
 	call	GetStoryStage
 	sub	A,3
 	add	A,0x49
 	ld	(XIZ+0x12),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_215704	section	code abs=0x215704
 
-loc_215704:
+; [code] talk next 0xE7: next row 0x53 when item 0xFF count != 0, else NpcTalkEnd (was loc_215704)
+TalkNextTetisIfItem:
 	push	W
 	ld	WA,0xFF
 	call	GetInventoryByte
 	pop	W
 	cp	A,0
-	jr	Z,loc_21572F
+	jr	Z,NpcTalkEnd
 	ld	A,0x53
 	ld	(XIZ+0x12),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_21571A	section	code abs=0x21571A
 
-loc_21571A:
+; [code] talk next 0xE6: TASK_ARG 0xB (TetisGift) (was loc_21571A)
+TalkNextTetisGift:
 	ld	A,0xB
 	ld	(XIZ+TASK_ARG),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_215721	section	code abs=0x215721
 
@@ -764,16 +779,17 @@ TalkNextLeavePlace:
 	ld	(XIZ+0x11),W
 	ld	A,4
 	ld	(XIZ+0xF),A
-	jr	loc_21572F.skip
+	jr	NpcTalkEnd.skip
 
 c_21572F	section	code abs=0x21572F
 
-loc_21572F:
+; [code] talk next 0xFF: talk state 4, +0x11 = 0xFF (end of talk); .skip is the common exit of NpcTalkRowNext (ResetTalkRowPhase, registers restored) (was loc_21572F)
+NpcTalkEnd:
 	ld	A,4
 	ld	(XIZ+0xF),A
 	ld	A,0xFF
 	ld	(XIZ+0x11),A
-loc_21572F.skip:
+NpcTalkEnd.skip:
 	calr	ResetTalkRowPhase
 	pop	XWA
 	pop	XBC
@@ -1146,7 +1162,7 @@ TownTalkFadeOut:
 	cp	A,0xEF
 	jr	Z,TalkGoToWorksRow0
 	cp	A,0xEE
-	jrl	Z,loc_215A64
+	jrl	Z,TalkGoToWorksRowE
 	ld	A,3
 	ld	(XIZ+0xF),A
 	jrl	TownTalkWindowOpen.skip3
@@ -1208,7 +1224,8 @@ TalkGoToWorksRow0:
 
 c_215A64	section	code abs=0x215A64
 
-loc_215A64:
+; [code] after talk next 0xEE and the fade to black: like TalkGoToWorksRow0 but row +0x12 = 0xE, window opening horizontally (SetupWindowOpenHorizontal), state 0xA (was loc_215A64)
+TalkGoToWorksRowE:
 	call	ClearScr1Tilemap
 	call	ClearTextBox1
 	call	PlaceBox2

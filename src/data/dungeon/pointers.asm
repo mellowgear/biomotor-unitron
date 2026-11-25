@@ -16,14 +16,14 @@ DungeonDescriptions:
 d_2493F8	section	romdata abs=0x2493F8
 ; [code] sub_211B35: colour palettes per dungeon 1-5
 DungeonPalettes:
-	dl	Pal_228649,Pal_228649,Pal_2286C5,Pal_2286C5
-	dl	Pal_2286C5
+	dl	Dungeon12Pal,Dungeon12Pal,Dungeon345Pal,Dungeon345Pal
+	dl	Dungeon345Pal
 
 d_24940C	section	romdata abs=0x24940C
 ; [code] mono palette per dungeon 1-5
 DungeonMonoPalettes:
-	dl	MonoPal_2286C1,MonoPal_2286C1,MonoPal_22873D,MonoPal_22873D
-	dl	MonoPal_22873D
+	dl	Dungeon12MonoPal,Dungeon12MonoPal,Dungeon345MonoPal,Dungeon345MonoPal
+	dl	Dungeon345MonoPal
 
 d_249424	section	romdata abs=0x249424
 ; [code] DungeonMaps: per map id (map pointer, chest position list)

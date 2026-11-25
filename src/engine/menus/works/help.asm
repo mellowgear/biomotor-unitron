@@ -89,7 +89,7 @@ HelpViewerInput:
 HelpViewerInput.skip:
 	ld	A,(wJoyPressed)
 	and	A,B_BUTTON
-	jr	NZ,loc_21D5C0
+	jr	NZ,HelpViewerExit
 	ld	A,(wJoyPressed)
 	and	A,D_LEFT|D_RIGHT
 	ret	Z
@@ -127,6 +127,7 @@ DrawHelpPage:
 
 c_21D5C0	section	code abs=0x21D5C0
 
-loc_21D5C0:
+; [code] B in HelpViewerInput: EndTask (was loc_21D5C0)
+HelpViewerExit:
 	call	EndTask
 	ret

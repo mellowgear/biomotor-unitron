@@ -113,24 +113,24 @@ WorksDataMenu.loop:
 	jp	WorksDataMenu.skip3
 WorksDataMenu.skip:
 	call	ClearPictureHideCursor
-	ldb	(0x6201),0
+	ldb	(wWorksDataDone),0
 	ld	XHL,RunWorksSaveTask
 	call	StartChildTask
 WorksDataMenu.loop2:
 	call	TaskYield
-	cpb	(0x6201),0
+	cpb	(wWorksDataDone),0
 	jr	Z,WorksDataMenu.loop2
 	call	ReopenWorksBoxes
 	call	DrawWorksPortraits
 	jp	WorksDataMenu.loop
 WorksDataMenu.skip2:
 	call	ClearPictureHideCursor
-	ldb	(0x6201),0
+	ldb	(wWorksDataDone),0
 	ld	XHL,RunWorksLoadTask
 	call	StartChildTask
 WorksDataMenu.loop3:
 	call	TaskYield
-	cpb	(0x6201),0
+	cpb	(wWorksDataDone),0
 	jr	Z,WorksDataMenu.loop3
 	call	ReopenWorksBoxes
 	call	DrawWorksPortraits
@@ -147,27 +147,27 @@ WorksDataMenu.skip3:
 
 c_219F1D	section	code abs=0x219F1D
 
-; [code] child WorksSaveTask (0x5DF5 = 1 Save, slot list, SaveGameSlot) with args 0x7E/8, task_wait, then 0x6201 = 1 (polled by WorksDataMenu, Data menu choice 0), EndTask
+; [code] child WorksSaveTask (0x5DF5 = 1 Save, slot list, SaveGameSlot) with args 0x7E/8, task_wait, then wWorksDataDone = 1 (polled by WorksDataMenu, Data menu choice 0), EndTask
 RunWorksSaveTask:
 	ld	XHL,WorksSaveTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x7E
 	ldw	(XHL+0x10),8
 	task_wait
-	ldb	(0x6201),1
+	ldb	(wWorksDataDone),1
 	call	EndTask
 	ret
 
 c_219F48	section	code abs=0x219F48
 
-; [code] child WorksLoadTask (slot list, LoadGameSlot) with args 0x7E / 8, task_wait, then 0x6201 = 1 (polled by WorksDataMenu), EndTask: the Load counterpart of RunWorksSaveTask; [play] runs after Works > Data > Load Ok
+; [code] child WorksLoadTask (slot list, LoadGameSlot) with args 0x7E / 8, task_wait, then wWorksDataDone = 1 (polled by WorksDataMenu), EndTask: the Load counterpart of RunWorksSaveTask; [play] runs after Works > Data > Load Ok
 RunWorksLoadTask:
 	ld	XHL,WorksLoadTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x7E
 	ldw	(XHL+0x10),8
 	task_wait
-	ldb	(0x6201),1
+	ldb	(wWorksDataDone),1
 	call	EndTask
 	ret
 

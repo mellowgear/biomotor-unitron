@@ -128,7 +128,8 @@ PlotPixel:
 
 c_207CE7	section	code abs=0x207CE7
 
-swp_207CE7:
+; [code] XDE = tile index -> XDE = 0xA000 + 16 * index (character RAM address), falls into RenderNumberTiles; no callers (was swp_207CE7)
+RenderNumberTilesAtTile:
 	extz	XDE
 	sll	4,DE
 	add	DE,0xA000
@@ -368,11 +369,11 @@ LoadImagePalette:
 	call	LoadPalettes
 	ld	A,4
 	ld	C,1
-	ld	XHL,MonoPal_220BFC
+	ld	XHL,ImageMonoPal
 	call	LoadMonoPalettes
 	ld	A,5
 	ld	C,1
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	call	LoadMonoPalettes
 	ret
 LoadImagePalette.skip:
@@ -381,11 +382,11 @@ LoadImagePalette.skip:
 	call	LoadPalettes
 	ld	A,2
 	ld	C,1
-	ld	XHL,MonoPal_220BFC
+	ld	XHL,ImageMonoPal
 	call	LoadMonoPalettes
 	ld	A,3
 	ld	C,1
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	call	LoadMonoPalettes
 	ret
 

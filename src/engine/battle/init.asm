@@ -557,7 +557,7 @@ BattleStart:
 	ld	WA,0x173
 	ld	XHL,RawTiles_2C8523
 	call	LoadRawTiles
-	ld	XHL,Pal_2C82CE
+	ld	XHL,BattleStartPal
 	ld	A,0x1D
 	ld	C,2
 	call	LoadPalettes
@@ -717,7 +717,7 @@ DrawBattleScreen:
 	calr	ComputeStatBuffs
 	ldw	(wAttackEPCost),0
 	ldw	(wEnemyAttackEPCost),0
-	ld	XHL,Pal_2C82AE
+	ld	XHL,BattleScreenPal
 	ld	A,0x11
 	ld	C,4
 	call	LoadPalettes
@@ -756,7 +756,7 @@ DrawBattleScreen:
 	ld	WA,0x1CC
 	ld	BC,0xC
 	ld	DE,9
-	ld	XHL,Map_2C82DE
+	ld	XHL,BattleParalyzedIconMap
 	call	DrawTilemap
 DrawBattleScreen.skip:
 	cpb	(wStatusRust),0
@@ -764,7 +764,7 @@ DrawBattleScreen.skip:
 	ld	WA,0x1CC
 	ld	BC,0xE
 	ld	DE,9
-	ld	XHL,Map_2C82FC
+	ld	XHL,BattleRustIconMap
 	call	DrawTilemap
 DrawBattleScreen.skip2:
 	cpb	(wStatusEPLeak),0
@@ -772,7 +772,7 @@ DrawBattleScreen.skip2:
 	ld	WA,0x1CC
 	ld	BC,0x10
 	ld	DE,9
-	ld	XHL,Map_2C82F2
+	ld	XHL,BattleEPLeakIconMap
 	call	DrawTilemap
 DrawBattleScreen.skip3:
 	cpb	(wStatusConfused),0
@@ -780,7 +780,7 @@ DrawBattleScreen.skip3:
 	ld	WA,0x1CC
 	ld	BC,0x12
 	ld	DE,9
-	ld	XHL,Map_2C82E8
+	ld	XHL,BattleConfusedIconMap
 	call	DrawTilemap
 DrawBattleScreen.skip4:
 	ldw	(wBattleChoice),0

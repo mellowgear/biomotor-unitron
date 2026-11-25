@@ -408,7 +408,7 @@ ClearPictureAndTilemaps:
 
 c_214675	section	code abs=0x214675
 
-; [code] the 18 x 5 map Map_2C87AA (mono Map_2C8860) drawn one column at a time into SCR1 row 7 at column (0x98 - +0x2C) / 8 - 1 (columns 1-0x12), tiles + GetPictureFirstTile - 1; wScr1ScrollX = 0x98 - +0x2C
+; [code] the 18 x 5 map DuelTitleSwordMap (mono DuelTitleSwordMonoMap) drawn one column at a time into SCR1 row 7 at column (0x98 - +0x2C) / 8 - 1 (columns 1-0x12), tiles + GetPictureFirstTile - 1; wScr1ScrollX = 0x98 - +0x2C
 DrawDuelSwordColumn:
 	push	XHL
 	push	XDE
@@ -435,10 +435,10 @@ DrawDuelSwordColumn:
 	ld	A,(wColorFlags)
 	cp	A,0
 	jr	Z,DrawDuelSwordColumn.skip
-	ld	XHL,Map_2C87AA
+	ld	XHL,DuelTitleSwordMap
 	jr	DrawDuelSwordColumn.skip2
 DrawDuelSwordColumn.skip:
-	ld	XHL,Map_2C8860
+	ld	XHL,DuelTitleSwordMonoMap
 DrawDuelSwordColumn.skip2:
 	inc	2,XHL
 	pop	XWA
@@ -474,7 +474,7 @@ DrawDuelSwordColumn.skip4:
 
 c_214700	section	code abs=0x214700
 
-; [code] the 10 x 3 map Map_2C8916 (mono Map_2C8954) one column at a time into SCR2 row 8 at column +0x2C / 8 + 1 (columns 5-0xE); SCR2 scroll the other way
+; [code] the 10 x 3 map DuelTitleWordMap (mono DuelTitleWordMonoMap) one column at a time into SCR2 row 8 at column +0x2C / 8 + 1 (columns 5-0xE); SCR2 scroll the other way
 DrawDuelLetterColumn:
 	push	XHL
 	push	XDE
@@ -499,10 +499,10 @@ DrawDuelLetterColumn:
 	ld	A,(wColorFlags)
 	cp	A,0
 	jr	Z,DrawDuelLetterColumn.skip
-	ld	XHL,Map_2C8916
+	ld	XHL,DuelTitleWordMap
 	jr	DrawDuelLetterColumn.skip2
 DrawDuelLetterColumn.skip:
-	ld	XHL,Map_2C8954
+	ld	XHL,DuelTitleWordMonoMap
 DrawDuelLetterColumn.skip2:
 	inc	2,XHL
 	pop	XWA

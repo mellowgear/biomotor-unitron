@@ -19,7 +19,7 @@ RawTiles_2C846F:    ; [code] DrawBarTilesReversed copies tiles from here by addr
 	dw	9
 $include "build/gfx/raw_tiles/2C846F.2bpp.asm"	; build/gfx/raw_tiles/2C846F.2bpp
 d_2C8501	section	romdata abs=0x2C8501
-RawTiles_2C8501:    ; [code] BattleStart (before Pal_2C82CE): to tile 0x15F
+RawTiles_2C8501:    ; [code] BattleStart (before BattleStartPal): to tile 0x15F
 	dw	2
 $include "build/gfx/raw_tiles/2C8501.2bpp.asm"	; build/gfx/raw_tiles/2C8501.2bpp
 d_2C8523	section	romdata abs=0x2C8523
@@ -35,7 +35,7 @@ RawTiles_2C8557:    ; [code] BattleStart: to tiles 0x15B and 0x16F
 	dw	1
 $include "build/gfx/raw_tiles/2C8557.2bpp.asm"	; build/gfx/raw_tiles/2C8557.2bpp
 d_2C8569	section	romdata abs=0x2C8569
-RawTiles_2C8569:    ; [code] InitTextBoxes: the text box tiles (PNG in Pal_21F010's colours)
+RawTiles_2C8569:    ; [code] InitTextBoxes: the text box tiles (PNG in TextBoxPal's colours)
 	dw	11
 $include "build/gfx/raw_tiles/2C8569.2bpp.asm"	; build/gfx/raw_tiles/2C8569.2bpp
 d_2C861B	section	romdata abs=0x2C861B

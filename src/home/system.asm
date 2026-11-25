@@ -25,7 +25,7 @@ Reset.loop:
 	jr	C,Reset.loop
 	orb	(TRUN),0x80
 	ld	RW3,2
-	ld	XHL3,0x500C
+	ld	XHL3,wBootRtcTime
 	call	BiosCall
 	ld	RW3,0x10
 	call	BiosCall
@@ -36,9 +36,9 @@ Reset.loop:
 	ldb	(wVBlankWait),0
 	ld	XHL,VBlankHandler
 	ld	(VEC_VBLANK),XHL
-	ld	WA,(0x500C)
-	ld	BC,(0x500E)
-	ld	DE,(0x5010)
+	ld	WA,(wBootRtcTime)
+	ld	BC,(wBootRtcTime+2)
+	ld	DE,(wBootRtcTime+4)
 	inc	1,DE
 	calr	SetRandomSeeds
 	call	InitDisplay
@@ -230,7 +230,7 @@ RemoveItem:
 
 c_206250	section	code abs=0x206250
 
-; clears 32 task slots at 0x5282, empty list at 0x5842
+; clears 32 task slots at 0x5282, empty list at wTaskList
 InitTaskList:
 	ld	XWA,0
 	ld	XHL,wTasks
@@ -242,10 +242,10 @@ InitTaskList.loop:
 	ld	(XHL+8),XWA
 	add	HL,0x2E
 	djnz	BC,InitTaskList.loop
-	ldw	(0x5844),0x5846
-	ldw	(wTaskList),0x5846
-	ldw	(0x5848),0x5842
-	ldw	(0x5846),0x5842
+	ldw	(wTaskList+2),wTaskList+4
+	ldw	(wTaskList),wTaskList+4
+	ldw	(wTaskList+6),wTaskList
+	ldw	(wTaskList+4),wTaskList
 	ret
 
 c_206286	section	code abs=0x206286
@@ -253,9 +253,9 @@ c_206286	section	code abs=0x206286
 ; walks the task list, calls each task's function (+8)
 RunTasks:
 	ld	XIZ,0
-	ld	IZ,(0x5844)
+	ld	IZ,(wTaskList+2)
 RunTasks.loop:
-	cp	IZ,0x5846
+	cp	IZ,wTaskList+4
 	jr	Z,RunTasks.done
 	bit	7,(XIZ+7)
 	jr	NZ,RunTasks.skip3
@@ -304,18 +304,18 @@ RunTasks.done:
 
 c_2062F5	section	code abs=0x2062F5
 
-; [code] like StartChildTask but without a parent: wTaskCount += 1, free slot (FindFreeTaskSlot, C = none), links the new task last before the list tail 0x5846, +4 parent = 0, +8 = XHL function, +0xC = 0; callers Reset, BattleStart, BattleVictory, BattleDefeat, StartBattleTask (BattleStart)
+; [code] like StartChildTask but without a parent: wTaskCount += 1, free slot (FindFreeTaskSlot, C = none), links the new task last before the list tail wTaskList+4, +4 parent = 0, +8 = XHL function, +0xC = 0; callers Reset, BattleStart, BattleVictory, BattleDefeat, StartBattleTask (BattleStart)
 StartTask:
 	incb	1,(wTaskCount)
 	ld	XDE,XHL
 	call	FindFreeTaskSlot
 	ret	C
 	ld	XWA,0
-	ld	WA,(0x5846)
+	ld	WA,(wTaskList+4)
 	ld	(XWA+2),HL
-	ld	(0x5846),HL
+	ld	(wTaskList+4),HL
 	ld	(XHL+0),WA
-	ldw	(XHL+2),0x5846
+	ldw	(XHL+2),wTaskList+4
 	ld	(XHL+8),XDE
 	ldw	(XHL+4),0
 	ldw	(XHL+0xC),0
@@ -343,14 +343,14 @@ StartChildTask:
 
 c_206350	section	code abs=0x206350
 
-; [code] XHL = first wTasks slot (0x2E bytes each, up to 0x5842) whose byte +0 is 0 (Z); none: XHL = 0 and carry; callers StartTask, StartChildTask
+; [code] XHL = first wTasks slot (0x2E bytes each, up to wTaskList) whose byte +0 is 0 (Z); none: XHL = 0 and carry; callers StartTask, StartChildTask
 FindFreeTaskSlot:
 	ld	XHL,wTasks
 FindFreeTaskSlot.loop:
 	cpb	(XHL+0),0
 	ret	Z
 	add	HL,0x2E
-	cp	HL,0x5842
+	cp	HL,wTaskList
 	jr	C,FindFreeTaskSlot.loop
 	ld	XHL,0
 	scf
@@ -539,11 +539,11 @@ c_219864	section	code abs=0x219864
 ; [code] coroutine: saves the return address, waits 0x1E frames, resumes
 Wait30Frames:
 	pop	XDE
-	ld	(0x61ED),XDE
+	ld	(wTextWaitReturn),XDE
 	call	WaitMessage
 	ld	A,0x1E
 	call	WaitFramesOrButton
-	ld	XHL,(0x61ED)
+	ld	XHL,(wTextWaitReturn)
 	jp	XHL
 
 c_219879	section	code abs=0x219879
@@ -551,8 +551,8 @@ c_219879	section	code abs=0x219879
 ; [code] coroutine: resumes on A/B/left/right or after 0x3C frames
 WaitForButton:
 	pop	XDE
-	ld	(0x61ED),XDE
-	ldb	(0x61F5),0x3C
+	ld	(wTextWaitReturn),XDE
+	ldb	(wWaitButtonTimer),0x3C
 WaitForButton.loop:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -573,14 +573,14 @@ WaitForButton.loop:
 	ld	A,(wMsgBox)
 	call	IsTextBoxPrinting
 	jr	C,WaitForButton.skip
-	cpb	(0x61F5),0
+	cpb	(wWaitButtonTimer),0
 	jp	Z,WaitForButton.skip2
-	decb	1,(0x61F5)
+	decb	1,(wWaitButtonTimer)
 WaitForButton.skip:
 	call	TaskYield
 	jr	WaitForButton.loop
 WaitForButton.skip2:
-	ld	XHL,(0x61ED)
+	ld	XHL,(wTextWaitReturn)
 	jp	XHL
 
 c_21D9B9	section	code abs=0x21D9B9

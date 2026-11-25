@@ -168,7 +168,7 @@ ResetBgPalettes:
 
 c_206877	section	code abs=0x206877
 
-; [code] same as ResetSpritePalettes but for SCR1: 15 x 0xFFF + Pal_21F010 into 0x58F6 (= wPalShadow+0x80 = LoadPalettes slot 0x10, the slot LoadImagePalette uses for SCR1), mono 0x5865 (= LoadMonoPalettes entries 2-3, SCR1 in LoadImagePalette) = 0 + MonoPal_21F018; 0x585C = ~wFadeLevel
+; [code] same as ResetSpritePalettes but for SCR1: 15 x 0xFFF + TextBoxPal into 0x58F6 (= wPalShadow+0x80 = LoadPalettes slot 0x10, the slot LoadImagePalette uses for SCR1), mono 0x5865 (= LoadMonoPalettes entries 2-3, SCR1 in LoadImagePalette) = 0 + TextBoxMonoPal; 0x585C = ~wFadeLevel
 ResetScr1Palettes:
 	ld	WA,0xFFF
 	ld	XDE,wPalShadow+0x80
@@ -176,7 +176,7 @@ ResetScr1Palettes:
 ResetScr1Palettes.loop:
 	ld	(XDE+),WA
 	djnz	C,ResetScr1Palettes.loop
-	ld	XHL,Pal_21F010
+	ld	XHL,TextBoxPal
 	ld	BC,4
 	ldirw	(XDE+),(XHL+)
 	ld	A,0
@@ -185,7 +185,7 @@ ResetScr1Palettes.loop:
 ResetScr1Palettes.loop2:
 	ld	(XDE+),A
 	djnz	C,ResetScr1Palettes.loop2
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	ld	BC,4
 	ldir	(XDE+),(XHL+)
 	ld	A,(wFadeLevel)
@@ -203,7 +203,7 @@ ResetScr2Palettes:
 ResetScr2Palettes.loop:
 	ld	(XDE+),WA
 	djnz	C,ResetScr2Palettes.loop
-	ld	XHL,Pal_21F010
+	ld	XHL,TextBoxPal
 	ld	BC,4
 	ldirw	(XDE+),(XHL+)
 	ld	A,0
@@ -212,7 +212,7 @@ ResetScr2Palettes.loop:
 ResetScr2Palettes.loop2:
 	ld	(XDE+),A
 	djnz	C,ResetScr2Palettes.loop2
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	ld	BC,4
 	ldir	(XDE+),(XHL+)
 	ld	A,(wFadeLevel)
@@ -222,7 +222,7 @@ ResetScr2Palettes.loop2:
 
 c_2068EF	section	code abs=0x2068EF
 
-; [code] sprite palettes in wPalShadow: 15 x 0xFFF, palette 15 = Pal_21F010; mono 0x585D
+; [code] sprite palettes in wPalShadow: 15 x 0xFFF, palette 15 = TextBoxPal; mono 0x585D
 ResetSpritePalettes:
 	ld	WA,0xFFF
 	ld	XDE,wPalShadow
@@ -230,7 +230,7 @@ ResetSpritePalettes:
 ResetSpritePalettes.loop:
 	ld	(XDE+),WA
 	djnz	C,ResetSpritePalettes.loop
-	ld	XHL,Pal_21F010
+	ld	XHL,TextBoxPal
 	ld	BC,4
 	ldirw	(XDE+),(XHL+)
 	ld	A,0
@@ -239,7 +239,7 @@ ResetSpritePalettes.loop:
 ResetSpritePalettes.loop2:
 	ld	(XDE+),A
 	djnz	C,ResetSpritePalettes.loop2
-	ld	XHL,MonoPal_21F018
+	ld	XHL,TextBoxMonoPal
 	ld	BC,4
 	ldir	(XDE+),(XHL+)
 	ld	A,(wFadeLevel)

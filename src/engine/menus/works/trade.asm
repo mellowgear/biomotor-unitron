@@ -84,7 +84,7 @@ WorksTradeMenu.loop3:
 	or	A,A
 	jp	MI,WorksTradeMenu.loop2
 	inc	1,A
-	ld	(0x61FB),A
+	ld	(wTradeOffer+1),A
 	call	OpenListBox
 	call	ClearTextBox2Home
 	ld	A,(wMenuChoice)
@@ -118,7 +118,7 @@ WorksTradeMenu.loop4:
 	or	A,A
 	jp	MI,WorksTradeMenu.loop2
 	add	A,6
-	ld	(0x61FB),A
+	ld	(wTradeOffer+1),A
 	call	OpenListBox
 	call	ClearTextBox2Home
 	ld	A,(wMenuChoice)
@@ -140,8 +140,8 @@ WorksTradeMenu.loop4:
 	jp	MI,WorksTradeMenu.loop4
 WorksTradeMenu.skip2:
 	inc	1,A
-	ld	(0x61FA),A
-	ld	WA,(0x61FA)
+	ld	(wTradeOffer),A
+	ld	WA,(wTradeOffer)
 	call	SetLinkOffer
 	call	StartTradeStatus
 WorksTradeMenu.loop5:
@@ -544,8 +544,8 @@ SetupTradeItemList:
 	ld	(wListRows),A
 	ld	XHL,DrawItemListPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218331
-	ld	(0x6166),XHL
+	ld	XHL,ItemListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2181D8
 	ld	(wListCells),XHL
 	jp	ListReset
@@ -598,8 +598,8 @@ SetupTradePartList:
 	ld	(wListRows),A
 	ld	XHL,DrawPartListPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218577
-	ld	(0x6166),XHL
+	ld	XHL,EntryListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2183EE
 	ld	(wListCells),XHL
 	jp	ListReset
@@ -683,7 +683,7 @@ swp_21D224:
 
 c_21D236	section	code abs=0x21D236
 
-; [code] wLinkOffer = WA (the entry WorksTradeMenu offers: 0x61FB << 8 | 0x61FA), C
+; [code] wLinkOffer = WA (the entry WorksTradeMenu offers: wTradeOffer+1 << 8 | wTradeOffer), C
 SetLinkOffer:
 	ld	(wLinkOffer),WA
 	scf
@@ -762,9 +762,9 @@ LinkCommTask.skip:
 	call	BiosCall
 	call	LinkTaskYield
 	ld	XHL,wLinkPacketText
-	ld	(0x6233),XHL
+	ld	(wLinkPacketWritePtr),XHL
 	ld	B,0x10
-	ld	(0x6237),B
+	ld	(wLinkPacketBytesLeft),B
 LinkCommTask.loop2:
 	ld	RW3,0x18
 	call	BiosCall
@@ -783,8 +783,8 @@ LinkCommTask.loop2:
 	ld	B,0x40
 	sub	B,A
 	ld	XHL,wLinkRxBuffer
-	ld	XDE,(0x6233)
-	ld	C,(0x6237)
+	ld	XDE,(wLinkPacketWritePtr)
+	ld	C,(wLinkPacketBytesLeft)
 	cp	C,0x10
 	jr	NZ,LinkCommTask.loop4
 LinkCommTask.loop3:
@@ -812,8 +812,8 @@ LinkCommTask.loop4:
 	dec	1,C
 	jr	LinkCommTask.loop4
 LinkCommTask.skip3:
-	ld	(0x6233),XDE
-	ld	(0x6237),C
+	ld	(wLinkPacketWritePtr),XDE
+	ld	(wLinkPacketBytesLeft),C
 	cpb	(wLinkTimeout),0
 	jp	Z,LinkCommTask.skip6
 	decb	1,(wLinkTimeout)

@@ -390,7 +390,8 @@ GetPortraitFirstTile:
 
 c_21684D	section	code abs=0x21684D
 
-swp_21684D:
+; [code] WA = 0x46: first tile DrawArenaParticipants passes to DrawPortrait (the sibling of GetPortraitFirstTile, 0x13C) (was swp_21684D)
+GetArenaPortraitFirstTile:
 	ld	WA,0x46
 	ret
 

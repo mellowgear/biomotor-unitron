@@ -36,7 +36,7 @@ UpdateSpritesAndFade  main loop after the VBlank wait: wSpriteBuffer -> SPRITE_V
 ```
 LoadPalettes          A = first slot, C = count, XHL = data (4 colours each) -> wPalShadow
 LoadMonoPalettes      A = first entry, C = count, XHL = data (4 bytes each) -> wMonoPalShadow
-ResetAllPalettes      ResetScr1Palettes + ResetScr2Palettes + ResetSpritePalettes (white, palette 15 = Pal_21F010)
+ResetAllPalettes      ResetScr1Palettes + ResetScr2Palettes + ResetSpritePalettes (white, palette 15 = TextBoxPal)
 ResetScr2Palettes     SCR2 palette shadow reset (also used by StreetGoWorks)
 WritePalettesDirect   XHL = colours, BC = palette count, WA = first palette: straight into SPRITE_PAL + 8*WA, wFadeLevelShown = wFadeLevel
 WriteMonoPalettesDirect  the same for the mono palette registers (SPPLT_01-1 + 4*WA)
@@ -175,7 +175,7 @@ step, `tools/biogfx.cpp` the game's own formats.
 - Unnamed RAM: none left in `ram/gfx.inc`'s range that the graphics code uses as a bare number;
   the palette shadow slots are written as offsets (`wPalShadow+0x80` = SCR1, `+0x100` = SCR2).
 - `DecompressTiles` uses `0x4000` (also `wTextBuffer`) as its 1 KiB ring.
-- Routines not understood yet: `swp_21037F` (portraits.asm), `swp_207CE7` and `PlotPixel`
+- Routines not understood yet: `swp_21037F` (portraits.asm) and `PlotPixel`
   (robot.asm), `DrawTilemapAt` (no comment yet); `GetBoxCursorTile` and `SetWindowStepsForB` have
   no callers.
 - Inline video writes left in game code, with hardware names: `CreditsLineTask` (engine/scenes.asm)

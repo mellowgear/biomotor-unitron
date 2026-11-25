@@ -6,10 +6,13 @@ DefaultEnemyAttack:
 	enemy_attack	255,0,13,0,0,100,2,0xDE,0xFF,0xFF,0xFF,0xFF,0xFF
 
 ; [code] battle effect lists for PlayEffectList (task +0x14: effect ids until 0xFF), one
-; caller each in battle.asm (Data_22541A: two)
-Data_22541A:
+; caller each in battle code (BattleEndEffects: two)
+; [code] BattleVictory and BattleDefeat (was Data_22541A)
+BattleEndEffects:
 	db	0xCC,0x0E,0xFF
-Data_22541D:
+; [code] BattleStatusEffects at HP 0 with an ITEM_AUTORP accessory: the accessory is used up, HP = max HP / 2 (was Data_22541D)
+AutoRPReviveEffects:
 	db	0xE0,0xD7,0xFF
-Data_225420:
+; [code] BattleStatusEffects when EP is below wMinEPCost with an ITEM_PROPLR accessory: the accessory is used up (was Data_225420)
+PropellerEffects:
 	db	0xDF,0xD6,0xFF

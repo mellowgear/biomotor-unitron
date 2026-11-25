@@ -128,10 +128,10 @@ QueueMessage:
 
 c_217634	section	code abs=0x217634
 
-; [code] yields (TaskYield) until wMsgPending is empty and wMsgBox is not printing, then returns to the caller's return address (kept in 0x6128)
+; [code] yields (TaskYield) until wMsgPending is empty and wMsgBox is not printing, then returns to the caller's return address (kept in wWaitMessageReturn)
 WaitMessage:
 	pop	XHL
-	ld	(0x6128),XHL
+	ld	(wWaitMessageReturn),XHL
 WaitMessage.loop:
 	ld	XHL,(wMsgPending)
 	or	XHL,XHL
@@ -143,15 +143,15 @@ WaitMessage.skip:
 	call	TaskYield
 	jr	WaitMessage.loop
 WaitMessage.skip2:
-	ld	XHL,(0x6128)
+	ld	XHL,(wWaitMessageReturn)
 	jp	XHL
 
 c_217657	section	code abs=0x217657
 
-; [code] WaitMessage with wMsgFastForward = 1 while waiting (the page prints at once), cleared after; return address in 0x612C
+; [code] WaitMessage with wMsgFastForward = 1 while waiting (the page prints at once), cleared after; return address in wFlushMessageReturn
 FlushMessage:
 	pop	XHL
-	ld	(0x612C),XHL
+	ld	(wFlushMessageReturn),XHL
 	ldb	(wMsgFastForward),1
 FlushMessage.loop:
 	ld	XHL,(wMsgPending)
@@ -165,7 +165,7 @@ FlushMessage.skip:
 	jr	FlushMessage.loop
 FlushMessage.skip2:
 	ldb	(wMsgFastForward),0
-	ld	XHL,(0x612C)
+	ld	XHL,(wFlushMessageReturn)
 	jp	XHL
 
 c_217684	section	code abs=0x217684
@@ -189,13 +189,13 @@ PrintInMessageBox:
 
 c_2176A2	section	code abs=0x2176A2
 
-; [code] draws "Yes No" (YesNoText2: 39 05 13 .. 2E 0F), cursor columns AskYesNoCursorColumns (4, 0xA); L -> 0, R -> 1; A returns 0x611E (0 Yes, 1 No), B returns 0xFF, back to the saved return address; [play] *_are_you_sure screens
+; [code] draws "Yes No" (YesNoText2: 39 05 13 .. 2E 0F), cursor columns AskYesNoCursorColumns (4, 0xA); L -> 0, R -> 1; A returns wYesNoAnswer (0 Yes, 1 No), B returns 0xFF, back to the saved return address; [play] *_are_you_sure screens
 AskYesNo:
-	ld	(0x611F),XHL
+	ld	(wYesNoPrompt),XHL
 	pop	XHL
 	ld	(wMenuWaitReturn),XHL
 	call	ClearMessageBox
-	ld	XHL,(0x611F)
+	ld	XHL,(wYesNoPrompt)
 	call	QueueMessage
 	call	WaitMessage
 	ld	XHL,YesNoText2
@@ -205,7 +205,7 @@ AskYesNo:
 	call	SetCursorBox
 	call	ShowCursor
 	xor	A,A
-	ld	(0x611E),A
+	ld	(wYesNoAnswer),A
 AskYesNo.loop:
 	ld	XHL,AskYesNoCursorColumns
 	ld	B,(XHL+A)
@@ -229,26 +229,26 @@ AskYesNo.skip:
 AskYesNo.skip2:
 	ld	A,1
 AskYesNo.skip3:
-	cp	(0x611E),A
+	cp	(wYesNoAnswer),A
 	jr	Z,AskYesNo.loop2
-	ld	(0x611E),A
+	ld	(wYesNoAnswer),A
 	ld	WA,0x80
 	call	CallSoundCommand
-	ld	A,(0x611E)
+	ld	A,(wYesNoAnswer)
 	jr	AskYesNo.loop
 AskYesNo.skip4:
 	ld	WA,0x81
 	call	CallSoundCommand
-	ld	A,(0x611E)
+	ld	A,(wYesNoAnswer)
 	jr	AskYesNo.skip6
 AskYesNo.skip5:
 	ld	WA,0x82
 	call	CallSoundCommand
 	ld	A,0xFF
 AskYesNo.skip6:
-	ld	(0x611E),A
+	ld	(wYesNoAnswer),A
 	call	HideCursor
-	ld	A,(0x611E)
+	ld	A,(wYesNoAnswer)
 	ld	XHL,(wMenuWaitReturn)
 	jp	XHL
 YesNoText2:
@@ -281,7 +281,7 @@ WaitAOrB.skip3:
 
 c_21777C	section	code abs=0x21777C
 
-; [code] waits A frames (TaskYield each, count in 0x6127) or until A or B is pressed, then returns to the saved return address (wMenuWaitReturn)
+; [code] waits A frames (TaskYield each, count in wWaitFrameCount) or until A or B is pressed, then returns to the saved return address (wMenuWaitReturn)
 WaitFramesOrButton:
 	pop	XHL
 	ld	(wMenuWaitReturn),XHL
@@ -289,14 +289,14 @@ WaitFramesOrButton.loop:
 	or	A,A
 	jr	Z,WaitFramesOrButton.skip
 	dec	1,A
-	ld	(0x6127),A
+	ld	(wWaitFrameCount),A
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
 	jr	NZ,WaitFramesOrButton.skip
 	bit	5,A
 	jr	NZ,WaitFramesOrButton.skip
 	call	TaskYield
-	ld	A,(0x6127)
+	ld	A,(wWaitFrameCount)
 	jr	WaitFramesOrButton.loop
 WaitFramesOrButton.skip:
 	ld	XHL,(wMenuWaitReturn)
@@ -304,7 +304,7 @@ WaitFramesOrButton.skip:
 
 c_2177A9	section	code abs=0x2177A9
 
-; [code] child task: when the box wMsgBox is idle and wMsgPending is set, starts it (SetTextBoxText, speed wMsgSpeed) and clears wMsgPending; while printing, A or B (not the press that ended a button wait, 0x611D) or wMsgFastForward set the box speed 0 (rest of the page at once); at a button wait the speed returns to wMsgSpeed
+; [code] child task: when the box wMsgBox is idle and wMsgPending is set, starts it (SetTextBoxText, speed wMsgSpeed) and clears wMsgPending; while printing, A or B (not the press that ended a button wait, wMsgWaitPressed) or wMsgFastForward set the box speed 0 (rest of the page at once); at a button wait the speed returns to wMsgSpeed
 MessageTask:
 	ld	XWA,MessageTask.resume
 	ld	(XIZ+TASK_FUNC),XWA
@@ -318,7 +318,7 @@ MessageTask.resume2:
 	ld	A,(wMsgBox)
 	call	IsTextBoxWaitingButton
 	jr	NC,MessageTask.skip
-	ldb	(0x611D),1
+	ldb	(wMsgWaitPressed),1
 	ld	B,(wMsgSpeed)
 	ld	A,(wMsgBox)
 	call	SetTextBoxSpeed
@@ -330,9 +330,9 @@ MessageTask.skip:
 	jr	NZ,MessageTask.skip2
 	jr	MessageTask.skip3
 MessageTask.skip2:
-	cpb	(0x611D),0
+	cpb	(wMsgWaitPressed),0
 	jr	Z,MessageTask.skip4
-	ldb	(0x611D),0
+	ldb	(wMsgWaitPressed),0
 MessageTask.skip3:
 	cpb	(wMsgFastForward),0
 	jr	Z,MessageTask.done
@@ -347,7 +347,7 @@ MessageTask.skip5:
 	ld	XHL,(wMsgPending)
 	or	XHL,XHL
 	ret	Z
-	ldb	(0x611D),0
+	ldb	(wMsgWaitPressed),0
 	ld	XHL,(wMsgPending)
 	ld	A,(wMsgBox)
 	call	SetTextBoxText
@@ -602,10 +602,10 @@ PostHideMenuCursor:
 
 c_217994	section	code abs=0x217994
 
-; [code] TaskYield until wMenuResult is set, XWA = it, back to the saved return address 0x6142 (no command posted)
+; [code] TaskYield until wMenuResult is set, XWA = it, back to the saved return address wMenuCmdReturn (no command posted)
 WaitMenuResult:
 	pop	XHL
-	ld	(0x6142),XHL
+	ld	(wMenuCmdReturn),XHL
 WaitMenuResult.loop:
 	ld	XWA,(wMenuResult)
 	or	XWA,XWA
@@ -615,16 +615,16 @@ WaitMenuResult.loop:
 WaitMenuResult.skip:
 	call	TaskYield
 	ld	XWA,(wMenuResult)
-	ld	XHL,(0x6142)
+	ld	XHL,(wMenuCmdReturn)
 	jp	XHL
 
 c_2179B5	section	code abs=0x2179B5
 
-; [code] wMenuCommand = A, wMenuResult = 0, TaskYield until MenuBoxTask posts a result, XWA = wMenuResult, back to the caller's return address (0x6142); DrawMenuBox / RunMenuInput / ShowMenuCursor are its commands 3-5
+; [code] wMenuCommand = A, wMenuResult = 0, TaskYield until MenuBoxTask posts a result, XWA = wMenuResult, back to the caller's return address (wMenuCmdReturn); DrawMenuBox / RunMenuInput / ShowMenuCursor are its commands 3-5
 MenuCommandWait:
 	ld	(wMenuCommand),A
 	pop	XHL
-	ld	(0x6142),XHL
+	ld	(wMenuCmdReturn),XHL
 	xor	XWA,XWA
 	ld	(wMenuResult),XWA
 MenuCommandWait.loop:
@@ -636,7 +636,7 @@ MenuCommandWait.loop:
 MenuCommandWait.skip:
 	call	TaskYield
 	ld	XWA,(wMenuResult)
-	ld	XHL,(0x6142)
+	ld	XHL,(wMenuCmdReturn)
 	jp	XHL
 
 c_2179E0	section	code abs=0x2179E0
@@ -662,7 +662,7 @@ DrawMenuBox:
 
 c_2179F2	section	code abs=0x2179F2
 
-; [code] menu command 4 (waits): handler 0x217AC0 = U/D wrap of cursor 0x6139 over 0x614A rows, A -> byte (wMenuValues)[cursor], B -> 0xFF, stored in 0x613B (callers read 0x613B)
+; [code] menu command 4 (waits): handler 0x217AC0 = U/D wrap of cursor 0x6139 over 0x614A rows, A -> byte (wMenuValues)[cursor], B -> 0xFF, stored in wMenuChoice (callers read wMenuChoice)
 RunMenuInput:
 	ld	A,4
 	jp	MenuCommandWait
@@ -683,11 +683,11 @@ HideMenuCursor:
 
 c_217A04	section	code abs=0x217A04
 
-; [code] child task: 0x613B, 0x613C, wMenuCursorOn = 0, then MenuBoxDispatch
+; [code] child task: wMenuChoice, wMenuChoiceMade, wMenuCursorOn = 0, then MenuBoxDispatch
 MenuBoxTask:
 	xor	A,A
 	ld	(wMenuChoice),A
-	ld	(0x613C),A
+	ld	(wMenuChoiceMade),A
 	ld	(wMenuCursorOn),A
 
 c_217A12	section	code abs=0x217A12
@@ -747,7 +747,7 @@ MenuCmdDrawBox:
 
 c_217AA4	section	code abs=0x217AA4
 
-; [code] menu command 5 handler: ShowCursor, cursor at the current entry (MenuSetCursorPos), wMenuCursorOn = 1; .loop (0x217AC0) is the command 4 input: U/D wrap wMenuCursor over wMenuCount (sound 0x80), A -> (wMenuValues)[cursor] (0x81), B -> 0xFF (0x82), W = 0xFF, stored in 0x613B
+; [code] menu command 5 handler: ShowCursor, cursor at the current entry (MenuSetCursorPos), wMenuCursorOn = 1; .loop (0x217AC0) is the command 4 input: U/D wrap wMenuCursor over wMenuCount (sound 0x80), A -> (wMenuValues)[cursor] (0x81), B -> 0xFF (0x82), W = 0xFF, stored in wMenuChoice
 MenuCmdShowCursor:
 	ld	A,(wMenuCursorOn)
 	or	A,A
@@ -837,7 +837,7 @@ MenuBoxIdle2:
 
 c_217B7A	section	code abs=0x217B7A
 
-; [code] menu command 2 handler: wMenuResult = 0xFFFF0000 | 0x613B, EndTask
+; [code] menu command 2 handler: wMenuResult = 0xFFFF0000 | wMenuChoice, EndTask
 MenuCmdEnd:
 	ld	XWA,0xFFFF0000
 	ld	A,(wMenuChoice)
@@ -873,11 +873,11 @@ MenuSetCursorPos.done:
 
 c_217BB4	section	code abs=0x217BB4
 
-; [code] when wMenuCursorOn and 0x613C are set and the cursor is valid (GetMenuCursorCell): DrawBoxCursorSprite in box 2
+; [code] when wMenuCursorOn and wMenuChoiceMade are set and the cursor is valid (GetMenuCursorCell): DrawBoxCursorSprite in box 2
 DrawMenuCursorSprite:
 	cpb	(wMenuCursorOn),0
 	jr	Z,DrawMenuCursorSprite.done
-	cpb	(0x613C),0
+	cpb	(wMenuChoiceMade),0
 	jr	Z,DrawMenuCursorSprite.done
 	call	GetMenuCursorCell
 	jr	NC,DrawMenuCursorSprite.done
@@ -965,10 +965,10 @@ PostHideListCursor:
 
 c_217EA2	section	code abs=0x217EA2
 
-; [code] TaskYield until the list task posts a result (0x6176), return it in XWA
+; [code] TaskYield until the list task posts a result (wListResult), return it in XWA
 WaitListResult:
 	pop	XHL
-	ld	(0x617A),XHL
+	ld	(wListCmdReturn),XHL
 WaitListResult.loop:
 	ld	XWA,(wListResult)
 	or	XWA,XWA
@@ -978,16 +978,16 @@ WaitListResult.loop:
 WaitListResult.skip:
 	call	TaskYield
 	ld	XWA,(wListResult)
-	ld	XHL,(0x617A)
+	ld	XHL,(wListCmdReturn)
 	jp	XHL
 
 c_217EC3	section	code abs=0x217EC3
 
-; [code] wListCommand = A, wListResult = 0, TaskYield until ListTask posts a result, XWA = it, back to the caller's return address (0x617A); RedrawListPage / ShowListCursor / HideListCursor are its commands 3 / 5 / 6
+; [code] wListCommand = A, wListResult = 0, TaskYield until ListTask posts a result, XWA = it, back to the caller's return address (wListCmdReturn); RedrawListPage / ShowListCursor / HideListCursor are its commands 3 / 5 / 6
 ListCommandWait:
 	ld	(wListCommand),A
 	pop	XHL
-	ld	(0x617A),XHL
+	ld	(wListCmdReturn),XHL
 	xor	XWA,XWA
 	ld	(wListResult),XWA
 ListCommandWait.loop:
@@ -999,7 +999,7 @@ ListCommandWait.loop:
 ListCommandWait.skip:
 	call	TaskYield
 	ld	XWA,(wListResult)
-	ld	XHL,(0x617A)
+	ld	XHL,(wListCmdReturn)
 	jp	XHL
 
 c_217EEE	section	code abs=0x217EEE
@@ -1121,11 +1121,11 @@ BlankText4:
 
 c_217FA0	section	code abs=0x217FA0
 
-; [code] child task: wListChoice, 0x615D, wListCursorOn = 0, then ListDispatch
+; [code] child task: wListChoice, wListChoiceMade, wListCursorOn = 0, then ListDispatch
 ListTask:
 	xor	WA,WA
 	ld	(wListChoice),WA
-	ld	(0x615D),A
+	ld	(wListChoiceMade),A
 	ld	(wListCursorOn),A
 
 c_217FAE	section	code abs=0x217FAE
@@ -1199,7 +1199,7 @@ ListCmdShowCursor.skip:
 
 c_218047	section	code abs=0x218047
 
-; [code] list command 4 handler: D/U wrap wListRow over wListRows, R/L wrap wListPage over wListPages (redraw through wListDrawPage), wListMoveHook after each move (sound 0x80); A calls wListAcceptHook: carry -> sound 0x81, result wListPage * wListRows + wListRow, else sound 0x83; B -> 0xFFFF (0x82); result in wListChoice, 0x615D = 0xFF, HideCursor; [play] shop_buy_* screens
+; [code] list command 4 handler: D/U wrap wListRow over wListRows, R/L wrap wListPage over wListPages (redraw through wListDrawPage), wListMoveHook after each move (sound 0x80); A calls wListAcceptHook: carry -> sound 0x81, result wListPage * wListRows + wListRow, else sound 0x83; B -> 0xFFFF (0x82); result in wListChoice, wListChoiceMade = 0xFF, HideCursor; [play] shop_buy_* screens
 ListCmdInput:
 	call	ListSetCursorPos
 	call	ShowCursor
@@ -1288,7 +1288,7 @@ ListCmdInput.skip14:
 	jp	ListCmdInput.loop
 ListCmdInput.skip15:
 	ld	(wListChoice),WA
-	ldb	(0x615D),0xFF
+	ldb	(wListChoiceMade),0xFF
 	call	HideCursor
 	xor	WA,WA
 	jp	ListCommandJumps.loop
@@ -1356,11 +1356,11 @@ ListSetCursorPos.done:
 
 c_2181B4	section	code abs=0x2181B4
 
-; [code] when wListCursorOn and 0x615D are set and GetListCursorCell succeeds: DrawBoxCursorSprite in box 3
+; [code] when wListCursorOn and wListChoiceMade are set and GetListCursorCell succeeds: DrawBoxCursorSprite in box 3
 DrawListCursorSprite:
 	cpb	(wListCursorOn),0
 	jr	Z,DrawListCursorSprite.done
-	cpb	(0x615D),0
+	cpb	(wListChoiceMade),0
 	jr	Z,DrawListCursorSprite.done
 	call	GetListCursorCell
 	jr	NC,DrawListCursorSprite.done
@@ -1412,21 +1412,22 @@ CopyGameToWorksStubCleanup:
 
 c_219843	section	code abs=0x219843
 
-swp_219843:
+; [code] A = 0x1E, jp WaitFramesOrButton (30 frames or A / B); no callers (was swp_219843)
+Wait30FramesOrButton:
 	ld	A,0x1E
 	jp	WaitFramesOrButton
 
 c_219849	section	code abs=0x219849
 
-; [code] FlushMessage, then queues XHL (0x21762F: wMsgPending = XHL) for MessageTask; back to the caller (return address in 0x61ED); ShowPartnerGenderText and ShowShopClerkText end here
+; [code] FlushMessage, then queues XHL (0x21762F: wMsgPending = XHL) for MessageTask; back to the caller (return address in wTextWaitReturn); ShowPartnerGenderText and ShowShopClerkText end here
 ShowMenuText:
-	ld	(0x61F1),XHL
+	ld	(wMenuTextPtr),XHL
 	pop	XDE
-	ld	(0x61ED),XDE
+	ld	(wTextWaitReturn),XDE
 	call	FlushMessage
-	ld	XHL,(0x61F1)
+	ld	XHL,(wMenuTextPtr)
 	call	QueueMessage
-	ld	XHL,(0x61ED)
+	ld	XHL,(wTextWaitReturn)
 	jp	XHL
 
 c_21990C	section	code abs=0x21990C
@@ -1438,7 +1439,7 @@ CallSoundCommand:
 
 c_21AB3F	section	code abs=0x21AB3F
 
-; [code] common exit (jp from ShopMenu, Works menu, WorksExit): empty cleanup stubs, EndChildTasks (task bit 6), posts 0xFFFF0000 | word (0x61F7) to 0x6212 (the result RunWorksScreen waits for), EndTask
+; [code] common exit (jp from ShopMenu, Works menu, WorksExit): empty cleanup stubs, EndChildTasks (task bit 6), posts 0xFFFF0000 | word (wWorksScreenValue) to wWorksScreenResult (the result RunWorksScreen waits for), EndTask
 EndMenuTask:
 	call	CopyGameToWorksCleanup
 	call	WorksBox4TaskCleanup
@@ -1450,7 +1451,7 @@ EndMenuTask:
 	call	EndChildTasks
 	call	TaskYield
 	ld	XWA,0xFFFF0000
-	ld	WA,(0x61F7)
+	ld	WA,(wWorksScreenValue)
 	ld	(wWorksScreenResult),XWA
 	call	EndTask
 EndMenuTask.loop:

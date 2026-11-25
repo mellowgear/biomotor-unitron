@@ -107,7 +107,7 @@ NameEntrySetup:
 	call	LoadCompressedTiles
 	ld	A,1
 	ld	C,1
-	ld	XHL,Pal_2C8D6C
+	ld	XHL,NameEntryCursorPal
 	call	LoadPalettes
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
@@ -301,7 +301,7 @@ StoreEnteredName.loop:
 
 c_20FAC6	section	code abs=0x20FAC6
 
-; [code] blinking cursor of the Cancel / End column: while bit 4 of the counter +0x2A is set, DrawSpriteGrid at x 0, y = word Data_226C12[+0x14]
+; [code] blinking cursor of the Cancel / End column: while bit 4 of the counter +0x2A is set, DrawSpriteGrid at x 0, y = word NameEntryCancelEndCursorY[+0x14]
 NameEntryCancelEndCursor:
 	incw	1,(XIZ+0x2A)
 	ld	WA,(XIZ+0x2A)
@@ -311,7 +311,7 @@ NameEntryCancelEndCursor:
 	ld	HL,(XIZ+0x14)
 	extz	XHL
 	sll	1,XHL
-	add	XHL,Data_226C12
+	add	XHL,NameEntryCancelEndCursorY
 	ld	DE,(XHL)
 	ld	WA,0x3E04
 	ld	QB,1
@@ -404,7 +404,7 @@ NameEntryGridA.skip2:
 
 c_20FBBF	section	code abs=0x20FBBF
 
-; [code] A = char -> char word +0x1A + 2 * count, count +0x18 + 1 (7 -> 6); B (only after a full name or without A) deletes the last char (sound 0x82, 0x83 at none left); then the blinking grid cursor (Map_2C8D74 / Map_2C8D7E, DrawSpriteMap at 8 * column + 4, 8 * row + 0x24)
+; [code] A = char -> char word +0x1A + 2 * count, count +0x18 + 1 (7 -> 6); B (only after a full name or without A) deletes the last char (sound 0x82, 0x83 at none left); then the blinking grid cursor (NameEntryCursorMap / NameEntryCursorAltMap, DrawSpriteMap at 8 * column + 4, 8 * row + 0x24)
 NameEntryAddChar:
 	add	XBC,NameEntryChars
 	ld	A,(XBC)
@@ -456,12 +456,12 @@ NameEntryAddChar.skip5:
 	mul	XDE,8
 	add	BC,4
 	add	DE,0x24
-	ld	XHL,Map_2C8D74
+	ld	XHL,NameEntryCursorMap
 	incw	1,(XIZ+0x2A)
 	ld	WA,(XIZ+0x2A)
 	and	WA,0x10
 	jr	Z,NameEntryAddChar.skip6
-	ld	XHL,Map_2C8D7E
+	ld	XHL,NameEntryCursorAltMap
 NameEntryAddChar.skip6:
 	ld	WA,0xD8
 	call	DrawSpriteMap

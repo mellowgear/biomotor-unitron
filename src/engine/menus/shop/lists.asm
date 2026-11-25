@@ -164,8 +164,8 @@ SetupShopBuyItemList:
 	ld	(wListRows),A
 	ld	XHL,DrawShopBuyItemPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218331
-	ld	(0x6166),XHL
+	ld	XHL,ItemListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2181D8
 	ld	(wListCells),XHL
 	jp	ListReset
@@ -222,8 +222,8 @@ SetupShopSellItemList:
 	ld	(wListRows),A
 	ld	XHL,DrawItemListPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218331
-	ld	(0x6166),XHL
+	ld	XHL,ItemListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2181D8
 	ld	(wListCells),XHL
 	jp	ListReset
@@ -396,8 +396,8 @@ SetupShopBuyPartList:
 	ld	(wListRows),A
 	ld	XHL,DrawShopBuyPartPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218577
-	ld	(0x6166),XHL
+	ld	XHL,EntryListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2183EE
 	ld	(wListCells),XHL
 	jp	ListReset
@@ -456,8 +456,8 @@ SetupShopSellPartList:
 	ld	(wListRows),A
 	ld	XHL,DrawPartListPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218577
-	ld	(0x6166),XHL
+	ld	XHL,EntryListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2183EE
 	ld	(wListCells),XHL
 	jp	ListReset

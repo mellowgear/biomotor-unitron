@@ -58,7 +58,8 @@ DrawEquipListPage:
 
 c_2187EC	section	code abs=0x2187EC
 
-swp_2187EC:
+; [code] ret; stored as the wListUnusedHook list hook (no action) by SetupEquipPartList (was swp_2187EC)
+EquipListEmptyHook:
 	ret
 
 c_2187ED	section	code abs=0x2187ED
@@ -115,8 +116,8 @@ SetupEquipPartList:
 	ld	(wListRows),A
 	ld	XHL,DrawEquipListPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_2187EC
-	ld	(0x6166),XHL
+	ld	XHL,EquipListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,EquipListMoveHook
 	ld	(wListMoveHook),XHL
 	ld	XHL,EquipListAcceptHook

@@ -250,7 +250,7 @@ LoadDungeonPalettes.skip3:
 	ld	A,0
 	ld	C,1
 	call	LoadPalettes
-	ld	XHL,MonoPal_26FE07
+	ld	XHL,PlayerDungeonSpriteMonoPal
 	ld	A,0
 	ld	C,1
 	call	LoadMonoPalettes
@@ -308,7 +308,7 @@ LoadPlayerDungeonSprite.skip2:
 	ld	A,0
 	ld	C,1
 	call	LoadPalettes
-	ld	XHL,MonoPal_26FE07
+	ld	XHL,PlayerDungeonSpriteMonoPal
 	ld	A,0
 	ld	C,1
 	call	LoadMonoPalettes

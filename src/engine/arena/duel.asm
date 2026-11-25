@@ -202,7 +202,7 @@ GetCenteredMapPos:
 
 c_21457E	section	code abs=0x21457E
 
-; [code] Pal_2C8772 (6 palettes) to palette 0, 0x10 and 0x20
+; [code] DuelTitlePal (6 palettes) to palette 0, 0x10 and 0x20
 LoadDuelTitlePalettes:
 	push	XHL
 	push	XDE
@@ -210,15 +210,15 @@ LoadDuelTitlePalettes:
 	push	XWA
 	ld	A,0
 	ld	C,6
-	ld	XHL,Pal_2C8772
+	ld	XHL,DuelTitlePal
 	call	LoadPalettes
 	ld	A,0x10
 	ld	C,6
-	ld	XHL,Pal_2C8772
+	ld	XHL,DuelTitlePal
 	call	LoadPalettes
 	ld	A,0x20
 	ld	C,6
-	ld	XHL,Pal_2C8772
+	ld	XHL,DuelTitlePal
 	call	LoadPalettes
 	pop	XWA
 	pop	XBC
@@ -228,7 +228,7 @@ LoadDuelTitlePalettes:
 
 c_2145AE	section	code abs=0x2145AE
 
-; [code] MonoPal_2C87A2 (2 palettes) to mono palette 0, 2 and 4
+; [code] DuelTitleMonoPal (2 palettes) to mono palette 0, 2 and 4
 LoadDuelTitleMonoPalettes:
 	push	XHL
 	push	XDE
@@ -236,15 +236,15 @@ LoadDuelTitleMonoPalettes:
 	push	XWA
 	ld	A,0
 	ld	C,2
-	ld	XHL,MonoPal_2C87A2
+	ld	XHL,DuelTitleMonoPal
 	call	LoadMonoPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2C87A2
+	ld	XHL,DuelTitleMonoPal
 	call	LoadMonoPalettes
 	ld	A,4
 	ld	C,2
-	ld	XHL,MonoPal_2C87A2
+	ld	XHL,DuelTitleMonoPal
 	call	LoadMonoPalettes
 	pop	XWA
 	pop	XBC
@@ -285,7 +285,7 @@ LoadDuelTitleGfx.skip2:
 
 c_214616	section	code abs=0x214616
 
-; [code] DrawSpriteMap Map_2C8992 + 10 * duel index +0x1E at GetPictureFirstTile
+; [code] DrawSpriteMap DuelTitleNumber1Map + 10 * duel index +0x1E at GetPictureFirstTile
 DrawDuelNumberColor:
 	push	XHL
 	push	XDE
@@ -295,7 +295,7 @@ DrawDuelNumberColor:
 	extz	WA
 	extz	XWA
 	mul	XWA,0xA
-	ld	XHL,Map_2C8992
+	ld	XHL,DuelTitleNumber1Map
 	add	XHL,XWA
 	call	GetPictureFirstTile
 	call	DrawSpriteMap
@@ -307,7 +307,7 @@ DrawDuelNumberColor:
 
 c_214639	section	code abs=0x214639
 
-; [code] DrawSpriteMap Map_2C89CE + 10 * duel index +0x1E
+; [code] DrawSpriteMap DuelTitleNumber1MonoMap + 10 * duel index +0x1E
 DrawDuelNumberMono:
 	push	XHL
 	push	XDE
@@ -317,7 +317,7 @@ DrawDuelNumberMono:
 	extz	WA
 	extz	XWA
 	mul	XWA,0xA
-	ld	XHL,Map_2C89CE
+	ld	XHL,DuelTitleNumber1MonoMap
 	add	XHL,XWA
 	call	GetPictureFirstTile
 	call	DrawSpriteMap

@@ -272,7 +272,7 @@ BattleStatusEffects.skip4:
 	ldb	(wScr1ScrollY),0
 	ldb	(wScr2ScrollX),0x60
 	ldb	(wScr2ScrollY),0
-	ld	XHL,Data_22541D
+	ld	XHL,AutoRPReviveEffects
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
@@ -338,7 +338,7 @@ BattleStatusEffects.skip7:
 	jr	BattleStatusEffects.skip9
 BattleStatusEffects.skip8:
 	ldb	(XBC),0
-	ld	XHL,Data_225420
+	ld	XHL,PropellerEffects
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask

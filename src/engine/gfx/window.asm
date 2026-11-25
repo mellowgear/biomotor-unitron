@@ -324,7 +324,7 @@ UpdateWindowAnimToB.skip15:
 
 c_2170E4	section	code abs=0x2170E4
 
-; [code] wWindowA = full screen, wWindowB = x 0x50 width 0 at full height, steps x 2, width 0xFC (opens sideways); caller loc_215A64
+; [code] wWindowA = full screen, wWindowB = x 0x50 width 0 at full height, steps x 2, width 0xFC (opens sideways); caller TalkGoToWorksRowE
 SetupWindowOpenHorizontal:
 	push	A
 	ld	A,0

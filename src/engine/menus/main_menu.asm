@@ -600,15 +600,15 @@ MainMenuSplitClose.resume:
 
 c_20D799	section	code abs=0x20D799
 
-; [code] the two halves of the main menu background (+0x12 left, +0x16 right) for DrawMainMenuSplit: Map_2876C4 / Map_287ED4, colour Map_29C88F / Map_29D39A
+; [code] the two halves of the main menu background (+0x12 left, +0x16 right) for DrawMainMenuSplit: GateLeftPictureMonoMap / GateRightPictureMonoMap, colour GateLeftPictureMap / GateRightPictureMap
 ; [play] seen in play: a rusty brown metal door behind the main menu, Config and Load screens
 MainMenuGraphics:
 	cpb	(wColorFlags),0
-	ld	XDE,Map_2876C4
-	ld	XHL,Map_287ED4
+	ld	XDE,GateLeftPictureMonoMap
+	ld	XHL,GateRightPictureMonoMap
 	jr	Z,MainMenuGraphics.skip
-	ld	XDE,Map_29C88F
-	ld	XHL,Map_29D39A
+	ld	XDE,GateLeftPictureMap
+	ld	XHL,GateRightPictureMap
 MainMenuGraphics.skip:
 	ld	(XIZ+0x12),XDE
 	ld	(XIZ+0x16),XHL
@@ -689,11 +689,11 @@ TitleScreen.resume:
 	ldw	(XIZ+TASK_FUNC),TitleScreen.resume2 & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),TitleScreen.resume2 >> 16
 TitleScreen.resume2:
-	ld	XHL,Map_2E513D
+	ld	XHL,TitleScreenFlashMap
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,TitleScreen.skip
-	ld	XHL,Map_2E573D
+	ld	XHL,TitleScreenFlashMonoMap
 TitleScreen.skip:
 	ld	WA,0xE7
 	ld	BC,0
@@ -705,13 +705,13 @@ TitleScreen.skip:
 
 c_20E336	section	code abs=0x20E336
 
-; [code] TitleScreen's step after the Map_2E513D frame (TASK_FUNC 0x20E336): DrawTilemapScr2 Map_2E4EE3 (mono Map_2E54E3) at 0,2 tiles 0xE7, +0x10 - 1: not 0 -> back to TitleScreen.resume2 (the other map) the next frame, 0 -> TitleScreen (0xB4 frames wait); the two maps alternate frame by frame, twice, every 0xB4 frames [play] I39: Map_2E513D is the flash frame of the whole SCR2 title picture (robot white, logo pale with yellow lines), Map_2E4EE3 the normal one; flashed twice, every 187 frames.
+; [code] TitleScreen's step after the TitleScreenFlashMap frame (TASK_FUNC 0x20E336): DrawTilemapScr2 TitleScreenMap (mono TitleScreenMonoMap) at 0,2 tiles 0xE7, +0x10 - 1: not 0 -> back to TitleScreen.resume2 (the other map) the next frame, 0 -> TitleScreen (0xB4 frames wait); the two maps alternate frame by frame, twice, every 0xB4 frames [play] I39: TitleScreenFlashMap is the flash frame of the whole SCR2 title picture (robot white, logo pale with yellow lines), TitleScreenMap the normal one; flashed twice, every 187 frames.
 TitleMapFlashStep:
-	ld	XHL,Map_2E4EE3
+	ld	XHL,TitleScreenMap
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,TitleMapFlashStep.skip
-	ld	XHL,Map_2E54E3
+	ld	XHL,TitleScreenMonoMap
 TitleMapFlashStep.skip:
 	ld	WA,0xE7
 	ld	BC,0
@@ -729,8 +729,8 @@ TitleMapFlashStep.skip2:
 
 c_20E36F	section	code abs=0x20E36F
 
-; [code] child task for 0x348 frames: DrawSpriteMap at x 0x18, y 0x58 of Map_2E4292, or Map_2E42B0 while bit 5 of the frame count is set (they alternate every 32 frames), then EndTask
-; [play] seen in play: the blinking "PRESS A BUTTON" prompt under the UNITRON logo (Map_2E4292 shown, Map_2E42B0 draws nothing), 32 frames
+; [code] child task for 0x348 frames: DrawSpriteMap at x 0x18, y 0x58 of TitlePressAButtonMap, or TitlePressAButtonOffMap while bit 5 of the frame count is set (they alternate every 32 frames), then EndTask
+; [play] seen in play: the blinking "PRESS A BUTTON" prompt under the UNITRON logo (TitlePressAButtonMap shown, TitlePressAButtonOffMap draws nothing), 32 frames
 ; on and 32 off, one DrawSpriteMap per frame; A ends it early (TitlePressedA, EndChildTasks) before the 0x348 limit
 TitleBlinkTask:
 	ldw	(XIZ+TASK_ARG),0
@@ -739,13 +739,13 @@ TitleBlinkTask:
 TitleBlinkTask.resume:
 	cpw	(XIZ+TASK_ARG),0x348
 	jp	Z,EndTask
-	ld	XHL,Map_2E4292
+	ld	XHL,TitlePressAButtonMap
 	incw	1,(XIZ+TASK_ARG)
 	ld	WA,(XIZ+TASK_ARG)
 	srl	5,WA
 	and	WA,1
 	jr	Z,TitleBlinkTask.skip
-	ld	XHL,Map_2E42B0
+	ld	XHL,TitlePressAButtonOffMap
 TitleBlinkTask.skip:
 	ld	WA,0xC
 	ld	BC,0x18

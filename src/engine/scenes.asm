@@ -91,11 +91,11 @@ IntroBackground:
 	ld	XHL,TitleRevealSequence
 	call	StartChildTask
 	task_wait
-	ld	XHL,Map_2E513D
+	ld	XHL,TitleScreenFlashMap
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,IntroBackground.skip
-	ld	XHL,Map_2E573D
+	ld	XHL,TitleScreenFlashMonoMap
 IntroBackground.skip:
 	ld	WA,0xE7
 	ld	BC,0
@@ -105,11 +105,11 @@ IntroBackground.skip:
 	call	StartChildTask
 	ldw	(XHL+0xE),5
 	task_wait
-	ld	XHL,Map_2E4EE3
+	ld	XHL,TitleScreenMap
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,IntroBackground.skip2
-	ld	XHL,Map_2E54E3
+	ld	XHL,TitleScreenMonoMap
 IntroBackground.skip2:
 	ld	WA,0xE7
 	ld	BC,0
@@ -236,17 +236,17 @@ Intro199YearsAgo:
 	ldb	(wFadeLevel),0
 	ld	A,0x10
 	ld	C,1
-	ld	XHL,Pal_2DE017
+	ld	XHL,Intro199YearsAgoPal
 	call	LoadPalettes
 	ld	A,2
 	ld	C,1
-	ld	XHL,MonoPal_2DE027
+	ld	XHL,IntroMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0xC
 	ld	XHL,Gfx_2DE3A7
 	call	LoadCompressedTiles
 	ld	WA,0xC
-	ld	XHL,Map_2DE033
+	ld	XHL,Intro199YearsAgoMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
@@ -258,7 +258,7 @@ Intro199YearsAgo:
 
 c_20E753	section	code abs=0x20E753
 
-; [code] frame function of Intro199YearsAgo: Map_2DE32D (Planet "Elscea") at 0xB4, fade at 0
+; [code] frame function of Intro199YearsAgo: PlanetElsceaCaptionMap (Planet "Elscea") at 0xB4, fade at 0
 Intro199YearsAgoStep:
 	decw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0xB4
@@ -266,7 +266,7 @@ Intro199YearsAgoStep:
 	ret
 Intro199YearsAgoStep.skip:
 	ld	WA,0xC
-	ld	XHL,Map_2DE32D
+	ld	XHL,PlanetElsceaCaptionMap
 	ld	BC,0
 	ld	DE,9
 	call	DrawTilemapScr1
@@ -320,27 +320,27 @@ IntroTitleScene:
 	ldb	(wFadeLevel),0
 	ld	A,0
 	ld	C,9
-	ld	XHL,Pal_2E3F68
+	ld	XHL,TitleBannerPal
 	call	LoadPalettes
 	ld	A,0x10
 	ld	C,9
-	ld	XHL,Pal_2E3F68
+	ld	XHL,TitleBannerPal
 	call	LoadPalettes
 	ld	A,0x20
 	ld	C,0xA
-	ld	XHL,Pal_2E4D3F
+	ld	XHL,TitleScreenPal
 	call	LoadPalettes
 	ld	A,0
 	ld	C,2
-	ld	XHL,MonoPal_2E3FB0
+	ld	XHL,TitleBannerMonoPal
 	call	LoadMonoPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2E3FB0
+	ld	XHL,TitleBannerMonoPal
 	call	LoadMonoPalettes
 	ld	A,4
 	ld	C,2
-	ld	XHL,MonoPal_2E4D8F
+	ld	XHL,TitleScreenMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0xC
 	ld	XHL,Gfx_2E42CE
@@ -348,7 +348,7 @@ IntroTitleScene:
 	ld	WA,0xE7
 	ld	XHL,Gfx_2E5997
 	call	LoadCompressedTiles
-	ld	XHL,Map_2E4240
+	ld	XHL,TitleCopyrightMap
 	ld	WA,0xC
 	ld	BC,0
 	ld	DE,0x11
@@ -357,7 +357,7 @@ IntroTitleScene:
 
 c_20E89B	section	code abs=0x20E89B
 
-; [code+play] Map_2E3FB8 (row 1) and Map_2E405A (row 13) slide in from opposite sides
+; [code+play] TitleBannerTopMap (row 1) and TitleBannerBottomMap (row 13) slide in from opposite sides
 SlideInTitleBanners:
 	ldb	(wFadeLevel),0
 	ldw	(XIZ+TASK_ARG),0xFFEC
@@ -366,12 +366,12 @@ SlideInTitleBanners:
 	ldw	(XIZ+TASK_FUNC_HI),SlideInTitleBanners.resume >> 16
 SlideInTitleBanners.resume:
 	ld	WA,0xC
-	ld	XHL,Map_2E3FB8
+	ld	XHL,TitleBannerTopMap
 	ld	BC,(XIZ+TASK_ARG)
 	ld	DE,1
 	call	DrawTilemapScr1
 	ld	WA,0xC
-	ld	XHL,Map_2E405A
+	ld	XHL,TitleBannerBottomMap
 	ld	BC,(XIZ+0x10)
 	ld	DE,0xD
 	call	DrawTilemapScr1
@@ -383,7 +383,7 @@ SlideInTitleBanners.resume:
 
 c_20E8E8	section	code abs=0x20E8E8
 
-; [code] TitleRevealSequence: Map_2E40FC (row 5) from column -20 and Map_2E419E (row 9) from column 20 slide to the centre on SCR1 (the middle two banners; SlideInTitleBanners does rows 1 and 13); [play] intro_title_reveal (four banners)
+; [code] TitleRevealSequence: TitleBannerMiddle1Map (row 5) from column -20 and TitleBannerMiddle2Map (row 9) from column 20 slide to the centre on SCR1 (the middle two banners; SlideInTitleBanners does rows 1 and 13); [play] intro_title_reveal (four banners)
 SlideInMiddleTitleBanners:
 	ldw	(XIZ+TASK_ARG),0xFFEC
 	ldw	(XIZ+0x10),0x14
@@ -391,12 +391,12 @@ SlideInMiddleTitleBanners:
 	ldw	(XIZ+TASK_FUNC_HI),SlideInMiddleTitleBanners.resume >> 16
 SlideInMiddleTitleBanners.resume:
 	ld	WA,0xC
-	ld	XHL,Map_2E40FC
+	ld	XHL,TitleBannerMiddle1Map
 	ld	BC,(XIZ+TASK_ARG)
 	ld	DE,5
 	call	DrawTilemapScr1
 	ld	WA,0xC
-	ld	XHL,Map_2E419E
+	ld	XHL,TitleBannerMiddle2Map
 	ld	BC,(XIZ+0x10)
 	ld	DE,9
 	call	DrawTilemapScr1
@@ -414,11 +414,11 @@ TitleReveal:
 	ldw	(XIZ+TASK_FUNC),TitleReveal.resume & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),TitleReveal.resume >> 16
 TitleReveal.resume:
-	ld	XHL,Map_2E4D97
+	ld	XHL,TitleRobotMap
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,TitleReveal.skip
-	ld	XHL,Map_2E5397
+	ld	XHL,TitleRobotMonoMap
 TitleReveal.skip:
 	ld	BC,(XIZ+TASK_ARG)
 	ld	WA,0xE7
@@ -448,25 +448,25 @@ IntroLogoScene:
 	call	FillScrRect
 	ld	A,0x10
 	ld	C,2
-	ld	XHL,Pal_2DD54D
+	ld	XHL,YumekoboLogoPal
 	call	LoadPalettes
 	ld	A,0x20
 	ld	C,2
-	ld	XHL,Pal_2DD54D
+	ld	XHL,YumekoboLogoPal
 	call	LoadPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2DD55D
+	ld	XHL,YumekoboLogoMonoPal
 	call	LoadMonoPalettes
 	ld	A,4
 	ld	C,2
-	ld	XHL,MonoPal_2DD55D
+	ld	XHL,YumekoboLogoMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0xC
 	ld	XHL,Gfx_2DDAB9
 	call	LoadCompressedTiles
 	ld	WA,0xC
-	ld	XHL,Map_2DD7BF
+	ld	XHL,YumekoboLogoMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
@@ -486,7 +486,7 @@ IntroLogoScene:
 	ldw	(XIZ+TASK_FUNC_HI),IntroLogoScene.resume >> 16
 IntroLogoScene.resume:
 	ld	WA,0xC
-	ld	XHL,Map_2DD565
+	ld	XHL,YumekoboLogoStripeMap
 	ld	BC,(XIZ+TASK_ARG)
 	ld	DE,3
 	call	DrawTilemapScr1
@@ -508,7 +508,7 @@ IntroLogoScene.resume:
 
 c_20EAA6	section	code abs=0x20EAA6
 
-; [code] the intro zoom, after IntroMeteorTask and sound 0xAF: 60 frames of Data_226B99 maps on SCR2 (reads past the table from frame 30);
+; [code] the intro zoom, after IntroMeteorTask and sound 0xAF: 60 frames of IntroImpactFrames maps on SCR2 (reads past the table from frame 30);
 ; from frame 7 a FadeLevelTask (0x20 frames, 0 -> 0x7F) fades to white
 ; [play] seen in play: the meteor hits the planet: a red impact on the blue face grows into white shock rings while the
 ; screen fades to white (the rings vanish at frame 34, see intro_frames.asm) (was swp_20EAA6)
@@ -532,11 +532,11 @@ IntroImpactTask.skip:
 	ld	HL,(XIZ+0x18)
 	extz	XHL
 	sll	2,XHL
-	add	XHL,Data_226B99
+	add	XHL,IntroImpactFrames
 	ld	HL,(XHL)
 	extz	XHL
 	sll	3,XHL
-	add	XHL,Data_226B69
+	add	XHL,IntroImpactMaps
 	ld	BC,(XHL+4)
 	ld	DE,(XHL+6)
 	ld	XHL,(XHL)
@@ -549,37 +549,37 @@ IntroImpactTask.skip:
 
 c_20EB17	section	code abs=0x20EB17
 
-; [code] Gfx_2DEB58 + Map_2DE660 (the planet) on SCR1, after Intro199YearsAgo
+; [code] Gfx_2DEB58 + IntroPlanetMap (the planet) on SCR1, after Intro199YearsAgo
 IntroPlanetGraphics:
 	ld	A,0
 	ld	C,3
-	ld	XHL,Pal_2DE648
+	ld	XHL,IntroPlanetPal
 	call	LoadPalettes
 	ld	A,0x10
 	ld	C,3
-	ld	XHL,Pal_2DE648
+	ld	XHL,IntroPlanetPal
 	call	LoadPalettes
 	ld	A,0x20
 	ld	C,3
-	ld	XHL,Pal_2DE648
+	ld	XHL,IntroPlanetPal
 	call	LoadPalettes
 	ld	A,0
 	ld	C,2
-	ld	XHL,MonoPal_2DE027
+	ld	XHL,IntroMonoPal
 	call	LoadMonoPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2DE027
+	ld	XHL,IntroMonoPal
 	call	LoadMonoPalettes
 	ld	A,4
 	ld	C,3
-	ld	XHL,MonoPal_2DE027
+	ld	XHL,IntroMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0xC
 	ld	XHL,Gfx_2DEB58
 	call	LoadCompressedTiles
 	ld	WA,0xC
-	ld	XHL,Map_2DE660
+	ld	XHL,IntroPlanetMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
@@ -588,7 +588,7 @@ IntroPlanetGraphics:
 
 c_20EB87	section	code abs=0x20EB87
 
-; [code] IntroSequence after IntroPlanetGraphics: 0x78 frames of a sprite map from Data_226B59 (4 frames, every 2nd frame) at x 0xA0 (- 1 per frame), y 0x18 (+ 1 every 2nd frame), DrawSpriteMap; [play] intro_planet_meteor
+; [code] IntroSequence after IntroPlanetGraphics: 0x78 frames of a sprite map from IntroMeteorFrames (4 frames, every 2nd frame) at x 0xA0 (- 1 per frame), y 0x18 (+ 1 every 2nd frame), DrawSpriteMap; [play] intro_planet_meteor
 IntroMeteorTask:
 	ldw	(XIZ+TASK_ARG),0xA0
 	ldw	(XIZ+0x10),0x18
@@ -605,7 +605,7 @@ IntroMeteorTask.resume:
 	and	HL,3
 	sll	2,HL
 	extz	XHL
-	add	XHL,Data_226B59
+	add	XHL,IntroMeteorFrames
 	ld	XHL,(XHL)
 	ld	BC,(XIZ+TASK_ARG)
 	ld	DE,(XIZ+0x10)
@@ -627,12 +627,12 @@ IntroMeteorTask.done:
 
 c_20EBF9	section	code abs=0x20EBF9
 
-; [code] 20 frames: Map_2E3616 on SCR2 at 0, 0 (tiles from 0x17C; the letters stay on SCR1); IntroSequence runs it after IntroBioLetters, IntroMotorScene, IntroUnitronScene and IntroMotorUnitronLetters
-; [play] seen in play: a full-screen cut, black but for a purple three-eyed mechanical head (Map_2E3616) (was swp_20EBF9)
+; [code] 20 frames: IntroHeadMap on SCR2 at 0, 0 (tiles from 0x17C; the letters stay on SCR1); IntroSequence runs it after IntroBioLetters, IntroMotorScene, IntroUnitronScene and IntroMotorUnitronLetters
+; [play] seen in play: a full-screen cut, black but for a purple three-eyed mechanical head (IntroHeadMap) (was swp_20EBF9)
 IntroHeadCutTask:
 	ldw	(XIZ+TASK_ARG),0x14
 	ld	WA,0x17C
-	ld	XHL,Map_2E3616
+	ld	XHL,IntroHeadMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
@@ -645,12 +645,12 @@ IntroHeadCutTask.resume:
 
 c_20EC21	section	code abs=0x20EC21
 
-; [code] the IntroHeadCutTask shape with Map_2E3910 (the same head, 9 cells of rows 11-12 differ); IntroSequence runs it once before the fade to white and IntroCockpitScene
+; [code] the IntroHeadCutTask shape with IntroHeadMouthMap (the same head, 9 cells of rows 11-12 differ); IntroSequence runs it once before the fade to white and IntroCockpitScene
 ; [play] seen in play: the head again with the mouth / jaw line changed (was swp_20EC21)
 IntroHeadMouthCutTask:
 	ldw	(XIZ+TASK_ARG),0x14
 	ld	WA,0x17C
-	ld	XHL,Map_2E3910
+	ld	XHL,IntroHeadMouthMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
@@ -693,20 +693,20 @@ IntroCockpitScene:
 	calr	ClearTilemapScr2
 	ld	A,0x10
 	ld	C,0xC
-	ld	XHL,Pal_2DB37F
+	ld	XHL,IntroCockpitPal
 	call	LoadPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2DB3CF
+	ld	XHL,IntroCockpitMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0xC
 	ld	XHL,Gfx_2DC0C7
 	call	LoadCompressedTiles
-	ld	XHL,Map_2DB3D7
+	ld	XHL,IntroCockpitMap
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,IntroCockpitScene.skip
-	ld	XHL,Map_2DBA4F
+	ld	XHL,IntroCockpitMonoMap
 IntroCockpitScene.skip:
 	ld	WA,0xC
 	ld	BC,0
@@ -773,27 +773,27 @@ c_20ED46	section	code abs=0x20ED46
 IntroLettersGraphics:
 	ld	A,0
 	ld	C,7
-	ld	XHL,Pal_2DF63C
+	ld	XHL,IntroLettersPal
 	call	LoadPalettes
 	ld	A,0x10
 	ld	C,7
-	ld	XHL,Pal_2DF63C
+	ld	XHL,IntroLettersPal
 	call	LoadPalettes
 	ld	A,0x20
 	ld	C,7
-	ld	XHL,Pal_2DF63C
+	ld	XHL,IntroLettersPal
 	call	LoadPalettes
 	ld	A,0
 	ld	C,2
-	ld	XHL,MonoPal_2DE027
+	ld	XHL,IntroMonoPal
 	call	LoadMonoPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2DE027
+	ld	XHL,IntroMonoPal
 	call	LoadMonoPalettes
 	ld	A,4
 	ld	C,2
-	ld	XHL,MonoPal_2DE027
+	ld	XHL,IntroMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0x12C
 	ld	XHL,Gfx_2DFF62
@@ -814,12 +814,12 @@ IntroBioLetters:
 	ld	XHL,Gfx_2E231F
 	call	LoadCompressedTiles
 	ld	WA,0x12C
-	ld	XHL,Map_2DF674
+	ld	XHL,IntroBioLettersMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
 	ld	WA,0xC
-	ld	XHL,Map_2E2025
+	ld	XHL,IntroBioSceneMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
@@ -843,7 +843,7 @@ IntroBioLetters.skip:
 
 c_20EE1A	section	code abs=0x20EE1A
 
-; [code] SCR2 Map_2DF96E ("MOTOR"), SCR1 Map_2E2B88 scrolled; started by IntroSequence
+; [code] SCR2 IntroMotorLettersMap ("MOTOR"), SCR1 IntroMotorSceneMap scrolled; started by IntroSequence
 IntroMotorScene:
 	calr	ClearTilemapScr2
 	calr	ClearTilemapScr1
@@ -851,12 +851,12 @@ IntroMotorScene:
 	ld	XHL,Gfx_2E2E82
 	call	LoadCompressedTiles
 	ld	WA,0x12C
-	ld	XHL,Map_2DF96E
+	ld	XHL,IntroMotorLettersMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
 	ld	WA,0xC
-	ld	XHL,Map_2E2B88
+	ld	XHL,IntroMotorSceneMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
@@ -880,7 +880,7 @@ IntroMotorScene.skip:
 
 c_20EE82	section	code abs=0x20EE82
 
-; [code] SCR2 Map_2DFC68 ("UNITRON"), SCR1 Map_2E1008 scrolled the other way
+; [code] SCR2 IntroUnitronLettersMap ("UNITRON"), SCR1 IntroUnitronSceneMap scrolled the other way
 IntroUnitronScene:
 	calr	ClearTilemapScr2
 	calr	ClearTilemapScr1
@@ -888,12 +888,12 @@ IntroUnitronScene:
 	ld	XHL,Gfx_2E1302
 	call	LoadCompressedTiles
 	ld	WA,0x12C
-	ld	XHL,Map_2DFC68
+	ld	XHL,IntroUnitronLettersMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
 	ld	WA,0xC
-	ld	XHL,Map_2E1008
+	ld	XHL,IntroUnitronSceneMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
@@ -925,12 +925,12 @@ IntroMotorUnitronLetters:
 	ld	XHL,Gfx_2E0426
 	call	LoadCompressedTiles
 	ld	WA,0x12C
-	ld	XHL,Map_2DF674
+	ld	XHL,IntroBioLettersMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
 	ld	WA,0xC
-	ld	XHL,Map_2E012C
+	ld	XHL,IntroMotorUnitronSceneMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
@@ -958,7 +958,7 @@ IntroMotorUnitronLetters.skip:
 
 c_20EF65	section	code abs=0x20EF65
 
-; [code] child of IntroMotorUnitronLetters: SCR2 tilemap cycles through table 0x226B4D = Map_2DF674 (BIO, IntroBioLetters), Map_2DF96E (MOTOR), Map_2DFC68 (UNITRON) at base 0x12C, interval 0x14 frames shrinking by 2 to 4; ends when its parent link (XIZ+4) is cleared
+; [code] child of IntroMotorUnitronLetters: SCR2 tilemap cycles through table 0x226B4D = IntroBioLettersMap (BIO, IntroBioLetters), IntroMotorLettersMap (MOTOR), IntroUnitronLettersMap (UNITRON) at base 0x12C, interval 0x14 frames shrinking by 2 to 4; ends when its parent link (XIZ+4) is cleared
 CycleIntroLetters:
 	ldw	(XIZ+0x14),0
 	ldw	(XIZ+0x16),0x14
@@ -1023,11 +1023,11 @@ StorySceneUnitice:
 	call	DrawPortrait
 	ld	A,0x20
 	ld	C,1
-	ld	XHL,Pal_225C3D
+	ld	XHL,StoryTextPal
 	call	LoadPalettes
 	ld	A,4
 	ld	C,1
-	ld	XHL,MonoPal_225C45
+	ld	XHL,StoryTextMonoPal
 	call	LoadMonoPalettes
 	ldb	(wFadeLevel),0
 	ld	XHL,CreditsTask
@@ -1070,11 +1070,11 @@ StorySceneUnitice.resume5:
 	task_wait
 	ld	A,0x20
 	ld	C,1
-	ld	XHL,Pal_225C3D
+	ld	XHL,StoryTextPal
 	calr	WritePalettesDirect
 	ld	A,4
 	ld	C,1
-	ld	XHL,MonoPal_225C45
+	ld	XHL,StoryTextMonoPal
 	calr	WriteMonoPalettesDirect
 	ld	XHL,CreditsTask
 	call	StartChildTask
@@ -1124,17 +1124,17 @@ c_20F1A4	section	code abs=0x20F1A4
 StorySceneDestruction:
 	ld	A,0x10
 	ld	C,7
-	ld	XHL,Pal_2E766D
+	ld	XHL,StoryDestructionPal
 	call	LoadPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2DD55D
+	ld	XHL,YumekoboLogoMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0xC
 	ld	XHL,Gfx_2E79D7
 	call	LoadCompressedTiles
 	ld	WA,0xC
-	ld	XHL,Map_2E76DD
+	ld	XHL,StoryDestructionMap
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
@@ -1161,11 +1161,11 @@ StorySceneDestruction.resume3:
 	task_wait
 	ld	A,0x20
 	ld	C,1
-	ld	XHL,Pal_225C3D
+	ld	XHL,StoryTextPal
 	calr	WritePalettesDirect
 	ld	A,4
 	ld	C,1
-	ld	XHL,MonoPal_225C45
+	ld	XHL,StoryTextMonoPal
 	calr	WriteMonoPalettesDirect
 	ld	XHL,CreditsTask
 	call	StartChildTask
@@ -1194,20 +1194,20 @@ c_20F2C1	section	code abs=0x20F2C1
 StorySceneSunBegan:
 	ld	A,0x10
 	ld	C,8
-	ld	XHL,Pal_2E6618
+	ld	XHL,StorySunBeganPal
 	call	LoadPalettes
 	ld	A,2
 	ld	C,2
-	ld	XHL,MonoPal_2E6698
+	ld	XHL,StorySunBeganMonoPal
 	call	LoadMonoPalettes
 	ld	WA,0xC
 	ld	XHL,Gfx_2E6C94
 	call	LoadCompressedTiles
-	ld	XHL,Map_2E66A0
+	ld	XHL,StorySunBeganMap
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,StorySceneSunBegan.skip
-	ld	XHL,Map_2E699A
+	ld	XHL,StorySunBeganMonoMap
 StorySceneSunBegan.skip:
 	ld	WA,0xC
 	ld	BC,0
@@ -1230,11 +1230,11 @@ StorySceneSunBegan.resume2:
 	task_wait
 	ld	A,0x20
 	ld	C,1
-	ld	XHL,Pal_225C3D
+	ld	XHL,StoryTextPal
 	calr	WritePalettesDirect
 	ld	A,4
 	ld	C,1
-	ld	XHL,MonoPal_225C45
+	ld	XHL,StoryTextMonoPal
 	calr	WriteMonoPalettesDirect
 	ld	XHL,CreditsTask
 	call	StartChildTask
@@ -1277,11 +1277,11 @@ CreditsScreen:
 	call	DrawPortrait
 	ld	A,0x20
 	ld	C,1
-	ld	XHL,Pal_225C3D
+	ld	XHL,StoryTextPal
 	call	LoadPalettes
 	ld	A,4
 	ld	C,1
-	ld	XHL,MonoPal_225C45
+	ld	XHL,StoryTextMonoPal
 	call	LoadMonoPalettes
 	ldb	(wFadeLevel),0
 	ld	XHL,CreditsTask
@@ -1353,11 +1353,11 @@ StorySceneTheEnd:
 	ldb	(wFadeLevel),0
 	ld	A,0x20
 	ld	C,1
-	ld	XHL,Pal_225C3D
+	ld	XHL,StoryTextPal
 	call	LoadPalettes
 	ld	A,4
 	ld	C,1
-	ld	XHL,MonoPal_225C45
+	ld	XHL,StoryTextMonoPal
 	call	LoadMonoPalettes
 	ld	XHL,CreditsTask
 	call	StartChildTask
@@ -1389,11 +1389,11 @@ GameOverScreen:
 	call	InitTextBoxes
 	ld	A,0x2F
 	ld	C,1
-	ld	XHL,Pal_225C3D
+	ld	XHL,StoryTextPal
 	call	LoadPalettes
 	ld	A,5
 	ld	C,1
-	ld	XHL,MonoPal_225C45
+	ld	XHL,StoryTextMonoPal
 	call	LoadMonoPalettes
 	ld	A,0
 	ld	C,0x14

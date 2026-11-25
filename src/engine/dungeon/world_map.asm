@@ -223,7 +223,7 @@ EraseEnterPromptBox:
 
 c_210600	section	code abs=0x210600
 
-; [code] LoadCompressedTiles Gfx_2C8691 to tile 0x10 and Pal_2C865D as palette 1: the tiles DrawWorldMapMarker draws; WorldMapOpen
+; [code] LoadCompressedTiles Gfx_2C8691 to tile 0x10 and WorldMapMarkerPal as palette 1: the tiles DrawWorldMapMarker draws; WorldMapOpen
 LoadWorldMapMarkerTiles:
 	push	XHL
 	push	XDE
@@ -232,7 +232,7 @@ LoadWorldMapMarkerTiles:
 	ld	XHL,Gfx_2C8691
 	ld	WA,0x10
 	call	LoadCompressedTiles
-	ld	XHL,Pal_2C865D
+	ld	XHL,WorldMapMarkerPal
 	ld	A,1
 	ld	C,1
 	call	LoadPalettes
@@ -244,7 +244,7 @@ LoadWorldMapMarkerTiles:
 
 c_210622	section	code abs=0x210622
 
-; [code] A = marker 0-3: DrawSpriteGrid 2 x 2 of tile 0x10 + 4 * ((A + (+0x2D >> 3)) & 3), palette 1, at the x / y words of Data_2275A1[A] - (8, 0xC)
+; [code] A = marker 0-3: DrawSpriteGrid 2 x 2 of tile 0x10 + 4 * ((A + (+0x2D >> 3)) & 3), palette 1, at the x / y words of WorldMapMarkerPos[A] - (8, 0xC)
 DrawWorldMapMarker:
 	push	XHL
 	push	XDE
@@ -254,7 +254,7 @@ DrawWorldMapMarker:
 	extz	WA
 	extz	XWA
 	sll	2,XWA
-	ld	XHL,Data_2275A1
+	ld	XHL,WorldMapMarkerPos
 	add	XHL,XWA
 	ld	BC,(XHL)
 	inc	2,XHL

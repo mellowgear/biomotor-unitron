@@ -46,7 +46,7 @@ DrawArenaParticipants.skip2:
 	ld	BC,1
 	ld	DE,4
 	add	E,0x20
-	call	swp_21684D
+	call	GetArenaPortraitFirstTile
 	call	DrawPortrait
 	jr	DrawArenaParticipants.skip4
 DrawArenaParticipants.skip3:

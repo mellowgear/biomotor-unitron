@@ -5,6 +5,8 @@ wRandomSeeds	equ	0x5000
 wFrameCounter	equ	0x5006
 ; [code] the main loop (Reset) sets 0xFF and spins until VBlankHandler clears it: one pass per frame
 wVBlankWait	equ	0x500A
+; [code] 7 bytes BIOS call 2 (RTC get, BCD year, month, day, hour, minute, second, ...) fills in Reset; Reset then seeds SetRandomSeeds from words +0 / +2 / +4 (+4 plus 1); nothing else reads it (wPlayerName follows)
+wBootRtcTime	equ	0x500C
 wPlayerName	equ	0x5013
 wPlayerRace	equ	0x5021
 wPlayerLevel	equ	0x5022
@@ -163,6 +165,10 @@ wYesNoChoice	equ	0x5DF7
 wChestTable	equ	0x5FFA
 ; [code] the town place task's result: TownPlaceTaskEnd copies task +0x11 here; StreetGoWorks opens RunWorksScreen on 1 (TownPlaceEnter with no entry talk), StreetGoShop RunShopScreen on 3, 4 or 5 (3 = no entry talk; 4 / 5 from the talk nexts 0xF9 / 0xF8, TalkNextLeavePlace)
 wTownPlaceResult	equ	0x60F0
+; [code] AddBCD32 scratch: XWA stored here, XBC added into it byte by byte (adc + daa), the sum read back into XWA
+wBcdSumA	equ	0x60FE
+; [code] AddBCD32 scratch: the second 4-byte packed-BCD operand (XBC), read back unchanged
+wBcdSumB	equ	0x6102
 ; [code] StartCursorTask stores the CursorTask handle (StartChildTask XHL) here
 wCursorTask	equ	0x6108
 wCursorVisible	equ	0x610C
@@ -184,14 +190,30 @@ wMsgPending	equ	0x6117
 wMsgSpeed	equ	0x611B
 ; [code] set by ShowMessageFast and FlushMessage: MessageTask then sets the box speed 0 (rest of the page at once) and clears it
 wMsgFastForward	equ	0x611C
+; [code] MessageTask: 1 when the box reached a button wait, so the A/B press that ends the wait does not also fast-forward the next page; cleared on that press and when a new message starts
+wMsgWaitPressed	equ	0x611D
+; [code] AskYesNo cursor and answer: 0 Yes, 1 No (L / R move it), 0xFF on B; returned in A
+wYesNoAnswer	equ	0x611E
+; [code] AskYesNo: the question text pointer (XHL on entry), queued after ClearMessageBox
+wYesNoPrompt	equ	0x611F
+; [code] WaitFramesOrButton: frames left (A on entry, minus 1 per TaskYield)
+wWaitFrameCount	equ	0x6127
+; [code] WaitMessage: the caller return address it pops on entry and jumps back to
+wWaitMessageReturn	equ	0x6128
+; [code] FlushMessage: the caller return address it pops on entry and jumps back to
+wFlushMessageReturn	equ	0x612C
 ; [code] menu task cursor entry: MenuCmdDrawBox zeroes it, the command 4 input moves it over wMenuCount with U/D (wrapping); GetMenuCursorCell reads it
 wMenuCursor	equ	0x6139
 ; [code] the menu box's answer byte: the command 4 input stores (wMenuValues)[wMenuCursor] (B: 0xFF) here with W = 0xFF; the Works / shop menus branch on it
 wMenuChoice	equ	0x613B
+; [code] 0xFF once the menu input stores its answer (the high byte of the word write to wMenuChoice, W = 0xFF), 0 when MenuBoxTask starts; DrawMenuCursorSprite only draws the box 2 cursor sprite while it is set
+wMenuChoiceMade	equ	0x613C
 ; [code] 1 after MenuCmdShowCursor, 0 after MenuCmdReset / MenuCmdHideCursor; DrawMenuCursorSprite needs it
 wMenuCursorOn	equ	0x613D
 ; [code] MenuBoxTask's answer to wMenuCommand (MenuCmdEnd: 0xFFFF0000 | 0x613B), read by MenuCommandWait, WaitMenuResult, GetMenuResult
 wMenuResult	equ	0x613E
+; [code] MenuCommandWait / WaitMenuResult: the caller return address they pop and jump back to
+wMenuCmdReturn	equ	0x6142
 ; [code] command for MenuBoxTask (MenuBoxDispatch table MenuCommandJumps, 1-6), set by MenuCommandWait / PostMenuCommand, 0 once handled
 wMenuCommand	equ	0x6146
 ; [code] entries the cursor wraps over (command 4 input, GetMenuCursorCell); set by the Setup*Menu routines (SetupItemPartsMenu: 3)
@@ -208,6 +230,8 @@ wListPage	equ	0x6158
 wListRow	equ	0x6159
 ; [code] word: ListCmdInput's result, wListPage * wListRows + wListRow on A, 0xFFFF on B; ListCmdEnd posts it
 wListChoice	equ	0x615B
+; [code] 0xFF once ListCmdInput stores wListChoice (A or B), 0 when ListTask starts; DrawListCursorSprite only draws the box 3 cursor sprite while it is set
+wListChoiceMade	equ	0x615D
 ; [code] 1 after ListCmdShowCursor, 0 after ListCmdReset / ListCmdHideCursor; DrawListCursorSprite needs it
 wListCursorOn	equ	0x615E
 ; [code] rows per list page: ListCmdInput wraps wListRow over it and multiplies the page by it; set by the list setup routines (0xA)
@@ -218,6 +242,8 @@ wListCount	equ	0x6160
 wListPages	equ	0x6161
 ; [code] callback that draws the current page (ListCmdRedraw and ListCmdInput on a page change); set by the list setup routines (e.g. DrawShopBuyItemPage)
 wListDrawPage	equ	0x6162
+; [code] 4-byte routine pointer every list setup stores next to wListDrawPage, always a bare ret (ItemListEmptyHook / EntryListEmptyHook); no reader found
+wListUnusedHook	equ	0x6166
 ; [code] callback ListCmdInput (and CallListMoveHook) calls after every cursor move
 wListMoveHook	equ	0x616A
 ; [code] callback ListCmdInput calls on A: carry accepts the row, no carry plays sound 0x83 and stays
@@ -225,6 +251,8 @@ wListAcceptHook	equ	0x616E
 ; [code] pointer to 2 bytes (column, row) per list row: the cursor cell (GetListCursorCell)
 wListCells	equ	0x6172
 wListResult	equ	0x6176
+; [code] ListCommandWait / WaitListResult: the caller return address they pop and jump back to
+wListCmdReturn	equ	0x617A
 wListCommand	equ	0x617E
 ; [code] 0-based item group of the item lists (SetupShopBuyItemList / SetupWorksItemList A); DrawItemListPage and GetSelectedListItem use it + 1
 wListGroup	equ	0x6182
@@ -248,14 +276,40 @@ wPartnerNamePtrCopy	equ	0x61DB
 wWorksPartnerRace	equ	0x61DF
 wWorksEngineerLevel	equ	0x61E0
 wEmblemBitsCopy	equ	0x61E1
+; [code] AddGPBCD scratch: the 4-byte packed-BCD amount (XWA) added into wGP byte by byte
+wGPBcdAddend	equ	0x61E2
+; [code] caller return address popped and jumped back to by Wait30Frames, WaitForButton and ShowMenuText
+wTextWaitReturn	equ	0x61ED
+; [code] ShowMenuText: the text pointer (XHL) kept across FlushMessage, then queued (QueueMessage)
+wMenuTextPtr	equ	0x61F1
+; [code] WaitForButton: frames left (0x3C at entry, minus 1 per frame once the message box is idle); 0 ends the wait
+wWaitButtonTimer	equ	0x61F5
 ; [code] RunWorksScreen A: 1 StreetGoWorks, 2 LoadGameEnterWorks (main menu after a load), 3 StreetAfterDungeonDefeat, 4 camp Stats (WorksStatsMenu, then WorksExit), 5 camp Item list (WorksItemMenu), 6 list pick (WorksScreenEntry)
 wWorksScreenMode	equ	0x61F6
+; [code] word EndMenuTask posts as 0xFFFF0000 | it to wWorksScreenResult: 0 at WorksScreenEntry, mode 6 the picked list row + 1
+wWorksScreenValue	equ	0x61F7
+; [code] Works main menu cursor whose description is shown: WorksMenuCursorMoved compares wMenuCursor with it, 0xFF forces a redraw
+wWorksMenuShownCursor	equ	0x61F9
+; [code] word WorksTradeMenu passes to SetLinkOffer: low byte the picked list row + 1, high byte (+1) the group (part category + 1, item category + 6)
+wTradeOffer	equ	0x61FA
+; [code] 0 when WorksDataMenu starts RunWorksSaveTask / RunWorksLoadTask, set 1 by them when the save / load task ends; WorksDataMenu polls it
+wWorksDataDone	equ	0x6201
 ; [code] the RunWorksScreen mode CampWorksScreenTask uses: 4 from CampMenuInput (Stats), 5 from CampItemSubmenuInput (List)
 wCampWorksMode	equ	0x620A
+; [code] CampWorksScreenTask stores the RunWorksScreen result (XWA) here; no reader found
+wCampWorksResult	equ	0x620E
 ; [code] EndMenuTask posts 0xFFFF0000 | (0x61F7) here; RunWorksScreen waits for it
 wWorksScreenResult	equ	0x6212
+; [code] RunWorksScreen: the caller return address it pops and jumps back to once wWorksScreenResult is posted
+wWorksScreenReturn	equ	0x6216
+; [code] routine WorksScreenTask jumps to after setting up (RunWorksScreen: WorksScreenEntry; the shop entry: ShopTalk)
+wWorksScreenEntry	equ	0x621A
 ; [code] 0 or 0x80 at random (PickShopClerk), 0 / 1 per greeting in ShopTalk: picks the clerk portrait (GetShopClerkPortrait 0x18 Galb / 0x19 Lana, [play]) and the line (PickShopClerkText: XHL or XDE)
 wShopClerk	equ	0x621E
+; [code] ShopMainMenu: the category picked in the buy / sell category menu (wMenuChoice), used for the part list and as the entry group - 1
+wShopCategory	equ	0x621F
+; [code] ShopMainMenu word: low byte list row + 1, high byte wShopCategory + 1; passed to GetEntryCountBy / GetEntryPrice / AddItemByCategory and the sell routines
+wShopEntry	equ	0x6220
 
 ; --- naming round 4a
 ; [code] skill effect 5 (ShowStatUp, skill record +4/+6/+8/+0xA): turns of AP/SP/RP/MP up; PlayerTurnEnd counts them down, ComputeStatBuffs +30 to wPlayerAPBuff.. while non-zero, 0 at BattleStart
@@ -371,6 +425,10 @@ wLinkFlags	equ	0x622D
 wLinkCallback	equ	0x622E
 ; [code] LinkCommTask timeout (was wLinkRetries): reset to 0x1E (ClearLinkState, task start, after each packet or error), minus 1 per receive poll without a whole packet; at 0 wLinkStatus = 0 and wLinkErrorBits |= 8
 wLinkTimeout	equ	0x6232
+; [code] LinkCommTask: where the next received byte goes in wLinkPacketText (reset to its start each packet)
+wLinkPacketWritePtr	equ	0x6233
+; [code] LinkCommTask: bytes of the 0x10-byte packet still to receive; 0x10 = still looking for LinkSyncWord
+wLinkPacketBytesLeft	equ	0x6237
 ; [code] LinkCommTask result: 1 = packet received and checksum good, 0 = timed out, 0xFF = COM status error, 0xFE = bad checksum, 0xFD = bad sync/hex (DecodeLinkPacket); CheckLinkStatus / CheckLinkError read it as a word with wLinkErrorBits
 wLinkStatus	equ	0x6238
 ; [code] LinkCommTask error bits: 1 COM error (plus the receive-status bits 1-3 of COM call 0x18's W, << 4), 2 checksum, 4 decode, 8 timeout

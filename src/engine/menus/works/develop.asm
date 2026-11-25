@@ -250,11 +250,12 @@ LoadPartStatsPanel:
 	ld	(wPanelStats+10),WA
 	ld	WA,(XHL+0xE)
 	ld	(wPanelStats+12),A
-	jr	loc_2192DD
+	jr	LoadPartStatsPanelDone
 
 c_2192DD	section	code abs=0x2192DD
 
-loc_2192DD:
+; [code] ret: end of LoadPartStatsPanel (was loc_2192DD)
+LoadPartStatsPanelDone:
 	ret
 
 c_2193A3	section	code abs=0x2193A3
@@ -687,7 +688,8 @@ LookupDevPartnerBonus:
 
 c_21BA1E	section	code abs=0x21BA1E
 
-loc_21BA1E:
+; [code] the ret of LookupDevPartnerBonus followed by the tool bonus bytes (5, 10, 15, 20, 100); LookupDevToolBonus reads byte [A] from here, tool 1-5 (was loc_21BA1E)
+DevToolBonus:
 	ret
 	db	0x05,0x0A,0x0F,0x14,0x64
 
@@ -696,7 +698,7 @@ c_21BA24	section	code abs=0x21BA24
 ; [code] A = tool 1-5 -> A = byte 0x21BA1E[A] (5, 10, 15, 20, 100; index 0 would read the ret opcode before the table); GetDevToolBonus
 LookupDevToolBonus:
 	push	XHL
-	ld	XHL,loc_21BA1E
+	ld	XHL,DevToolBonus
 	ld	A,(XHL+A)
 	pop	XHL
 	ret

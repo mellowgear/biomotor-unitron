@@ -101,7 +101,8 @@ DrawItemListPage.skip3:
 
 c_218331	section	code abs=0x218331
 
-swp_218331:
+; [code] ret; stored as the wListUnusedHook list hook (no action) by the Works item lists, the shop item lists and the trade list (was swp_218331)
+ItemListEmptyHook:
 	ret
 
 c_218332	section	code abs=0x218332
@@ -144,11 +145,11 @@ c_218377	section	code abs=0x218377
 ; [code] list accept hook of the Setup accessory list (SetupSlotAccList): carry only for a valid row with GetListItemCount & 0xF != 0
 ItemListAcceptCount:
 	call	GetSelectedListItem
-	jr	NC,loc_218389
+	jr	NC,ItemListAcceptDone
 	ld	BC,WA
 	call	GetListItemCount
 	and	A,0xF
-	jr	Z,loc_218389
+	jr	Z,ItemListAcceptDone
 
 c_218388	section	code abs=0x218388
 
@@ -158,7 +159,8 @@ ItemListAcceptAny:
 
 c_218389	section	code abs=0x218389
 
-loc_218389:
+; [code] ret: no-carry exit of ItemListAcceptCount (ItemListAcceptAny falls in after scf) (was loc_218389)
+ItemListAcceptDone:
 	ret
 
 c_21838A	section	code abs=0x21838A
@@ -203,8 +205,8 @@ SetupWorksItemList.skip:
 	ld	(wListRows),A
 	ld	XHL,DrawItemListPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218331
-	ld	(0x6166),XHL
+	ld	XHL,ItemListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2181D8
 	ld	(wListCells),XHL
 	jp	ListReset
@@ -305,7 +307,8 @@ DrawPartListPage.skip3:
 
 c_218577	section	code abs=0x218577
 
-swp_218577:
+; [code] ret; stored as the wListUnusedHook list hook (no action) by the Develop / part lists, the shop part lists and the trade list (was swp_218577)
+EntryListEmptyHook:
 	ret
 
 c_218578	section	code abs=0x218578
@@ -392,11 +395,11 @@ c_21860A	section	code abs=0x21860A
 ; [code] list accept hook of the Develop arm / material / tool lists and the Setup part list: carry only for a valid row with GetListEntryCount & 0xF != 0
 EntryListAcceptCount:
 	call	GetSelectedListEntry
-	jr	NC,loc_21861C
+	jr	NC,EntryListAcceptDone
 	ld	BC,WA
 	call	GetListEntryCount
 	and	A,0xF
-	jr	Z,loc_21861C
+	jr	Z,EntryListAcceptDone
 
 c_21861B	section	code abs=0x21861B
 
@@ -406,7 +409,8 @@ EntryListAcceptAny:
 
 c_21861C	section	code abs=0x21861C
 
-loc_21861C:
+; [code] ret: no-carry exit of EntryListAcceptCount (EntryListAcceptAny falls in after scf) (was loc_21861C)
+EntryListAcceptDone:
 	ret
 
 c_21861D	section	code abs=0x21861D
@@ -508,8 +512,8 @@ SetupEntryList:
 	ld	(wListRows),A
 	ld	XHL,DrawPartListPage
 	ld	(wListDrawPage),XHL
-	ld	XHL,swp_218577
-	ld	(0x6166),XHL
+	ld	XHL,EntryListEmptyHook
+	ld	(wListUnusedHook),XHL
 	ld	XHL,ListCursor_2183EE
 	ld	(wListCells),XHL
 	jp	ListReset
@@ -628,15 +632,16 @@ c_219256	section	code abs=0x219256
 LoadSelectedPartStats:
 	ldw	(wPanelPart),0
 	call	GetSelectedListEntry
-	jp	NC,loc_2192D7
+	jp	NC,ClearPanelPart
 	ld	(wPanelPart),WA
 	ld	XHL,(wPanelPartFilter)
 	call	CallXHL
-	jr	NC,loc_2192D7
+	jr	NC,ClearPanelPart
 
 c_2192D7	section	code abs=0x2192D7
 
-loc_2192D7:
+; [code] wPanelPart = 0 (LoadSelectedPartStats: invalid row or filter refused), falls into DrawPartStatsPanel (was loc_2192D7)
+ClearPanelPart:
 	ldw	(wPanelPart),0
 
 c_2192DE	section	code abs=0x2192DE

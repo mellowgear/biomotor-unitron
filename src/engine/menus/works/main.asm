@@ -331,9 +331,9 @@ PlayMusic2:
 
 c_219917	section	code abs=0x219917
 
-; [code] the 0x621A entry of RunWorksScreen: mode 6 -> SetupTradeItemList list, result list row 0x615B + 1 to 0x61F7, EndMenuTask; other modes -> WorksScreenModes
+; [code] the wWorksScreenEntry entry of RunWorksScreen: mode 6 -> SetupTradeItemList list, result list row wListChoice + 1 to wWorksScreenValue, EndMenuTask; other modes -> WorksScreenModes
 WorksScreenEntry:
-	ldw	(0x61F7),0
+	ldw	(wWorksScreenValue),0
 	cpb	(wWorksScreenMode),6
 	jp	NZ,WorksScreenModes
 	ld	A,1
@@ -343,7 +343,7 @@ WorksScreenEntry:
 	call	RunListInput
 	ld	A,(wListChoice)
 	inc	1,A
-	ld	(0x61F7),A
+	ld	(wWorksScreenValue),A
 	jp	EndMenuTask
 
 c_219947	section	code abs=0x219947
@@ -363,7 +363,7 @@ WorksGreeting.done:
 
 c_219960	section	code abs=0x219960
 
-; [code] WorksGreeting, DrawGP; mode 4 -> WorksStatsMenu, 5 -> WorksItemMenu, 3 -> loc_21AA73; else engineer level 10 / 30 body upgrades (JustThePersonIText / IveGotSomeGoodText, UpgradeBody, EVENT_BODY2 / EVENT_BODY3), EVENT_STAGE_LILY ImGladToSeeText, mode 2 GoodMorningHowDoText, else WelcomeBackEverythingHeresText; then WorksMainMenu
+; [code] WorksGreeting, DrawGP; mode 4 -> WorksStatsMenu, 5 -> WorksItemMenu, 3 -> WorksAfterDefeatGreeting; else engineer level 10 / 30 body upgrades (JustThePersonIText / IveGotSomeGoodText, UpgradeBody, EVENT_BODY2 / EVENT_BODY3), EVENT_STAGE_LILY ImGladToSeeText, mode 2 GoodMorningHowDoText, else WelcomeBackEverythingHeresText; then WorksMainMenu
 WorksScreenModes:
 	call	WorksGreeting
 	call	DrawGP
@@ -375,7 +375,7 @@ WorksScreenModes:
 	ld	WA,0x22
 	call	CallSoundCommand
 	cpb	(wWorksScreenMode),3
-	jp	Z,loc_21AA73
+	jp	Z,WorksAfterDefeatGreeting
 	cpb	(wWorksEngineerLevel),0xA
 	jr	C,WorksScreenModes.skip
 	ld	A,EVENT_BODY2
@@ -460,7 +460,7 @@ WorksMainMenu:
 	ld	XDE,WhatDoYouWantText2
 	call	ShowPartnerGenderText
 	call	WaitForButton
-	ldb	(0x61F9),0xFF
+	ldb	(wWorksMenuShownCursor),0xFF
 
 c_219A8A	section	code abs=0x219A8A
 
@@ -496,14 +496,14 @@ WorksMenuIdle:
 
 c_219ADB	section	code abs=0x219ADB
 
-; [code] when wMenuCursor differs from 0x61F9: FlushMessage and the entry's description from the table at WorksMenuCursorJumps (ShowSetupDescription ... ShowExitDescription)
+; [code] when wMenuCursor differs from wWorksMenuShownCursor: FlushMessage and the entry's description from the table at WorksMenuCursorJumps (ShowSetupDescription ... ShowExitDescription)
 WorksMenuCursorMoved:
 	ld	A,(wMenuCursor)
-	cp	A,(0x61F9)
+	cp	A,(wWorksMenuShownCursor)
 	jp	Z,WorksMenuIdle
-	ld	(0x61F9),A
+	ld	(wWorksMenuShownCursor),A
 	call	FlushMessage
-	ld	A,(0x61F9)
+	ld	A,(wWorksMenuShownCursor)
 	cp	A,8
 	jp	NC,WorksMenuIdle
 	sll	2,A
@@ -597,7 +597,8 @@ WorksExit:
 
 c_21AA73	section	code abs=0x21AA73
 
-loc_21AA73:
+; [code] WorksScreenModes mode 3 (StreetAfterDungeonDefeat): WhewImGladToText, Wait30Frames, WorksMainMenu (was loc_21AA73)
+WorksAfterDefeatGreeting:
 	ld	XHL,WhewImGladToText
 	ld	XDE,WhewImGladToText
 	call	ShowPartnerGenderText
@@ -606,11 +607,11 @@ loc_21AA73:
 
 c_21AA89	section	code abs=0x21AA89
 
-; [code] child task of the camp menu: RunWorksScreen(0x620A: 4 Stats from CampMenuInput, 5 Item list from CampItemSubmenuInput), result to 0x620E, EndChildTasks, EndTask
+; [code] child task of the camp menu: RunWorksScreen(wCampWorksMode: 4 Stats from CampMenuInput, 5 Item list from CampItemSubmenuInput), result to wCampWorksResult, EndChildTasks, EndTask
 CampWorksScreenTask:
 	ld	A,(wCampWorksMode)
 	call	RunWorksScreen
-	ld	(0x620E),XWA
+	ld	(wCampWorksResult),XWA
 	call	EndChildTasks
 	call	EndTask
 CampWorksScreenTask.loop:
@@ -619,14 +620,14 @@ CampWorksScreenTask.loop:
 
 c_21AAA5	section	code abs=0x21AAA5
 
-; [code] A = mode (wWorksScreenMode): entry pointer 0x621A = WorksScreenEntry, child WorksScreenTask, TaskYield until EndMenuTask posts 0x6212, XWA = it. Modes: 1 / 2 street Works visits (StreetGoWorks, LoadGameEnterWorks), 3 StreetAfterDungeonDefeat, 4 camp Stats, 5 camp Item list (CampWorksScreenTask), 6 list pick
+; [code] A = mode (wWorksScreenMode): entry pointer wWorksScreenEntry = WorksScreenEntry, child WorksScreenTask, TaskYield until EndMenuTask posts wWorksScreenResult, XWA = it. Modes: 1 / 2 street Works visits (StreetGoWorks, LoadGameEnterWorks), 3 StreetAfterDungeonDefeat, 4 camp Stats, 5 camp Item list (CampWorksScreenTask), 6 list pick
 RunWorksScreen:
 	ld	XHL,WorksScreenEntry
 RunWorksScreen.withEntry:
-	ld	(0x621A),XHL
+	ld	(wWorksScreenEntry),XHL
 	ld	(wWorksScreenMode),A
 	pop	XHL
-	ld	(0x6216),XHL
+	ld	(wWorksScreenReturn),XHL
 	xor	XWA,XWA
 	ld	(wWorksScreenResult),XWA
 	ld	XHL,WorksScreenTask
@@ -640,12 +641,12 @@ RunWorksScreen.loop:
 RunWorksScreen.skip:
 	call	TaskYield
 	ld	XWA,(wWorksScreenResult)
-	ld	XHL,(0x6216)
+	ld	XHL,(wWorksScreenReturn)
 	jp	XHL
 
 c_21AAE2	section	code abs=0x21AAE2
 
-; [code] child of RunWorksScreen: ClearPictureAndTilemaps, boxes 1 (0x14 x 5 at 0,0xE), StartCursorTask, StartMessageTask, StartBox2Task, StartMenuBoxTask, list setup, SetMessageBox 1, SetMessageSpeed wOptionMessageSpeed, then jp (0x621A)
+; [code] child of RunWorksScreen: ClearPictureAndTilemaps, boxes 1 (0x14 x 5 at 0,0xE), StartCursorTask, StartMessageTask, StartBox2Task, StartMenuBoxTask, list setup, SetMessageBox 1, SetMessageSpeed wOptionMessageSpeed, then jp (wWorksScreenEntry)
 WorksScreenTask:
 	call	ClearPictureAndTilemaps
 	ld	A,1
@@ -673,7 +674,7 @@ WorksScreenTask:
 	call	Box2Open
 	call	Box2ClearPlace
 	call	Box2SetFlag
-	ld	XHL,(0x621A)
+	ld	XHL,(wWorksScreenEntry)
 	jp	XHL
 
 c_21AB7A	section	code abs=0x21AB7A
