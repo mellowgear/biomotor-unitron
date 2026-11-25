@@ -1,0 +1,19 @@
+; Track_AF: track id 0xAF (SFX), ROM 0x205F7B; in song 17.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0xAF
+	channel	3, .ch0
+	map	0
+
+.ch0:
+	instr	0 w1
+	note	o1 G v15 w6 g3
+	note	o0 A w8 g6
+	note	G# w5 g4
+	note	G w76 g76
+	note	= v14 w36 g36
+	note	= v13
+	note	= v10 w24
+	note	= v0 w12 g0
+	note	= w1 g1
+	end

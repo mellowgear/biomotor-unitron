@@ -1,0 +1,148 @@
+; ItemDescs (items): 71 strings, 19-byte slots (18 characters + done),
+; one per id; keep the order and count. Built by unitron text (Makefile).
+; Notes on the table: src/data/items/prices.asm
+
+slot 19 FF
+	text "Body▶Fire affin."	; 1 FlrCt
+	done
+	text "Body▶Wood affin."	; 2 RefCt
+	done
+	text "Body▶Water affin."	; 3 IceCt
+	done
+	text "Body▶Wind affin."	; 4 WindCt
+	done
+	text "Body▶Earth affin."	; 5 ErthCt
+	done
+	text "Body▶Light affin."	; 6 LghtCt
+	done
+	text "Body▶Dark affin."	; 7 DarkCt
+	done
+	text "Copies enemy affin"	; 8 MirrCt
+	done
+	text "+5% to Critical"	; 9 Radar5
+	done
+	text "+8% to Critical"	; 10 Radar8
+	done
+	text "+10% to Critical"	; 11 Radr10
+	done
+	text "-10% EP loss"	; 12 Cycl10
+	done
+	text "-20% EP loss"	; 13 Cycl20
+	done
+	text "-30% EP loss"	; 14 Cycl30
+	done
+	text "EP Recovery +15%"	; 15 Panl15
+	done
+	text "EP Recovery +30%"	; 16 Panl30
+	done
+	text "EP Recovery +50%"	; 17 Panl50
+	done
+	text "Armor; +25HP"	; 18 Armr25
+	done
+	text "Armor; +50HP"	; 19 Armr50
+	done
+	text "Armor; +80HP"	; 20 Armr80
+	done
+	text "Subtank; +15EP"	; 21 Tank15
+	done
+	text "Subtank; +30EP"	; 22 Tank30
+	done
+	text "Subtank; +60EP"	; 23 Tank60
+	done
+	text "Motor; +10AP"	; 24 Bst10
+	done
+	text "Motor; +20AP"	; 25 Bst20
+	done
+	text "Motor; +30AP"	; 26 Bst30
+	done
+	text "Plating; +10SP"	; 27 Plt10
+	done
+	text "Plating; +20SP"	; 28 Plt20
+	done
+	text "Plating; +30SP"	; 29 Plt30
+	done
+	text "Transponder; +10RP"	; 30 Axel10
+	done
+	text "Transponder; +20RP"	; 31 Axel20
+	done
+	text "Transponder; +30RP"	; 32 Axel30
+	done
+	text "Subunit; +10MP"	; 33 Burn10
+	done
+	text "Subunit; +20MP"	; 34 Burn20
+	done
+	text "Subunit; +30MP"	; 35 Burn30
+	done
+	text "Cures Paralysis"	; 36 AutoRp
+	done
+	text "Cures EP shortage"	; 37 Proplr
+	done
+	text "Restores 30HP"	; 38 FixIt1
+	done
+	text "Restores 50HP"	; 39 FixIt2
+	done
+	text "Restores 100HP"	; 40 FixIt3
+	done
+	text "Restores 150HP"	; 41 FixIt4
+	done
+	text "Restores all HP"	; 42 FullFx
+	done
+	text "Cures all status"	; 43 Clear
+	done
+	text "AP +15% (temp)"	; 44 PowDrv
+	done
+	text "SP +15% (temp)"	; 45 EField
+	done
+	text "RP +15% (temp)"	; 46 SitClr
+	done
+	text "MP +15% (temp)"	; 47 Turbo
+	done
+	text "Enemy AP -15%"	; 48 Absorb
+	done
+	text "Enemy SP -15%"	; 49 AcidBm
+	done
+	text "Enemy RP -15%"	; 50 Jammer
+	done
+	text "Enemy MP -15%"	; 51 MagFlr
+	done
+	text "Cheap dev. tool"	; 52 Tool1
+	done
+	text "Basic dev. tool"	; 53 Tool2
+	done
+	text "Quality dev. tool"	; 54 Tool3
+	done
+	text "Pro's dev. tool"	; 55 Tool4
+	done
+	text "Best quality tool"	; 56 Myster
+	done
+	text "Basic iron ore"	; 57 Steel
+	done
+	text "Silver ore"	; 58 Silver
+	done
+	text "Gold ore"	; 59 Gold
+	done
+	text "Rare, strong metal"	; 60 Tngstn
+	done
+	text "Expensive metal"	; 61 Platnm
+	done
+	text "Faerie-made metal"	; 62 Mithrl
+	done
+	text "Gem w/ fire soul"	; 63 Slmndr
+	done
+	text "Gem w/ wood soul"	; 64 Dryad
+	done
+	text "Gem w/ water soul"	; 65 Undine
+	done
+	text "Gem w/ wind soul"	; 66 Sylph
+	done
+	text "Gem w/ earth soul"	; 67 Gnome
+	done
+	text "Strongest metal"	; 68 Hirokn
+	done
+	text "Flying gem"	; 69 Oricon
+	done
+	text "Gem w/ light soul"	; 70 Zeus
+	done
+	text "Gem w/ dark soul"	; 71 Hades
+	done
+slot 0

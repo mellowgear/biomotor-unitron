@@ -1,0 +1,30 @@
+; Track_90: track id 0x90 (SFX), ROM 0x205A94; in songs 4, 20.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x90
+	channel	1, .ch0
+	channel	2, .ch1
+	channel	3, .ch2
+	map	2
+
+.ch0:
+	instr	0 w1
+	note	o1 D v15 w21 g2
+	note	o0 A w64 g36
+	note	= v0 w1 g1
+	end
+
+.ch1:
+	instr	0 w1
+	note	o1 E v15 w33 g2
+	note	o0 G w50 g36
+	note	= v0 w1 g1
+	end
+
+.ch2:
+	instr	0 w1
+	note	o0 G v15 w7 g2
+	note	= w8 g1
+	note	= w68 g48
+	note	= v0 w1 g1
+	end

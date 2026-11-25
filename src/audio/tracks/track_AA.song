@@ -1,0 +1,32 @@
+; Track_AA: track id 0xAA (SFX), ROM 0x205DE4; in songs 10, 11, 12, 13.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0xAA
+	channel	1, .ch0
+	map	2
+
+.ch0:
+	instr	0 w1
+	note	o1 A v15 w6 g2
+	note	o2 D# w4
+	note	o1 A w2
+	note	o2 D w4
+	note	D# w2
+	note	A# w4
+	note	D# w2
+	note	o3 G w4
+	note	o2 A# w6
+	note	o1 G# w26
+	note	o2 D v14 w4
+	note	D# w2
+	note	A# w4
+	note	C# w2
+	note	o1 G# w4
+	note	o2 A# w6
+	note	o1 G# w32
+	note	o2 A# v10 w4
+	note	D# w2
+	note	o1 G# w4
+	note	o2 A# w6
+	note	o1 G# w2
+	end

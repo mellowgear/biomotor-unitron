@@ -1,0 +1,30 @@
+; Track_89: track id 0x89 (SFX), ROM 0x2059AB; in song 2.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x89
+	channel	1, .ch0
+	channel	2, .ch1
+	channel	3, .ch2
+	map	2
+
+.ch0:
+	call	.sub_2059CA
+	end
+
+.ch1:
+	instr	0 w1
+	note	o2 G v15 w6 g2
+	note	o5 F w65 g48
+	note	= v0 w1 g1
+	end
+
+.ch2:
+	call	.sub_2059CA
+	end
+
+.sub_2059CA:
+	instr	0 w1
+	note	o1 A v15 w6 g2
+	note	o5 G w65 g48
+	note	= v0 w1 g1
+	ret

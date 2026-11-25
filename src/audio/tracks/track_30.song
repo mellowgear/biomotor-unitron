@@ -1,0 +1,238 @@
+; Track_30: track id 0x30 (music), ROM 0x20455B; in song 16.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x30
+	channel	0, .ch0
+	channel	1, .ch1
+	channel	2, .ch2
+	map	0, 1, 2
+
+.ch0:
+	tempo	254
+	instr	0 w2
+	atten	2
+	pan	8
+	atten	2 w10
+	tempo	84
+	call	.sub_204727
+	loop	0
+		note	o2 A v15 w192 g192
+		note	= w84 g84
+		note	= v13 w36 g12
+		note	F v15 w24 g24
+		note	G
+		note	A
+		note	=
+		note	G w12 g12
+		note	= v13
+		note	= v15 w60 g60
+		note	= v13 w12 g12
+		note	= v15 w24 g24
+		note	A
+		note	A#
+		note	A
+		note	F w12 g12
+		note	= v13
+		note	= v15 w60 g60
+		note	= v13 w12 g12
+		note	A v15 w24 g24
+		note	o3 F w36 g36
+		note	E w12 g12
+		note	o2 A w108 g108
+		note	= v13 w36 g36
+		note	F v15
+		note	E w12 g12
+		note	o1 A w108 g108
+		note	= v13 w36 g36
+		note	F v15
+		note	E w12 g12
+		note	o0 A w192 g192
+		note	= w156 g144
+		note	= v13 w36 g36
+		call	.sub_204727
+	endloop
+
+.ch1:
+	instr	1 w2
+	atten	2
+	pan	8
+	atten	2 w10
+	note	o2 E v15 w96 g96
+	note	F w48 g48
+	note	D
+	note	C#
+	note	C
+	note	E
+	note	G w47
+	loop	0
+		note	o2 F v15 w48 g48
+		note	E
+		note	G
+		note	F w24 g24
+		note	E
+		note	F w96 g96
+		note	D
+		note	o0 C v0 w24 g0
+		note	o1 D v15 w12 g6
+		note	= v13 g12
+		call	.sub_204755
+		note	= v13 w36 g12
+		note	E v15 w12 g6
+		note	= v13 g12
+		note	G v15 g6
+		note	= v13 g12
+		call	.sub_20474F
+		note	C# v15 w12 g6
+		note	= v13 g12
+		note	o1 A v15 g6
+		note	= v13 g12
+		call	.sub_204755
+		note	= v13 w36 g12
+		call	.sub_204755
+		note	= v13 w12 g12
+		note	o2 D v15 g6
+		note	= v13 g12
+		note	F v15 g6
+		note	= v13 g12
+		call	.sub_20474F
+		call	.sub_20474F
+		call	.sub_204749
+		call	.sub_204749
+		loop	2
+			note	o1 A v15 w12 g6
+			note	= v13 g12
+		endloop
+		call	.sub_204749
+		note	F v15 w12 g6
+		note	= v13 g12
+		call	.sub_204743
+		call	.sub_204743
+		loop	2
+			note	o3 D v15 w12 g6
+			note	= v13 g12
+		endloop
+		note	F v15 w12 g6
+		note	= v13 g12
+		call	.sub_204743
+		note	o3 D v15 w12 g6
+		note	= v13 g12
+		call	.sub_204749
+		call	.sub_20474F
+		call	.sub_20474F
+		call	.sub_204743
+		call	.sub_204743
+		call	.sub_20475E
+		note	o2 G v15 w36 g36
+		note	F w12 g12
+		note	E w48 g48
+		call	.sub_204743
+		loop	2
+			note	o3 C v15 w12 g6
+			note	= v13 g12
+		endloop
+		loop	2
+			call	.sub_20475E
+		endloop
+		note	A v15 w12 g6
+		note	= v13 g12
+		note	o2 D v15 w96 g96
+		note	F w48 g48
+		note	o1 A
+		note	o2 E w96 g96
+		note	G w95
+	endloop
+
+.ch2:
+	instr	2 w2
+	atten	1
+	pan	8
+	atten	1 w10
+	note	o2 C v15 w96 g96
+	note	o1 B
+	note	A#
+	note	G w48 g48
+	note	E w47
+	loop	0
+		note	o1 D v15 w192 g216
+		note	= w24 g24
+		note	o0 A
+		note	o1 F
+		note	A
+		note	o0 A# w96 g96
+		note	B w72 g72
+		note	A w12 g12
+		note	B
+		note	o1 C w96 g96
+		note	C# w72 g72
+		note	o0 B w12 g12
+		note	o1 C#
+		note	D w96 g96
+		note	E w72 g72
+		note	D w12 g12
+		note	E
+		note	F w96 g96
+		note	G w48 g48
+		note	F w24 g24
+		note	E
+		note	F w48 g36
+		note	o3 = w12 g6
+		note	= v13 g12
+		note	A v15 g6
+		note	= v13 g12
+		note	o0 C v0 w48 g0
+		note	o3 E v15 w36 g36
+		note	D w12 g12
+		note	C w96 g96
+		call	.sub_204749
+		call	.sub_204743
+		note	C v15 w36 g36
+		note	o1 B w12 g12
+		note	A w24 g24
+		note	B
+		note	o2 C w48 g48
+		note	o1 D w96 g96
+		note	C#
+		note	C w48 g48
+		note	o0 A#
+		note	A
+		note	o1 D# w47
+	endloop
+
+.sub_204727:
+	note	o3 D v15 w24 g24
+	note	C w12 g12
+	note	= v13
+	note	= v15 w24 g24
+	note	o2 A w12 g12
+	note	= v13
+	note	= v15 w48 g48
+	note	F
+	note	G w96 g96
+	note	o3 C w95
+	ret
+
+.sub_204743:
+	note	o2 A v15 w12 g6
+	note	= v13 g12
+	ret
+
+.sub_204749:
+	note	o2 C v15 w12 g6
+	note	= v13 g12
+	ret
+
+.sub_20474F:
+	note	o2 E v15 w12 g6
+	note	= v13 g12
+	ret
+
+.sub_204755:
+	note	o1 F v15 w12 g6
+	note	= v13 g12
+	note	A v15 g6
+	ret
+
+.sub_20475E:
+	note	o3 E v15 w12 g6
+	note	= v13 g12
+	ret

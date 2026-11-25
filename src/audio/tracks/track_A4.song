@@ -1,0 +1,17 @@
+; Track_A4: track id 0xA4 (SFX), ROM 0x205D45; in songs 10, 11, 12, 13.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0xA4
+	channel	1, .ch0
+	channel	3, .ch1
+	map	2
+
+.ch0:
+	instr	0 w1
+	note	o4 A# v15 w82 g82
+	end
+
+.ch1:
+	instr	0 w1
+	note	o2 A# v15 w82 g82
+	end

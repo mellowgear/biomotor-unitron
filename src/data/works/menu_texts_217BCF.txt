@@ -1,0 +1,33 @@
+; strings at 217BCF-217BFC (sub_217C44)
+
+SetupText:
+    text "Setup"
+    done
+
+DevelpText:
+    text "Develp"
+    done
+
+ItemText5:
+    text "Item"
+    done
+
+StatsText2:
+    text "Stats"
+    done
+
+TradeText:
+    text "Trade"
+    done
+
+HelpText:
+    text "Help"
+    done
+
+DataText:
+    text "Data"
+    done
+
+ExitText2:
+    text "Exit"
+    done

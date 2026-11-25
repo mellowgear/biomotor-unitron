@@ -1,0 +1,265 @@
+; Track_2C: track id 0x2C (music), ROM 0x203F19; in song 12.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x2C
+	channel	0, .ch0
+	channel	1, .ch1
+	channel	2, .ch2
+	map	0, 2
+
+.ch0:
+	tempo	254
+	instr	0 w1
+	atten	2
+	pan	8
+	atten	2 w11
+	tempo	184
+	loop	2
+		call	.sub_204097
+		note	o2 = w24
+	endloop
+	call	.sub_204097
+	note	o2 = w12
+	call	.sub_20409F
+	loop	0
+		call	.sub_204097
+		note	o2 = w24
+		note	A# g8
+		note	o1 A g4
+		note	= g12
+		note	o2 A#
+		note	B g8
+		note	o1 A w12 g4
+		note	=
+		note	o3 C w24 g12
+		note	o1 A w12 g4
+		note	=
+		note	o3 C# w24 g12
+		note	D w12
+		note	o1 A g6
+		note	=
+		note	o0 B w6
+		note	o1 C
+		note	D
+		note	E
+		note	F
+		note	G
+		note	A w64 g60
+		note	o2 D w4 g4
+		note	E
+		note	G w120 g180
+		note	= v0 w72 g0
+		note	F# v15 w24 g24
+		note	G
+		note	F# w8 g8
+		note	G
+		note	F#
+		note	D w24 g12
+		note	o1 A g24
+		note	o2 C w64 g60
+		note	F w4 g4
+		note	G
+		note	A# w120 g120
+		note	F w64 g60
+		note	A# w4 g4
+		note	o3 C
+		note	C# w120 g120
+		note	C w192 g240
+		note	= v0 w84 g24
+		call	.sub_20409F
+	endloop
+
+.ch1:
+	instr	1 w1
+	atten	2
+	pan	8
+	atten	2 w11
+	loop	3
+		note	o2 C v15 w72 g12
+		note	= w24
+	endloop
+	note	o1 G w24
+	note	A
+	note	G w12
+	note	A
+	note	o2 C
+	note	E w11
+	loop	0
+		note	o2 C v15 w12 g12
+		note	o3 E
+		note	F
+		note	E
+		note	F
+		note	E
+		note	o2 C
+		note	o3 E
+		note	o2 C#
+		note	o3 E
+		note	F
+		note	E
+		note	F
+		note	E
+		note	o2 C#
+		note	o3 E
+		note	o2 D
+		note	o3 E
+		note	F
+		note	E
+		note	o2 D#
+		note	o3 E
+		note	F
+		note	E
+		note	o2 =
+		note	o3 F
+		note	o2 =
+		note	o3 = w36
+		note	o1 A w12
+		note	=
+		loop	4
+			note	o2 C v15 w12 g12
+			note	o1 B
+			note	A
+			note	B
+			note	o2 C
+			note	D
+			note	E
+			note	D
+		endloop
+		note	o4 D# w12
+		note	C
+		note	o3 G#
+		note	D#
+		note	C
+		note	o2 G#
+		note	D#
+		note	C
+		note	o1 G
+		note	A#
+		note	o2 D
+		note	G
+		note	o3 D
+		note	G
+		note	A#
+		note	o4 D
+		note	F
+		note	C#
+		note	o3 G#
+		note	F
+		note	C#
+		note	o2 G#
+		note	F
+		note	C#
+		note	D#
+		note	G
+		note	A#
+		note	o3 D#
+		note	G
+		note	A#
+		note	o4 C#
+		note	D#
+		loop	3
+			call	.sub_204097
+			note	o2 = w24
+		endloop
+		note	o1 G w24 g8
+		note	A
+		note	G w12
+		note	A
+		note	o2 C
+		note	E w11
+	endloop
+
+.ch2:
+	instr	1 w1
+	atten	1
+	pan	8
+	atten	1 w11
+	loop	3
+		call	.sub_2040AF
+	endloop
+	call	.sub_2040C4
+	loop	0
+		loop	2
+			call	.sub_2040BA
+			note	= w24
+		endloop
+		loop	2
+			call	.sub_2040BA
+			note	= w12 g6
+			note	=
+			note	= w24 g12
+			note	= w12 g6
+			note	=
+		endloop
+		loop	6
+			note	o0 A v15 w24 g12
+			note	= w12 g6
+			note	=
+		endloop
+		loop	2
+			note	o0 G# v15 w24 g12
+			note	= w12 g6
+			note	=
+		endloop
+		loop	2
+			note	o0 G v15 w24 g12
+			note	= w12 g6
+			note	=
+		endloop
+		loop	2
+			note	o1 C# v15 w24 g12
+			note	= w12 g6
+			note	=
+		endloop
+		loop	2
+			note	o0 A# v15 w24 g12
+			note	= w12 g6
+			note	=
+		endloop
+		loop	3
+			call	.sub_2040AF
+		endloop
+		call	.sub_2040C4
+	endloop
+
+.sub_204097:
+	note	o2 A v15 w24 g8
+	note	o1 = g4
+	note	= g12
+	ret
+
+.sub_20409F:
+	note	o3 E v15 w12 g12
+	note	F
+	note	E
+	note	C
+	note	o2 A
+	note	F
+	note	E
+	note	C
+	note	o1 A w11
+	ret
+
+.sub_2040AF:
+	note	o0 A v15 w24 g8
+	note	= w12 g4
+	note	=
+	note	= w24 g12
+	note	=
+	ret
+
+.sub_2040BA:
+	note	o0 A v15 w24 g8
+	note	= w12 g6
+	note	=
+	note	= w24 g12
+	ret
+
+.sub_2040C4:
+	note	o0 G v15 w24 g8
+	note	A
+	note	G w12
+	note	A
+	note	o1 C
+	note	E w11
+	ret

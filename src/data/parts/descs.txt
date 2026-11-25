@@ -1,0 +1,460 @@
+; PartDescs (parts): 227 strings, 19-byte slots (18 characters + done),
+; one per id; keep the order and count. Built by unitron text (Makefile).
+; Notes on the table: src/data/parts/stats.asm
+
+slot 19 FF
+	text "H's Basic body"	; 1 Body1
+	done
+	text "H's 2nd stage body"	; 2 Body2
+	done
+	text "H's 3rd stage body"	; 3 Body3
+	done
+	text "F's Basic body"	; 4 Body1
+	done
+	text "F's 2nd stage body"	; 5 Body2
+	done
+	text "F's 3rd stage body"	; 6 Body3
+	done
+	text "M's Basic body"	; 7 Body1
+	done
+	text "M's 2nd stage body"	; 8 Body2
+	done
+	text "M's 3rd stage body"	; 9 Body3
+	done
+	text "B's Basic body"	; 10 Body1
+	done
+	text "B's 2nd stage body"	; 11 Body2
+	done
+	text "B's 3rd stage body"	; 12 Body3
+	done
+	text "L's Basic body"	; 13 Body1
+	done
+	text "L's 2nd stage body"	; 14 Body2
+	done
+	text "L's 3rd stage body"	; 15 Body3
+	done
+	text "Old, used core"	; 16 Core1
+	done
+	text "Cheap core"	; 17 Core2
+	done
+	text "Standard core"	; 18 Core3
+	done
+	text "Core for Arena-use"	; 19 Core4
+	done
+	text "Quality core"	; 20 Core5
+	done
+	text "Expensive core"	; 21 Core6
+	done
+	text "High-quality core"	; 22 Core7
+	done
+	text "Nearly pure core"	; 23 Core8
+	done
+	text "Hyper-quality core"	; 24 Core9
+	done
+	text "Original core part"	; 25 CoreX
+	done
+	text "Efreet's symbol"	; 26 FireB
+	done
+	text "Ent's symbol"	; 27 WoodB
+	done
+	text "Kraken's symbol"	; 28 WaterB
+	done
+	text "Roc's symbol"	; 29 WindB
+	done
+	text "Behemoth's symbol"	; 30 EarthB
+	done
+	text "Human leg set"	; 31 Human
+	done
+	text "Birdian leg set"	; 32 Birdan
+	done
+	text "Warrior leg set"	; 33 Knight
+	done
+	text "Hero leg set"	; 34 Paladn
+	done
+	text "Forester leg set"	; 35 Forest
+	done
+	text "Marble leg set"	; 36 Marble
+	done
+	text "Onyx leg set"	; 37 Obsedn
+	done
+	text "Jester-pattern leg"	; 38 Jester
+	done
+	text "Reaper-pattern leg"	; 39 Kalon
+	done
+	text "Mariner leg set"	; 40 Marinr
+	done
+	text "Kraken-pattern leg"	; 41 Siren
+	done
+	text "Orca-pattern leg"	; 42 Dolphn
+	done
+	text "Ocean-pattern leg"	; 43 Serpnt
+	done
+	text "Lizardman leg"	; 44 Lizard
+	done
+	text "Armored leg"	; 45 Turtle
+	done
+	text "Battle-use leg"	; 46 Fightr
+	done
+	text "Dragon-scale leg"	; 47 Dragon
+	done
+	text "Leg for speed"	; 48 Hero
+	done
+	text "Dinosaur leg"	; 49 Dino1
+	done
+	text "Clawed leg"	; 50 Dino2
+	done
+	text "Snake-style leg"	; 51 Wyrm1
+	done
+	text "Snake-scale leg"	; 52 Wyrm2
+	done
+	text "Flying leg"	; 53 Flier1
+	done
+	text "Jet-engine leg"	; 54 Flier2
+	done
+	text "Special leg"	; 55 Scout1
+	done
+	text "High-quality leg"	; 56 Scout2
+	done
+	text "Leg with treads"	; 57 Worm1
+	done
+	text "2-treaded leg"	; 58 Worm2
+	done
+	text "High-speed jet leg"	; 59 Boost1
+	done
+	text "Fastest jet leg"	; 60 Boost2
+	done
+	text "Controls gravity"	; 61 Craftr
+	done
+	text "High-jump leg"	; 62 Wing
+	done
+	text "Tiger-pattern leg"	; 63 Tiger
+	done
+	text "Mantis-style leg"	; 64 Insect
+	done
+	text "A-shaped leg"	; 65 Manta
+	done
+	text "High-stability leg"	; 66 MultiL
+	done
+	text "Large wheeled leg"	; 67 Wheel
+	done
+	text "Regal-looking leg"	; 68 Rivet
+	done
+	text "Horse-style leg"	; 69 Centar
+	done
+	text "Armored leg"	; 70 Saurus
+	done
+	text "Octopus-style leg"	; 71 Tntacl
+	done
+	text "Crab-style leg"	; 72 Crab
+	done
+	text "Bee-style leg"	; 73 Wasp
+	done
+	text "Magical leg"	; 74 Magic
+	done
+	text "Backpack w/ engine"	; 75 Thrst1
+	done
+	text "Turbine engine"	; 76 Thrst2
+	done
+	text "Pack w/ engine"	; 77 Thrst3
+	done
+	text "Enhanced engine"	; 78 Thrst4
+	done
+	text "Hi-quality engine"	; 79 Thrst5
+	done
+	text "Hawk-style wings"	; 80 Bird
+	done
+	text "Angel-style wings"	; 81 Seraph
+	done
+	text "Bladed wings"	; 82 Fin
+	done
+	text "Devil's wings"	; 83 Bardos
+	done
+	text "Beetle-style wings"	; 84 Bug
+	done
+	text "Faerie's wings"	; 85 Seed
+	done
+	text "Pure white cape"	; 86 Robe
+	done
+	text "Ebon-dark cape"	; 87 Cape
+	done
+	text "Wing w/ 4 engines"	; 88 SJW
+	done
+	text "Anti-grav engine"	; 89 Grav
+	done
+	text "Hi-tech engine"	; 90 Fuzion
+	done
+	text "Wood Queen's wings"	; 91 Titan
+	done
+	text "Pirate's cape"	; 92 C-Lion
+	done
+	text "Angel's wings"	; 93 Mikal
+	done
+	text "Black dragon wings"	; 94 DWing
+	done
+	text "Punching arm"	; 95 BtFist
+	done
+	text "Striking arm"	; 96 PwrHnd
+	done
+	text "Armored arm"	; 97 ArmHnd
+	done
+	text "Silk gloved arm"	; 98 SlkHnd
+	done
+	text "Oak arm"	; 99 OakHnd
+	done
+	text "Arm with bow"	; 100 Crssbw
+	done
+	text "Water bomb arm"	; 101 H-Gun
+	done
+	text "Arm w/ ice fist"	; 102 IceBlw
+	done
+	text "Arm w/ water blade"	; 103 Hydro
+	done
+	text "Clawed arm"	; 104 Hawk
+	done
+	text "Arm w/ wind affin."	; 105 AirHnd
+	done
+	text "Bladed arm"	; 106 Killer
+	done
+	text "Giant arm"	; 107 Ogre
+	done
+	text "Arm made of stone"	; 108 Golem
+	done
+	text "Alloyed arm"	; 109 Giant
+	done
+	text "Magnetic arm"	; 110 Magma
+	done
+	text "Basic hammer"	; 111 Binder
+	done
+	text "Alloyed hammer"	; 112 Hammer
+	done
+	text "Metal pliers"	; 113 Pliers
+	done
+	text "Metal scissors"	; 114 Blade
+	done
+	text "Screwdriver set"	; 115 Driver
+	done
+	text "Hi-speed drill"	; 116 Drill
+	done
+	text "Sledgehammer"	; 117 GrvHmr
+	done
+	text "Special scissors"	; 118 Cutter
+	done
+	text "Super screwdriver"	; 119 3DDvr
+	done
+	text "Arm-mounted cutter"	; 120 Rapier
+	done
+	text "Thin-bladed sword"	; 121 Sabre
+	done
+	text "Bowie knife"	; 122 Dirk
+	done
+	text "Twin-bladed sabre"	; 123 Sabre+
+	done
+	text "Short battle blade"	; 124 Gradus
+	done
+	text "Faerie's sword"	; 125 Gram
+	done
+	text "Fire blade"	; 126 Lavatn
+	done
+	text "Wind blade"	; 127 Wyndia
+	done
+	text "Magic blade"	; 128 Demon
+	done
+	text "Sword of light"	; 129 Crsadr
+	done
+	text "Light axe"	; 130 HndAxe
+	done
+	text "Double-edged axe"	; 131 BtlAxe
+	done
+	text "Single-edged ace"	; 132 Tomhwk
+	done
+	text "Battle axe"	; 133 2Edge
+	done
+	text "Axe; earth-affin."	; 134 Break
+	done
+	text "Metal ball"	; 135 BllArm
+	done
+	text "Ball-and-chain"	; 136 MgaBll
+	done
+	text "Magic ball"	; 137 NoWire
+	done
+	text "Large metal ball"	; 138 Crushr
+	done
+	text "Magic ball"	; 139 Sthrn+
+	done
+	text "Metal spear"	; 140 Lancer
+	done
+	text "Metal drill"	; 141 DrlArm
+	done
+	text "Spear w/ sharp tip"	; 142 Pierce
+	done
+	text "Drill; wind affin."	; 143 Trnado
+	done
+	text "Drill; water affin"	; 144 Spiral
+	done
+	text "Clawed arm"	; 145 Hook
+	done
+	text "Cargo hook"	; 146 LogHk
+	done
+	text "Battle hook"	; 147 BtlHk
+	done
+	text "Ice claws"	; 148 IceClw
+	done
+	text "Magic claws"	; 149 DvlClw
+	done
+	text "Wire whip"	; 150 Whip
+	done
+	text "Double whip"	; 151 Whip+
+	done
+	text "Fire whip"	; 152 FBoot
+	done
+	text "Whip o' 9 tails"	; 153 9Tail
+	done
+	text "Lightning whip"	; 154 EBoot
+	done
+	text "3-pronged spear"	; 155 Fork
+	done
+	text "Triple claws"	; 156 HkClaw
+	done
+	text "Spear; water-affin"	; 157 Tridnt
+	done
+	text "Wolf claws"	; 158 WlfClw
+	done
+	text "White tiger claws"	; 159 TgrClw
+	done
+	text "Circular arm"	; 160 Disc
+	done
+	text "Bladed disc arm"	; 161 SpikeD
+	done
+	text "Sharp disc arm"	; 162 RingD
+	done
+	text "Crossblade arm"	; 163 Disc+
+	done
+	text "Disc arm; wind-aff"	; 164 AirD
+	done
+	text "Electric arm"	; 165 EWire
+	done
+	text "Wire arm"	; 166 ArmWre
+	done
+	text "Electric cord"	; 167 Tangle
+	done
+	text "Electric wire"	; 168 Lghtng
+	done
+	text "10000-volt charge"	; 169 Coil
+	done
+	text "Belonged to wizard"	; 170 Mage
+	done
+	text "Wizard's arm"	; 171 Wizard
+	done
+	text "Mage's arm"	; 172 Warlok
+	done
+	text "Archmage's arm"	; 173 ArchMg
+	done
+	text "Holy warrior's arm"	; 174 GodHnd
+	done
+	text "Demon's arm"	; 175 Skull
+	done
+	text "Dragon's arm"	; 176 DgnHed
+	done
+	text "Devil's arm"	; 177 DrkClw
+	done
+	text "Fire dragon's arm"	; 178 Cursed
+	done
+	text "Evil dragon's arm"	; 179 Infrno
+	done
+	text "Spring arm"	; 180 Spring
+	done
+	text "Strong spring arm"	; 181 Curler
+	done
+	text "Snake spring arm"	; 182 Snaker
+	done
+	text "Bone-breaking fist"	; 183 Zoomer
+	done
+	text "Rock-smashing fist"	; 184 Buster
+	done
+	text "3-clawed arm"	; 185 Claw
+	done
+	text "Arm w/ 3 daggers"	; 186 Triger
+	done
+	text "Defensive knife"	; 187 Qatar
+	done
+	text "Electric qatar"	; 188 Indra
+	done
+	text "Fire qatar"	; 189 Agni
+	done
+	text "Utility arm"	; 190 Maxi
+	done
+	text "2-pair set"	; 191 Twin
+	done
+	text "Arm with torch"	; 192 FPlse
+	done
+	text "Arm with freezer"	; 193 IcePls
+	done
+	text "Heavy-duty arm"	; 194 Ashra
+	done
+	text "Circular saw"	; 195 Bazoka
+	done
+	text "Hi-speed buzzsaw"	; 196 SDisc
+	done
+	text "Chainsaw"	; 197 Chnsaw
+	done
+	text "Two-handle saw"	; 198 Saw
+	done
+	text "Metal-cutter"	; 199 Hacker
+	done
+	text "Arm w/ gauntlet"	; 200 Knukle
+	done
+	text "Steel arm"	; 201 Gloves
+	done
+	text "Arm w/ booster"	; 202 Rocket
+	done
+	text "Arm w/ heavy plate"	; 203 Mail
+	done
+	text "Plated gauntlet"	; 204 Plate
+	done
+	text "Army ant arm"	; 205 Troopr
+	done
+	text "Scorpion arm"	; 206 Scorp
+	done
+	text "Beetle arm"	; 207 Spider
+	done
+	text "Mantis arm"	; 208 Mantis
+	done
+	text "Arm w/ stinger"	; 209 RedClw
+	done
+	text "Revolver"	; 210 HndGun
+	done
+	text "Machine gun"	; 211 Vulcan
+	done
+	text "Missile launcher"	; 212 Lncher
+	done
+	text "Chaingun"	; 213 Gatlng
+	done
+	text "Multimissiles"	; 214 Phalnx
+	done
+	text "Single missle"	; 215 Cannon
+	done
+	text "Shotgun"	; 216 2Barrl
+	done
+	text "Artillery"	; 217 LineGn
+	done
+	text "Double cannon"	; 218 XGun
+	done
+	text "Large cannon"	; 219 RailGn
+	done
+	text "Castanets"	; 220 Flint
+	done
+	text "Throwing stars"	; 221 Sword
+	done
+	text "Legendary weapon"	; 222 Kama
+	done
+	text "Soft flesh pads"	; 223 TgrHnd
+	done
+	text "Used for digging"	; 224 MoleHd
+	done
+	text "Strange crystal"	; 225 Stunr
+	done
+	text "Used for poking"	; 226 Needle
+	done
+	text "Spiked weapon"	; 227 Pole
+	done
+slot 0

@@ -1,0 +1,42 @@
+; 2 strings at 2518B5-251A8B (pinned: stay within 470 bytes)
+
+HelloIBetYoureText:
+    text "Hello! I bet"
+    line "you're impressed"
+    line "that my<WAIT>"
+    page "prediction came"
+    line "true, huh?<WAIT>"
+    page "...What? It'd"
+    line "didn't? Oh...I"
+    line "guess not...<WAIT>"
+    page "I mean, really?<WAIT>"
+    page "You can't tell"
+    line "with just one go!"
+    line "Let's try again!<WAIT>"
+    page "Hmmm...I see..."
+    line "You might be in"
+    line "trouble, <PLAYER>.<WAIT>"
+    page "I see a big fight"
+    line "between you and"
+    line "<PARTNER> soon...<WAIT>"
+    page ""
+    done
+
+HelloPlayerHowAreText:
+    text "Hello, <PLAYER>."
+    line "How are you?<WAIT>"
+    page "Ceus was asking"
+    line "how you did.<WAIT>"
+    page "Ceus? That's"
+    line "the fortune"
+    line "teller.<WAIT>"
+    page "Not that she"
+    line "ever gets any-"
+    line "thing right...<WAIT>"
+    page "Some people say"
+    line "you should"
+    line "believe the<WAIT>"
+    page "opposite of what"
+    line "she says.<WAIT>"
+    page ""
+    done

@@ -1,0 +1,13 @@
+; Track_9D: track id 0x9D (SFX), ROM 0x205C8C; in songs 10, 11, 12, 13.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x9D
+	channel	1, .ch0
+	map	2
+
+.ch0:
+	instr	0 w1
+	note	o3 A v15 w2 g1
+	note	E w3 g2
+	note	o4 A w12 g12
+	end

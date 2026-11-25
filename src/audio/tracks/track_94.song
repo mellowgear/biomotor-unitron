@@ -1,0 +1,29 @@
+; Track_94: track id 0x94 (SFX), ROM 0x205B44; in songs 5, 6, 7, 8, 9.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x94
+	channel	1, .ch0
+	channel	2, .ch1
+	map	1
+
+.ch0:
+	instr	0 w1
+	note	o0 A v9 g1
+	note	o1 D v13
+	note	E v14 w2 g2
+	note	o2 D v15 w16 g14
+	note	= v13
+	note	= v10
+	note	= v4 w14
+	end
+
+.ch1:
+	instr	0 w1
+	note	o0 G v9 g1
+	note	o1 C v13
+	note	D v14 w2 g2
+	note	o2 C v15 w16 g14
+	note	= v13
+	note	= v10
+	note	= v4 w14
+	end

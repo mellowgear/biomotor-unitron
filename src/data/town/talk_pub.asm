@@ -1,0 +1,65 @@
+; TalkPub (talk_pub): 53 records of 8 bytes, one line per id; keep the order and count.
+; Talk rows of the Pub (place 1), line = row + 1.
+; speaker: portrait drawn for the speaker (dyn_2151B8: 0 none, 255 = the player's own); also the
+; NPC for TownNpcTalk (n = speaker - 0x15: the NPC names at 0x249F66, Jon .. Tetis).
+; portrait: the place picture behind (dyn_2157E3 DrawPortrait). flag: event flag set when the
+; row is done (NpcTalkRowAction; 0 = none; 1, 9, 0x4A, 0x4D do more there).
+; next (dyn_215609): the next row, or a command 0xE6-0xFD, 0xFF = end.
+; message: text address; below 0x58 = an offset into tables/talk_gender_texts.asm (dyn_2158CE).
+; The same format is used by every talk_*.txt.
+; One talk_row record per line (src/macros/tables.inc).
+; Addresses are 4-byte ROM addresses (dd).
+; id: speaker, portrait, flag, next, message
+	talk_row	31,0,90,255,0x2543C1	; 1 Camil: "Hi! Can I get you anything? ..."
+	talk_row	31,0, 0,255,0x25440D	; 2 Camil: "Huh? What do you want?"
+	talk_row	26,0,85,255,0x254426	; 3 Wyse: "hic!...Wha...Oh, it's you......"
+	talk_row	26,0, 0,255,UhhhIThinkIText	; 4 Wyse: "Uhhh...I think I had one too..."
+	talk_row	28,0,87,255,0x254475	; 5 Ceus: "Hi, . What do you say--tell ..."
+	talk_row	28,0, 0,255,0x2544D2	; 6 Ceus: "sigh...I wonder why my predi..."
+	talk_row	27,0,86,255,0x25452A	; 7 Ziggy: "Say, , how's it going? I'll ..."
+	talk_row	27,0, 0,255,0x254579	; 8 Ziggy: "UNITRONs are fascinating, ar..."
+	talk_row	31,0,90,255,0x2545F5	; 9 Camil: "Hi there, ! Want anything?"
+	talk_row	31,0, 0,255,0x254613	; 10 Camil: "How about a banana squash?"
+	talk_row	26,0,85,255,0x254631	; 11 Wyse: "Hey, ! hic! Howsabout a drin..."
+	talk_row	26,0, 0,255,0x2546B8	; 12 Wyse: "I've given up gambling... De..."
+	talk_row	28,0,87,255,0x25474B	; 13 Ceus: "Hi there, . You're looking g..."
+	talk_row	28,0, 0,255,0x2547D5	; 14 Ceus: "Sorry--I'm busy right now! I..."
+	talk_row	27,0,86,255,0x254806	; 15 Ziggy: "How're things going, ? How's..."
+	talk_row	27,0, 0,255,0x254856	; 16 Ziggy: "Looking at you makes me real..."
+	talk_row	31,0,74,255,0x25489A	; 17 Camil: "Hi there! Oh-- this is your ..."
+	talk_row	26,0,69,255,0x254927	; 18 Wyse: "Huh? Who're you? hic! Outta ..."
+	talk_row	31,0,74,255,OhHiStopByText	; 19 Camil: "Oh, ! Hi! Stop by for a refr..."
+	talk_row	26,0,69,255,UuuuHuhOhItsText	; 20 Wyse: "Uuuu...Huh? Oh, it's you. St..."
+	talk_row	31,0,74,255,0x254C74	; 21 Camil: "Hi there, ! Congratulations!..."
+	talk_row	26,0,69,255,0x254E9E	; 22 Wyse: "...I lost-- again... Why is ..."
+	talk_row	27,0,70,255,0x254F2B	; 23 Ziggy: "Hm? You're... You're , aren'..."
+	talk_row	31,0,74,255,0x25518C	; 24 Camil: "Hi there, ! Congratulations ..."
+	talk_row	26,0,69,255,0x255369	; 25 Wyse: "hic! It's no use...I'm givin..."
+	talk_row	27,0,70,255,0x2553B7	; 26 Ziggy: "Hello, . Looks like you're d..."
+	talk_row	28,0,71,255,0x255575	; 27 Ceus: "Well, hi there, . Me? I'm ta..."
+	talk_row	31,0,74,255,0x25562C	; 28 Camil: "Hello, ! Congratulations on ..."
+	talk_row	26,0,69,255,0x2557A2	; 29 Wyse: "Huh? ... I've had it, ... I ..."
+	talk_row	27,0,70,255,0x255858	; 30 Ziggy: "Hello there, . I heard you w..."
+	talk_row	31,0,74,255,HiIHeardYouText	; 31 Camil: "Hi ! I heard you won Rank B!..."
+	talk_row	26,0,69,255,0x255D9A	; 32 Wyse: "! I made up my mind! I'm gon..."
+	talk_row	27,0,70,255,0x255E20	; 33 Ziggy: "Congratulations on your vict..."
+	talk_row	31,0,74,255,0x256095	; 34 Camil: "Congratulations, ! I knew yo..."
+	talk_row	26,0,69,255,0x256222	; 35 Wyse: "hic!...huh? ? Well, I guess ..."
+	talk_row	27,0,70,255,0x2562F9	; 36 Ziggy: "Congratulations, . You've ma..."
+	talk_row	28,0,71,255,0x256599	; 37 Ceus: "Hi, ! Congratulations on win..."
+	talk_row	31,0,74,255,YayCongratulationsYoureRankText	; 38 Camil: "Yay! Congratulations! You're..."
+	talk_row	26,0,69,255,0x256892	; 39 Wyse: "Ha ha...The Champ lost! I fi..."
+	talk_row	27,0,70,255,0x25697E	; 40 Ziggy: "I never imagined that Garl w..."
+	talk_row	28,0,71,255,0x256AEC	; 41 Ceus: "My crystal ball didn't tell ..."
+	talk_row	31,0,74,255,0x256BD1	; 42 Camil: "Congratulations on becoming ..."
+	talk_row	26,0,69,255,UuuuHicHeyItsText	; 43 Wyse: "Uuuu...hic! Hey, it's ! snif..."
+	talk_row	27,0,70,255,0x256DF7	; 44 Ziggy: "Well done. You and did it. H..."
+	talk_row	28,0,71,255,0x256F02	; 45 Ceus: "Good job, ! I knew you could..."
+	talk_row	31,0,74,255,0x257006	; 46 Camil: "I never imagined...I never t..."
+	talk_row	26,0,69,255,0x2570B1	; 47 Wyse: "! What is that!? I'm not goi..."
+	talk_row	27,0,70,255,0x257103	; 48 Ziggy: "Are you scared? So am I. All..."
+	talk_row	28,0,71,255,0x257260	; 49 Ceus: "My crystal ball told me that..."
+	talk_row	31,0,74,255,0x2572EF	; 50 Camil: "...!? Is that you, ? Long ti..."
+	talk_row	26,0,69,255,0x25739C	; 51 Wyse: "hic! Huh? Well, well, well, ..."
+	talk_row	27,0,70,255,0x2573EE	; 52 Ziggy: "Well, if it isn't ! It's goo..."
+	talk_row	28,0,71,255,0x25750A	; 53 Ceus: "! I've been waiting for you...."

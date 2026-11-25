@@ -1,0 +1,14 @@
+; Track_82: track id 0x82 (SFX), ROM 0x20585D; in songs 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x82
+	channel	1, .ch0
+	map	1
+
+.ch0:
+	instr	0 w1
+	note	o2 G v15 w2 g2
+	note	D
+	note	o1 G#
+	note	o0 A w6 g6
+	end

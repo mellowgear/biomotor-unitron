@@ -1,0 +1,460 @@
+; PartNames (parts): 227 strings, 7-byte slots (6 characters + done),
+; one per id; keep the order and count. Built by unitron text (Makefile).
+; Notes on the table: src/data/parts/stats.asm
+
+slot 7 FF
+	text "Body1"	; 1
+	done
+	text "Body2"	; 2
+	done
+	text "Body3"	; 3
+	done
+	text "Body1"	; 4
+	done
+	text "Body2"	; 5
+	done
+	text "Body3"	; 6
+	done
+	text "Body1"	; 7
+	done
+	text "Body2"	; 8
+	done
+	text "Body3"	; 9
+	done
+	text "Body1"	; 10
+	done
+	text "Body2"	; 11
+	done
+	text "Body3"	; 12
+	done
+	text "Body1"	; 13
+	done
+	text "Body2"	; 14
+	done
+	text "Body3"	; 15
+	done
+	text "Core1"	; 16
+	done
+	text "Core2"	; 17
+	done
+	text "Core3"	; 18
+	done
+	text "Core4"	; 19
+	done
+	text "Core5"	; 20
+	done
+	text "Core6"	; 21
+	done
+	text "Core7"	; 22
+	done
+	text "Core8"	; 23
+	done
+	text "Core9"	; 24
+	done
+	text "CoreX"	; 25
+	done
+	text "FireB"	; 26
+	done
+	text "WoodB"	; 27
+	done
+	text "WaterB"	; 28
+	done
+	text "WindB"	; 29
+	done
+	text "EarthB"	; 30
+	done
+	text "Human"	; 31
+	done
+	text "Birdan"	; 32
+	done
+	text "Knight"	; 33
+	done
+	text "Paladn"	; 34
+	done
+	text "Forest"	; 35
+	done
+	text "Marble"	; 36
+	done
+	text "Obsedn"	; 37
+	done
+	text "Jester"	; 38
+	done
+	text "Kalon"	; 39
+	done
+	text "Marinr"	; 40
+	done
+	text "Siren"	; 41
+	done
+	text "Dolphn"	; 42
+	done
+	text "Serpnt"	; 43
+	done
+	text "Lizard"	; 44
+	done
+	text "Turtle"	; 45
+	done
+	text "Fightr"	; 46
+	done
+	text "Dragon"	; 47
+	done
+	text "Hero"	; 48
+	done
+	text "Dino1"	; 49
+	done
+	text "Dino2"	; 50
+	done
+	text "Wyrm1"	; 51
+	done
+	text "Wyrm2"	; 52
+	done
+	text "Flier1"	; 53
+	done
+	text "Flier2"	; 54
+	done
+	text "Scout1"	; 55
+	done
+	text "Scout2"	; 56
+	done
+	text "Worm1"	; 57
+	done
+	text "Worm2"	; 58
+	done
+	text "Boost1"	; 59
+	done
+	text "Boost2"	; 60
+	done
+	text "Craftr"	; 61
+	done
+	text "Wing"	; 62
+	done
+	text "Tiger"	; 63
+	done
+	text "Insect"	; 64
+	done
+	text "Manta"	; 65
+	done
+	text "MultiL"	; 66
+	done
+	text "Wheel"	; 67
+	done
+	text "Rivet"	; 68
+	done
+	text "Centar"	; 69
+	done
+	text "Saurus"	; 70
+	done
+	text "Tntacl"	; 71
+	done
+	text "Crab"	; 72
+	done
+	text "Wasp"	; 73
+	done
+	text "Magic"	; 74
+	done
+	text "Thrst1"	; 75
+	done
+	text "Thrst2"	; 76
+	done
+	text "Thrst3"	; 77
+	done
+	text "Thrst4"	; 78
+	done
+	text "Thrst5"	; 79
+	done
+	text "Bird"	; 80
+	done
+	text "Seraph"	; 81
+	done
+	text "Fin"	; 82
+	done
+	text "Bardos"	; 83
+	done
+	text "Bug"	; 84
+	done
+	text "Seed"	; 85
+	done
+	text "Robe"	; 86
+	done
+	text "Cape"	; 87
+	done
+	text "SJW"	; 88
+	done
+	text "Grav"	; 89
+	done
+	text "Fuzion"	; 90
+	done
+	text "Titan"	; 91
+	done
+	text "C-Lion"	; 92
+	done
+	text "Mikal"	; 93
+	done
+	text "DWing"	; 94
+	done
+	text "BtFist"	; 95
+	done
+	text "PwrHnd"	; 96
+	done
+	text "ArmHnd"	; 97
+	done
+	text "SlkHnd"	; 98
+	done
+	text "OakHnd"	; 99
+	done
+	text "Crssbw"	; 100
+	done
+	text "H-Gun"	; 101
+	done
+	text "IceBlw"	; 102
+	done
+	text "Hydro"	; 103
+	done
+	text "Hawk"	; 104
+	done
+	text "AirHnd"	; 105
+	done
+	text "Killer"	; 106
+	done
+	text "Ogre"	; 107
+	done
+	text "Golem"	; 108
+	done
+	text "Giant"	; 109
+	done
+	text "Magma"	; 110
+	done
+	text "Binder"	; 111
+	done
+	text "Hammer"	; 112
+	done
+	text "Pliers"	; 113
+	done
+	text "Blade"	; 114
+	done
+	text "Driver"	; 115
+	done
+	text "Drill"	; 116
+	done
+	text "GrvHmr"	; 117
+	done
+	text "Cutter"	; 118
+	done
+	text "3DDvr"	; 119
+	done
+	text "Rapier"	; 120
+	done
+	text "Sabre"	; 121
+	done
+	text "Dirk"	; 122
+	done
+	text "Sabre+"	; 123
+	done
+	text "Gradus"	; 124
+	done
+	text "Gram"	; 125
+	done
+	text "Lavatn"	; 126
+	done
+	text "Wyndia"	; 127
+	done
+	text "Demon"	; 128
+	done
+	text "Crsadr"	; 129
+	done
+	text "HndAxe"	; 130
+	done
+	text "BtlAxe"	; 131
+	done
+	text "Tomhwk"	; 132
+	done
+	text "2Edge"	; 133
+	done
+	text "Break"	; 134
+	done
+	text "BllArm"	; 135
+	done
+	text "MgaBll"	; 136
+	done
+	text "NoWire"	; 137
+	done
+	text "Crushr"	; 138
+	done
+	text "Sthrn+"	; 139
+	done
+	text "Lancer"	; 140
+	done
+	text "DrlArm"	; 141
+	done
+	text "Pierce"	; 142
+	done
+	text "Trnado"	; 143
+	done
+	text "Spiral"	; 144
+	done
+	text "Hook"	; 145
+	done
+	text "LogHk"	; 146
+	done
+	text "BtlHk"	; 147
+	done
+	text "IceClw"	; 148
+	done
+	text "DvlClw"	; 149
+	done
+	text "Whip"	; 150
+	done
+	text "Whip+"	; 151
+	done
+	text "FBoot"	; 152
+	done
+	text "9Tail"	; 153
+	done
+	text "EBoot"	; 154
+	done
+	text "Fork"	; 155
+	done
+	text "HkClaw"	; 156
+	done
+	text "Tridnt"	; 157
+	done
+	text "WlfClw"	; 158
+	done
+	text "TgrClw"	; 159
+	done
+	text "Disc"	; 160
+	done
+	text "SpikeD"	; 161
+	done
+	text "RingD"	; 162
+	done
+	text "Disc+"	; 163
+	done
+	text "AirD"	; 164
+	done
+	text "EWire"	; 165
+	done
+	text "ArmWre"	; 166
+	done
+	text "Tangle"	; 167
+	done
+	text "Lghtng"	; 168
+	done
+	text "Coil"	; 169
+	done
+	text "Mage"	; 170
+	done
+	text "Wizard"	; 171
+	done
+	text "Warlok"	; 172
+	done
+	text "ArchMg"	; 173
+	done
+	text "GodHnd"	; 174
+	done
+	text "Skull"	; 175
+	done
+	text "DgnHed"	; 176
+	done
+	text "DrkClw"	; 177
+	done
+	text "Cursed"	; 178
+	done
+	text "Infrno"	; 179
+	done
+	text "Spring"	; 180
+	done
+	text "Curler"	; 181
+	done
+	text "Snaker"	; 182
+	done
+	text "Zoomer"	; 183
+	done
+	text "Buster"	; 184
+	done
+	text "Claw"	; 185
+	done
+	text "Triger"	; 186
+	done
+	text "Qatar"	; 187
+	done
+	text "Indra"	; 188
+	done
+	text "Agni"	; 189
+	done
+	text "Maxi"	; 190
+	done
+	text "Twin"	; 191
+	done
+	text "FPlse"	; 192
+	done
+	text "IcePls"	; 193
+	done
+	text "Ashra"	; 194
+	done
+	text "Bazoka"	; 195
+	done
+	text "SDisc"	; 196
+	done
+	text "Chnsaw"	; 197
+	done
+	text "Saw"	; 198
+	done
+	text "Hacker"	; 199
+	done
+	text "Knukle"	; 200
+	done
+	text "Gloves"	; 201
+	done
+	text "Rocket"	; 202
+	done
+	text "Mail"	; 203
+	done
+	text "Plate"	; 204
+	done
+	text "Troopr"	; 205
+	done
+	text "Scorp"	; 206
+	done
+	text "Spider"	; 207
+	done
+	text "Mantis"	; 208
+	done
+	text "RedClw"	; 209
+	done
+	text "HndGun"	; 210
+	done
+	text "Vulcan"	; 211
+	done
+	text "Lncher"	; 212
+	done
+	text "Gatlng"	; 213
+	done
+	text "Phalnx"	; 214
+	done
+	text "Cannon"	; 215
+	done
+	text "2Barrl"	; 216
+	done
+	text "LineGn"	; 217
+	done
+	text "XGun"	; 218
+	done
+	text "RailGn"	; 219
+	done
+	text "Flint"	; 220
+	done
+	text "Sword"	; 221
+	done
+	text "Kama"	; 222
+	done
+	text "TgrHnd"	; 223
+	done
+	text "MoleHd"	; 224
+	done
+	text "Stunr"	; 225
+	done
+	text "Needle"	; 226
+	done
+	text "Pole"	; 227
+	done
+slot 0

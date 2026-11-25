@@ -1,0 +1,16 @@
+; Track_A8: track id 0xA8 (SFX), ROM 0x205DA5; in songs 10, 11, 12, 13.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0xA8
+	channel	3, .ch0
+	map	0
+
+.ch0:
+	instr	0 w1
+	note	o3 A v15 w4 g2
+	note	o4 E w3
+	note	o5 A w6 g4
+	note	o4 E
+	note	o1 C
+	note	o0 A w112 g112
+	end

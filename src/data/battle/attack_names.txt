@@ -1,0 +1,180 @@
+; AttackNames (attack_names): 87 strings, 7-byte slots (6 characters + done),
+; one per id; keep the order and count. Built by unitron text (Makefile).
+; Accessor 0x2082DC.
+
+slot 7 FF
+	text "IceEye"	; 1
+	done
+	text "Cutter"	; 2
+	done
+	text "Smoke"	; 3
+	done
+	text "Liten"	; 4
+	done
+	text "Swirl"	; 5
+	done
+	text "Staff"	; 6
+	done
+	text "Gas"	; 7
+	done
+	text "Scythe"	; 8
+	done
+	text "Gnaw"	; 9
+	done
+	text "Scream"	; 10
+	done
+	text "Bite"	; 11
+	done
+	text "Charge"	; 12
+	done
+	text "Kick"	; 13
+	done
+	text "Fang"	; 14
+	done
+	text "Acid"	; 15
+	done
+	text "Peck"	; 16
+	done
+	text "Vision"	; 17
+	done
+	text "Harden"	; 18
+	done
+	text "Revive"	; 19
+	done
+	text "Hypno"	; 20
+	done
+	text "Judge"	; 21
+	done
+	text "SunRay"	; 22
+	done
+	text "Sprout"	; 23
+	done
+	text "Tusk"	; 24
+	done
+	text "Necro"	; 25
+	done
+	text "Stare"	; 26
+	done
+	text "Purify"	; 27
+	done
+	text "Spit"	; 28
+	done
+	text "Feeler"	; 29
+	done
+	text "Repair"	; 30
+	done
+	text "Flow"	; 31
+	done
+	text "Slicer"	; 32
+	done
+	text "Blade"	; 33
+	done
+	text "Tackle"	; 34
+	done
+	text "Thrust"	; 35
+	done
+	text "Stomp"	; 36
+	done
+	text "Whip"	; 37
+	done
+	text "Claws"	; 38
+	done
+	text "Tail"	; 39
+	done
+	text "Wing"	; 40
+	done
+	text "Fist"	; 41
+	done
+	text "Breath"	; 42
+	done
+	text "Return"	; 43
+	done
+	text "Poison"	; 44
+	done
+	text "Needle"	; 45
+	done
+	text "Spore"	; 46
+	done
+	text "Spike"	; 47
+	done
+	text "Grab"	; 48
+	done
+	text "Unique"	; 49
+	done
+	text "Drain"	; 50
+	done
+	text "Twist"	; 51
+	done
+	text "Riddle"	; 52
+	done
+	text "Dance"	; 53
+	done
+	text "Ray"	; 54
+	done
+	text "Flee"	; 55
+	done
+	text "Gum"	; 56
+	done
+	text "Lure"	; 57
+	done
+	text "Bomb"	; 58
+	done
+	text "Pinch"	; 59
+	done
+	text "Gust"	; 60
+	done
+	text "Makeup"	; 61
+	done
+	text "Punch"	; 62
+	done
+	text "Beam"	; 63
+	done
+	text "Slash"	; 64
+	done
+	text "Freeze"	; 65
+	done
+	text "Dagger"	; 66
+	done
+	text "Tickle"	; 67
+	done
+	text "Crush"	; 68
+	done
+	text "EyeRay"	; 69
+	done
+	text "Flare"	; 70
+	done
+	text "Blow"	; 71
+	done
+	text "Tongue"	; 72
+	done
+	text "Gun"	; 73
+	done
+	text "Seed"	; 74
+	done
+	text "Wrap"	; 75
+	done
+	text "Snap"	; 76
+	done
+	text "Hold"	; 77
+	done
+	text "Magick"	; 78
+	done
+	text "Flute"	; 79
+	done
+	text "Mist"	; 80
+	done
+	text "Shoot"	; 81
+	done
+	text "Chrge+"	; 82
+	done
+	text "Geddon"	; 83
+	done
+	text "Tempt"	; 84
+	done
+	text "Snow"	; 85
+	done
+	text "Dark"	; 86
+	done
+	text "Horn"	; 87
+	done
+slot 0

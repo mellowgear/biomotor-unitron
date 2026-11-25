@@ -1,0 +1,43 @@
+; Track_9A: track id 0x9A (SFX), ROM 0x205C1A; in songs 10, 11, 12, 13.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x9A
+	channel	1, .ch0
+	channel	3, .ch1
+	map	2
+
+.ch0:
+	call	.sub_205C2A
+	end
+
+.ch1:
+	call	.sub_205C2A
+	end
+
+.sub_205C2A:
+	instr	0 w1
+	note	o1 D v15 w26 g2
+	note	E w24
+	note	F# w22
+	note	G# w20
+	note	A# w18
+	note	o2 C w16
+	note	D w14
+	note	E w12
+	note	F# w11
+	note	G# w10
+	note	A# w9
+	note	o3 C w8
+	note	D w1
+	note	= v0 w6 g0
+	note	E v15 g2
+	note	F# w5
+	note	G# w4
+	note	A# w3
+	note	o4 C
+	note	D
+	note	E w2
+	note	F#
+	note	G#
+	note	A# w6 g6
+	ret

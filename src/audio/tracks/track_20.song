@@ -1,0 +1,559 @@
+; Track_20: track id 0x20 (music), ROM 0x201659; in song 0.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x20
+	channel	0, .ch0
+	channel	1, .ch1
+	channel	2, .ch2
+	map	0, 1, 2
+
+.ch0:
+	tempo	254
+	instr	0 w1
+	atten	2
+	pan	8
+	atten	2 w4
+	loop	0
+		tempo	79
+		note	o1 A v15 w48 g48
+		note	A# w60 g60
+		note	= v13 w12 g12
+		note	A v15 w24 g24
+		note	A#
+		note	o2 E
+		call	.sub_201A37
+		note	o1 G v15 w132 g132
+		note	= v12 w12 g12
+		note	A v13 w48 g48
+		note	A# w60 g60
+		note	= v12 w12 g12
+		note	A v14 w24 g24
+		note	A#
+		note	o2 E v15
+		call	.sub_201A37
+		note	A v15 w132 g132
+		note	= v12 w12 g12
+		call	.sub_201A2A
+		note	G# v12 w12
+		note	C# w42
+		note	o2 D# v13 w48 g48
+		note	D v14
+		call	.sub_201A2A
+		note	G# v12 w6
+		note	o1 = v15 w12
+		note	A w6
+		note	G# v12
+		note	= v15
+		note	A v12
+		note	G v15
+		note	G# v12
+		note	G w12 g10
+		note	= v11
+		note	= v9
+		note	= v7
+		note	G# v15 g6
+		note	A
+		note	G#
+		note	G
+		note	A v13 w48 g48
+		note	G# v15 w36 g36
+		note	= v12 w12 g12
+		call	.sub_201A37
+		note	C# v15 w36 g36
+		note	= v12 w12 g12
+		note	G# v15 w36 g36
+		note	= v12 w12 g12
+		note	F# v15 w36 g36
+		note	= v12 w12 g12
+		note	o3 D# v15 w36 g36
+		note	= v12 w12 g12
+		note	C# v15 w48 g60
+		note	= v0 w12 g0
+		note	= v12 w36 g12
+		note	o2 G# v15 g36
+		note	= v12 w12 g12
+		note	o3 D# v15 w36 g36
+		note	= v12 w12 g12
+		note	C# v15 w36 g36
+		note	= v12 w12 g12
+		note	G# v15 w36 g36
+		note	= v12 w12 g12
+		note	F# v15 w36 g36
+		note	= v12 w12 g12
+		note	o4 D# v15 w36 g36
+		note	= v12 w12 g12
+		note	C# v15 w36 g36
+		note	= v12 w12 g12
+		note	o2 G# v15 g8
+		note	o1 = w6 g2
+		note	=
+		note	= g4
+		note	= v12 g6
+		note	o2 = v15 w12 g8
+		call	.sub_201A0C
+		note	= w12
+		note	o2 G g8
+		note	G# w24 g12
+		call	.sub_201A0C
+		note	o2 A w12 g8
+		note	o1 = w6 g2
+		note	=
+		note	= g4
+		note	= v12 g6
+		note	o2 = v15 w12 g8
+		call	.sub_201A1B
+		note	= w12
+		note	o2 G# g8
+		note	A w24 g12
+		call	.sub_201A1B
+		note	o2 A# w12 g8
+		note	o1 = w6 g2
+		note	=
+		note	= g4
+		note	= v12 g6
+		note	o2 = v15 w12 g8
+		note	B g12
+		note	A# w6 g6
+		note	o1 = g2
+		note	= g4
+		note	= v12 g6
+		note	= v15 g2
+		note	=
+		note	o2 B w12 g8
+		note	o1 = w6 g2
+		note	=
+		note	= g4
+		note	= v12 g6
+		note	o2 = v15 w12 g8
+		note	o3 C g12
+		note	o2 B w6 g6
+		note	o1 = g2
+		note	= g4
+		note	= v12 g6
+		note	= v15 g2
+		note	=
+		loop	10
+			note	o0 A v14 w6 g6
+		endloop
+		call	.sub_2019FD
+		note	o0 C v0 w60 g0
+		call	.sub_2019FD
+		loop	2
+			note	o1 G v15 w12 g8
+			note	= v12 g10
+			note	= v11
+			note	= v9
+		endloop
+		loop	2
+			note	o1 G v15 w12 g8
+			note	= v12 g10
+			note	= v15 g8
+			note	= v12 g10
+			note	= v11
+			note	= v9
+		endloop
+		note	= v7 w12
+		note	= v3 w60
+		note	A# v4 w4 g4
+		note	= v7
+		note	= v8
+		note	= v9
+		note	= v10
+		note	= v11
+		note	= v12
+		note	=
+		note	= v13
+		note	=
+		note	=
+		note	= v14
+		note	=
+		note	= v15
+		note	=
+		note	=
+		note	=
+		note	= w3
+	endloop
+
+.ch1:
+	instr	1 w1
+	atten	2
+	pan	8
+	atten	2 w4
+	loop	0
+		note	o1 D# v15 w48 g48
+		note	E w72 g60
+		note	D# w24 g24
+		note	E
+		note	A#
+		note	A w48 g36
+		note	C# w144 g132
+		note	D# v13 w48 g48
+		note	E w72 g60
+		note	D# v14 w24 g24
+		note	E
+		note	A# v15
+		note	A w48 g36
+		note	= w144 g132
+		note	o0 C v0 w96 g0
+		note	o2 = v13 w48 g48
+		note	o1 A#
+		note	o2 C# v14 w192 g24
+		note	o1 = v15 w96 g84
+		note	C w48 g36
+		note	A
+		note	B w96 g84
+		note	o2 C w48 g36
+		note	A
+		note	G# w24 g24
+		note	F# w12 g12
+		note	E
+		note	o1 G# w96 g84
+		note	A w48 g36
+		note	o2 C# w84 g84
+		note	o1 B v14 w2 g2
+		note	A
+		note	G
+		note	F
+		note	D#
+		note	C#
+		note	o0 B v15 w48 g48
+		note	o1 A g36
+		note	o2 C# w12 g8
+		note	o1 E w6 g2
+		note	=
+		note	= w12 g4
+		note	o2 C# g8
+		call	.sub_201A59
+		note	= w12
+		note	o2 C# g8
+		note	= g12
+		note	o1 E g4
+		call	.sub_201A59
+		note	o2 D w12 g8
+		note	o1 F w6 g2
+		note	=
+		note	= w12 g4
+		note	o2 D g8
+		call	.sub_201A67
+		note	= w12
+		note	o2 D g8
+		note	= g12
+		note	o1 F g4
+		call	.sub_201A67
+		note	o2 D# w12 g8
+		note	o1 F# w6 g2
+		note	=
+		note	= w12 g4
+		note	o2 D# g8
+		note	= g12
+		note	= w6 g6
+		note	o1 F# g2
+		note	= w12 g4
+		note	= w6 g2
+		note	=
+		note	o2 E w12 g8
+		note	o1 G w6 g2
+		note	=
+		note	= w12 g4
+		note	o2 E g8
+		note	= g12
+		note	= w6 g6
+		note	o1 G g2
+		note	= w12 g4
+		note	= w6 g2
+		note	=
+		loop	18
+			note	o0 G# v15 w4 g4
+		endloop
+		call	.sub_2019DB
+		note	o0 G# v15 w3
+		note	o2 C# v13 w1 g1
+		note	o0 G# v15 w4 g4
+		note	= w1 g1
+		note	o2 A# v13 w3 g3
+		loop	15
+			note	o0 G# v15 w4 g4
+		endloop
+		call	.sub_2019DB
+		loop	2
+			note	o1 C# v15 w12 g8
+			note	= v12 g10
+			note	= v11
+			note	= v9
+		endloop
+		loop	2
+			note	o1 C# v15 w12 g8
+			note	= v12 g10
+			note	= v15 g8
+			note	= v12 g10
+			note	= v11
+			note	= v9
+		endloop
+		note	= v7 w12
+		note	= v3 w60
+		note	F v4 w4 g4
+		note	= v7
+		note	= v8
+		note	= v9
+		note	= v10
+		note	= v11
+		note	= v12
+		note	=
+		note	= v13
+		note	=
+		note	=
+		note	= v14
+		note	=
+		note	= v15
+		note	=
+		note	=
+		note	=
+		note	= w3
+	endloop
+
+.ch2:
+	instr	2 w1
+	atten	1
+	pan	8
+	atten	1 w4
+	loop	0
+		note	o0 A v15 w48 g48
+		note	A# w72 g60
+		note	A w24 g24
+		note	A#
+		note	o1 E
+		note	D# w48 g36
+		note	o0 G w144 g132
+		note	A v13 w48 g48
+		note	A# w72 g60
+		note	A v14 w24 g24
+		note	A#
+		note	o1 E v15
+		note	D# w48 g36
+		note	o0 A w144 g132
+		note	C v0 w48 g0
+		note	o1 G# v15 w12 g6
+		note	A
+		note	G#
+		note	C# w60
+		note	F# v13 w48 g48
+		note	o2 G# v15 w12 g6
+		note	A
+		note	G#
+		note	C#
+		note	o0 G# w6
+		note	o3 C# v12
+		note	o0 A v15 w12
+		note	G#
+		note	G w60
+		note	G# w12
+		note	A
+		note	G#
+		loop	2
+			note	o0 G v15 w12 g6
+			note	A
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	G#
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	G
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+			note	=
+		endloop
+		note	= w12
+		note	G# g8
+		note	= w6 g2
+		note	=
+		note	= w12 g4
+		note	= g8
+		call	.sub_201A3F
+		note	= w12
+		note	A g8
+		note	G# g12
+		note	= g4
+		call	.sub_201A3F
+		note	A w12 g8
+		note	= w6 g2
+		note	=
+		note	= w12 g4
+		note	= g8
+		call	.sub_201A4C
+		note	= w12
+		note	A# g8
+		note	A g12
+		note	= g4
+		call	.sub_201A4C
+		note	A# w12 g8
+		note	= w6 g2
+		note	=
+		note	= w12 g4
+		note	= g8
+		note	A g12
+		note	A# w6 g6
+		note	= g2
+		note	= w12 g4
+		note	= w6 g2
+		note	=
+		note	B w12 g8
+		note	= w6 g2
+		note	=
+		note	= w12 g4
+		note	= g8
+		note	A# g12
+		note	B w6 g6
+		note	= g2
+		note	= w12 g4
+		note	= w6 g2
+		note	=
+		loop	16
+			note	o0 G v15 w6 g6
+			note	=
+			note	=
+			note	=
+		endloop
+		note	= w48 g8
+		note	=
+		note	= w24
+		note	= w48
+		note	= w24
+		note	= w120
+		note	A# v4 w4 g4
+		note	= v7
+		note	= v8
+		note	= v9
+		note	= v10
+		note	= v11
+		note	= v12
+		note	=
+		note	= v13
+		note	=
+		note	=
+		note	= v14
+		note	=
+		note	= v15
+		note	=
+		note	=
+		note	=
+		note	= w3
+	endloop
+
+.sub_2019DB:
+	note	o2 C# v15 w72 g72
+	note	o3 G w6 g6
+	note	C# g3
+	note	o2 A# w3
+	note	o3 G v13
+	note	o2 C# v15
+	note	o3 = v13
+	note	o1 G v15
+	note	o2 A# v13
+	note	o1 = v15
+	note	o2 C# v13
+	note	= v15
+	note	o1 G v13
+	note	o2 A# v15
+	note	o1 = v13
+	ret
+
+.sub_2019FD:
+	note	o1 G# v14 w2 g2
+	note	A#
+	note	o2 C
+	note	D
+	note	D#
+	note	F
+	note	G v15 w120 g120
+	ret
+
+.sub_201A0C:
+	note	o2 A v15 w12 g12
+	note	G# w6 g6
+	note	o1 = g2
+	note	= g4
+	note	= v12 g6
+	note	= v15 g2
+	note	=
+	ret
+
+.sub_201A1B:
+	note	o2 A# v15 w12 g12
+	note	A w6 g6
+	note	o1 = g2
+	note	= g4
+	note	= v12 g6
+	note	= v15 g2
+	note	=
+	ret
+
+.sub_201A2A:
+	note	o3 G# v15 w12 g6
+	note	A w6
+	note	G# v12
+	note	= v15
+	note	A v12
+	note	C# v15
+	ret
+
+.sub_201A37:
+	note	o2 D# v15 w36 g36
+	note	= v12 w12 g12
+	ret
+
+.sub_201A3F:
+	note	o0 G v15 w12 g12
+	note	G# w6 g6
+	note	= g2
+	note	= w12 g4
+	note	= w6 g2
+	note	=
+	ret
+
+.sub_201A4C:
+	note	o0 G# v15 w12 g12
+	note	A w6 g6
+	note	= g2
+	note	= w12 g4
+	note	= w6 g2
+	note	=
+	ret
+
+.sub_201A59:
+	note	o2 C# v15 w12 g12
+	note	= w6 g6
+	note	o1 E g2
+	note	= w12 g4
+	note	= w6 g2
+	note	=
+	ret
+
+.sub_201A67:
+	note	o2 D v15 w12 g12
+	note	= w6 g6
+	note	o1 F g2
+	note	= w12 g4
+	note	= w6 g2
+	note	=
+	ret

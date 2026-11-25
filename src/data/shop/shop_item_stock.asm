@@ -1,0 +1,77 @@
+; ShopItemStock (shop_item_stock): 71 records of 1 bytes, one line per id; keep the order and count.
+; Shop list filter (sub_21D1AE <- swp_21752D <- swp_217558): an item is listed when tier is not
+; 0 and tier > the threshold for wArenaRankCopy in the code at 0x217571 (4 3 3 2 2 1 1 0 0 0 for
+; ranks 0-9). So 4 = from the start, 3 = from rank 3, 2 = from rank 5, 1 = from rank 7,
+; 0 = never. (swp_21B6AE draws a line only when the filter returns carry.)
+; id: tier
+	db	3	; 1 FlrCt
+	db	3	; 2 RefCt
+	db	3	; 3 IceCt
+	db	3	; 4 WindCt
+	db	3	; 5 ErthCt
+	db	0	; 6 LghtCt
+	db	0	; 7 DarkCt
+	db	0	; 8 MirrCt
+	db	4	; 9 Radar5
+	db	2	; 10 Radar8
+	db	0	; 11 Radr10
+	db	4	; 12 Cycl10
+	db	2	; 13 Cycl20
+	db	0	; 14 Cycl30
+	db	4	; 15 Panl15
+	db	2	; 16 Panl30
+	db	0	; 17 Panl50
+	db	4	; 18 Armr25
+	db	2	; 19 Armr50
+	db	1	; 20 Armr80
+	db	4	; 21 Tank15
+	db	2	; 22 Tank30
+	db	1	; 23 Tank60
+	db	4	; 24 Bst10
+	db	2	; 25 Bst20
+	db	1	; 26 Bst30
+	db	4	; 27 Plt10
+	db	2	; 28 Plt20
+	db	1	; 29 Plt30
+	db	4	; 30 Axel10
+	db	2	; 31 Axel20
+	db	1	; 32 Axel30
+	db	4	; 33 Burn10
+	db	2	; 34 Burn20
+	db	1	; 35 Burn30
+	db	0	; 36 AutoRp
+	db	0	; 37 Proplr
+	db	4	; 38 FixIt1
+	db	4	; 39 FixIt2
+	db	3	; 40 FixIt3
+	db	2	; 41 FixIt4
+	db	1	; 42 FullFx
+	db	4	; 43 Clear
+	db	3	; 44 PowDrv
+	db	3	; 45 EField
+	db	3	; 46 SitClr
+	db	3	; 47 Turbo
+	db	3	; 48 Absorb
+	db	3	; 49 AcidBm
+	db	3	; 50 Jammer
+	db	3	; 51 MagFlr
+	db	4	; 52 Tool1
+	db	3	; 53 Tool2
+	db	2	; 54 Tool3
+	db	1	; 55 Tool4
+	db	0	; 56 Myster
+	db	4	; 57 Steel
+	db	4	; 58 Silver
+	db	4	; 59 Gold
+	db	4	; 60 Tngstn
+	db	4	; 61 Platnm
+	db	4	; 62 Mithrl
+	db	0	; 63 Slmndr
+	db	0	; 64 Dryad
+	db	0	; 65 Undine
+	db	0	; 66 Sylph
+	db	0	; 67 Gnome
+	db	0	; 68 Hirokn
+	db	0	; 69 Oricon
+	db	0	; 70 Zeus
+	db	0	; 71 Hades

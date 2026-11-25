@@ -1,0 +1,242 @@
+; EnemyNames (enemies): 118 strings, 7-byte slots (6 characters + done),
+; one per id; keep the order and count. Built by unitron text (Makefile).
+; Notes on the table: src/data/battle/enemies/stats.asm
+
+slot 7 FF
+	text "Stump"	; 1
+	done
+	text "Spidey"	; 2
+	done
+	text "Squirm"	; 3
+	done
+	text "Crabby"	; 4
+	done
+	text "Pumper"	; 5
+	done
+	text "Trappr"	; 6
+	done
+	text "Coyote"	; 7
+	done
+	text "Firey"	; 8
+	done
+	text "Iil"	; 9
+	done
+	text "Flower"	; 10
+	done
+	text "Bulby"	; 11
+	done
+	text "Bulbet"	; 12
+	done
+	text "Scythr"	; 13
+	done
+	text "Wolfen"	; 14
+	done
+	text "Viney"	; 15
+	done
+	text "Wooden"	; 16
+	done
+	text "Borey"	; 17
+	done
+	text "Mamoth"	; 18
+	done
+	text "Squido"	; 19
+	done
+	text "Horsee"	; 20
+	done
+	text "Narl"	; 21
+	done
+	text "Orka"	; 22
+	done
+	text "Seel"	; 23
+	done
+	text "Barby"	; 24
+	done
+	text "Fishen"	; 25
+	done
+	text "Aquan"	; 26
+	done
+	text "Drake"	; 27
+	done
+	text "Rocky"	; 28
+	done
+	text "Fountn"	; 29
+	done
+	text "Snoman"	; 30
+	done
+	text "Merman"	; 31
+	done
+	text "Marman"	; 32
+	done
+	text "Deep1"	; 33
+	done
+	text "Froggy"	; 34
+	done
+	text "Froggr"	; 35
+	done
+	text "Nauti"	; 36
+	done
+	text "Skully"	; 37
+	done
+	text "Skullt"	; 38
+	done
+	text "Mummy"	; 39
+	done
+	text "Zombit"	; 40
+	done
+	text "Walley"	; 41
+	done
+	text "Crystl"	; 42
+	done
+	text "Iworm"	; 43
+	done
+	text "Moworm"	; 44
+	done
+	text "Bonryu"	; 45
+	done
+	text "Agolem"	; 46
+	done
+	text "Golem"	; 47
+	done
+	text "Zhuga"	; 48
+	done
+	text "Zhaga"	; 49
+	done
+	text "Lickin"	; 50
+	done
+	text "Curly"	; 51
+	done
+	text "Whirly"	; 52
+	done
+	text "Pengun"	; 53
+	done
+	text "Dedhed"	; 54
+	done
+	text "Toris"	; 55
+	done
+	text "Mrice"	; 56
+	done
+	text "Trice"	; 57
+	done
+	text "Chimer"	; 58
+	done
+	text "Mutan"	; 59
+	done
+	text "Eyefly"	; 60
+	done
+	text "Whyrm"	; 61
+	done
+	text "Hornd"	; 62
+	done
+	text "Harpy"	; 63
+	done
+	text "Darpy"	; 64
+	done
+	text "Grifon"	; 65
+	done
+	text "Coatl"	; 66
+	done
+	text "Jyster"	; 67
+	done
+	text "Smoky"	; 68
+	done
+	text "Feyt"	; 69
+	done
+	text "Beasty"	; 70
+	done
+	text "Hyoi"	; 71
+	done
+	text "Eeek"	; 72
+	done
+	text "Hippie"	; 73
+	done
+	text "Cerebn"	; 74
+	done
+	text "Unicon"	; 75
+	done
+	text "Faroh"	; 76
+	done
+	text "Lamia"	; 77
+	done
+	text "Ratta"	; 78
+	done
+	text "Elice"	; 79
+	done
+	text "Jakko"	; 80
+	done
+	text "Dragon"	; 81
+	done
+	text "Sphinx"	; 82
+	done
+	text "Niten"	; 83
+	done
+	text "Scaley"	; 84
+	done
+	text "Misynk"	; 85
+	done
+	text "Octpod"	; 86
+	done
+	text "Mibore"	; 87
+	done
+	text "Cabra"	; 88
+	done
+	text "Ent"	; 89
+	done
+	text "Kraken"	; 90
+	done
+	text "Roc"	; 91
+	done
+	text "Behemt"	; 92
+	done
+	text "Trifid"	; 93
+	done
+	text "Squidl"	; 94
+	done
+	text "Simrug"	; 95
+	done
+	text "Catble"	; 96
+	done
+	text "Uniti"	; 97
+	done
+	text "Alex"	; 98
+	done
+	text "Crofrd"	; 99
+	done
+	text "Lester"	; 100
+	done
+	text "Kaldrl"	; 101
+	done
+	text "Fandel"	; 102
+	done
+	text "Leygos"	; 103
+	done
+	text "Loxia"	; 104
+	done
+	text "Legaea"	; 105
+	done
+	text "Palten"	; 106
+	done
+	text "Hawki"	; 107
+	done
+	text "Crawel"	; 108
+	done
+	text "Eegle"	; 109
+	done
+	text "MJ"	; 110
+	done
+	text "Vasky"	; 111
+	done
+	text "Dupon"	; 112
+	done
+	text "Fenril"	; 113
+	done
+	text "Domino"	; 114
+	done
+	text "Neptun"	; 115
+	done
+	text "Oberon"	; 116
+	done
+	text "Balrok"	; 117
+	done
+	text "Satana"	; 118
+	done
+slot 0

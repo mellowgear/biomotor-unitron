@@ -1,0 +1,22 @@
+; Track_AD: track id 0xAD (SFX), ROM 0x205ED8; in songs 15, 16.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0xAD
+	channel	3, .ch0
+	map	0
+
+.ch0:
+	instr	0 w1
+	note	o2 C v15 w4 g4
+	note	D# w7 g2
+	note	o0 B w24 g24
+	note	o2 C v14 w4 g4
+	note	D# w2 g2
+	note	o0 B w24 g24
+	note	o2 C v13 w4 g4
+	note	D# w2 g2
+	note	o0 B w24 g24
+	note	o2 C v12 w4 g4
+	note	D# w8 g2
+	note	o0 B w48 g48
+	end

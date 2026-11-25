@@ -1,0 +1,55 @@
+; Track_AE: track id 0xAE (SFX), ROM 0x205F0A; in songs 15, 16.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0xAE
+	channel	0, .ch0
+	channel	1, .ch1
+	channel	2, .ch2
+	channel	3, .ch3
+	map	0
+
+.ch0:
+	instr	0 w1
+	note	o4 D v10 w48 g48
+	note	= v12
+	note	= v13
+	note	= v14 w47 g192
+	note	= v0 w156 g0
+	note	= w2 g2
+	end
+
+.ch1:
+	instr	0 w1
+	note	o3 C v10 w48 g48
+	note	= v12
+	note	= v13
+	note	= v14 w47 g192
+	note	= v0 w156 g0
+	note	= w2 g2
+	end
+
+.ch2:
+	instr	0 w1
+	note	o3 E v10 w48 g48
+	note	= v12
+	note	= v13
+	note	= v14 w47 g192
+	note	= v0 w156 g0
+	note	= w2 g2
+	end
+
+.ch3:
+	instr	0 w1
+	note	o2 C v15 w4 g4
+	note	D# w7 g2
+	note	o0 B w24 g24
+	note	o2 C v14 w4 g4
+	note	D# w2 g2
+	note	o0 B w24 g24
+	note	o2 C v13 w4 g4
+	note	D# w2 g2
+	note	o0 B w24 g24
+	note	o2 C v12 w4 g4
+	note	D# w8 g2
+	note	o0 B w48 g48
+	end

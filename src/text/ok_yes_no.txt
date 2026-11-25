@@ -1,0 +1,17 @@
+; 4 strings at 20DFD2-20E012 (pinned: stay within 64 bytes)
+
+OkYesNoText:
+    text " Ok?  Yes No"
+    done
+
+ClearOkYesNoText:
+    text "Clear Ok? Yes No"
+    done
+
+SaveOkYesNoText:
+    text "Save Ok?  Yes No"
+    done
+
+OverOkYesNoText:
+    text "Over Ok?  Yes No"
+    done

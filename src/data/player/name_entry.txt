@@ -1,0 +1,23 @@
+; The name entry screen's texts (NameEntryScreen 0x20FC87, Enter your name / partner name).
+
+; [code] NameEntryScreen: text box 2, the controls line under the grid
+SelectPutBackText:
+	text "▲▼◀▶:Select   A:Put"
+	line "   B:Back"
+	done
+
+; [code] the character grid: NameEntryScreen and swp_20FC6F draw it in text box 1 (opened with
+; C = 10, E = 9: 9 rows of 10); dyn_20FB76 / dyn_20FBBF take the picked character from
+; NameEntryChars + row * 10 + column + 1 (the + 1 skips the page byte) into the name.
+; {50}, {61}, {63}: codes the charmap has no character for (glyphs 0x4F, 0x60, 0x62 of the font).
+NameEntryChars:
+	page "ABCDEFG&!?"
+	text "HIJKLMN★♥×"
+	text "OPQRSTU+-="
+	text "VWXYZ()[]‥"
+	text "abcdefg:{50}'"
+	text "hijklmn#%*"
+	text "opqrstu/\_"
+	text "vwxyz.·{61}{63} "
+	text "0123456789"
+	done

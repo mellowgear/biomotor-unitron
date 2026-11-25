@@ -1,0 +1,27 @@
+; Track_AB: track id 0xAB (SFX), ROM 0x205E21; in songs 10, 11, 12, 13.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0xAB
+	channel	1, .ch0
+	channel	2, .ch1
+	channel	3, .ch2
+	map	2
+
+.ch0:
+	instr	0 w3
+	note	o3 E v15 g2
+	note	o5 A w18 g8
+	note	= v7 w12 g12
+	end
+
+.ch1:
+	instr	0 w6
+	note	o5 G v15 w18 g8
+	note	= v7 w10 g10
+	end
+
+.ch2:
+	instr	0 w6
+	note	o5 B v15 w18 g8
+	note	= v7 w10 g10
+	end

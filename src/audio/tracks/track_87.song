@@ -1,0 +1,32 @@
+; Track_87: track id 0x87 (SFX), ROM 0x2058EE; in song 2.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x87
+	channel	1, .ch0
+	channel	2, .ch1
+	channel	3, .ch2
+	map	0, 2
+
+.ch0:
+	instr	1 w2
+	note	o0 G v15 w11 g1
+	note	o5 C w9 g4
+	note	= v13
+	note	= v10 w4
+	end
+
+.ch1:
+	instr	1 w1
+	note	o0 A v14 w2 g1
+	note	o4 C# v13 w5 g4
+	note	F# v11 w6
+	note	B v7 w16 g16
+	end
+
+.ch2:
+	instr	0 w1
+	note	o3 D# v15 w11 g2
+	note	o5 C v13 w9 g4
+	note	D v10
+	note	E v7 w4
+	end

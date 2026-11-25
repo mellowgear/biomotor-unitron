@@ -1,0 +1,34 @@
+; Track_86: track id 0x86 (SFX), ROM 0x2058B2; in songs 1, 5, 6, 7, 8, 9.
+; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+
+	track	0x86
+	channel	1, .ch0
+	channel	3, .ch1
+	map	2
+
+.ch0:
+	call	.sub_2058E0
+	note	F# v11 w58 g48
+	note	= v0 w2 g2
+	end
+
+.ch1:
+	call	.sub_2058E0
+	note	o2 = w14 g13
+	note	C# v14 w12 g11
+	note	D v13 w10 g9
+	note	D# w8 g7
+	note	E v12 w6 g5
+	note	F v11 w4 g3
+	note	F# v10 w2 g2
+	note	F v7
+	note	= v0
+	end
+
+.sub_2058E0:
+	instr	0 w1
+	note	o0 B v15 w3 g2
+	note	o1 C
+	note	D w10 g3
+	note	C w31 g2
+	ret
