@@ -64,25 +64,7 @@ wModeTimer	equ	0x52DC
 wHelpPage	equ	0x542E
 wTaskList	equ	0x5842
 wTaskCount	equ	0x584A
-wFadeLevel	equ	0x585B
-; [code] the wFadeLevel last applied: UpdateSpritesAndFade calls FadePalettes / FadeMonoPalettes only when they differ; LoadPalettes and the Reset*Palettes store ~wFadeLevel to force it
-wFadeLevelShown	equ	0x585C
-wMonoPalShadow	equ	0x585D
-wPalShadow	equ	0x5876
-wShakeFlags	equ	0x5A7F
-wShakeX	equ	0x5A80
-wShakeY	equ	0x5A81
-; [code] next free 4-byte sprite entry in wSpriteBuffer (DrawSpriteGrid, DrawSpriteMap); UpdateSpritesAndFade copies up to it to sprite VRAM and resets it
-wSpriteBufferPtr	equ	0x5A82
-; [code] next free palette byte in wSpritePalBuffer, advanced with wSpriteBufferPtr
-wSpritePalBufferPtr	equ	0x5A84
-; [code] 64 sprites x 4 bytes, copied to sprite VRAM 0x8800-0x88FF each frame (UpdateSpritesAndFade); full when wSpriteBufferPtr reaches wSpritePalBuffer
-wSpriteBuffer	equ	0x5A86
-; [code] one colour-palette byte per sprite, copied to 0x8C00-0x8C3F on colour units (UpdateSpritesAndFade)
-wSpritePalBuffer	equ	0x5B86
-wColorFlags	equ	0x5BC6
 wMapPtr	equ	0x5BD1
-wMetatileAttrPtr	equ	0x5BD9
 wJoyHistoryIndex	equ	0x5BDD
 wJoyHistory	equ	0x5BDE
 wJoyHeld	equ	0x5CDE
@@ -181,15 +163,6 @@ wYesNoChoice	equ	0x5DF7
 wChestTable	equ	0x5FFA
 ; [code] the town place task's result: TownPlaceTaskEnd copies task +0x11 here; StreetGoWorks opens RunWorksScreen on 1 (TownPlaceEnter with no entry talk), StreetGoShop RunShopScreen on 3, 4 or 5 (3 = no entry talk; 4 / 5 from the talk nexts 0xF9 / 0xF8, TalkNextLeavePlace)
 wTownPlaceResult	equ	0x60F0
-; [code] 4 bytes x, y, width, height for WBA_H, WBA_V, WSI_H, WSI_V: ApplyWindowA, the target of StartWindowAnimToA; set by SetupWindowIris (full screen)
-wWindowA	equ	0x60F1
-; [code] 4 bytes x, y, width, height: ApplyWindowB; SetupWindowIris puts an empty window at the centre here
-wWindowB	equ	0x60F5
-; [code] 4 signed steps (x, y, width, height) UpdateWindowAnim adds per frame
-wWindowStep	equ	0x60F9
-; [code] 0 idle, 1 animate towards wWindowA, 2 towards wWindowB (all four registers; UpdateWindowAnim clears it
-; when done). [play] 2 = the iris closing before a scene change, 41 frames
-wWindowAnim	equ	0x60FD
 ; [code] StartCursorTask stores the CursorTask handle (StartChildTask XHL) here
 wCursorTask	equ	0x6108
 wCursorVisible	equ	0x610C
@@ -285,11 +258,6 @@ wWorksScreenResult	equ	0x6212
 wShopClerk	equ	0x621E
 
 ; --- naming round 4a
-; [code] VBlank UpdateScrollRegisters writes 0x584B / 0x584D to S1SO_H / S1SO_V (plus wShakeX/Y when wShakeFlags bit 1) and 0x5853 / 0x5855 to S2SO_H / S2SO_V (bit 2)
-wScr1ScrollX	equ	0x584B
-wScr1ScrollY	equ	0x584D
-wScr2ScrollX	equ	0x5853
-wScr2ScrollY	equ	0x5855
 ; [code] skill effect 5 (ShowStatUp, skill record +4/+6/+8/+0xA): turns of AP/SP/RP/MP up; PlayerTurnEnd counts them down, ComputeStatBuffs +30 to wPlayerAPBuff.. while non-zero, 0 at BattleStart
 wSkillAPUpTurns	equ	0x5D97
 wSkillSPUpTurns	equ	0x5D98

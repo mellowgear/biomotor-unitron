@@ -158,7 +158,7 @@ PlayerParalysisCheck:
 
 c_209FFB	section	code abs=0x209FFB
 
-; [code] HitMargin, then DamageRoll (damage.txt: about 0.4 x (attack - defence) + 8) x affinity, x2 crit (play); while wStatusConfused the unit's own RP / SP / affinity stand in for the enemy's and the result goes to ConfusedPlayerHitResult.
+; [code] HitMargin, then DamageRoll (damage.asm: about 0.4 x (attack - defence) + 8) x affinity, x2 crit (play); while wStatusConfused the unit's own RP / SP / affinity stand in for the enemy's and the result goes to ConfusedPlayerHitResult.
 ; EnemyAttack and EnemyArmAttack (engine/battle/enemy_turn.asm) are near-copies of this code with the sides swapped (enemy RP / AP / level / buffs against the unit's, ApplyAirbag where this has AtLeastOne, EnemyHitResult2-4, the confused path resuming at ConfusedEnemyHitResult); EnemyArmAttack reads the same arm record fields (+4 power, +0xE affinity, +0x10 status, effect list in +0x14)
 PlayerAttack:
 	ld	XHL,0

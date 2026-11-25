@@ -16,9 +16,11 @@ SetupWorksMenu:
 	ld	(wMenuValues),XHL
 	jp	MenuReset
 CharaText:
-	db	0x23,0x08,0x01,0x12,0x01,0xFF	; "Chara"
+	text "Chara"
+	done
 UNITText:
-	db	0x35,0x2E,0x29,0x34,0xFF	; "UNIT"
+	text "UNIT"
+	done
 ExitText5:
 	db	0x25,0x18,0x09,0x14,0xFF	; "Exit"
 MenuLines_217C7F:
@@ -78,9 +80,11 @@ SetupItemCategoryMenu:
 	ld	(wMenuValues),XHL
 	jp	MenuReset
 SaveText:
-	db	0x33,0x01,0x16,0x05,0xFF	; "Save"
+	text "Save"
+	done
 LoadText:
-	db	0x2C,0x0F,0x01,0x04,0xFF	; "Load"
+	text "Load"
+	done
 ExitText7:
 	db	0x25,0x18,0x09,0x14,0xFF	; "Exit"
 MenuLines_217E0D:
@@ -252,7 +256,7 @@ DrawPortraitScr1:
 
 c_2197CC	section	code abs=0x2197CC
 
-; [code] ClearPicture clears the picture area, portrait 0x35 (place_portraits.txt: 53 = Works) at 0,0 tile 0x7E (DrawPortraitScr1), then A = 0xFF -> the partner's portrait (wWorksPartnerRace, DrawPortraitOrRace) at 0,0x20 tile 0x126 (DrawPortraitScr2 -> DrawPortraitTiles126)
+; [code] ClearPicture clears the picture area, portrait 0x35 (place_portraits.asm: 53 = Works) at 0,0 tile 0x7E (DrawPortraitScr1), then A = 0xFF -> the partner's portrait (wWorksPartnerRace, DrawPortraitOrRace) at 0,0x20 tile 0x126 (DrawPortraitScr2 -> DrawPortraitTiles126)
 DrawWorksPortraits:
 	call	ClearPicture
 	ld	A,0x35
@@ -711,38 +715,4 @@ ReopenWorksBoxes:
 	ld	E,0xB
 	call	PlaceTextBox
 	call	CopyGameToWorks
-	ret
-
-c_21ABDA	section	code abs=0x21ABDA
-
-; [code] same 12x14 clear + FillTiles 0x7E x 0x1C2 as ClearPicture, then zeroes all of 0x9000-0x97FF and 0x9800-0x9FFF (SCR1 and SCR2 maps); callers ClearPictureHideCursor, HideMenuClearPicture, WorksScreenTask, ReopenWorksBoxes
-ClearPictureAndTilemaps:
-	ld	WA,0
-	ld	C,0
-	ld	E,0
-	ld	B,0xC
-	ld	D,0xE
-	call	FillScr1Rect
-	ld	WA,0
-	ld	C,0
-	ld	E,0
-	ld	B,0xC
-	ld	D,0xE
-	call	FillScr2Rect
-	ld	WA,0x7E
-	ld	QA,0
-	ld	BC,0x1C2
-	call	FillTiles
-	ld	XHL,0x9000
-	ld	XDE,0x9001
-	ld	XBC,0x7FF
-	xor	A,A
-	ld	(XHL),A
-	ldir	(XDE+),(XHL+)
-	ld	XHL,0x9800
-	ld	XDE,0x9801
-	ld	XBC,0x7FF
-	xor	A,A
-	ld	(XHL),A
-	ldir	(XDE+),(XHL+)
 	ret

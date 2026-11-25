@@ -282,7 +282,7 @@ InitClearSlotList:
 
 c_20DDBC	section	code abs=0x20DDBC
 
-; [code] header "Load"/"Save"/"Clear" by 0x5DF5 (SaveMenuLoadText ..), then slots 1-3: SaveSlotEmptyText if IsSaveSlotUsed NZ, else name (+0), partner name (+0x1C), levels (+0xF, +0x2B), emblem flags 0x10-0x13, GetRankTitle (+0x32) (rank_titles.txt header); [play] works_data_save_load_menu
+; [code] header "Load"/"Save"/"Clear" by 0x5DF5 (SaveMenuLoadText ..), then slots 1-3: SaveSlotEmptyText if IsSaveSlotUsed NZ, else name (+0), partner name (+0x1C), levels (+0xF, +0x2B), emblem flags 0x10-0x13, GetRankTitle (+0x32) (rank_titles.asm header); [play] works_data_save_load_menu
 DrawSaveSlotList:
 	pushw	(XIZ+TASK_ARG)
 	ld	A,(XIZ+0x10)

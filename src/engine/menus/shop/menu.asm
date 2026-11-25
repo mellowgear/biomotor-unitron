@@ -81,7 +81,7 @@ HalveBCD:
 
 c_217558	section	code abs=0x217558
 
-; [code] GetShopItemTierBy, then carry only when tier != 0 and tier > ShopTierByRank[wArenaRankCopy] (shop_item_stock.txt); ShopBuyPartMoveHook draws a shop line only with carry
+; [code] GetShopItemTierBy, then carry only when tier != 0 and tier > ShopTierByRank[wArenaRankCopy] (shop_item_stock.asm); ShopBuyPartMoveHook draws a shop line only with carry
 IsShopItemStocked:
 	call	GetShopItemTierBy
 IsShopItemStocked.done:
@@ -714,9 +714,11 @@ ShopMainMenu.skip13:
 	call	Wait30Frames
 	jp	EndMenuTask
 BuyText:
-	db	0x22,0x15,0x19,0xFF	; "Buy"
+	text "Buy"
+	done
 SellText:
-	db	0x33,0x05,0x0C,0x0C,0xFF	; "Sell"
+	text "Sell"
+	done
 ExitText8:
 	db	0x25,0x18,0x09,0x14,0xFF	; "Exit"
 MenuLines_21B34E:

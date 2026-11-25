@@ -88,7 +88,7 @@ HelmutEyesWait.done:
 
 c_215FB3	section	code abs=0x215FB3
 
-; [code] XHL = NovaText + 7 * A (the 20 skill name strings of nova.txt: Nova, Burst, Ragnok ...)
+; [code] XHL = NovaText + 7 * A (the 20 skill name strings of nova.asm: Nova, Burst, Ragnok ...)
 GetSkillNameText:
 	push	XWA
 	extz	WA

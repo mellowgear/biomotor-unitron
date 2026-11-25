@@ -1,8 +1,8 @@
 ; ChestGoldText (chest_gold): 16 strings, 6-byte slots (5 characters + done),
-; one per id; keep the order and count. Built by unitron text (Makefile).
+; one per id; keep the order and count. Character codes from the charmap ($charmap).
 ; Notes on the table: src/data/dungeon/chest_gold/gold.asm
 
-slot 6 FF
+	slot	6 FF
 	text "740"	; 1
 	done
 	text "1080"	; 2
@@ -35,4 +35,4 @@ slot 6 FF
 	done
 	text "10000"	; 16
 	done
-slot 0
+	slot	0

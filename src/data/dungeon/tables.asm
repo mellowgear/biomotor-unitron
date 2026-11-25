@@ -1,6 +1,6 @@
 ; data/dungeon/tables.asm: the dungeon tables in ROM order, one section per part; each part is a
-; file in src/data/dungeon/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/dungeon/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/dungeon/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 d_22744B	section	romdata abs=0x22744B
@@ -34,7 +34,7 @@ ChestGold:
 #include "src/data/dungeon/chest_gold/gold.asm"
 d_2496EE	section	romdata abs=0x2496EE
 ChestGoldText:
-$include "build/data/dungeon/chest_gold/text.asm"	; src/data/dungeon/chest_gold/text.txt
+$include "src/data/dungeon/chest_gold/text.asm"
 d_24974E	section	romdata abs=0x24974E
 ChestOdds:
 #include "src/data/dungeon/chest_odds.asm"

@@ -1,4 +1,4 @@
-; engine/tables: 62 routines (each keeps its ROM address in its own section)
+; engine/tables: 61 routines (each keeps its ROM address in its own section)
 
 c_208220	section	code abs=0x208220
 
@@ -336,7 +336,7 @@ GetDungeonSelectCursor:
 
 c_212BAB	section	code abs=0x212BAB
 
-; [code] A = encounter_enemies list (encounters.txt line (DUNGEON_ID-1)*7 + floor)[Random() % count]
+; [code] A = encounter_enemies list (encounters/ line (DUNGEON_ID-1)*7 + floor)[Random() % count]
 GetEncounterEnemy:
 	push	XHL
 	push	XDE
@@ -372,7 +372,7 @@ GetEncounterEnemy:
 
 c_2132FC	section	code abs=0x2132FC
 
-; [code] A = scene; A < 0x50 returned as is, else A = ArenaGenderScenes[(A-0x50) + IsPlayerMale] (female/male byte pairs, arena_gender_scenes.txt header already documents this routine); ArenaSceneEnd (ArenaSceneCmdGenderScene) stores the result in task +0x12 (scene)
+; [code] A = scene; A < 0x50 returned as is, else A = ArenaGenderScenes[(A-0x50) + IsPlayerMale] (female/male byte pairs, arena_gender_scenes.asm header already documents this routine); ArenaSceneEnd (ArenaSceneCmdGenderScene) stores the result in task +0x12 (scene)
 GetArenaGenderScene:
 	push	XHL
 	push	XDE
@@ -522,7 +522,7 @@ GetArenaTalkRow.skip15:
 
 c_213413	section	code abs=0x213413
 
-; [code] W = ArenaRankFirstScene[task+0x15 - 2] (through GetArenaGenderScene when < 0x70) if the chosen rank task+0x15 > GetStageArenaRank, else scene 2 (scene 3 when stage rank = 9); only caller ArenaRoundsComplete stores W in task +0x12 (scene); matches arena_first_scenes.txt header
+; [code] W = ArenaRankFirstScene[task+0x15 - 2] (through GetArenaGenderScene when < 0x70) if the chosen rank task+0x15 > GetStageArenaRank, else scene 2 (scene 3 when stage rank = 9); only caller ArenaRoundsComplete stores W in task +0x12 (scene); matches arena_first_scenes.asm header
 GetArenaRankFirstScene:
 	push	XHL
 	push	XDE
@@ -627,7 +627,7 @@ GetItemOrPartName.skip2:
 
 c_216BC9	section	code abs=0x216BC9
 
-; [code] WA <= 0x100: XHL = ItemDescs + 0x13*(WA-1), else PartDescs + 0x13*(WA-0x101) (same id split as GetItemOrPartName, cyrius_trades.txt)
+; [code] WA <= 0x100: XHL = ItemDescs + 0x13*(WA-1), else PartDescs + 0x13*(WA-0x101) (same id split as GetItemOrPartName, cyrius_trades.asm)
 GetItemOrPartDesc:
 	push	XWA
 	cp	WA,0x101
@@ -644,37 +644,6 @@ GetItemOrPartDesc.skip2:
 	mul	XWA,0x13
 	add	XHL,XWA
 	pop	XWA
-	ret
-
-c_216BEE	section	code abs=0x216BEE
-
-; [code] XHL = tilemap address: zeroes the top-left 12 x 14 entries (rows 0x20 words apart), registers saved; callers ClearArenaPortraitArea / ClearArenaPortraitArea2 (SCR2 0x9800) and the town talk code
-ClearPictureMap:
-	push	XHL
-	push	XDE
-	push	XBC
-	push	XWA
-	ld	WA,0
-	ld	B,0
-ClearPictureMap.loop:
-	ld	C,0
-ClearPictureMap.loop2:
-	ld	(XHL),WA
-	inc	2,XHL
-	inc	1,C
-	cp	C,0xC
-	jr	C,ClearPictureMap.loop2
-	ld	XDE,0x20
-	sub	XDE,0xC
-	sll	1,XDE
-	add	XHL,XDE
-	inc	1,B
-	cp	B,0xE
-	jr	C,ClearPictureMap.loop
-	pop	XWA
-	pop	XBC
-	pop	XDE
-	pop	XHL
 	ret
 
 c_21752D	section	code abs=0x21752D
@@ -720,15 +689,19 @@ GetTradeConfirmText:
 	ld	XDE,AreYouSureText
 	ret
 SelfText:
-	db	0x33,0x05,0x0C,0x06,0xFF	; "Self"
+	text "Self"
+	done
 OtherText:
-	db	0x2F,0x14,0x08,0x05,0x12,0xFF	; "Other"
+	text "Other"
+	done
 DashText15:
 	db	0x59,0x59,0xFF	; "--"
 OKText:
-	db	0x2F,0x2B,0xFF	; "OK"
+	text "OK"
+	done
 NOText:
-	db	0x2E,0x2F,0xFF	; "NO"
+	text "NO"
+	done
 BlankText5:
 	db	0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "      "
 BlankText6:
@@ -796,7 +769,7 @@ GetItemDescWorks:
 
 c_21B902	section	code abs=0x21B902
 
-; [code] WA = ItemGroupIds[WA] (item_works.txt index, group); no caller
+; [code] WA = ItemGroupIds[WA] (item_works/ index, group); no caller
 GetItemGroupIds:
 	push	XHL
 	add	WA,WA
@@ -818,7 +791,7 @@ swp_21B911:
 
 c_21B920	section	code abs=0x21B920
 
-; [code] WA = ItemAffinity[WA] (item_works.txt); called only by GetEntryAffinity (no caller)
+; [code] WA = ItemAffinity[WA] (item_works/); called only by GetEntryAffinity (no caller)
 GetItemAffinity:
 	push	XHL
 	add	WA,WA
@@ -909,7 +882,7 @@ GetPartDescWorks:
 
 c_21B9A5	section	code abs=0x21B9A5
 
-; [code] WA = PartIdWords[WA] (part_id_words.txt); no caller
+; [code] WA = PartIdWords[WA] (part_id_words.asm); no caller
 GetPartIdWord:
 	push	XHL
 	add	WA,WA
@@ -929,7 +902,7 @@ GetPartStatsWorks:
 
 c_21B9C2	section	code abs=0x21B9C2
 
-; [code] XHL = rank_titles.txt string WA (0x25E450 + 7 * WA)
+; [code] XHL = rank_titles.asm string WA (0x25E450 + 7 * WA)
 GetRankTitle:
 	mul	WA,7
 	ld	XHL,RankTitles-7
@@ -938,7 +911,7 @@ GetRankTitle:
 
 c_21B9D0	section	code abs=0x21B9D0
 
-; [code] XHL = race_names.txt string WA (0x25E48F + 7 * WA)
+; [code] XHL = race_names.asm string WA (0x25E48F + 7 * WA)
 GetRaceName:
 	mul	WA,7
 	ld	XHL,RaceNames-7

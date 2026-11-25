@@ -1,8 +1,8 @@
 ; ItemDescs (items): 71 strings, 19-byte slots (18 characters + done),
-; one per id; keep the order and count. Built by unitron text (Makefile).
+; one per id; keep the order and count. Character codes from the charmap ($charmap).
 ; Notes on the table: src/data/items/prices.asm
 
-slot 19 FF
+	slot	19 FF
 	text "Body▶Fire affin."	; 1 FlrCt
 	done
 	text "Body▶Wood affin."	; 2 RefCt
@@ -145,4 +145,4 @@ slot 19 FF
 	done
 	text "Gem w/ dark soul"	; 71 Hades
 	done
-slot 0
+	slot	0

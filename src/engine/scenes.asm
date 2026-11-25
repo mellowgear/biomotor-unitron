@@ -1,4 +1,4 @@
-; engine/scenes: 53 routines (each keeps its ROM address in its own section)
+; engine/scenes: 51 routines (each keeps its ROM address in its own section)
 
 c_20E1D4	section	code abs=0x20E1D4
 
@@ -8,46 +8,6 @@ WaitFramesTask:
 	jp	Z,EndTask
 	decw	1,(XIZ+TASK_ARG)
 	jp	Z,EndTask
-	ret
-
-c_20E1E7	section	code abs=0x20E1E7
-
-; [code] XHL = colours, BC = palette count, WA = first palette: copies BC*4 words straight into palette RAM 0x8200 + 8*WA and sets wFadeLevelShown = wFadeLevel (no shadow, no fade pass)
-WritePalettesDirect:
-	push	XDE
-	push	XHL
-	extz	BC
-	sll	2,BC
-	extz	WA
-	extz	XWA
-	sll	3,XWA
-	ld	XDE,0x8200
-	add	XDE,XWA
-	ldirw	(XDE+),(XHL+)
-	ld	A,(wFadeLevel)
-	ld	(wFadeLevelShown),A
-	pop	XHL
-	pop	XDE
-	ret
-
-c_20E209	section	code abs=0x20E209
-
-; [code] the monochrome counterpart of WritePalettesDirect: BC*4 bytes into 0x8100 + 4*WA, wFadeLevelShown = wFadeLevel
-WriteMonoPalettesDirect:
-	push	XDE
-	push	XHL
-	extz	BC
-	sll	2,BC
-	extz	WA
-	extz	XWA
-	sll	2,XWA
-	ld	XDE,0x8100
-	add	XDE,XWA
-	ldir	(XDE+),(XHL+)
-	ld	A,(wFadeLevel)
-	ld	(wFadeLevelShown),A
-	pop	XHL
-	pop	XDE
 	ret
 
 c_20E22B	section	code abs=0x20E22B
@@ -1486,7 +1446,7 @@ CreditsTask:
 	ldb	(wScr2ScrollY),0
 	ld	XDE,wPlayerName
 	ld	B,6
-	ld	WA,0x16C
+	ld	WA,CREDITS_PLAYER_NAME_TILE
 CreditsTask.loop:
 	ld	L,(XDE)
 	push	B
@@ -1501,7 +1461,7 @@ CreditsTask.loop:
 	djnz	B,CreditsTask.loop
 	ld	XDE,wPartnerName
 	ld	B,6
-	ld	WA,0x173
+	ld	WA,CREDITS_PARTNER_NAME_TILE
 CreditsTask.loop2:
 	ld	L,(XDE)
 	push	B
@@ -1573,7 +1533,7 @@ CreditsLineTask:
 	add	A,0x13
 	and	A,0x1F
 	sll	6,XWA
-	add	XWA,0x9800
+	add	XWA,SCROLL2_VRAM
 	ldw	(XIZ+TASK_ARG),0
 	ld	XHL,(XIY+0xE)
 CreditsLineTask.loop:
@@ -1584,7 +1544,7 @@ CreditsLineTask.loop:
 	jrl	Z,CreditsLineEnd
 	cp	C,0xFC
 	jr	NZ,CreditsLinePartnerName
-	ld	DE,0x16C
+	ld	DE,CREDITS_PLAYER_NAME_TILE
 	ld	XBC,wPlayerName
 	jr	CreditsLineNameTiles
 
@@ -1594,7 +1554,7 @@ c_20F730	section	code abs=0x20F730
 CreditsLinePartnerName:
 	cp	C,0xFB
 	jr	NZ,CreditsLineChar
-	ld	DE,0x173
+	ld	DE,CREDITS_PARTNER_NAME_TILE
 	ld	XBC,wPartnerName
 
 c_20F73D	section	code abs=0x20F73D

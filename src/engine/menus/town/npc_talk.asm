@@ -11,16 +11,6 @@ GetCurrentTalkRow:
 	pop	WA
 	ret
 
-c_21516D	section	code abs=0x21516D
-
-; [code] ClearPictureMap on SCR2 0x9800 (zeroes its top-left 12 x 14 entries), the area the talk speaker portrait is drawn in; byte-identical copy of ClearArenaPortraitArea2, ClearArenaPortraitArea (the ROM has each)
-ClearTalkPortraitArea:
-	push	XHL
-	ld	XHL,0x9800
-	call	ClearPictureMap
-	pop	XHL
-	ret
-
 c_215179	section	code abs=0x215179
 
 ; [code] HL = talk row speaker: ClearTalkPortraitArea; 0 -> nothing; 0xFFFF (row speaker 255) -> DrawTalkSpeakerPlayer; else DrawPortraitAt HL at 0, 0x20 with first tile GetPortraitFirstTile (registers saved); the same as the start of DrawArenaParticipants

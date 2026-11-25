@@ -1,7 +1,7 @@
 ; ArenaSceneCast (arena_scenes): 70 records of 1 bytes, one line per id; keep the order and count.
 ; Arena talk scenes, line = scene + 1 (task +0x12); the message is ArenaTalkTexts[scene].
 ; end_action (ArenaSceneEnd): 1 SetTalkedJon, 2 rank won (AdvanceStoryStage, ClearTalkedFlags,
-; prize item arena_prizes.txt, prize GP), 3 SetJonNotReadySeen, else nothing.
+; prize item arena_prize_items.asm, prize GP), 3 SetJonNotReadySeen, else nothing.
 ; next (ArenaSceneEnd): below 0x50 = the next scene; 0x50-0x6F = a pair in
 ; tables/arena_gender_scenes.asm; 0xF2-0xFE = commands (ArenaSceneEnd's jump list), 0xFF = end.
 ; cast: DrawArenaSceneCast passes it to DrawArenaParticipants (only when it changes): 0 = none,

@@ -1,6 +1,6 @@
 ; gfx/raw_tiles.asm: raw tile sets read by LoadRawTiles (XHL = u16 count + 2bpp tiles, WA =
 ; first tile), or copied by address. Each record: the count, then the tiles (a PNG of one row,
-; in storage order; Makefile rule build/gfx/raw_tiles/%.2bpp).
+; in storage order; gfx.mk rule build/gfx/raw_tiles/%.2bpp).
 
 d_2C83B9	section	romdata abs=0x2C83B9
 RawTiles_2C83B9:    ; [code] UpdateTextBoxes (text engine): blinks with RawTiles_2C83CB every 8 frames (wFrameCounter bit 3), to tile 0xB

@@ -1,6 +1,6 @@
 ; data/items/tables.asm: the items tables in ROM order, one section per part; each part is a
-; file in src/data/items/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/items/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/items/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 d_224612	section	romdata abs=0x224612
@@ -18,10 +18,10 @@ ItemUseTexts:
 	dl	AllHPRestoredText,StatusClearedText
 d_25ABAC	section	romdata abs=0x25ABAC
 ItemNamesWorks:
-$include "build/data/items/names.asm"	; src/data/items/names.txt
+$include "src/data/items/names.asm"
 d_25AD9D	section	romdata abs=0x25AD9D
 ItemDescsWorks:
-$include "build/data/items/descs.asm"	; src/data/items/descs.txt
+$include "src/data/items/descs.asm"
 d_25B2E2	section	romdata abs=0x25B2E2
 ItemGroupSizes:
 #include "src/data/items/item_groups.asm"
@@ -45,10 +45,10 @@ ItemPrices:
 #include "src/data/items/prices.asm"
 d_270E15	section	romdata abs=0x270E15
 ItemNames:
-$include "build/data/items/names.asm"	; src/data/items/names.txt
+$include "src/data/items/names.asm"
 d_271006	section	romdata abs=0x271006
 ItemDescs:
-$include "build/data/items/descs.asm"	; src/data/items/descs.txt
+$include "src/data/items/descs.asm"
 d_27154B	section	romdata abs=0x27154B
 ItemGroupSizesCopy:
 #include "src/data/items/item_groups.asm"

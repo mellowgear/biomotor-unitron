@@ -206,63 +206,63 @@ AccBattleNone:
 
 c_207ADC	section	code abs=0x207ADC
 
-; [code] Pointers_207A43 entry 9 = item 9 Radar5 (src/data/items/names.txt): wCritChance += 5 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 9 = item 9 Radar5 (src/data/items/names.asm): wCritChance += 5 (ApplyBattleAccessory)
 AccBattleRadar5:
 	addb	(wCritChance),5
 	ret
 
 c_207AE2	section	code abs=0x207AE2
 
-; [code] Pointers_207A43 entry 10 = item 10 Radar8 (src/data/items/names.txt): wCritChance += 8 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 10 = item 10 Radar8 (src/data/items/names.asm): wCritChance += 8 (ApplyBattleAccessory)
 AccBattleRadar8:
 	addb	(wCritChance),8
 	ret
 
 c_207AE8	section	code abs=0x207AE8
 
-; [code] Pointers_207A43 entry 11 = item 11 Radr10 (src/data/items/names.txt): wCritChance += 10 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 11 = item 11 Radr10 (src/data/items/names.asm): wCritChance += 10 (ApplyBattleAccessory)
 AccBattleRadr10:
 	addb	(wCritChance),0xA
 	ret
 
 c_207AEE	section	code abs=0x207AEE
 
-; [code] Pointers_207A43 entry 12 = item 12 Cycl10 (src/data/items/names.txt): wEPCostPercent -= 10 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 12 = item 12 Cycl10 (src/data/items/names.asm): wEPCostPercent -= 10 (ApplyBattleAccessory)
 AccBattleCycl10:
 	addb	(wEPCostPercent),0xF6
 	ret
 
 c_207AF4	section	code abs=0x207AF4
 
-; [code] Pointers_207A43 entry 13 = item 13 Cycl20 (src/data/items/names.txt): wEPCostPercent -= 20 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 13 = item 13 Cycl20 (src/data/items/names.asm): wEPCostPercent -= 20 (ApplyBattleAccessory)
 AccBattleCycl20:
 	addb	(wEPCostPercent),0xEC
 	ret
 
 c_207AFA	section	code abs=0x207AFA
 
-; [code] Pointers_207A43 entry 14 = item 14 Cycl30 (src/data/items/names.txt): wEPCostPercent -= 30 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 14 = item 14 Cycl30 (src/data/items/names.asm): wEPCostPercent -= 30 (ApplyBattleAccessory)
 AccBattleCycl30:
 	addb	(wEPCostPercent),0xE2
 	ret
 
 c_207B00	section	code abs=0x207B00
 
-; [code] Pointers_207A43 entry 15 = item 15 Panl15 (src/data/items/names.txt): wRechargePercent += 15 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 15 = item 15 Panl15 (src/data/items/names.asm): wRechargePercent += 15 (ApplyBattleAccessory)
 AccBattlePanl15:
 	addb	(wRechargePercent),0xF
 	ret
 
 c_207B06	section	code abs=0x207B06
 
-; [code] Pointers_207A43 entry 16 = item 16 Panl30 (src/data/items/names.txt): wRechargePercent += 30 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 16 = item 16 Panl30 (src/data/items/names.asm): wRechargePercent += 30 (ApplyBattleAccessory)
 AccBattlePanl30:
 	addb	(wRechargePercent),0x1E
 	ret
 
 c_207B0C	section	code abs=0x207B0C
 
-; [code] Pointers_207A43 entry 17 = item 17 Panl50 (src/data/items/names.txt): wRechargePercent += 50 (ApplyBattleAccessory)
+; [code] Pointers_207A43 entry 17 = item 17 Panl50 (src/data/items/names.asm): wRechargePercent += 50 (ApplyBattleAccessory)
 AccBattlePanl50:
 	addb	(wRechargePercent),0x32
 	ret
@@ -274,116 +274,6 @@ StartBattleTask:
 	ldb	(wBattleResult),0xFF
 	ld	XHL,BattleStart
 	call	StartTask
-	ret
-
-c_207C0F	section	code abs=0x207C0F
-
-; [code] DE = tile -> XDE = CHAR RAM 0xA000 + 16 * tile, then (entered here, or at DrawBarTilesAt with XDE set by BattleHPEPDisplayTask): QC copies of the empty bar tile RawTiles_2C83DD+2, then from the left one full tile (+0x82) per 8 of n = BC * 8 * QC / HL (rounded up) and the partial tile +2 + 16 * (n % 8); HL = max, BC = value
-DrawBarTiles:
-	extz	XDE
-	sll	4,DE
-	add	DE,0xA000
-; [code] entry with XDE already a CHAR RAM address (BattleHPEPDisplayTask)
-DrawBarTilesAt:
-	push	BC
-	push	HL
-	push	XDE
-	ld	XHL,RawTiles_2C83DD+0x2
-	ld	BC,8
-	ldirw	(XDE+),(XHL+)
-	ld	XHL,(XSP)
-	ld	C,QC
-	dec	1,C
-	jr	Z,DrawBarTiles.skip
-	ld	B,0
-	sll	3,BC
-	ldirw	(XDE+),(XHL+)
-DrawBarTiles.skip:
-	pop	XDE
-	pop	HL
-	pop	BC
-	or	BC,BC
-	ret	Z
-	ld	QB,0
-	sll	3,QBC
-	mul	XBC,QBC
-	extz	XHL
-	add	XBC,XHL
-	dec	1,XBC
-	div	XBC,HL
-DrawBarTiles.loop:
-	cp	BC,8
-	jr	C,DrawBarTiles.skip2
-	push	BC
-	ld	XHL,RawTiles_2C83DD+0x82
-	ld	BC,8
-	ldirw	(XDE+),(XHL+)
-	pop	BC
-	dec	8,BC
-	jr	DrawBarTiles.loop
-DrawBarTiles.skip2:
-	or	BC,BC
-	ret	Z
-	sll	4,BC
-	ld	XHL,RawTiles_2C83DD+0x2
-	lda	XHL,XHL+BC
-	ld	BC,8
-	ldirw	(XDE+),(XHL+)
-	ret
-
-c_207C7B	section	code abs=0x207C7B
-
-; [code] the DrawBarTiles shape with RawTiles_2C846F, filled from the right end backwards (lddrw); entered at DrawBarTilesReversedAt by BattleHPEPDisplayTask for the enemy HP / EP
-DrawBarTilesReversed:
-	extz	XDE
-	sll	4,DE
-	add	DE,0xA000
-; [code] entry with XDE already a CHAR RAM address (BattleHPEPDisplayTask)
-DrawBarTilesReversedAt:
-	push	BC
-	push	HL
-	push	XDE
-	ld	XHL,RawTiles_2C846F+0x2
-	ld	BC,8
-	ldirw	(XDE+),(XHL+)
-	pop	XHL
-	ld	C,QC
-	dec	1,C
-	jr	Z,DrawBarTilesReversed.skip
-	ld	B,0
-	sll	3,BC
-	ldirw	(XDE+),(XHL+)
-	dec	2,XDE
-DrawBarTilesReversed.skip:
-	pop	HL
-	pop	BC
-	or	BC,BC
-	ret	Z
-	ld	QB,0
-	sll	3,QBC
-	mul	XBC,QBC
-	extz	XHL
-	add	XBC,XHL
-	dec	1,XBC
-	div	XBC,HL
-DrawBarTilesReversed.loop:
-	cp	BC,8
-	jr	C,DrawBarTilesReversed.skip2
-	push	BC
-	ld	XHL,RawTiles_2C846F+0x90
-	ld	BC,8
-	lddrw	(XDE-),(XHL-)
-	pop	BC
-	dec	8,BC
-	jr	DrawBarTilesReversed.loop
-DrawBarTilesReversed.skip2:
-	or	BC,BC
-	ret	Z
-	sll	4,BC
-	ld	XHL,RawTiles_2C846F+0x10
-	lda	XHL,XHL+BC
-	ld	BC,8
-	lddrw	(XDE-),(XHL-)
 	ret
 
 c_207E9A	section	code abs=0x207E9A
@@ -616,13 +506,13 @@ BattleStart:
 	call	ClearSprites
 	ldb	(wScr1ScrollX),0x60
 	ldb	(wScr1ScrollY),0
-	ldb	(0x584F),0
-	ldb	(0x5851),0x60
+	ldb	(wScr1SplitScrollX),0
+	ldb	(wScr1SplitScrollY),0x60
 	ldb	(wScr2ScrollX),0x60
 	ldb	(wScr2ScrollY),0
-	ldb	(0x5857),0
-	ldb	(0x5859),0x68
-	ldb	(0x5A76),0x61
+	ldb	(wScr2SplitScrollX),0
+	ldb	(wScr2SplitScrollY),0x68
+	ldb	(wScrollSplitLine),0x61
 	ld	A,0
 	ld	C,0x14
 	ld	E,5
@@ -797,7 +687,8 @@ BattleStart.skip2:
 	ret
 ; [code] "??" + FF (charmap 64 = "?"), drawn by DrawString at 0x2093BA and 0x2093CB
 QuestionMarksText:
-	db	0x64,0x64,0xFF
+	text "??"
+	done
 ; [code] BattleStart's task resumes here (TASK_FUNC 0x2095E6 above): EnemySlideInTask (wScr2ScrollX 0x60 -> 0), YouEncounteredEnemyText, EnemySlideOutTask (0 -> 0x60), then task 0x209647; [play] executed in all runs (D10)
 BattleEncounterMessage:
 	ld	XHL,EnemySlideInTask

@@ -1,6 +1,6 @@
 ; data/player/tables.asm: the player tables in ROM order, one section per part; each part is a
-; file in src/data/player/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/player/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/player/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 d_225009	section	romdata abs=0x225009
@@ -47,16 +47,16 @@ DefaultNames:
 	dl	LeafText,ZappaText,SheraText,FezarText
 	dl	ShilfeText,CarlText,PinkyText
 d_226D54	section	romdata abs=0x226D54
-$include "build/data/player/name_entry.asm"	; src/data/player/name_entry.txt (SelectPutBackText, NameEntryChars)
+$include "src/data/player/name_entry.asm"	; (SelectPutBackText, NameEntryChars)
 d_25B5FB	section	romdata abs=0x25B5FB
 StartingEquipmentCopy:
 #include "src/data/player/start_equipment.asm"
 d_25E457	section	romdata abs=0x25E457
 RankTitles:
-$include "build/data/player/rank_titles.asm"	; src/data/player/rank_titles.txt
+$include "src/data/player/rank_titles.asm"
 d_25E496	section	romdata abs=0x25E496
 RaceNames:
-$include "build/data/player/race_names.asm"	; src/data/player/race_names.txt
+$include "src/data/player/race_names.asm"
 d_271864	section	romdata abs=0x271864
 StartingEquipment:
 #include "src/data/player/start_equipment.asm"

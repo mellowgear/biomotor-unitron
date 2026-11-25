@@ -316,7 +316,7 @@ DrawStatusLabel.skip4:
 
 c_211FE8	section	code abs=0x211FE8
 
-; [code] box 4: items 0x26-0x2B (items.txt 38-43: FixIt1-4, FullFx, Clear), each GetItemName + count digit string 0x2497B5 + count*2, or the dash line 0x2497A8 when GetInventoryByte sets carry (none held); callers ShowCampItemList, CampItemUseMenu; [play] camp_item_use_list_fixit1_x4
+; [code] box 4: items 0x26-0x2B (items.asm 38-43: FixIt1-4, FullFx, Clear), each GetItemName + count digit string 0x2497B5 + count*2, or the dash line 0x2497A8 when GetInventoryByte sets carry (none held); callers ShowCampItemList, CampItemUseMenu; [play] camp_item_use_list_fixit1_x4
 DrawCampItemList:
 	ld	A,4
 	call	ClearTextBox
@@ -601,13 +601,7 @@ c_212241	section	code abs=0x212241
 
 ; [code] CampItemUseMenu on B / the row 6: clears 0x80 words at 0x8800, RedrawDungeonFloor, OpenCampBox, DrawCampItemSubmenu, PlaceCampBox, cursor +0x20 = +0x1F, DrawDungeonBoxes, CampMenuDispatch state 4
 CloseCampItemList:
-	ld	XHL,0x8800
-	ld	XDE,0x8802
-	ld	BC,0x80
-	dec	1,BC
-	ld	WA,0
-	ld	(XHL),WA
-	ldirw	(XDE+),(XHL+)
+	clear_sprite_vram
 	call	RedrawDungeonFloor
 	calr	OpenCampBox
 	calr	DrawCampItemSubmenu

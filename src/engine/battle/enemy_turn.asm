@@ -722,7 +722,7 @@ EnemyHitResult2.skip5:
 
 c_20BBC7	section	code abs=0x20BBC7
 
-; [code] as EnemyHitResult2 with PlayNextEffect twice (scroll registers set directly) in place of the two scroll tasks; picked for f0 = 1
+; [code] as EnemyHitResult2 with PlayNextEffect twice (scroll registers set directly) in place of the two scroll tasks; picked for f0 = 1 [play] I38: SCR1 0xC0 / SCR2 0x60 set in one step, no slide.
 EnemyHitResult3:
 	ldb	(wScr2ScrollX),0
 	ldb	(wScr2ScrollY),0

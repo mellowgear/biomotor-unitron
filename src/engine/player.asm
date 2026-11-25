@@ -359,182 +359,182 @@ AccStatsNone:
 
 c_208927	section	code abs=0x208927
 
-; [code] Pointers_20888E entry 1 = item 1 FlrCt (src/data/items/names.txt): or WA,1 (affinity bit 0) (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 1 = item 1 FlrCt (src/data/items/names.asm): or WA,1 (affinity bit 0) (ApplyAccessoryStats from CalcUnitStats)
 AccStatsFlrCt:
 	or	WA,1
 	ret
 
 c_20892C	section	code abs=0x20892C
 
-; [code] Pointers_20888E entry 2 = item 2 RefCt (src/data/items/names.txt): or WA,2 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 2 = item 2 RefCt (src/data/items/names.asm): or WA,2 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsRefCt:
 	or	WA,2
 	ret
 
 c_208931	section	code abs=0x208931
 
-; [code] Pointers_20888E entry 3 = item 3 IceCt (src/data/items/names.txt): or WA,4 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 3 = item 3 IceCt (src/data/items/names.asm): or WA,4 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsIceCt:
 	or	WA,4
 	ret
 
 c_208936	section	code abs=0x208936
 
-; [code] Pointers_20888E entry 4 = item 4 WindCt (src/data/items/names.txt): or WA,8 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 4 = item 4 WindCt (src/data/items/names.asm): or WA,8 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsWindCt:
 	or	WA,8
 	ret
 
 c_20893B	section	code abs=0x20893B
 
-; [code] Pointers_20888E entry 5 = item 5 ErthCt (src/data/items/names.txt): or WA,0x10 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 5 = item 5 ErthCt (src/data/items/names.asm): or WA,0x10 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsErthCt:
 	or	WA,0x10
 	ret
 
 c_208940	section	code abs=0x208940
 
-; [code] Pointers_20888E entry 6 = item 6 LghtCt (src/data/items/names.txt): or WA,0x20 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 6 = item 6 LghtCt (src/data/items/names.asm): or WA,0x20 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsLghtCt:
 	or	WA,0x20
 	ret
 
 c_208945	section	code abs=0x208945
 
-; [code] Pointers_20888E entry 7 = item 7 DarkCt (src/data/items/names.txt): or WA,0x40 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 7 = item 7 DarkCt (src/data/items/names.asm): or WA,0x40 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsDarkCt:
 	or	WA,0x40
 	ret
 
 c_20894A	section	code abs=0x20894A
 
-; [code] Pointers_20888E entry 8 = item 8 MirrCt (src/data/items/names.txt): or WA,0x80 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 8 = item 8 MirrCt (src/data/items/names.asm): or WA,0x80 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsMirrCt:
 	or	WA,0x80
 	ret
 
 c_20894F	section	code abs=0x20894F
 
-; [code] Pointers_20888E entry 18 = item 18 Armr25 (src/data/items/names.txt): wUnitMaxHP += 25 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 18 = item 18 Armr25 (src/data/items/names.asm): wUnitMaxHP += 25 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsArmr25:
 	addw	(wUnitMaxHP),0x19
 	ret
 
 c_208956	section	code abs=0x208956
 
-; [code] Pointers_20888E entry 19 = item 19 Armr50 (src/data/items/names.txt): wUnitMaxHP += 50 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 19 = item 19 Armr50 (src/data/items/names.asm): wUnitMaxHP += 50 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsArmr50:
 	addw	(wUnitMaxHP),0x32
 	ret
 
 c_20895D	section	code abs=0x20895D
 
-; [code] Pointers_20888E entry 20 = item 20 Armr80 (src/data/items/names.txt): wUnitMaxHP += 80 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 20 = item 20 Armr80 (src/data/items/names.asm): wUnitMaxHP += 80 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsArmr80:
 	addw	(wUnitMaxHP),0x50
 	ret
 
 c_208964	section	code abs=0x208964
 
-; [code] Pointers_20888E entry 21 = item 21 Tank15 (src/data/items/names.txt): wUnitMaxEP += 15 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 21 = item 21 Tank15 (src/data/items/names.asm): wUnitMaxEP += 15 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsTank15:
 	addw	(wUnitMaxEP),0xF
 	ret
 
 c_20896B	section	code abs=0x20896B
 
-; [code] Pointers_20888E entry 22 = item 22 Tank30 (src/data/items/names.txt): wUnitMaxEP += 30 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 22 = item 22 Tank30 (src/data/items/names.asm): wUnitMaxEP += 30 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsTank30:
 	addw	(wUnitMaxEP),0x1E
 	ret
 
 c_208972	section	code abs=0x208972
 
-; [code] Pointers_20888E entry 23 = item 23 Tank60 (src/data/items/names.txt): wUnitMaxEP += 60 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 23 = item 23 Tank60 (src/data/items/names.asm): wUnitMaxEP += 60 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsTank60:
 	addw	(wUnitMaxEP),0x3C
 	ret
 
 c_208979	section	code abs=0x208979
 
-; [code] Pointers_20888E entry 24 = item 24 Bst10 (src/data/items/names.txt): wUnitAP += 10 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 24 = item 24 Bst10 (src/data/items/names.asm): wUnitAP += 10 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsBst10:
 	addw	(wUnitAP),0xA
 	ret
 
 c_208980	section	code abs=0x208980
 
-; [code] Pointers_20888E entry 25 = item 25 Bst20 (src/data/items/names.txt): wUnitAP += 20 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 25 = item 25 Bst20 (src/data/items/names.asm): wUnitAP += 20 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsBst20:
 	addw	(wUnitAP),0x14
 	ret
 
 c_208987	section	code abs=0x208987
 
-; [code] Pointers_20888E entry 26 = item 26 Bst30 (src/data/items/names.txt): wUnitAP += 30 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 26 = item 26 Bst30 (src/data/items/names.asm): wUnitAP += 30 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsBst30:
 	addw	(wUnitAP),0x1E
 	ret
 
 c_20898E	section	code abs=0x20898E
 
-; [code] Pointers_20888E entry 27 = item 27 Plt10 (src/data/items/names.txt): wUnitSP += 10 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 27 = item 27 Plt10 (src/data/items/names.asm): wUnitSP += 10 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsPlt10:
 	addw	(wUnitSP),0xA
 	ret
 
 c_208995	section	code abs=0x208995
 
-; [code] Pointers_20888E entry 28 = item 28 Plt20 (src/data/items/names.txt): wUnitSP += 20 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 28 = item 28 Plt20 (src/data/items/names.asm): wUnitSP += 20 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsPlt20:
 	addw	(wUnitSP),0x14
 	ret
 
 c_20899C	section	code abs=0x20899C
 
-; [code] Pointers_20888E entry 29 = item 29 Plt30 (src/data/items/names.txt): wUnitSP += 30 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 29 = item 29 Plt30 (src/data/items/names.asm): wUnitSP += 30 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsPlt30:
 	addw	(wUnitSP),0x1E
 	ret
 
 c_2089A3	section	code abs=0x2089A3
 
-; [code] Pointers_20888E entry 30 = item 30 Axel10 (src/data/items/names.txt): wUnitRP += 10 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 30 = item 30 Axel10 (src/data/items/names.asm): wUnitRP += 10 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsAxel10:
 	addw	(wUnitRP),0xA
 	ret
 
 c_2089AA	section	code abs=0x2089AA
 
-; [code] Pointers_20888E entry 31 = item 31 Axel20 (src/data/items/names.txt): wUnitRP += 20 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 31 = item 31 Axel20 (src/data/items/names.asm): wUnitRP += 20 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsAxel20:
 	addw	(wUnitRP),0x14
 	ret
 
 c_2089B1	section	code abs=0x2089B1
 
-; [code] Pointers_20888E entry 32 = item 32 Axel30 (src/data/items/names.txt): wUnitRP += 30 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 32 = item 32 Axel30 (src/data/items/names.asm): wUnitRP += 30 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsAxel30:
 	addw	(wUnitRP),0x1E
 	ret
 
 c_2089B8	section	code abs=0x2089B8
 
-; [code] Pointers_20888E entry 33 = item 33 Burn10 (src/data/items/names.txt): wUnitMP += 10 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 33 = item 33 Burn10 (src/data/items/names.asm): wUnitMP += 10 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsBurn10:
 	addw	(wUnitMP),0xA
 	ret
 
 c_2089BF	section	code abs=0x2089BF
 
-; [code] Pointers_20888E entry 34 = item 34 Burn20 (src/data/items/names.txt): wUnitMP += 20 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 34 = item 34 Burn20 (src/data/items/names.asm): wUnitMP += 20 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsBurn20:
 	addw	(wUnitMP),0x14
 	ret
 
 c_2089C6	section	code abs=0x2089C6
 
-; [code] Pointers_20888E entry 35 = item 35 Burn30 (src/data/items/names.txt): wUnitMP += 30 (ApplyAccessoryStats from CalcUnitStats)
+; [code] Pointers_20888E entry 35 = item 35 Burn30 (src/data/items/names.asm): wUnitMP += 30 (ApplyAccessoryStats from CalcUnitStats)
 AccStatsBurn30:
 	addw	(wUnitMP),0x1E
 	ret
@@ -613,12 +613,7 @@ SetMaxPilotStats:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	BC,0x400
-	dec	1,BC
-	ld	XHL,0x9000
-	ld	XDE,0x9002
-	ldw	(XHL),0
-	ldirw	(XDE+),(XHL+)
+	clear_scr1_map
 	ld	A,0
 	ld	(wFadeLevel),A
 	calr	StreetMenuTask

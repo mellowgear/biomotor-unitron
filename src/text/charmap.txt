@@ -1,4 +1,5 @@
-; Biomotor Unitron character map, read by unitron text.
+; Biomotor Unitron character map, loaded by $charmap in src/main.asm: text, line, page and
+; done lines in the .asm files assemble to these codes.
 ; Font 0x2C8DA9: code n draws glyph n-1; text engine 0x2073B3.
 
 char " " 00

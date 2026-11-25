@@ -1,4 +1,4 @@
-; engine/gfx/tiles.asm: CHAR RAM tile loading: raw, mapped and LZSS-compressed tiles, tile fills
+; engine/gfx/tiles.asm: CHAR RAM tile loading: raw, mapped and LZSS-compressed tiles, tile fills; the battle HP / EP bar tiles, the arena portrait and battle-entry tile wipes
 
 c_20692B	section	code abs=0x20692B
 
@@ -177,3 +177,239 @@ DecompressTilesMatch.loop:
 	jr	Z,DecompressTiles.loop3
 	djnz	QW,DecompressTilesMatch.loop
 	jr	DecompressTiles.loop2
+
+c_207C0F	section	code abs=0x207C0F
+
+; [code] DE = tile -> XDE = CHAR RAM 0xA000 + 16 * tile, then (entered here, or at DrawBarTilesAt with XDE set by BattleHPEPDisplayTask): QC copies of the empty bar tile RawTiles_2C83DD+2, then from the left one full tile (+0x82) per 8 of n = BC * 8 * QC / HL (rounded up) and the partial tile +2 + 16 * (n % 8); HL = max, BC = value
+DrawBarTiles:
+	extz	XDE
+	sll	4,DE
+	add	DE,CHARACTER_RAM
+; [code] entry with XDE already a CHAR RAM address (BattleHPEPDisplayTask)
+DrawBarTilesAt:
+	push	BC
+	push	HL
+	push	XDE
+	ld	XHL,RawTiles_2C83DD+0x2
+	ld	BC,8
+	ldirw	(XDE+),(XHL+)
+	ld	XHL,(XSP)
+	ld	C,QC
+	dec	1,C
+	jr	Z,DrawBarTiles.skip
+	ld	B,0
+	sll	3,BC
+	ldirw	(XDE+),(XHL+)
+DrawBarTiles.skip:
+	pop	XDE
+	pop	HL
+	pop	BC
+	or	BC,BC
+	ret	Z
+	ld	QB,0
+	sll	3,QBC
+	mul	XBC,QBC
+	extz	XHL
+	add	XBC,XHL
+	dec	1,XBC
+	div	XBC,HL
+DrawBarTiles.loop:
+	cp	BC,8
+	jr	C,DrawBarTiles.skip2
+	push	BC
+	ld	XHL,RawTiles_2C83DD+0x82
+	ld	BC,8
+	ldirw	(XDE+),(XHL+)
+	pop	BC
+	dec	8,BC
+	jr	DrawBarTiles.loop
+DrawBarTiles.skip2:
+	or	BC,BC
+	ret	Z
+	sll	4,BC
+	ld	XHL,RawTiles_2C83DD+0x2
+	lda	XHL,XHL+BC
+	ld	BC,8
+	ldirw	(XDE+),(XHL+)
+	ret
+
+c_207C7B	section	code abs=0x207C7B
+
+; [code] the DrawBarTiles shape with RawTiles_2C846F, filled from the right end backwards (lddrw); entered at DrawBarTilesReversedAt by BattleHPEPDisplayTask for the enemy HP / EP
+DrawBarTilesReversed:
+	extz	XDE
+	sll	4,DE
+	add	DE,CHARACTER_RAM
+; [code] entry with XDE already a CHAR RAM address (BattleHPEPDisplayTask)
+DrawBarTilesReversedAt:
+	push	BC
+	push	HL
+	push	XDE
+	ld	XHL,RawTiles_2C846F+0x2
+	ld	BC,8
+	ldirw	(XDE+),(XHL+)
+	pop	XHL
+	ld	C,QC
+	dec	1,C
+	jr	Z,DrawBarTilesReversed.skip
+	ld	B,0
+	sll	3,BC
+	ldirw	(XDE+),(XHL+)
+	dec	2,XDE
+DrawBarTilesReversed.skip:
+	pop	HL
+	pop	BC
+	or	BC,BC
+	ret	Z
+	ld	QB,0
+	sll	3,QBC
+	mul	XBC,QBC
+	extz	XHL
+	add	XBC,XHL
+	dec	1,XBC
+	div	XBC,HL
+DrawBarTilesReversed.loop:
+	cp	BC,8
+	jr	C,DrawBarTilesReversed.skip2
+	push	BC
+	ld	XHL,RawTiles_2C846F+0x90
+	ld	BC,8
+	lddrw	(XDE-),(XHL-)
+	pop	BC
+	dec	8,BC
+	jr	DrawBarTilesReversed.loop
+DrawBarTilesReversed.skip2:
+	or	BC,BC
+	ret	Z
+	sll	4,BC
+	ld	XHL,RawTiles_2C846F+0x10
+	lda	XHL,XHL+BC
+	ld	BC,8
+	lddrw	(XDE-),(XHL-)
+	ret
+
+c_216C75	section	code abs=0x216C75
+
+; [code] WA = tile, C = step: the tile's 8 pixel rows (words) in CHAR RAM 0xA000 + 16 * tile = 0 (clear) for the last step / 2 rows, else 0xFFFF (colour 3); A = 1 until step / 2 = 8
+UncoverTileStep:
+	push	XHL
+	push	XDE
+	push	XBC
+	sra	1,BC
+	extz	XWA
+	sll	4,XWA
+	ld	XHL,CHARACTER_RAM
+	add	XHL,XWA
+	ld	B,8
+UncoverTileStep.loop:
+	cp	C,B
+	jr	C,UncoverTileStep.skip
+	ld	WA,0
+	jr	UncoverTileStep.skip2
+UncoverTileStep.skip:
+	ld	WA,0xFFFF
+UncoverTileStep.skip2:
+	ld	(XHL),WA
+	inc	2,XHL
+	djnz	B,UncoverTileStep.loop
+	cp	C,8
+	jr	Z,UncoverTileStep.skip3
+	ld	A,1
+	jr	UncoverTileStep.skip4
+UncoverTileStep.skip3:
+	ld	A,0
+UncoverTileStep.skip4:
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216D00	section	code abs=0x216D00
+
+; [code] the UncoverTileStep shape the other way: the last step / 2 rows = 0xFFFF, the rest 0; A = 1 until step / 2 = 0x10
+CoverTileStep:
+	push	XHL
+	push	XDE
+	push	XBC
+	sra	1,BC
+	extz	XWA
+	sll	4,XWA
+	ld	XHL,CHARACTER_RAM
+	add	XHL,XWA
+	ld	B,8
+CoverTileStep.loop:
+	cp	C,B
+	jr	C,CoverTileStep.skip
+	ld	WA,0xFFFF
+	jr	CoverTileStep.skip2
+CoverTileStep.skip:
+	ld	WA,0
+CoverTileStep.skip2:
+	ld	(XHL),WA
+	inc	2,XHL
+	djnz	B,CoverTileStep.loop
+	cp	C,0x10
+	jr	Z,CoverTileStep.skip3
+	ld	A,1
+	jr	CoverTileStep.skip4
+CoverTileStep.skip3:
+	ld	A,0
+CoverTileStep.skip4:
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216DCD	section	code abs=0x216DCD
+
+; [code] WA = tile, C = step: rewrites the 16 bytes of the tile in CHAR RAM 0xA000 + 16 * tile: byte i = PixelFillBytes[clamp(step / 4 - (i / 2) - 4 * (i odd), 0, 4)] (filled from the top left); A = 1 until C = 0x14
+DrawWipeTileStep:
+	push	XHL
+	push	XDE
+	push	XBC
+	sra	2,BC
+	extz	XWA
+	sll	4,XWA
+	ld	XHL,CHARACTER_RAM
+	add	XHL,XWA
+	ld	B,0x10
+DrawWipeTileStep.loop:
+	ld	A,0
+	ld	XDE,XHL
+	and	XDE,1
+	jr	Z,DrawWipeTileStep.skip
+	sub	A,4
+DrawWipeTileStep.skip:
+	ld	XDE,XHL
+	srl	1,XDE
+	and	XDE,7
+	sub	A,E
+	add	A,C
+	bit	7,A
+	jr	NZ,DrawWipeTileStep.skip2
+	cp	A,4
+	jr	C,DrawWipeTileStep.skip3
+	ld	A,4
+	jr	DrawWipeTileStep.skip3
+DrawWipeTileStep.skip2:
+	ld	A,0
+DrawWipeTileStep.skip3:
+	extz	WA
+	extz	XWA
+	ld	XDE,PixelFillBytes
+	add	XDE,XWA
+	ld	A,(XDE)
+	ld	(XHL),A
+	inc	1,XHL
+	djnz	B,DrawWipeTileStep.loop
+	cp	C,0x14
+	jr	Z,DrawWipeTileStep.skip4
+	ld	A,1
+	jr	DrawWipeTileStep.skip5
+DrawWipeTileStep.skip4:
+	ld	A,0
+DrawWipeTileStep.skip5:
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret

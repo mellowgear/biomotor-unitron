@@ -3,7 +3,7 @@
 d_2274D7	section	romdata abs=0x2274D7
 ; [code] dungeon.asm (sub_2105xx area, 2 readers): name per DUNGEON_ID 0-4 (DrawBoxString). Name 0
 ; starts at DungeonSelectCursor+0x14: the cursor table's last record (0, 0) is 4 zero bytes =
-; spaces, so the game draws 4 + 3 spaces and "Town" (TownText, src/text/town.txt).
+; spaces, so the game draws 4 + 3 spaces and "Town" (TownText, src/text/town.asm).
 DungeonNames:
 	dl	DungeonSelectCursor+0x14,ForestOfVerdureText,CorridorOfBlueText,RuinsOfWindText
 	dl	MazeOfStoneText

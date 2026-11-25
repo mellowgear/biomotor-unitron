@@ -1,6 +1,6 @@
 ; data/shop/tables.asm: the shop tables in ROM order, one section per part; each part is a
-; file in src/data/shop/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/shop/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/shop/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 #include "src/data/shop/menu_217D1B.asm"

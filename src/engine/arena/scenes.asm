@@ -98,7 +98,7 @@ StartArenaUncover:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	ld	WA,0xC
 	add	WA,0
 	call	DrawUncoverTilemap
@@ -135,7 +135,7 @@ StartArenaCover:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	ld	WA,0xC
 	add	WA,0
 	call	DrawCoverTilemap
@@ -161,16 +161,6 @@ ArenaCoverStep:
 	call	CoverTileStep
 	pop	XBC
 	pop	XDE
-	pop	XHL
-	ret
-
-c_213201	section	code abs=0x213201
-
-; [code] ClearPictureMap on SCR2 0x9800 (zeroes its top-left 12 x 14 entries); byte-identical copy of ClearArenaPortraitArea, ClearTalkPortraitArea (the ROM has each)
-ClearArenaPortraitArea2:
-	push	XHL
-	ld	XHL,0x9800
-	call	ClearPictureMap
 	pop	XHL
 	ret
 
@@ -212,19 +202,9 @@ ArenaShowPicture:
 	pop	XHL
 	ret
 
-c_21323D	section	code abs=0x21323D
-
-; [code] ClearPictureMap on SCR2 0x9800 (zeroes its top-left 12 x 14 entries); DrawArenaParticipants does it before each portrait; byte-identical copy of ClearArenaPortraitArea2, ClearTalkPortraitArea (the ROM has each)
-ClearArenaPortraitArea:
-	push	XHL
-	ld	XHL,0x9800
-	call	ClearPictureMap
-	pop	XHL
-	ret
-
 c_2132D2	section	code abs=0x2132D2
 
-; [code] arena_scenes.txt cast of scene task +0x12 -> DrawArenaParticipants, only when it differs from task +0x13
+; [code] arena_scenes/ cast of scene task +0x12 -> DrawArenaParticipants, only when it differs from task +0x13
 DrawArenaSceneCast:
 	push	XHL
 	push	XDE
@@ -252,7 +232,7 @@ DrawArenaSceneCast.skip:
 
 c_213450	section	code abs=0x213450
 
-; [code+play] end of an arena talk scene: runs its end action (arena_scenes.txt: 1 SetTalkedJon, 2 rank won = AdvanceStoryStage + prize item/GP, 3 SetJonNotReadySeen), then its next scene or command (play: prize and next-rank screens)
+; [code+play] end of an arena talk scene: runs its end action (arena_scenes/: 1 SetTalkedJon, 2 rank won = AdvanceStoryStage + prize item/GP, 3 SetJonNotReadySeen), then its next scene or command (play: prize and next-rank screens)
 ArenaSceneEnd:
 	push	XHL
 	push	XDE

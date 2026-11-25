@@ -1,6 +1,6 @@
 ; data/story/tables.asm: the story tables in ROM order, one section per part; each part is a
-; file in src/data/story/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/story/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/story/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 d_24A1DC	section	romdata abs=0x24A1DC

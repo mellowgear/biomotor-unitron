@@ -41,10 +41,9 @@ What `make` does:
 
 0. Builds this game's own converters (`tools/biogfx`, `tools/biosong`) with plain `c++`.
 1. Converts each editable asset into the bytes the game expects: PNG -> tiles (with the game's
-   LZSS compression), map files -> map data, text and the text tables -> the game's character
-   codes (`unitron text`). Each result becomes `db` lines (`unitron bin2db`), since asm900 has no
-   binary include. Palettes and numeric tables are asm900 source already (`dw`/`db` lines and
-   records), so they need no step. Only what changed is rebuilt.
+   LZSS compression), map files -> map data. Each result becomes `db` lines (`unitron bin2db`),
+   since asm900 has no binary include. Palettes and numeric tables are asm900 source already (`dw`/`db` lines and
+   records), and text assembles through the charmap, so they need no step. Only what changed is rebuilt.
 2. Assembles `src/main.asm` and everything it includes into `biomotor.ngp` (`unitron asm`).
    It is one unit of about 1,500 `$include`s. Toshiba's own asm900 allows 99 per unit, so unitron
    prints a warning about it; the build is fine. Building with the original asm900 would need the source
@@ -76,16 +75,16 @@ Edit a PNG, a text file, a table or an assembly routine, then run `make`.
 
 - **Graphics:** `src/gfx/**.png`. Indexed PNGs; keep the palette indices. Monster PNGs also carry the
   monster's palette.
-- **Text:** `src/text/*.txt`. Dialogue in plain words with codes like `<PLAYER>` and `<WAIT>`
-  (`src/text/charmap.txt`). asm900 has no character map, so the build turns each bank into `db`
-  lines with `unitron text`.
+- **Text:** `src/text/*.asm`. Dialogue in plain words (`text`, `line`, `page`, `done`) with codes
+  like `<PLAYER>` and `<WAIT>`. `src/main.asm` loads the character map (`src/text/charmap.txt`)
+  with `$charmap`, a unitron extension to asm900.
 - **Game data:** `src/data/<subject>/` (items, parts, works, battle, player, dungeon, arena, story,
   town, shop, graphics, help), one file per ROM part of a table, `#include`d from that subject's
   `tables.asm`. Enemies, items, robot parts,
   skills, development recipes, arena brackets, chests, EXP. Numbers are asm900 records (`.asm`:
   `db`/`dw`/`dd` lines, or a record macro from `src/macros/tables.inc`), one line per id, the name
   in a comment; prices are BCD, written `dd 0x650000` for 650000. Names and descriptions are text
-  files (`.txt`) with a `slot 7 FF` line, built by `unitron text`. Each file's header says how
+  files with a `slot 7 FF` line (fixed-size slots). Each file's header says how
   the game reads it.
 - **Palettes:** in `src/gfx/palettes.asm` at their labels: `dw` lines of 4 colours (0x0BGR) for colour
   palettes, `db` lines for the mono ones.
@@ -107,8 +106,8 @@ assembler stops and names both clashing pieces.
 | `src/gfx/` | Tile sheets, monster images, robot parts, battle-effect sheets and frames, dungeon tiles, tile maps, palettes |
 | `src/maps/dungeon/` | The 57 dungeon floor maps |
 | `src/text/` | All dialogue and menu text |
-| `src/data/<subject>/` | The game database by subject: one file per table part (asm900 records, or text slot files), `tables.asm` / `pointers.asm` per subject; also the dungeon and battle-effect containers, the save area |
-| `src/data/unknown/` | The data blocks not identified yet (`unknown.asm` + one `.bin` each; 3 blocks, 47 bytes, no reader found) |
+| `src/data/<subject>/` | The game database by subject: one file per table part (asm900 records, or text in slots), `tables.asm` / `pointers.asm` per subject; also the dungeon and battle-effect containers, the save area |
+| `src/data/unknown/` | The data blocks not identified yet (`unknown.asm`: 3 blocks, 47 bytes, written out as `db`; no reader found) |
 | `tools/` | Converters for this game's own formats |
 
 ## How it was made

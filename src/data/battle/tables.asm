@@ -1,14 +1,14 @@
 ; data/battle/tables.asm: the battle tables in ROM order, one section per part; each part is a
-; file in src/data/battle/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/battle/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/battle/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 d_221120	section	romdata abs=0x221120
 SkillNames:
-$include "build/data/battle/skills/names.asm"	; src/data/battle/skills/names.txt
+$include "src/data/battle/skills/names.asm"
 d_2211AC	section	romdata abs=0x2211AC
 SkillDescs:
-$include "build/data/battle/skills/descs.asm"	; src/data/battle/skills/descs.txt
+$include "src/data/battle/skills/descs.asm"
 d_221328	section	romdata abs=0x221328
 SkillStats:
 #include "src/data/battle/skills/stats.asm"
@@ -17,13 +17,13 @@ SkillData:
 #include "src/data/battle/skills/data.asm"
 d_221530	section	romdata abs=0x221530
 EnemyNames:
-$include "build/data/battle/enemies/names.asm"	; src/data/battle/enemies/names.txt
+$include "src/data/battle/enemies/names.asm"
 d_22186A	section	romdata abs=0x22186A
 EnemyStats:
 #include "src/data/battle/enemies/stats.asm"
 d_222466	section	romdata abs=0x222466
 AttackNames:
-$include "build/data/battle/attack_names.asm"	; src/data/battle/attack_names.txt
+$include "src/data/battle/attack_names.asm"
 d_2226C7	section	romdata abs=0x2226C7
 EnemyAttacks:
 #include "src/data/battle/enemy_attacks.asm"

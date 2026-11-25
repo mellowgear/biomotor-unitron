@@ -271,5 +271,5 @@ MapSpriteBeaten3:    ; LoadBossMapSprite: beaten boss record 3
 $include "build/gfx/dungeon_sprites/beaten_3.2bpp.asm"	; build/gfx/dungeon_sprites/beaten_3.2bpp
 d_270063	section	romdata abs=0x270063
 PlayerDungeonTiles:    ; LoadPlayerDungeonSprite / LoadDungeonPalettes (LoadMappedTiles copies the tiles the sprite maps name); colours: race 0 (Human)
-	dw	219	; tile count (the Makefile's --count for player.png must match)
+	dw	PLAYER_DUNGEON_TILE_COUNT	; tile count (gfx.mk's --count for player.png must match)
 $include "build/gfx/dungeon_sprites/player.2bpp.asm"	; build/gfx/dungeon_sprites/player.2bpp

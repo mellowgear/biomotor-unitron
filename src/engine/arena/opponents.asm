@@ -2,7 +2,7 @@
 
 c_213249	section	code abs=0x213249
 
-; [play] arena participant screens: portraits
+; [play] arena participant screens: portraits. [play] I41: cast 0xFE (HL 0xFFFE, the Rank CS talk) takes .skip2: the partner's portrait 0x0B + ((wPlayerRace - 1) xor 1) (Rod: 0x0C RenaB, Shera: 0x0F), 6 x 10 tiles from tile 0x46 at columns 1-6, rows 4-13 of SCR2, above the text box.
 DrawArenaParticipants:
 	push	XHL
 	push	XDE
@@ -111,7 +111,7 @@ StartPortraitUncover:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	ld	WA,0xC
 	add	WA,0
 	call	DrawUncoverTilemap
@@ -132,7 +132,7 @@ StartPortraitRecover:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	ld	WA,0xC
 	add	WA,0
 	call	DrawUncoverTilemap
@@ -715,7 +715,7 @@ SlideBracketLineFromRight:
 
 c_214013	section	code abs=0x214013
 
-; [code] A = 0 -> SlideBracketLineFromLeft, else SlideBracketLineFromRight (registers saved); ArenaBracketReveal state 1 each frame with the line's parity (even lines from the left, odd lines from the right)
+; [code] A = 0 -> SlideBracketLineFromLeft, else SlideBracketLineFromRight (registers saved); ArenaBracketReveal state 1 each frame with the line's parity (even lines from the left, odd lines from the right) [play] I40: 2 px a step, one step a frame, 24 steps = 48 px (the 6-tile line), cut at the box edge.
 SlideBracketLineStep:
 	push	XHL
 	push	XDE
@@ -844,7 +844,7 @@ LoadArenaOpponent:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	XHL,0x9000
+	ld	XHL,SCROLL1_VRAM
 	call	ClearTilemap20x19
 	ld	E,A
 	extz	DE
@@ -877,7 +877,7 @@ LoadArenaOpponent.skip2:
 
 c_214122	section	code abs=0x214122
 
-; [code] +0x2A = 2: steps through the bracket lines (+0x1E) with the box 4 animations (Box4Preshift / SlideBracketLineStep), loading each opponent (LoadArenaOpponent) behind the portrait cover; B -> ArenaBracketQuit; A: DrawArenaBracketList and StartPortraitRecover, then (also after the last line) box 1 FightQuitText, LoadArenaOpponent(0), XorBracketSlotPixels, cursor +0x10 = 0, +0x2A = 3
+; [code] +0x2A = 2: steps through the bracket lines (+0x1E) with the box 4 animations (Box4Preshift / SlideBracketLineStep), loading each opponent (LoadArenaOpponent) behind the portrait cover; B -> ArenaBracketQuit; A: DrawArenaBracketList and StartPortraitRecover, then (also after the last line) box 1 FightQuitText, LoadArenaOpponent(0), XorBracketSlotPixels, cursor +0x10 = 0, +0x2A = 3 [play] I40: even lines (rounds) slide in from the left, odd lines (pilot names) from the right; 10-frame pause before an odd line, 30 before an even one.
 ArenaBracketReveal:
 	push	XHL
 	push	XDE
@@ -1245,205 +1245,6 @@ ArenaBracketDispatch.skip4:
 	ld	A,(XIZ+0x2D)
 	inc	1,A
 	ld	(XIZ+0x2D),A
-	pop	XWA
-	pop	XBC
-	pop	XDE
-	pop	XHL
-	ret
-
-c_216C1F	section	code abs=0x216C1F
-
-; [code] XHL = tilemap, WA = tile: UncoverTileStep step 0, then 12 x 14 entries (row stride 0x20) of the tile with palette 15 (0x3E00), flip bit 14 on odd rows
-DrawUncoverTilemap:
-	push	XHL
-	push	XDE
-	push	XBC
-	push	XWA
-	push	WA
-	and	WA,0x1FF
-	ld	BC,0
-	call	UncoverTileStep
-	pop	WA
-	ld	B,0
-DrawUncoverTilemap.loop:
-	ld	C,0
-DrawUncoverTilemap.loop2:
-	push	WA
-	ld	DE,0
-	ld	A,B
-	and	A,1
-	jr	Z,DrawUncoverTilemap.skip
-	or	DE,0x4000
-	jr	DrawUncoverTilemap.skip2
-DrawUncoverTilemap.skip:
-	or	DE,0
-DrawUncoverTilemap.skip2:
-	pop	WA
-	or	DE,WA
-	or	DE,0x3E00
-	ld	(XHL),DE
-	inc	2,XHL
-	inc	1,C
-	cp	C,0xC
-	jr	C,DrawUncoverTilemap.loop2
-	ld	XDE,0x20
-	sub	XDE,0xC
-	sll	1,XDE
-	add	XHL,XDE
-	inc	1,B
-	cp	B,0xE
-	jr	C,DrawUncoverTilemap.loop
-	pop	XWA
-	pop	XBC
-	pop	XDE
-	pop	XHL
-	ret
-
-c_216C75	section	code abs=0x216C75
-
-; [code] WA = tile, C = step: the tile's 8 pixel rows (words) in CHAR RAM 0xA000 + 16 * tile = 0 (clear) for the last step / 2 rows, else 0xFFFF (colour 3); A = 1 until step / 2 = 8
-UncoverTileStep:
-	push	XHL
-	push	XDE
-	push	XBC
-	sra	1,BC
-	extz	XWA
-	sll	4,XWA
-	ld	XHL,0xA000
-	add	XHL,XWA
-	ld	B,8
-UncoverTileStep.loop:
-	cp	C,B
-	jr	C,UncoverTileStep.skip
-	ld	WA,0
-	jr	UncoverTileStep.skip2
-UncoverTileStep.skip:
-	ld	WA,0xFFFF
-UncoverTileStep.skip2:
-	ld	(XHL),WA
-	inc	2,XHL
-	djnz	B,UncoverTileStep.loop
-	cp	C,8
-	jr	Z,UncoverTileStep.skip3
-	ld	A,1
-	jr	UncoverTileStep.skip4
-UncoverTileStep.skip3:
-	ld	A,0
-UncoverTileStep.skip4:
-	pop	XBC
-	pop	XDE
-	pop	XHL
-	ret
-
-c_216CAA	section	code abs=0x216CAA
-
-; [code] the DrawUncoverTilemap shape with CoverTileStep step 0 and flip bit 14 on even rows
-DrawCoverTilemap:
-	push	XHL
-	push	XDE
-	push	XBC
-	push	XWA
-	push	WA
-	and	WA,0x1FF
-	ld	BC,0
-	call	CoverTileStep
-	pop	WA
-	ld	B,0
-DrawCoverTilemap.loop:
-	ld	C,0
-DrawCoverTilemap.loop2:
-	push	WA
-	ld	DE,0
-	ld	A,B
-	and	A,1
-	jr	Z,DrawCoverTilemap.skip
-	or	DE,0
-	jr	DrawCoverTilemap.skip2
-DrawCoverTilemap.skip:
-	or	DE,0x4000
-DrawCoverTilemap.skip2:
-	pop	WA
-	or	DE,WA
-	or	DE,0x3E00
-	ld	(XHL),DE
-	inc	2,XHL
-	inc	1,C
-	cp	C,0xC
-	jr	C,DrawCoverTilemap.loop2
-	ld	XDE,0x20
-	sub	XDE,0xC
-	sll	1,XDE
-	add	XHL,XDE
-	inc	1,B
-	cp	B,0xE
-	jr	C,DrawCoverTilemap.loop
-	pop	XWA
-	pop	XBC
-	pop	XDE
-	pop	XHL
-	ret
-
-c_216D00	section	code abs=0x216D00
-
-; [code] the UncoverTileStep shape the other way: the last step / 2 rows = 0xFFFF, the rest 0; A = 1 until step / 2 = 0x10
-CoverTileStep:
-	push	XHL
-	push	XDE
-	push	XBC
-	sra	1,BC
-	extz	XWA
-	sll	4,XWA
-	ld	XHL,0xA000
-	add	XHL,XWA
-	ld	B,8
-CoverTileStep.loop:
-	cp	C,B
-	jr	C,CoverTileStep.skip
-	ld	WA,0xFFFF
-	jr	CoverTileStep.skip2
-CoverTileStep.skip:
-	ld	WA,0
-CoverTileStep.skip2:
-	ld	(XHL),WA
-	inc	2,XHL
-	djnz	B,CoverTileStep.loop
-	cp	C,0x10
-	jr	Z,CoverTileStep.skip3
-	ld	A,1
-	jr	CoverTileStep.skip4
-CoverTileStep.skip3:
-	ld	A,0
-CoverTileStep.skip4:
-	pop	XBC
-	pop	XDE
-	pop	XHL
-	ret
-
-c_216D35	section	code abs=0x216D35
-
-; [code] zeroes 20 x 19 entries (row stride 0x20) of the tilemap at XHL
-ClearTilemap20x19:
-	push	XHL
-	push	XDE
-	push	XBC
-	push	XWA
-	ld	WA,0
-	ld	B,0
-ClearTilemap20x19.loop:
-	ld	C,0
-ClearTilemap20x19.loop2:
-	ld	(XHL),WA
-	inc	2,XHL
-	inc	1,C
-	cp	C,0x14
-	jr	C,ClearTilemap20x19.loop2
-	ld	XDE,0x20
-	sub	XDE,0x14
-	sll	1,XDE
-	add	XHL,XDE
-	inc	1,B
-	cp	B,0x13
-	jr	C,ClearTilemap20x19.loop
 	pop	XWA
 	pop	XBC
 	pop	XDE

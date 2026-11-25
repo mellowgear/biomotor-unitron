@@ -1,6 +1,6 @@
 ; 8 stat lines (HP, EP, RA, LA, SP, RP, MP, AT with "---")
 d_218A70	section	romdata abs=0x218A70
-$include "build/data/works/menu_texts_218A70.asm"	; src/data/works/menu_texts_218A70.txt
+$include "src/data/works/menu_texts_218A70.asm"
 d_218AA8	section	romdata abs=0x218AA8
 ; [code] works.asm (2 callers): PrintStringTable with B = 8 in box 2
 MenuLines_218AA8:

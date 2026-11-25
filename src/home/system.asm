@@ -1,4 +1,4 @@
-; home/system: 38 routines (each keeps its ROM address in its own section)
+; home/system: 35 routines (each keeps its ROM address in its own section)
 
 c_205FA3	section	code abs=0x205FA3
 
@@ -63,8 +63,7 @@ Reset.loop3:
 	call	SendQueuedSoundCommand
 	cpb	(wJoyResetCombo),0
 	jr	Z,Reset.loop2
-	ldw	(WBA_H),0xFF00
-	ldw	(WSI_H),0
+	window_off
 	jrl	Reset
 
 c_206073	section	code abs=0x206073
@@ -369,171 +368,6 @@ c_20636D	section	code abs=0x20636D
 ; [code] sets bit 6 of the current task's +7; RunTasks gives a task whose parent (+4) has bit 6 set +7 |= 0xC0 (ended, and passes it on to its own children); RunTasks clears bit 6 before each call
 EndChildTasks:
 	set	6,(XIZ+7)
-	ret
-
-c_206379	section	code abs=0x206379
-
-; [code] boot (Reset): wColorFlags = 0x10 on a colour unit (OS_VERSION >= 0x10, BIOS call 0xE), SCROLL_PRIORITY / BG / CONTROL_2D, timer 0, ClearTilemaps, ClearSprites, InitDisplayState, wFadeLevel = 0x81, zeroes palette RAM 0x8200-0x83FF, full window (WBA_H 0, WSI_H 0x98A0)
-InitDisplay:
-	ldb	(wColorFlags),0
-	cpb	(OS_VERSION),0x10
-	jr	C,InitDisplay.skip
-	ldb	(wColorFlags),0x10
-	ld	RW3,0xE
-	ld	RA3,0x10
-	call	BiosCall
-InitDisplay.skip:
-	ldb	(SCROLL_PRIORITY),0x80
-	ldb	(BG),0x80
-	ldb	(CONTROL_2D),7
-	andb	(TRUN),0x8E
-	ldb	(T01MOD),0
-	ldb	(TREG0),1
-	orb	(TRUN),1
-	ld	RW3,4
-	ld	RB3,0
-	ld	RC3,2
-	call	BiosCall
-	call	ClearTilemaps
-	call	ClearSprites
-	call	InitDisplayState
-	ldb	(wFadeLevel),0x81
-	ld	XHL,0x8200
-	ld	BC,0x100
-InitDisplay.loop:
-	ldw	(XHL+),0
-	djnz	BC,InitDisplay.loop
-	ldw	(WBA_H),0
-	ldw	(WSI_H),0x98A0
-	ret
-
-c_2063EE	section	code abs=0x2063EE
-
-; [code] once from InitDisplay at boot: zeroes 0x5A76, 0x584B-0x5859 (odd bytes), 0x5A7B, 0x5A7D, wShakeFlags/X/Y, the sprite buffers (pointers reset), wFadeLevel = 0, wFadeLevelShown = 0xFF, and grey ramps 0xFFF..0 into 0x5A56-
-InitDisplayState:
-	ld	A,0
-	ld	(0x5A76),A
-	ld	(wScr1ScrollX),A
-	ld	(wScr1ScrollY),A
-	ld	(0x584F),A
-	ld	(0x5851),A
-	ld	(wScr2ScrollX),A
-	ld	(wScr2ScrollY),A
-	ld	(0x5857),A
-	ld	(0x5859),A
-	ld	(0x5A7B),A
-	ld	(0x5A7D),A
-	ld	(wShakeFlags),A
-	ld	(wShakeX),A
-	ld	(wShakeY),A
-	ld	XWA,0
-	ld	XHL,wSpriteBuffer
-	ld	(wSpriteBufferPtr),HL
-	ld	XDE,wSpritePalBuffer
-	ld	(wSpritePalBufferPtr),DE
-	ld	C,0x40
-InitDisplayState.loop:
-	ld	(XHL+),XWA
-	ld	(XDE+),A
-	djnz	C,InitDisplayState.loop
-	ldb	(wFadeLevel),0
-	ldb	(wFadeLevelShown),0xFF
-	ldw	(0x5A56),0xFFF
-	ldw	(0x5A58),0xDDD
-	ldw	(0x5A5A),0xBBB
-	ldw	(0x5A5C),0x999
-	ldw	(0x5A5E),0x666
-	ldw	(0x5A60),0x444
-	ldw	(0x5A62),0x222
-	ldw	(0x5A64),0
-	ldw	(0x5A66),0xFFF
-	ldw	(0x5A68),0xDDD
-	ldw	(0x5A6A),0xBBB
-	ldw	(0x5A6C),0x999
-	ldw	(0x5A6E),0x666
-	ldw	(0x5A70),0x444
-	ldw	(0x5A72),0x222
-	ldw	(0x5A74),0
-	ld	XHL,0x8100
-	ld	XDE,wMonoPalShadow
-	ld	BC,0x19
-	ldir	(XDE+),(XHL+)
-	ldb	(0x5875),0x80
-	ret
-
-c_2064C6	section	code abs=0x2064C6
-
-; [code] from VBlankHandler: S1SO_H/V = wScr1ScrollX/Y, S2SO_H/V = wScr2ScrollX/Y, PO_H/V = -(0x5A7B / 0x5A7D), each plus wShakeX/Y when its wShakeFlags bit (1, 2, 0) is set; when 0x5A76 is 1..0x97 it also sets DMA0/DMA1 to copy the 4 bytes 0x5A77 (0x584F / 0x5851 / 0x5857 / 0x5859, shake bits 3, 4) to S1SO_H.. mid-frame
-UpdateScrollRegisters:
-	ld	W,(wShakeFlags)
-	ld	A,(0x5A76)
-	or	A,A
-	jr	Z,UpdateScrollRegisters.skip3
-	cp	A,0x98
-	jr	NC,UpdateScrollRegisters.skip3
-	ld	C,(0x584F)
-	ld	E,(0x5851)
-	bit	3,W
-	jr	Z,UpdateScrollRegisters.skip
-	add	C,(wShakeX)
-	add	E,(wShakeY)
-UpdateScrollRegisters.skip:
-	ld	(0x5A77),C
-	ld	(0x5A78),E
-	ld	C,(0x5857)
-	ld	E,(0x5859)
-	bit	4,W
-	jr	Z,UpdateScrollRegisters.skip2
-	add	C,(wShakeX)
-	add	E,(wShakeY)
-UpdateScrollRegisters.skip2:
-	ld	(0x5A79),C
-	ld	(0x5A7A),E
-	ld	W,0
-	ldc	DMAC0,WA
-	ld	A,0x14
-	ldc	DMAM0,A
-	ldb	(DMA0V),0x10
-	ld	XWA,0x5A77
-	ldc	DMAS1,XWA
-	ld	XWA,0x8032
-	ldc	DMAD1,XWA
-	ld	WA,1
-	ldc	DMAC1,WA
-	ld	A,0xA
-	ldc	DMAM1,A
-	ldb	(DMA1V),0x10
-UpdateScrollRegisters.skip3:
-	ld	W,(wShakeFlags)
-	ld	C,(wScr1ScrollX)
-	ld	E,(wScr1ScrollY)
-	bit	1,W
-	jr	Z,UpdateScrollRegisters.skip4
-	add	C,(wShakeX)
-	add	E,(wShakeY)
-UpdateScrollRegisters.skip4:
-	ld	(S1SO_H),C
-	ld	(S1SO_V),E
-	ld	C,(wScr2ScrollX)
-	ld	E,(wScr2ScrollY)
-	bit	2,W
-	jr	Z,UpdateScrollRegisters.skip5
-	add	C,(wShakeX)
-	add	E,(wShakeY)
-UpdateScrollRegisters.skip5:
-	ld	(S2SO_H),C
-	ld	(S2SO_V),E
-	ld	C,(0x5A7B)
-	ld	E,(0x5A7D)
-	bit	0,W
-	jr	Z,UpdateScrollRegisters.skip6
-	add	C,(wShakeX)
-	add	E,(wShakeY)
-UpdateScrollRegisters.skip6:
-	neg	C
-	neg	E
-	ld	(PO_H),C
-	ld	(PO_V),E
 	ret
 
 c_206FC1	section	code abs=0x206FC1

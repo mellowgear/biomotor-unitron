@@ -1,4 +1,4 @@
-; Item ids (src/data/items/names.txt line numbers).
+; Item ids (src/data/items/names.asm line numbers).
 ITEM_FLRCT	equ	1
 ITEM_REFCT	equ	2
 ITEM_ICECT	equ	3

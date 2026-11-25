@@ -116,7 +116,7 @@ StartBattleWipe:
 	push	XWA
 	ld	A,0
 	ld	(XIZ+0x2C),A
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	ld	WA,0x10
 	call	DrawWipeTilemap
 	pop	XWA
@@ -142,116 +142,6 @@ BattleWipeStep:
 	cp	A,1
 	jr	Z,BattleWipeStep.skip
 BattleWipeStep.skip:
-	pop	XBC
-	pop	XDE
-	pop	XHL
-	ret
-
-c_216D66	section	code abs=0x216D66
-
-; [code] XHL = tilemap, WA = tile: DrawWipeTileStep step 0, then 20 x 19 entries (row stride 0x20) of the tile with palette 15 (0x3E00), flip bit 15 on even columns and flip bit 14 on odd rows (four mirrored copies of one tile)
-DrawWipeTilemap:
-	push	XHL
-	push	XDE
-	push	XBC
-	push	XWA
-	push	WA
-	and	WA,0x1FF
-	ld	BC,0
-	call	DrawWipeTileStep
-	pop	WA
-	ld	B,0
-DrawWipeTilemap.loop:
-	ld	C,0
-DrawWipeTilemap.loop2:
-	push	WA
-	ld	DE,0
-	ld	A,B
-	and	A,1
-	jr	Z,DrawWipeTilemap.skip
-	or	DE,0x4000
-	jr	DrawWipeTilemap.skip2
-DrawWipeTilemap.skip:
-	or	DE,0
-DrawWipeTilemap.skip2:
-	ld	A,C
-	and	A,1
-	jr	Z,DrawWipeTilemap.skip3
-	or	DE,0
-	jr	DrawWipeTilemap.skip4
-DrawWipeTilemap.skip3:
-	or	DE,0x8000
-DrawWipeTilemap.skip4:
-	pop	WA
-	or	DE,WA
-	or	DE,0x3E00
-	ld	(XHL),DE
-	inc	2,XHL
-	inc	1,C
-	cp	C,0x14
-	jr	C,DrawWipeTilemap.loop2
-	ld	XDE,0x20
-	sub	XDE,0x14
-	sll	1,XDE
-	add	XHL,XDE
-	inc	1,B
-	cp	B,0x13
-	jr	C,DrawWipeTilemap.loop
-	pop	XWA
-	pop	XBC
-	pop	XDE
-	pop	XHL
-	ret
-
-c_216DCD	section	code abs=0x216DCD
-
-; [code] WA = tile, C = step: rewrites the 16 bytes of the tile in CHAR RAM 0xA000 + 16 * tile: byte i = PixelFillBytes[clamp(step / 4 - (i / 2) - 4 * (i odd), 0, 4)] (filled from the top left); A = 1 until C = 0x14
-DrawWipeTileStep:
-	push	XHL
-	push	XDE
-	push	XBC
-	sra	2,BC
-	extz	XWA
-	sll	4,XWA
-	ld	XHL,0xA000
-	add	XHL,XWA
-	ld	B,0x10
-DrawWipeTileStep.loop:
-	ld	A,0
-	ld	XDE,XHL
-	and	XDE,1
-	jr	Z,DrawWipeTileStep.skip
-	sub	A,4
-DrawWipeTileStep.skip:
-	ld	XDE,XHL
-	srl	1,XDE
-	and	XDE,7
-	sub	A,E
-	add	A,C
-	bit	7,A
-	jr	NZ,DrawWipeTileStep.skip2
-	cp	A,4
-	jr	C,DrawWipeTileStep.skip3
-	ld	A,4
-	jr	DrawWipeTileStep.skip3
-DrawWipeTileStep.skip2:
-	ld	A,0
-DrawWipeTileStep.skip3:
-	extz	WA
-	extz	XWA
-	ld	XDE,PixelFillBytes
-	add	XDE,XWA
-	ld	A,(XDE)
-	ld	(XHL),A
-	inc	1,XHL
-	djnz	B,DrawWipeTileStep.loop
-	cp	C,0x14
-	jr	Z,DrawWipeTileStep.skip4
-	ld	A,1
-	jr	DrawWipeTileStep.skip5
-DrawWipeTileStep.skip4:
-	ld	A,0
-DrawWipeTileStep.skip5:
 	pop	XBC
 	pop	XDE
 	pop	XHL

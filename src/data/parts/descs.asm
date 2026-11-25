@@ -1,8 +1,8 @@
 ; PartDescs (parts): 227 strings, 19-byte slots (18 characters + done),
-; one per id; keep the order and count. Built by unitron text (Makefile).
+; one per id; keep the order and count. Character codes from the charmap ($charmap).
 ; Notes on the table: src/data/parts/stats.asm
 
-slot 19 FF
+	slot	19 FF
 	text "H's Basic body"	; 1 Body1
 	done
 	text "H's 2nd stage body"	; 2 Body2
@@ -457,4 +457,4 @@ slot 19 FF
 	done
 	text "Spiked weapon"	; 227 Pole
 	done
-slot 0
+	slot	0

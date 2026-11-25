@@ -21,7 +21,7 @@ MainMenuSetup:
 	call	PlayMusic
 	ld	WA,0x35
 	call	SoundCommand
-	ldb	(SCROLL_PRIORITY),0
+	set_scroll_priority	0
 	ldw	(XIZ+TASK_FUNC),MainMenu & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),MainMenu >> 16
 	ret
@@ -128,20 +128,26 @@ MainMenuCancel:
 	task_wait
 	call	ClearScr2Tilemap
 	ldb	(wMainMenuCursor),0
-	ldb	(SCROLL_PRIORITY),0x80
+	set_scroll_priority	0x80
 	call	EndTask
 	ret
 MainMenuTitleText:
-	db	0xFD,0x2D,0x01,0x09,0x0E,0x00,0x2D,0x05,0x0E,0x15,0xFF	; "<page>Main Menu"
+	page "Main Menu"
+	done
 MainMenuChoicesText:
-	db	0xFD,0x00,0x2E,0x05,0x17,0x00,0x27,0x01,0x0D,0x05,0xFE,0xFE,0x00,0x2C,0x0F,0x01,0x04,0xFE,0xFE,0x00,0x23,0x0F,0x0E,0x06,0x09,0x07,0xFF	; "<page> New Game<line><line> Load<line><line> Config"
+	page " New Game"
+	line ""
+	line " Load"
+	line ""
+	line " Config"
+	done
 
 c_20D0E8	section	code abs=0x20D0E8
 
 ; [code] main menu option 0 (MainMenuConfirm table): wMainMenuCursor += 1 (-> 1: MainMenuTask goes to NewGameSetup), SCROLL_PRIORITY = 0x80, EndTask
 MainMenuNewGame:
 	incb	1,(wMainMenuCursor)
-	ldb	(SCROLL_PRIORITY),0x80
+	set_scroll_priority	0x80
 	call	EndTask
 	ret
 
@@ -179,7 +185,7 @@ MainMenuLoadTask.skip:
 	call	StartChildTask
 	task_wait
 	incb	1,(wMainMenuCursor)
-	ldb	(SCROLL_PRIORITY),0x80
+	set_scroll_priority	0x80
 	call	EndTask
 	ret
 MainMenuLoadTask.skip2:
@@ -370,7 +376,10 @@ DeleteDataMenu.skip4:
 	ldb	(XIZ+TASK_ARG),0
 	ret
 DeleteDataMenuText:
-	db	0xFD,0x24,0x05,0x0C,0x05,0x14,0x05,0x00,0x24,0x01,0x14,0x01,0xFE,0x37,0x08,0x09,0x03,0x08,0x64,0xFE,0x00,0x00,0x00,0x00,0x00,0x21,0x0C,0x0C,0x00,0x00,0x33,0x05,0x0C,0x05,0x03,0x14,0xFF	; "<page>Delete Data<line>Which?<line>     All  Select"
+	page "Delete Data"
+	line "Which?"
+	line "     All  Select"
+	done
 
 c_20D462	section	code abs=0x20D462
 
@@ -534,11 +543,11 @@ c_20D6DF	section	code abs=0x20D6DF
 ; the screen, splits and slides apart to show the boxes on white, then slides back together behind the boxes (SCR2 in front)
 MainMenuTransitionIn:
 	calr	MainMenuGraphics
-	ldb	(SCROLL_PRIORITY),0
+	set_scroll_priority	0
 	ld	XHL,MainMenuSplitOpen
 	call	StartChildTask
 	task_wait
-	ldb	(SCROLL_PRIORITY),0x80
+	set_scroll_priority	0x80
 	ld	XHL,MainMenuSplitClose
 	call	StartChildTask
 	task_wait
@@ -551,11 +560,11 @@ c_20D71E	section	code abs=0x20D71E
 ; front of them and hide the screen; the next screen is drawn behind the closed doors (New Game goes on to Select Player with no TransitionIn)
 MainMenuTransitionOut:
 	calr	MainMenuGraphics
-	ldb	(SCROLL_PRIORITY),0x80
+	set_scroll_priority	0x80
 	ld	XHL,MainMenuSplitOpen
 	call	StartChildTask
 	task_wait
-	ldb	(SCROLL_PRIORITY),0
+	set_scroll_priority	0
 	ld	XHL,MainMenuSplitClose
 	call	StartChildTask
 	task_wait
@@ -696,7 +705,7 @@ TitleScreen.skip:
 
 c_20E336	section	code abs=0x20E336
 
-; [code] TitleScreen's step after the Map_2E513D frame (TASK_FUNC 0x20E336): DrawTilemapScr2 Map_2E4EE3 (mono Map_2E54E3) at 0,2 tiles 0xE7, +0x10 - 1: not 0 -> back to TitleScreen.resume2 (the other map) the next frame, 0 -> TitleScreen (0xB4 frames wait); the two maps alternate frame by frame, twice, every 0xB4 frames
+; [code] TitleScreen's step after the Map_2E513D frame (TASK_FUNC 0x20E336): DrawTilemapScr2 Map_2E4EE3 (mono Map_2E54E3) at 0,2 tiles 0xE7, +0x10 - 1: not 0 -> back to TitleScreen.resume2 (the other map) the next frame, 0 -> TitleScreen (0xB4 frames wait); the two maps alternate frame by frame, twice, every 0xB4 frames [play] I39: Map_2E513D is the flash frame of the whole SCR2 title picture (robot white, logo pale with yellow lines), Map_2E4EE3 the normal one; flashed twice, every 187 frames.
 TitleMapFlashStep:
 	ld	XHL,Map_2E4EE3
 	ld	A,(wColorFlags)

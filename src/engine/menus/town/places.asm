@@ -437,7 +437,7 @@ SquareMenuSelect.skip2:
 
 c_214F3D	section	code abs=0x214F3D
 
-; [code] copies the talk rows listed for the place (task +0x15) and GetStoryStage (talk_slots_*.txt) to task +0x1E.., count to +0x1A
+; [code] copies the talk rows listed for the place (task +0x15) and GetStoryStage (talk_slots_*.asm) to task +0x1E.., count to +0x1A
 LoadTalkSlots:
 	push	XHL
 	push	XDE

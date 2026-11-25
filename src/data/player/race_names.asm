@@ -1,8 +1,8 @@
 ; RaceNames (race_names): 5 strings, 7-byte slots (6 characters + done),
-; one per id; keep the order and count. Built by unitron text (Makefile).
+; one per id; keep the order and count. Character codes from the charmap ($charmap).
 ; GetRaceName: string 0x25E48F + 7 * n (line = n), n from SplitRaceGender (DrawCharaStatsPage).
 
-slot 7 FF
+	slot	7 FF
 	text "Human"	; 1
 	done
 	text "Forest"	; 2
@@ -13,4 +13,4 @@ slot 7 FF
 	done
 	text "Lizard"	; 5
 	done
-slot 0
+	slot	0

@@ -194,15 +194,15 @@ BattleEnd:
 	call	ClearSprites
 	call	InitTextBoxes
 	ld	A,0
-	ld	(0x5A76),A
+	ld	(wScrollSplitLine),A
 	ld	(wScr1ScrollX),A
 	ld	(wScr1ScrollY),A
-	ld	(0x584F),A
-	ld	(0x5851),A
+	ld	(wScr1SplitScrollX),A
+	ld	(wScr1SplitScrollY),A
 	ld	(wScr2ScrollX),A
 	ld	(wScr2ScrollY),A
-	ld	(0x5857),A
-	ld	(0x5859),A
+	ld	(wScr2SplitScrollX),A
+	ld	(wScr2SplitScrollY),A
 	ld	WA,0x7F
 	call	SoundCommand
 	ld	WA,0x8086

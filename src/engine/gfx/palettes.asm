@@ -171,7 +171,7 @@ c_206877	section	code abs=0x206877
 ; [code] same as ResetSpritePalettes but for SCR1: 15 x 0xFFF + Pal_21F010 into 0x58F6 (= wPalShadow+0x80 = LoadPalettes slot 0x10, the slot LoadImagePalette uses for SCR1), mono 0x5865 (= LoadMonoPalettes entries 2-3, SCR1 in LoadImagePalette) = 0 + MonoPal_21F018; 0x585C = ~wFadeLevel
 ResetScr1Palettes:
 	ld	WA,0xFFF
-	ld	XDE,0x58F6
+	ld	XDE,wPalShadow+0x80
 	ld	C,0x3C
 ResetScr1Palettes.loop:
 	ld	(XDE+),WA
@@ -180,7 +180,7 @@ ResetScr1Palettes.loop:
 	ld	BC,4
 	ldirw	(XDE+),(XHL+)
 	ld	A,0
-	ld	XDE,0x5865
+	ld	XDE,wMonoPalShadow+8
 	ld	C,4
 ResetScr1Palettes.loop2:
 	ld	(XDE+),A
@@ -198,7 +198,7 @@ c_2068B3	section	code abs=0x2068B3
 ; [code] same for SCR2: 0x5976 (= wPalShadow+0x100 = slot 0x20, SCR2 in LoadImagePalette) and mono 0x586D (entries 4-5); callers ResetAllPalettes, ResetBgPalettes, StreetGoWorks
 ResetScr2Palettes:
 	ld	WA,0xFFF
-	ld	XDE,0x5976
+	ld	XDE,wPalShadow+0x100
 	ld	C,0x3C
 ResetScr2Palettes.loop:
 	ld	(XDE+),WA
@@ -207,7 +207,7 @@ ResetScr2Palettes.loop:
 	ld	BC,4
 	ldirw	(XDE+),(XHL+)
 	ld	A,0
-	ld	XDE,0x586D
+	ld	XDE,wMonoPalShadow+0x10
 	ld	C,4
 ResetScr2Palettes.loop2:
 	ld	(XDE+),A
@@ -263,7 +263,7 @@ LoadPalettes.skip:
 	ld	XDE,0
 	ld	E,A
 	sll	3,DE
-	add	DE,0x5876
+	add	DE,wPalShadow
 	ld	B,0
 	sll	2,BC
 	ldirw	(XDE+),(XHL+)
@@ -288,7 +288,7 @@ LoadMonoPalettes.skip:
 	ld	XDE,0
 	ld	E,A
 	sll	2,DE
-	add	DE,0x585D
+	add	DE,wMonoPalShadow
 	ld	B,0
 	sll	2,BC
 	ldir	(XDE+),(XHL+)
@@ -423,4 +423,44 @@ FadeToWhiteStep.skip:
 	ld	A,0
 FadeToWhiteStep.skip2:
 	pop	W
+	ret
+
+c_20E1E7	section	code abs=0x20E1E7
+
+; [code] XHL = colours, BC = palette count, WA = first palette: copies BC*4 words straight into palette RAM 0x8200 + 8*WA and sets wFadeLevelShown = wFadeLevel (no shadow, no fade pass)
+WritePalettesDirect:
+	push	XDE
+	push	XHL
+	extz	BC
+	sll	2,BC
+	extz	WA
+	extz	XWA
+	sll	3,XWA
+	ld	XDE,SPRITE_PAL
+	add	XDE,XWA
+	ldirw	(XDE+),(XHL+)
+	ld	A,(wFadeLevel)
+	ld	(wFadeLevelShown),A
+	pop	XHL
+	pop	XDE
+	ret
+
+c_20E209	section	code abs=0x20E209
+
+; [code] the monochrome counterpart of WritePalettesDirect: BC*4 bytes into 0x8100 + 4*WA, wFadeLevelShown = wFadeLevel
+WriteMonoPalettesDirect:
+	push	XDE
+	push	XHL
+	extz	BC
+	sll	2,BC
+	extz	WA
+	extz	XWA
+	sll	2,XWA
+	ld	XDE,SPPLT_01-1
+	add	XDE,XWA
+	ldir	(XDE+),(XHL+)
+	ld	A,(wFadeLevel)
+	ld	(wFadeLevelShown),A
+	pop	XHL
+	pop	XDE
 	ret

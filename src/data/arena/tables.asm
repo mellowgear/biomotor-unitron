@@ -1,6 +1,6 @@
 ; data/arena/tables.asm: the arena tables in ROM order, one section per part; each part is a
-; file in src/data/arena/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/arena/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/arena/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 d_249A5E	section	romdata abs=0x249A5E

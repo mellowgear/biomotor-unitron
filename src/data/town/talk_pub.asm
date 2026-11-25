@@ -6,7 +6,7 @@
 ; row is done (NpcTalkRowAction; 0 = none; 1, 9, 0x4A, 0x4D do more there).
 ; next (NpcTalkRowNext): the next row, or a command 0xE6-0xFD, 0xFF = end.
 ; message: text address; below 0x58 = an offset into tables/talk_gender_texts.asm (TownTalkStartRow).
-; The same format is used by every talk_*.txt.
+; The same format is used by every talk_*.asm.
 ; One talk_row record per line (src/macros/tables.inc).
 ; Messages / lists are 4-byte ROM pointers (dd), written as their labels.
 ; id: speaker, portrait, flag, next, message

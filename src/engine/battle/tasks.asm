@@ -249,7 +249,8 @@ BattleHPEPDisplayTask.skip3:
 BattleHPEPDisplayTask.done:
 	ret
 QuestionMarkText:
-	db	0x00,0x64,0x00,0xFF	; " ? "
+	text " ? "
+	done
 
 c_208E0F	section	code abs=0x208E0F
 
@@ -486,7 +487,7 @@ EnemyEPLossTask.resume:
 c_20904F	section	code abs=0x20904F
 
 ; [code] task: wScr1ScrollX 0x60 -> 0xC0 (0xC0 - 0x60 * n / TASK_ARG, n = TASK_ARG .. 0); PlayerTurn as the second turn of the round; Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X rising 0x60 -> 0xC0: the unit enters from the right (0x60 = off screen, where UnitSlideInTask starts) and stops 64 px right of its home (X 0); PlayerHitResult1 runs it after UnitSlideOutLeftTask with the enemy shown (SCR2 X 0); the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_20904F)
+; [code+play] SCR1 X rising 0x60 -> 0xC0: the unit enters from the right (0x60 = off screen, where UnitSlideInTask starts) and stops 64 px right of its home (X 0); PlayerHitResult1 runs it after UnitSlideOutLeftTask with the enemy shown (SCR2 X 0); the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_20904F) [play] I38: 16 frames, 6.4 px a frame, the unit stops just right of the enemy; PlayerTurn also runs it when the player moves second (SCR2 0x60, the unit slides in alone).
 UnitSlideInShiftedTask:
 	ldb	(wScr1ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -533,7 +534,7 @@ UnitSlideInTask.skip:
 c_2090C0	section	code abs=0x2090C0
 
 ; [code] task: wScr1ScrollX 0xC0 -> 0x60 upwards (0xC0 + 0xA0 * n / TASK_ARG, n = 0 .. TASK_ARG); Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X rising 0xC0 -> 0x160 (= 0x60): the unit moves 160 px left, from 64 px right of home off the screen; PlayerHitResult1 before UnitSlideInShiftedTask; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2090C0)
+; [code+play] SCR1 X rising 0xC0 -> 0x160 (= 0x60): the unit moves 160 px left, from 64 px right of home off the screen; PlayerHitResult1 before UnitSlideInShiftedTask; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2090C0) [play] I38: 16 frames, about 10.7 px a frame; PlayerHitResult1 then sets SCR2 X = 0, the enemy at home.
 UnitSlideOutLeftTask:
 	ldb	(wScr1ScrollY),0
 	ldb	(XIZ+0x10),0
@@ -558,7 +559,7 @@ UnitSlideOutLeftTask.skip:
 c_2090FE	section	code abs=0x2090FE
 
 ; [code] task: wScr1ScrollX 0xC0 -> 0x60 downwards (0x60 + 0x60 * n / TASK_ARG, n = TASK_ARG .. 0); BattleRetreat; Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X falling 0xC0 -> 0x60: the unit moves 96 px right, off the screen; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2090FE)
+; [code+play] SCR1 X falling 0xC0 -> 0x60: the unit moves 96 px right, off the screen; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2090FE) [play] I38: on a successful flee (BattleRetreat), 16 frames at 6.4 px a frame, after "You fled!!".
 UnitSlideOutRightTask:
 	ldb	(wScr1ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -581,7 +582,7 @@ UnitSlideOutRightTask.skip:
 c_209136	section	code abs=0x209136
 
 ; [code] task: wScr1ScrollX 0 -> 0xC0 (0xC0 + 0x40 * n / TASK_ARG, n = TASK_ARG .. 0); PlayerTurn as the first turn of the round; Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X falling 0x100 (= 0) -> 0xC0: the unit moves from its home 64 px right; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_209136)
+; [code+play] SCR1 X falling 0x100 (= 0) -> 0xC0: the unit moves from its home 64 px right; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_209136) [play] I38: 16 frames, SCR1 X 0 -> 0xC0 at about 4.3 px a frame (Animation On).
 UnitShiftRightTask:
 	ldb	(wScr1ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -604,7 +605,7 @@ UnitShiftRightTask.skip:
 c_20916E	section	code abs=0x20916E
 
 ; [code] task: wScr2ScrollX 0x60 -> 0 (0x60 * n / TASK_ARG, n = TASK_ARG .. 0); BattleEncounterMessage, EnemyTurn, EnemyHitResult2; Y scroll 0; at once when wOptionAnimation = 0
-; [play] seen in play: SCR2 holds the enemy; at battle start the enemy picture slides in from the left before "You encountered ...!!" (random and boss battles) (was swp_20916E)
+; [play] seen in play: SCR2 holds the enemy; at battle start the enemy picture slides in from the left before "You encountered ...!!" (random and boss battles) (was swp_20916E) [play] I38: SCR2 X 0x60 -> 0 in 16 frames (6.4 px a frame), also at each EnemyTurn and after EnemySlideOutRightTask.
 EnemySlideInTask:
 	ldb	(wScr2ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -650,7 +651,7 @@ EnemySlideOutTask.skip:
 c_2091DD	section	code abs=0x2091DD
 
 ; [code] task: wScr2ScrollX 0 -> 0x60 downwards, wrapping (-(0xA0 * n / TASK_ARG), n = 0 .. TASK_ARG); Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR2 X falling 0 -> -0xA0 (= 0x60): the enemy moves 160 px right, off the screen (EnemySlideOutTask leaves to the left); EnemyHitResult2 before EnemySlideInTask; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2091DD)
+; [code+play] SCR2 X falling 0 -> -0xA0 (= 0x60): the enemy moves 160 px right, off the screen (EnemySlideOutTask leaves to the left); EnemyHitResult2 before EnemySlideInTask; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2091DD) [play] I38: 16 frames, about 10.7 px a frame; EnemyHitResult2 then sets SCR1 X = 0xC0 and EnemySlideInTask brings the enemy back from the left.
 EnemySlideOutRightTask:
 	ldb	(wScr2ScrollY),0
 	ldb	(XIZ+0x10),0

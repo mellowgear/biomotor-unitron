@@ -2,11 +2,16 @@ $maximum
 	module	biomotor
 ; Biomotor Unitron -- main source. Assemble with unitron asm (see Makefile).
 
+$charmap "src/text/charmap.txt"	; text, line, page, done: the game's character codes
+
 #include "constants/hardware.inc"
+#include "constants/gfx.inc"
 #include "ram/wram.inc"
+#include "ram/gfx.inc"
 
 #include "macros/macros.inc"
 #include "macros/tables.inc"
+#include "macros/gfx.inc"
 #include "constants/struct_fields.inc"
 #include "constants/joypad.inc"
 #include "constants/event_flags.inc"
@@ -39,12 +44,15 @@ $maximum
 #include "engine/dungeon/task.asm"
 #include "engine/dungeon/world_map.asm"
 #include "engine/events.asm"
+#include "engine/gfx/display.asm"
+#include "engine/gfx/font.asm"
 #include "engine/gfx/palettes.asm"
 #include "engine/gfx/portraits.asm"
 #include "engine/gfx/robot.asm"
 #include "engine/gfx/sprites.asm"
 #include "engine/gfx/tilemap.asm"
 #include "engine/gfx/tiles.asm"
+#include "engine/gfx/vblank.asm"
 #include "engine/gfx/window.asm"
 #include "engine/menus/main_menu.asm"
 #include "engine/menus/menu_helpers.asm"

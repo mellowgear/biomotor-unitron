@@ -2,7 +2,7 @@
 
 c_216391	section	code abs=0x216391
 
-; [code] task +0x28 = colla_offers.txt line by Random() % 100 against the rank column (GetStageArenaRank 3-8), +0x29 = price column by colla_price_odds.txt
+; [code] task +0x28 = colla_offers/ line by Random() % 100 against the rank column (GetStageArenaRank 3-8), +0x29 = price column by colla_price_odds.asm
 RollCollaOffer:
 	push	XHL
 	push	C

@@ -1,124 +1,124 @@
 ; text/banks.asm: the text banks in ROM order, one section each
 
 d_20D333	section	romdata abs=0x20D333
-$include "build/text/config.asm"	; src/text/config.txt
+$include "src/text/config.asm"
 d_20D544	section	romdata abs=0x20D544
-$include "build/text/delete_data_delete_all.asm"	; src/text/delete_data_delete_all.txt
+$include "src/text/delete_data_delete_all.asm"
 d_20DF5B	section	romdata abs=0x20DF5B
-$include "build/text/save_menu.asm"	; src/text/save_menu.txt
+$include "src/text/save_menu.asm"
 d_20DFCE	section	romdata abs=0x20DFCE
-$include "build/text/ok_yes_no.asm"	; src/text/ok_yes_no.txt
+$include "src/text/ok_yes_no.asm"
 d_20E051	section	romdata abs=0x20E051
-$include "build/text/save_complete.asm"	; src/text/save_complete.txt
+$include "src/text/save_complete.asm"
 d_2172F2	section	romdata abs=0x2172F2
-$include "build/text/hex_digits.asm"	; src/text/hex_digits.txt
+$include "src/text/hex_digits.asm"
 d_225423	section	romdata abs=0x225423
-$include "build/text/attack_item_charge.asm"	; src/text/attack_item_charge.txt
+$include "src/text/attack_item_charge.asm"
 d_2254B2	section	romdata abs=0x2254B2
-$include "build/text/player_s_special_attack.asm"	; src/text/player_s_special_attack.txt
+$include "src/text/player_s_special_attack.asm"
 d_2259C9	section	romdata abs=0x2259C9
-$include "build/text/but_chases_you.asm"	; src/text/but_chases_you.txt
+$include "src/text/but_chases_you.asm"
 d_225A7C	section	romdata abs=0x225A7C
-$include "build/text/you_gained_a_level.asm"	; src/text/you_gained_a_level.txt
+$include "src/text/you_gained_a_level.asm"
 d_225BE2	section	romdata abs=0x225BE2
-$include "build/text/where_do_you_go.asm"	; src/text/where_do_you_go.txt
+$include "src/text/where_do_you_go.asm"
 d_225C49	section	romdata abs=0x225C49
-$include "build/text/it_all_began_with.asm"	; src/text/it_all_began_with.txt
+$include "src/text/it_all_began_with.asm"
 d_226C15	section	romdata abs=0x226C15
-$include "build/text/cancel_yes_no.asm"	; src/text/cancel_yes_no.txt
+$include "src/text/cancel_yes_no.asm"
 d_226C82	section	romdata abs=0x226C82
-$include "build/text/human.asm"	; src/text/human.txt
+$include "src/text/human.asm"
 d_226CE5	section	romdata abs=0x226CE5
-$include "build/text/rod.asm"	; src/text/rod.txt
+$include "src/text/rod.asm"
 d_22748B	section	romdata abs=0x22748B
-$include "build/text/town.asm"	; src/text/town.txt
+$include "src/text/town.asm"
 d_2274EB	section	romdata abs=0x2274EB
-$include "build/text/dungeon_made_of_trees.asm"	; src/text/dungeon_made_of_trees.txt
+$include "src/text/dungeon_made_of_trees.asm"
 d_227590	section	romdata abs=0x227590
-$include "build/text/enter_yes_no.asm"	; src/text/enter_yes_no.txt
+$include "src/text/enter_yes_no.asm"
 d_2275B1	section	romdata abs=0x2275B1
-$include "build/text/player_is_dead.asm"	; src/text/player_is_dead.txt
+$include "src/text/player_is_dead.asm"
 d_249755	section	romdata abs=0x249755
-$include "build/text/camp.asm"	; src/text/camp.txt
+$include "src/text/camp.asm"
 d_2497CF	section	romdata abs=0x2497CF
-$include "build/text/30hp_restored.asm"	; src/text/30hp_restored.txt
+$include "src/text/30hp_restored.asm"
 d_249842	section	romdata abs=0x249842
-$include "build/text/status.asm"	; src/text/status.txt
+$include "src/text/status.asm"
 d_2498D3	section	romdata abs=0x2498D3
-$include "build/text/area0.asm"	; src/text/area0.txt
+$include "src/text/area0.asm"
 d_249923	section	romdata abs=0x249923
-$include "build/text/dungeon_status.asm"	; src/text/dungeon_status.txt
+$include "src/text/dungeon_status.asm"
 d_249A33	section	romdata abs=0x249A33
-$include "build/text/try_yes_no.asm"	; src/text/try_yes_no.txt
+$include "src/text/try_yes_no.asm"
 d_249B58	section	romdata abs=0x249B58
-$include "build/text/arena.asm"	; src/text/arena.txt
+$include "src/text/arena.asm"
 d_249BBC	section	romdata abs=0x249BBC
-$include "build/text/entry.asm"	; src/text/entry.txt
+$include "src/text/entry.asm"
 d_249BD1	section	romdata abs=0x249BD1
-$include "build/text/ranke.asm"	; src/text/ranke.txt
+$include "src/text/ranke.asm"
 d_249C3F	section	romdata abs=0x249C3F
-$include "build/text/entry_costs.asm"	; src/text/entry_costs.txt
+$include "src/text/entry_costs.asm"
 d_249C83	section	romdata abs=0x249C83
-$include "build/text/cost.asm"	; src/text/cost.txt
+$include "src/text/cost.asm"
 d_249CD0	section	romdata abs=0x249CD0
-$include "build/text/fight_quit.asm"	; src/text/fight_quit.txt
+$include "src/text/fight_quit.asm"
 d_249E7A	section	romdata abs=0x249E7A
-$include "build/text/pub.asm"	; src/text/pub.txt
+$include "src/text/pub.asm"
 d_249ECE	section	romdata abs=0x249ECE
-$include "build/text/d_town.asm"	; src/text/d_town.txt
+$include "src/text/d_town.asm"
 d_249F9E	section	romdata abs=0x249F9E
-$include "build/text/talk_menu.asm"	; src/text/talk_menu.txt
+$include "src/text/talk_menu.asm"
 d_249FF4	section	romdata abs=0x249FF4
-$include "build/text/nova.asm"	; src/text/nova.txt
+$include "src/text/nova.asm"
 d_24A1A7	section	romdata abs=0x24A1A7
-$include "build/text/item_price.asm"	; src/text/item_price.txt
+$include "src/text/item_price.asm"
 d_24A1FC	section	romdata abs=0x24A1FC
-$include "build/text/bcd_digits.asm"	; src/text/bcd_digits.txt
+$include "src/text/bcd_digits.asm"
 d_24A22D	section	romdata abs=0x24A22D
-$include "build/text/sorry_there_is_nodata.asm"	; src/text/sorry_there_is_nodata.txt
+$include "src/text/sorry_there_is_nodata.asm"
 d_24A34C	section	romdata abs=0x24A34C
-$include "build/text/i_am_ent_i.asm"	; src/text/i_am_ent_i.txt
+$include "src/text/i_am_ent_i.asm"
 d_24B3EE	section	romdata abs=0x24B3EE
-$include "build/text/d_4_d_r.asm"	; src/text/d_4_d_r.txt
+$include "src/text/d_4_d_r.asm"
 d_24CF57	section	romdata abs=0x24CF57
-$include "build/text/text.asm"	; src/text/text.txt
+$include "src/text/text.asm"
 d_24D154	section	romdata abs=0x24D154
-$include "build/text/i_am_the_guardian.asm"	; src/text/i_am_the_guardian.txt
+$include "src/text/i_am_the_guardian.asm"
 d_24D2A4	section	romdata abs=0x24D2A4
-$include "build/text/wow_player_that_was.asm"	; src/text/wow_player_that_was.txt
+$include "src/text/wow_player_that_was.asm"
 d_24E075	section	romdata abs=0x24E075
-$include "build/text/well_hello_there_hows.asm"	; src/text/well_hello_there_hows.txt
+$include "src/text/well_hello_there_hows.asm"
 d_24E6D8	section	romdata abs=0x24E6D8
-$include "build/text/all_right_what_do.asm"	; src/text/all_right_what_do.txt
+$include "src/text/all_right_what_do.asm"
 d_24F30E	section	romdata abs=0x24F30E
-$include "build/text/i_said_im_busy.asm"	; src/text/i_said_im_busy.txt
+$include "src/text/i_said_im_busy.asm"
 d_24FE39	section	romdata abs=0x24FE39
-$include "build/text/listen_to_me_must.asm"	; src/text/listen_to_me_must.txt
+$include "src/text/listen_to_me_must.asm"
 d_250AAE	section	romdata abs=0x250AAE
-$include "build/text/here_it_is.asm"	; src/text/here_it_is.txt
+$include "src/text/here_it_is.asm"
 d_2518B5	section	romdata abs=0x2518B5
-$include "build/text/see_you_might_be.asm"	; src/text/see_you_might_be.txt
+$include "src/text/see_you_might_be.asm"
 d_251A8B	section	romdata abs=0x251A8B
-$include "build/text/tell_me_a_story.asm"	; src/text/tell_me_a_story.txt
+$include "src/text/tell_me_a_story.asm"
 d_2543C1	section	romdata abs=0x2543C1
-$include "build/text/hi_can_i_get.asm"	; src/text/hi_can_i_get.txt
+$include "src/text/hi_can_i_get.asm"
 d_25444E	section	romdata abs=0x25444E
-$include "build/text/think_i_had_one.asm"	; src/text/think_i_had_one.txt
+$include "src/text/think_i_had_one.asm"
 d_2549F9	section	romdata abs=0x2549F9
-$include "build/text/i_dont_really_know.asm"	; src/text/i_dont_really_know.txt
+$include "src/text/i_dont_really_know.asm"
 d_254B51	section	romdata abs=0x254B51
-$include "build/text/why_why_cant_i.asm"	; src/text/why_why_cant_i.txt
+$include "src/text/why_why_cant_i.asm"
 d_255C8D	section	romdata abs=0x255C8D
-$include "build/text/wonder_what_cake_i.asm"	; src/text/wonder_what_cake_i.txt
+$include "src/text/wonder_what_cake_i.asm"
 d_256655	section	romdata abs=0x256655
-$include "build/text/are_you_all_right.asm"	; src/text/are_you_all_right.txt
+$include "src/text/are_you_all_right.asm"
 d_256D42	section	romdata abs=0x256D42
-$include "build/text/hic_hey_its_player.asm"	; src/text/hic_hey_its_player.txt
+$include "src/text/hic_hey_its_player.asm"
 d_258607	section	romdata abs=0x258607
-$include "build/text/text_2.asm"	; src/text/text_2.txt
+$include "src/text/text_2.asm"
 d_259743	section	romdata abs=0x259743
-$include "build/text/welcome_back_everything_heres.asm"	; src/text/welcome_back_everything_heres.txt
+$include "src/text/welcome_back_everything_heres.asm"
 d_25E6DF	section	romdata abs=0x25E6DF
-$include "build/text/unitron_status_hp_hit.asm"	; src/text/unitron_status_hp_hit.txt
+$include "src/text/unitron_status_hp_hit.asm"
 d_25E83B	section	romdata abs=0x25E83B
-$include "build/text/affinities_2_strength_weakness.asm"	; src/text/affinities_2_strength_weakness.txt
+$include "src/text/affinities_2_strength_weakness.asm"

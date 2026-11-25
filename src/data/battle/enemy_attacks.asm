@@ -1,6 +1,6 @@
 ; EnemyAttacks (enemy_attacks): 472 records of 15 bytes, one line per id; keep the order and count.
 ; GetEnemyAttackSlots 0x2082EB: 4 slots of 15 bytes per enemy (line id = enemy.slot).
-; attack: id in tables/attack_names.txt (255 = empty slot). power: base damage, scaled by the
+; attack: id in tables/attack_names.asm (255 = empty slot). power: base damage, scaled by the
 ; area's ap % for scaled enemies. action: battle handler table EnemyActionJumps [action + 1]
 ; (255 = handler 0, plain attack; 11/12 = attack with the robot's right/left arm, wEnemyParts +2/+3 as the equipment slots);
 ; 1-4 also inflict a status with chance wEnemyStatusChance (1 paralysis, 2 rust, 3 EP leak,

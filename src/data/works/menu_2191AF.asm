@@ -1,6 +1,6 @@
 ; 7 stat lines (HP, EP, AP, SP, RP, MP, AT) and their "---" values
 d_2191AF	section	romdata abs=0x2191AF
-$include "build/data/works/menu_texts_2191AF.asm"	; src/data/works/menu_texts_2191AF.txt
+$include "src/data/works/menu_texts_2191AF.asm"
 d_2191C8	section	romdata abs=0x2191C8
 ; [code] works.asm (ld XHL,0x2191C8): PrintStringTable, 7 lines
 MenuLines_2191C8:
@@ -12,7 +12,7 @@ MenuLines_2191C8:
 	menu_item	0,5,MPText2
 	menu_item	0,8,ATText2
 d_2191F2	section	romdata abs=0x2191F2
-$include "build/data/works/menu_texts_2191F2.asm"	; src/data/works/menu_texts_2191F2.txt
+$include "src/data/works/menu_texts_2191F2.asm"
 d_21920E	section	romdata abs=0x21920E
 ; [code] works.asm (ld XHL,0x21920E): PrintStringTable, 7 lines at column 3
 MenuLines_21920E:

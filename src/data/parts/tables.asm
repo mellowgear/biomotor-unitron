@@ -1,6 +1,6 @@
 ; data/parts/tables.asm: the parts tables in ROM order, one section per part; each part is a
-; file in src/data/parts/: numbers as asm900 records (#include), names as a slot file that
-; unitron text turns into build/data/parts/<file>.asm ($include). A part the ROM holds twice
+; file in src/data/parts/: numbers as asm900 records (#include), names as text slot
+; files ($include, character codes from the charmap). A part the ROM holds twice
 ; (Works/Copy labels) includes the same file twice.
 
 d_21F01C	section	romdata abs=0x21F01C
@@ -26,10 +26,10 @@ PartCategoryStartWorks:
 #include "src/data/parts/category_start.asm"
 d_25B623	section	romdata abs=0x25B623
 PartNamesWorks:
-$include "build/data/parts/names.asm"	; src/data/parts/names.txt
+$include "src/data/parts/names.asm"
 d_25BC58	section	romdata abs=0x25BC58
 PartDescsWorks:
-$include "build/data/parts/descs.asm"	; src/data/parts/descs.txt
+$include "src/data/parts/descs.asm"
 d_25CD31	section	romdata abs=0x25CD31
 PartIdWords:
 #include "src/data/parts/part_id_words.asm"
@@ -41,10 +41,10 @@ PartCategoryStart:
 #include "src/data/parts/category_start.asm"
 d_27188C	section	romdata abs=0x27188C
 PartNames:
-$include "build/data/parts/names.asm"	; src/data/parts/names.txt
+$include "src/data/parts/names.asm"
 d_271EC1	section	romdata abs=0x271EC1
 PartDescs:
-$include "build/data/parts/descs.asm"	; src/data/parts/descs.txt
+$include "src/data/parts/descs.asm"
 d_272F9A	section	romdata abs=0x272F9A
 PartIdWordsCopy:
 #include "src/data/parts/part_id_words.asm"

@@ -165,25 +165,6 @@ GetMapCellAttr:
 	ld	HL,(XHL)
 	ret
 
-c_206F69	section	code abs=0x206F69
-
-; [code] BC / DE = cell -> its GetMetatileTiles 2 x 2 tiles into SCR1 0x9000 + (y & 15) * 0x80 + (x & 15) * 4 (XBC) and +0x40 (XDE)
-DrawMapCell:
-	ld	XWA,0
-	ld	A,C
-	ld	W,E
-	and	WA,0xF0F
-	sll	3,A
-	srl	1,WA
-	add	WA,0x9000
-	push	XWA
-	call	GetMapCell
-	call	GetMetatileTiles
-	pop	XWA
-	ld	(XWA),XBC
-	ld	(XWA+0x40),XDE
-	ret
-
 c_206F8D	section	code abs=0x206F8D
 
 ; [code] DrawMapCell for 14 cells from BC, DE

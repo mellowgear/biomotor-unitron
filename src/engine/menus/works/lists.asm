@@ -594,7 +594,8 @@ DrawPartEpCostAndAffinity:
 DrawPartEpCostAndAffinity.done:
 	ret
 PercentText:
-	db	0x52,0xFF	; "%"
+	text "%"
+	done
 
 c_218A62	section	code abs=0x218A62
 

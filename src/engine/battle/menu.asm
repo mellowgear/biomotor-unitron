@@ -86,7 +86,8 @@ c_20994F	section	code abs=0x20994F
 
 ; [code] "LV" + FF (charmap 2C 36): DrawBattleScreen draws it with DrawString before wPlayerLevel
 LevelText:
-	db	0x2C,0x36,0xFF
+	text "LV"
+	done
 ; [code+play] battle_command_menu; ShowWeaponInfo. [play] entered at 0x209952 in all runs (D10);
 ; BattleMainMenuJumps entry 0 and ShowNotEnoughEP (TASK_FUNC 0x9952) lead here (was "the task resume after StartBattleRound")
 BattleCommandMenu:
@@ -538,9 +539,11 @@ DrawBattleItemPage.skip2:
 DrawBattleItemPage.done:
 	ret
 Slash03Text:
-	db	0x5B,0x41,0x44,0xFF	; "/03"
+	text "/03"
+	done
 BlankZeroText:
-	db	0x00,0x41,0xFF	; " 0"
+	text " 0"
+	done
 TimesText5:
 	db	0x69,0xFF	; "×"
 DashText12:

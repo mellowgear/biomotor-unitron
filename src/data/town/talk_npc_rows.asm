@@ -1,6 +1,6 @@
 ; TalkNpcRows (talk_npc_rows): 17 records of 4 bytes, one line per id; keep the order and count.
 ; TownNpcTalk, once EVENT_TALKED flag 0x40 + n is set for NPC n = speaker - 0x15: the talk row
-; (0-based, in the place's talk_*.txt) to show instead. Line n + 1 for NPC n (0-13), line 15 =
+; (0-based, in the place's talk_*.asm) to show instead. Line n + 1 for NPC n (0-13), line 15 =
 ; NPC 7 in D-town, 16 = NPC 7 at the Spring, 17 = NPC 8 outside the Forest. Column: greeted =
 ; EVENT_GREETED flag 0x50 + n set; late = EVENT_STAGE_ENDING or EVENT_STAGE_WON_RANK_X set.
 ; 255 = the default row ("Sorry, There is no data."). Some NPCs are handled before this

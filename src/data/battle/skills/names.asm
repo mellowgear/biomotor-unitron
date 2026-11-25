@@ -1,8 +1,8 @@
 ; SkillNames (skills): 20 strings, 7-byte slots (6 characters + done),
-; one per id; keep the order and count. Built by unitron text (Makefile).
+; one per id; keep the order and count. Character codes from the charmap ($charmap).
 ; Notes on the table: src/data/battle/skills/stats.asm
 
-slot 7 FF
+	slot	7 FF
 	text "Nova"	; 1
 	done
 	text "Burst"	; 2
@@ -43,4 +43,4 @@ slot 7 FF
 	done
 	text "Breath"	; 20
 	done
-slot 0
+	slot	0

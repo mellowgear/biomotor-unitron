@@ -10,9 +10,10 @@ $include "build/gfx/tiles/2846FE.2bpp.lz.asm"	; build/gfx/tiles/2846FE.2bpp.lz
 ```
 
 asm900 has no binary include, so every product is turned into `db` lines: `build/P.asm` is made
-from the product `build/P` by `unitron bin2db`, `build/src/F.asm` from a source file used as it is,
-and `build/text/B.asm` from `src/text/B.txt` by `unitron text` (the game's character map,
-`src/text/charmap.txt`). The Makefile collects every `build/...` path named by a `$include`; the
+from the product `build/P` by `unitron bin2db`, and `build/src/F.asm` from a source file used as it
+is. Text needs no product: `src/main.asm` loads the game's character map with
+`$charmap "src/text/charmap.txt"`, and `text`/`line`/`page`/`done` lines assemble straight to
+character codes. The Makefile collects every `build/...` path named by a `$include`; the
 product's path or extension picks a pattern rule (only what changed is rebuilt). Formats are the
 game loaders':
 
@@ -26,11 +27,11 @@ game loaders':
 | (none) | `src/gfx/palettes.asm`, at the `MonoPal_` label: `db` lines | mono shades, as written (LoadMonoPalettes 0x206DCD) |
 | `build/gfx/font/font.2bpp` | `src/gfx/font/font.png` | 128 raw 2bpp glyphs, no compression (`unitron gfx frompng --count 128`); `dw 128` before it in gfx/font.asm (GetFontGlyph 0x207073) |
 | (none) | `src/data/S/T.asm` or `src/data/S/T/P.asm` | a numeric table part: `db`/`dw`/`dd` lines or record macros (`src/macros/tables.inc`), `#include`d from `src/data/S/tables.asm` (S = subject) |
-| `build/data/S/T.asm`, `build/data/S/T/P.asm` | `src/data/S/T.txt`, `src/data/S/T/P.txt` | a text table part: fixed-size slots (`slot 7 FF`), `unitron text` |
+| (none) | `src/data/S/T.asm`, `src/data/S/T/P.asm` (text) | a text table part: fixed-size slots (`slot 7 FF`), `$include`d, through the charmap |
 | (none) | `src/gfx/maps/X.tilemap`, `.blk` | included as they are (`build/src/...asm`): u8 w, h + u16 entries (DrawTilemap 0x206B37) |
 | (none) | `src/gfx/blocksets/dungeon.bst` | included as it is: 441 metatiles of 4 u16 tile words, no header (GetMetatileTiles 0x206EE6) |
 | `build/gfx/blocksets/X.tilemap` | `src/gfx/blocksets/X.bst` | not in the ROM: the blockset as a u8 w, h + u16 map, the metatiles 16 to a row (`tools/biogfx blockmap`), the `--map` that lays out `dungeon_tiles.png` |
-| `build/text/B.asm` | `src/text/B.txt` | the bank's strings in the game's character codes (`unitron text`, TextStep 0x2073B3) |
+| (none) | `src/text/B.asm` | the bank's strings, through the charmap (TextStep 0x2073B3) |
 
 LZSS is Okumura's LZSS.C, which reproduces every original stream. A
 sheet's tile count is read from its PNG: every tile up to the last one in the last row that is not

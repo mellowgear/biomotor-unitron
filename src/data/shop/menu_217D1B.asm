@@ -3,7 +3,7 @@
 ; 0x614B = lines, 0x614C = lines (PrintStringTable / PrintStringTableEntry: text box column, row, string),
 ; 0x6150 = cursor stops (GetMenuCursorCell: column, row), 0x6154 = the result per stop (MenuCmdShowCursor)
 d_217D1B	section	romdata abs=0x217D1B
-$include "build/data/shop/menu_texts_217D1B.asm"	; src/data/shop/menu_texts_217D1B.txt
+$include "src/data/shop/menu_texts_217D1B.asm"
 d_217D33	section	romdata abs=0x217D33
 ; [code] SetupPartCategoryMenu: 0x614C
 MenuLines_217D33:

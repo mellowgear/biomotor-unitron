@@ -6,7 +6,7 @@ d_2186D4	section	romdata abs=0x2186D4
 ListCursor_2186D4:
 	db	0,1, 0,3, 0,4, 0,5, 0,6, 0,7, 0,9, 0,10	; column, row
 d_2186E4	section	romdata abs=0x2186E4
-$include "build/data/works/menu_texts_2186E4.asm"	; src/data/works/menu_texts_2186E4.txt
+$include "src/data/works/menu_texts_2186E4.asm"
 d_218713	section	romdata abs=0x218713
 ; [code] DrawEquipListPage: PrintStringTable with B = 8 in box 3 (the 8 slot names)
 MenuLines_218713:

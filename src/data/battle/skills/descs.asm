@@ -1,8 +1,8 @@
 ; SkillDescs (skills): 20 strings, 19-byte slots (18 characters + done),
-; one per id; keep the order and count. Built by unitron text (Makefile).
+; one per id; keep the order and count. Character codes from the charmap ($charmap).
 ; Notes on the table: src/data/battle/skills/stats.asm
 
-slot 19 FF
+	slot	19 FF
 	text "Flame attack"	; 1 Nova
 	done
 	text "Raises AP & RP"	; 2 Burst
@@ -43,4 +43,4 @@ slot 19 FF
 	done
 	text "No EP loss"	; 20 Breath
 	done
-slot 0
+	slot	0
