@@ -1,4 +1,4 @@
-; strings at 217D1B-217D33 (sub_217D60)
+; strings at 217D1B-217D33 (SetupPartCategoryMenu)
 
 CoreText:
     text "Core"

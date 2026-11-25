@@ -1,5 +1,5 @@
-; data/battle_anims/battle_effects.asm: battle effect data (tools/battle_fx.py; make extract
-; rewrites it). Read by PlayBattleEffect through BattleEffects (effect id -> record).
+; data/battle_anims/battle_effects.asm: battle effect data.
+; Read by PlayBattleEffect through BattleEffects (effect id -> record).
 ; FxMono_* are the records' mono palettes: LoadMonoPalettes is called with A = 0xE and returns
 ; without loading (A >= 6), so their bytes are kept as plain data.
 

@@ -1,6 +1,6 @@
 ; ExpCurve5 (exp_curves): 50 records of 2 bytes, one line per id; keep the order and count.
 ; Line = your level; value = EXP needed to reach the next level (0 = max level 50).
-; dyn_207B12 (level up): when EXP-to-next (0x5023) reaches 0, it adds the value for the
+; TryLevelUp (level up): when EXP-to-next (0x5023) reaches 0, it adds the value for the
 ; new level and the level (0x5022) goes up; a new game starts at level 0 and levels once.
 ; One curve per race: ExpCurves pointer table 0x224FF5 [(0x5021 - 1) / 2], 0x5021 =
 ; race/gender 1-10 (1 = Human male confirmed in play; the rest in Select Player order).

@@ -49,7 +49,7 @@
 	dw	?sound
 ?endm
 
-; menu_item: one menu line of 6 bytes (the menu tables read by swp_2171F0 / swp_217207):
+; menu_item: one menu line of 6 bytes (the menu tables read by PrintStringTableEntry / PrintStringTable):
 ; text box column and row, then the string
 ?macro menu_item column,row,text
 	db	?column,?row

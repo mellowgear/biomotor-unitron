@@ -1,5 +1,5 @@
 # Instructions whose ROM encoding is not unitron's default: ADDR operand-index width (asm900 ':n').
-# Read by tools/split_source.py (asm900 output). Found by comparing with unitron's converter; the build proves them.
+# A record of the `:n` widths in src/. Found by comparing with unitron's converter; the build proves them.
 200057 0 24    ; ld (0x62AA:24),A
 20005C 0 24    ; ld (0x62AB:24),A
 200061 0 24    ; ld (0x62AC:24),A

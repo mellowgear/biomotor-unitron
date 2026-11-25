@@ -1,6 +1,6 @@
 ; ItemPrices (items): 71 records of 4 bytes, one line per id; keep the order and count.
 ; Accessors 0x208272 / 0x208281. price: buy price in GP, stored as 4-byte BCD at 0x25B4DF
-; (found from the play agent's shop prices: FixIt1 100, Tngstn 10000, Gnome 150000, all
+; (found from shop prices seen in play: FixIt1 100, Tngstn 10000, Gnome 150000, all
 ; match); selling gives half. Ids 1-37 are accessories (slots wEquipAcc1/2), 38-51 battle
 ; items, 52-56 tools, 57-71 materials (play: Works item list categories).
 ; Code (BattleStatusEffects 0x20C604, the only way to BattleDefeat): at 0 HP, Recvr

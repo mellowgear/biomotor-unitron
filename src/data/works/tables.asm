@@ -7,6 +7,7 @@
 #include "src/data/works/menu_217D8B.asm"
 #include "src/data/works/menu_2186D4.asm"
 #include "src/data/works/menu_218A70.asm"
+#include "src/data/works/menu_218F9F.asm"
 #include "src/data/works/menu_2191AF.asm"
 d_21BA31	section	romdata abs=0x21BA31
 Recipes:

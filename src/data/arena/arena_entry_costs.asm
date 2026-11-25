@@ -1,5 +1,5 @@
 ; ArenaEntryCosts (arena_entry_costs): 8 records of 2 bytes, one line per id; keep the order and count.
-; sub_213A68 / sub_2142EF: GP to enter the rank picked in the menu (line = choice + 1, ranks
+; ArenaRankListChoose / ArenaFightQuitChoose: GP to enter the rank picked in the menu (line = choice + 1, ranks
 ; E D C B A S CS X; the names are the pointers at 0x249C0F), compared with and taken from wGP.
 ; id: gp
 	dw	  200	; 1 Rank E

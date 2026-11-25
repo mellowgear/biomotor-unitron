@@ -1,11 +1,17 @@
-; text/banks.asm: the text banks in ROM order (tools/text.py extract), one section each
+; text/banks.asm: the text banks in ROM order, one section each
 
 d_20D333	section	romdata abs=0x20D333
 $include "build/text/config.asm"	; src/text/config.txt
 d_20D544	section	romdata abs=0x20D544
 $include "build/text/delete_data_delete_all.asm"	; src/text/delete_data_delete_all.txt
-d_20DFD2	section	romdata abs=0x20DFD2
+d_20DF5B	section	romdata abs=0x20DF5B
+$include "build/text/save_menu.asm"	; src/text/save_menu.txt
+d_20DFCE	section	romdata abs=0x20DFCE
 $include "build/text/ok_yes_no.asm"	; src/text/ok_yes_no.txt
+d_20E051	section	romdata abs=0x20E051
+$include "build/text/save_complete.asm"	; src/text/save_complete.txt
+d_2172F2	section	romdata abs=0x2172F2
+$include "build/text/hex_digits.asm"	; src/text/hex_digits.txt
 d_225423	section	romdata abs=0x225423
 $include "build/text/attack_item_charge.asm"	; src/text/attack_item_charge.txt
 d_2254B2	section	romdata abs=0x2254B2

@@ -1,4 +1,4 @@
-; data/town/pointers: pointer tables read by the code (tools/pointers.py), one section each
+; data/town/pointers: pointer tables read by the code, one section each
 
 d_249EAB	section	romdata abs=0x249EAB
 ; [code] DrawTownPlace: name per town place 0-6

@@ -10,8 +10,8 @@ d_227473	section	romdata abs=0x227473
 DungeonSelectCursor:
 #include "src/data/dungeon/dungeon_select_cursor.asm"
 d_2275A1	section	romdata abs=0x2275A1
-; [code] sub_210622: the sprite position (x, y; drawn at x - 8, y - 12 by sub_206BFF) of the
-; marker for dungeon A = 0-3, which sub_210675 draws for each set event flag 0x60-0x63
+; [code] DrawWorldMapMarker: the sprite position (x, y; drawn at x - 8, y - 12 by DrawSpriteGrid) of the
+; marker for dungeon A = 0-3, which DrawBeatenDungeonMarkers draws for each set event flag 0x60-0x63
 Data_2275A1:
 	dw	140,74
 	dw	96,142

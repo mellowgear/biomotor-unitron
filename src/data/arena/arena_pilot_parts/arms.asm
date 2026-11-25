@@ -1,6 +1,6 @@
 ; ArenaPilotArms: 6 ranks x 15 arm ids; right and left arm are each entry line * 15 +
 ; Random() % count (two separate rolls; the same arm can come twice). Not per pilot group.
-; How sub_213C2E builds a random pilot's parts, and the line order: body_base.asm.
+; How RollArenaBracket builds a random pilot's parts, and the line order: body_base.asm.
 ; one line per rank: 15 ids
 	db	 24, 33, 40, 54, 75, 79, 85, 90, 94,100,105,110,115,125,  0	; Rank S: Cutter, Wyndia, Break, IceClw, Coil, ArchMg, Infrno, Buster, Indra, Ashra, Hacker, Plate, RedClw, RailGn
 	db	 22, 29, 39, 45, 50, 53, 59, 78, 84, 89, 93,109,114,120,124	; Rank A: Drill, Sabre+, 2Edge, Sthrn+, Spiral, BtlHk, 9Tail, Warlok, Cursed, Zoomer, Qatar, Mail, Mantis, Phalnx, XGun

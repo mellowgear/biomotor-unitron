@@ -1,9 +1,9 @@
 ; ItemAffinity (item_works): 71 records of 2 bytes, one line per id; keep the order and count.
 ; Per item (line = item id), in the Works copy of the database.
-; index, group: the item's place in tables/item_groups.asm (group 1-4, index from 1); swp_21B902 reads
-; it, but nothing calls swp_21B902.
+; index, group: the item's place in tables/item_groups.asm (group 1-4, index from 1); GetItemGroupIds reads
+; it, but nothing calls GetItemGroupIds.
 ; u379: no reader found (swp_21B911 has no caller): 1 for ids 1-37, 6 for 38-43, 2 for 44-51, 8 for 52-71.
-; affinity: swp_217444 (no caller) returns this for items where it returns the part's affinity
+; affinity: GetEntryAffinity (no caller) returns this for items where it returns the part's affinity
 ; (tables/parts/) for parts; the eight affinity chips FlrCt..MirrCt hold the affinity bits 1..128.
 ; id: affinity
 	dw	  1	; 1 FlrCt

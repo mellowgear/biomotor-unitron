@@ -9,7 +9,7 @@
 	db	29,30	; 5
 	db	31,32	; 6
 	db	34,35	; 7
-	db	36,37	; 8
+	db	36,37	; 8; [play] the Satanachia's UNITRON transmission before Rank CS duel 6 (ArenaDuel6Scene)
 	db	39,40	; 9
 	db	42,43	; 10
 	db	45,46	; 11

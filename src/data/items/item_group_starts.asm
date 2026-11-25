@@ -1,5 +1,5 @@
 ; ItemGroupStarts (item_group_starts): 4 records of 1 bytes, one line per id; keep the order and count.
-; sub_21B8C0: item id - 1 = this + index - 1, line = group 1-4 (see tables/item_groups.asm).
+; ItemGroupToIndex: item id - 1 = this + index - 1, line = group 1-4 (see tables/item_groups.asm).
 ; id: first
 	db	 0	; 1 group 1: accessories
 	db	37	; 2 group 2: battle items

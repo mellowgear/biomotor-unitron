@@ -1,5 +1,5 @@
 ; Event flags: CheckEventFlag / SetEventFlag / ClearEventFlag (HL = flag) test bit flag & 15
-; of wEventFlags[flag >> 4] (0x5060, 16 x u16). Meanings from the code and play (RAM_MAP.md).
+; of wEventFlags[flag >> 4] (0x5060, 16 x u16). Meanings from the code and play (the comment on each flag).
 EVENT_STAGE_TOWN	equ	0x00
 EVENT_STAGE_ARENA_OPEN	equ	0x01
 EVENT_STAGE_WON_RANK_E	equ	0x02

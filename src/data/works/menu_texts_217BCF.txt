@@ -1,4 +1,4 @@
-; strings at 217BCF-217BFC (sub_217C44)
+; strings at 217BCF-217BFC (SetupWorksMenu)
 
 SetupText:
     text "Setup"

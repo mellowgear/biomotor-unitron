@@ -1,5 +1,5 @@
 ; ArenaBrackets (arena_brackets): 8 records of 6 bytes, one line per id; keep the order and count.
-; Arena opponents per rank. sub_213C2E: line = chosen rank - 1 (task +0x15 - 2); `count`
+; Arena opponents per rank. RollArenaBracket: line = chosen rank - 1 (task +0x15 - 2); `count`
 ; opponents are fought in order o1, o2, ...; an enemy id (tables/enemies/) is fixed, 255 = a
 ; random pilot 98 + Random() % 15 (Alex .. Dupon), never one already drawn for this bracket.
 ; The pointer table to the rows is at 0x249D2E (still raw).

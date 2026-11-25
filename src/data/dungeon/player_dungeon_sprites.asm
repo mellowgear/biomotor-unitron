@@ -2,7 +2,7 @@
 ; Sprite maps of the player in the dungeon (LoadPlayerDungeonSprite 0x211D03, LoadDungeonPalettes):
 ; line = race r * 12 + set s * 3 + frame f + 1, r = (wPlayerRace - 1) / 2; s and f come from the task
 ; (+0x15 facing / +0x2D timer, see the code). w, h in tiles; t1..t4 = tiles of
-; src/gfx/dungeon_sprites/player.png (0 = blank), copied by swp_206941.
+; src/gfx/dungeon_sprites/player.png (0 = blank), copied by LoadMappedTiles.
 ; One player_dungeon_sprite record per line (src/macros/tables.inc).
 ; id: w, h, t1, t2, t3, t4
 	player_dungeon_sprite	2,2,  1,  2,  3,  4	; 1 Human set 0 frame 0

@@ -98,13 +98,15 @@ GetStoryStage:
 	push	XHL
 	push	BC
 	ld	HL,0xB
+GetStoryStage.loop:
 	push	HL
 	call	CheckEventFlag
 	cp	L,1
 	pop	HL
-	jr	Z,0x216AB7
+	jr	Z,GetStoryStage.skip
 	sub	HL,1
-	jr	NZ,0x216AA7
+	jr	NZ,GetStoryStage.loop
+GetStoryStage.skip:
 	ld	A,L
 	pop	BC
 	pop	XHL

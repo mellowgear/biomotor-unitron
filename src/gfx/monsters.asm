@@ -1,4 +1,4 @@
-; gfx/monsters.asm: monster images and MonsterPalettes, in ROM order (written once by tools/assets.py extract; edited by hand since). Each keeps its address in its own section;
+; gfx/monsters.asm: monster images and MonsterPalettes, in ROM order. Each keeps its address in its own section;
 ; the included product says how the Makefile builds it (see README).
 
 d_2C95A9	section	romdata abs=0x2C95A9

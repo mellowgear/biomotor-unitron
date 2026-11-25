@@ -1,7 +1,10 @@
-; strings at 218228-218236 (swp_21B394: "x/" (only its first byte is read: ld L,(0x218228), the "x" before a count) and the dash line of an empty row)
+; strings at 218228-218236 (DrawShopBuyItemPage: "×" (read alone: ld L,(TimesText2), the "×" before a count) and the dash line of an empty row)
 
 TimesText2:
-    text "×/"
+    text "×"
+
+SlashText3:
+    text "/"
     done
 
 DashText2:

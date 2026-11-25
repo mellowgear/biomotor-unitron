@@ -1,6 +1,6 @@
 ; BattleItemEffects (battle_item_effects): 14 records of 4 bytes, one line per id; keep the order and count.
 ; Battle items 38-51 (line = item id - 37). GetBattleItemEffect 0x208290; BattleUseItem 0x20A1D6
-; then runs the item's handler (table 0x20A232). Format as tables/arm_effects.asm.
+; then runs the item's handler (table BattleItemJumps). Format as tables/arm_effects.asm.
 ; id: f0, effects (3 bytes)
 	db	2,0x86,0xFF,0xFF	; 1 FixIt1
 	db	2,0x87,0xFF,0xFF	; 2 FixIt2

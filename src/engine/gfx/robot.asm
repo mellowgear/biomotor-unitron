@@ -1,4 +1,130 @@
-; engine/gfx/robot: 5 routines (each keeps its ROM address in its own section)
+; engine/gfx/robot: 15 routines (each keeps its ROM address in its own section)
+
+c_2070C7	section	code abs=0x2070C7
+
+; format 04: w, h, LZSS 4-bit pixels (4 = transparent)
+DrawPartImage:
+	cpb	(XHL+),4
+	ret	NZ
+	push	XIX
+	push	XIY
+	push	XIZ
+	pushw	0
+	pushw	(XHL+)
+	push	QD
+	push	QB
+	push	DE
+	push	BC
+	push	WA
+	ld	XDE,wTextBuffer
+	ld	XWA,0
+DrawPartImage.loop:
+	ld	(XDE+),XWA
+	cp	DE,0x43EE
+	jr	C,DrawPartImage.loop
+	ld	XIZ,XHL
+	ld	A,(XSP+8)
+	mul	WA,(XSP+9)
+	ld	IY,WA
+	ld	IX,0
+	ld	QIX,0x3EE
+DrawPartImage.loop2:
+	cp	(XSP+0xA),IY
+	jrl	NC,DrawPartImage.skip3
+	srl	1,IX
+	bit	0,IXH
+	jr	NZ,DrawPartImage.skip
+	ld	A,(XIZ+)
+	ld	IXL,A
+	ld	IXH,0xFF
+DrawPartImage.skip:
+	bit	0,IXL
+	jr	Z,DrawPartImage.skip2
+	ld	A,(XIZ+)
+	ld	XDE,wTextBuffer
+	ld	(XDE+QIX),A
+	minc1	0x400,QIX
+	ld	QB,A
+	srl	4,A
+	cp	A,4
+	call	C,PlotPixel
+	incw	1,(XSP+0xA)
+	ld	A,QB
+	and	A,0xF
+	cp	A,4
+	call	C,PlotPixel
+	incw	1,(XSP+0xA)
+	jr	DrawPartImage.loop2
+DrawPartImage.skip2:
+	ld	WA,(XIZ+)
+	ld	QIY,WA
+	srl	4,QIYH
+	and	W,0xF
+	inc	3,W
+	ld	QW,W
+DrawPartImage.loop3:
+	ld	XDE,wTextBuffer
+	ld	A,(XDE+QIY)
+	minc1	0x400,QIY
+	ld	(XDE+QIX),A
+	minc1	0x400,QIX
+	ld	QB,A
+	srl	4,A
+	cp	A,4
+	call	C,PlotPixel
+	incw	1,(XSP+0xA)
+	ld	A,QB
+	and	A,0xF
+	cp	A,4
+	call	C,PlotPixel
+	incw	1,(XSP+0xA)
+	djnz	QW,DrawPartImage.loop3
+	jrl	DrawPartImage.loop2
+DrawPartImage.skip3:
+	add	XSP,0xC
+	pop	XIZ
+	pop	XIY
+	pop	XIX
+	ret
+
+c_2071AF	section	code abs=0x2071AF
+
+PlotPixel:
+	ld	DE,(XSP+0xE)
+	div	DE,(XSP+0xC)
+	ld	C,D
+	ld	B,0
+	ld	D,0
+	add	BC,(XSP+6)
+	add	DE,(XSP+8)
+	ld	HL,DE
+	srl	3,HL
+	mul	HL,(XSP+0xA)
+	ld	QHL,HL
+	ld	HL,BC
+	srl	3,HL
+	add	HL,QHL
+	add	HL,(XSP+4)
+	push	A
+	sll	4,HL
+	ld	A,E
+	and	A,7
+	sll	1,A
+	ld	W,0
+	add	HL,WA
+	add	HL,0xA000
+	ld	A,C
+	sll	1,A
+	ld	BC,0x3FFF
+	rrc	A,BC
+	pop	E
+	and	DE,3
+	inc	2,A
+	rrc	A,DE
+	extz	XHL
+	and	(XHL),BC
+	or	(XHL),DE
+	ret
 
 c_207CE7	section	code abs=0x207CE7
 
@@ -9,19 +135,20 @@ swp_207CE7:
 
 c_207CF0	section	code abs=0x207CF0
 
-sub_207CF0:
+; [code] BC = value (clamped to 0-999), XDE = 3 tiles: fills them with the font glyph of code 0 (space, byte NumberTileChars), then writes the decimal digits right-aligned (glyph 0x41 '0' + digit, GetFontGlyph), last digit first; callers ScreenShakeTask, DrawBattleScreen, DrawBattleItemPage, DrawSaveSlotList
+RenderNumberTiles:
 	or	BC,BC
-	jr	PL,sub_207CF0.skip
+	jr	PL,RenderNumberTiles.skip
 	ld	BC,0
-	jr	sub_207CF0.skip2
-sub_207CF0.skip:
+	jr	RenderNumberTiles.skip2
+RenderNumberTiles.skip:
 	cp	BC,0x3E8
-	jr	C,sub_207CF0.skip2
+	jr	C,RenderNumberTiles.skip2
 	ld	BC,0x3E7
-sub_207CF0.skip2:
+RenderNumberTiles.skip2:
 	push	BC
 	push	XDE
-	ld	L,(0x207D3E)
+	ld	L,(NumberTileChars)
 	call	GetFontGlyph
 	ld	BC,8
 	ldirw	(XDE+),(XHL+)
@@ -30,11 +157,11 @@ sub_207CF0.skip2:
 	ldirw	(XDE+),(XHL+)
 	dec	2,XDE
 	pop	BC
-sub_207CF0.loop:
+RenderNumberTiles.loop:
 	extz	XBC
 	div	XBC,0xA
 	ld	HL,QBC
-	add	L,(0x207D3F)
+	add	L,(NumberTileChars+1)
 	call	GetFontGlyph
 	add	XHL,0xE
 	push	BC
@@ -42,8 +169,9 @@ sub_207CF0.loop:
 	lddrw	(XDE-),(XHL-)
 	pop	BC
 	or	BC,BC
-	jr	NZ,sub_207CF0.loop
+	jr	NZ,RenderNumberTiles.loop
 	ret
+NumberTileChars:
 	db	0x00,0x41
 
 c_207D40	section	code abs=0x207D40
@@ -78,6 +206,92 @@ DrawRobot:
 	pop	XHL
 	ld	QB,0xC
 	ld	QD,0xB
+	ret
+
+c_207D9D	section	code abs=0x207D9D
+
+; [code] wDrawBody image (ImageTable group 0) at PartOffsetsBody[wDrawBody]
+DrawBodyPart:
+	or	B,B
+	ret	Z
+	push	XIX
+	push	XIY
+	ld	XIX,ImageTable
+	ld	XIY,PartOffsetsBody
+	or	C,C
+	jr	Z,DrawBodyPart.skip
+	cp	C,0x10
+	jr	NC,DrawBodyPart.skip
+	ld	C,B
+	ld	XDE,0
+	ld	D,B
+	dec	1,D
+	srl	3,DE
+	sub	XIY,XDE
+DrawBodyPart.skip:
+	calr	DrawRobotPart
+	pop	XIY
+	pop	XIX
+	ret
+
+c_207DC9	section	code abs=0x207DC9
+
+; [code+play] wDrawRightArm image from group 15 (gfx/parts/arm_r), drawn behind the body
+DrawRightArmPart:
+	or	B,B
+	ret	Z
+	push	XIX
+	push	XIY
+	ld	XIX,RightArmImages
+	ld	XIY,PartOffsetsRightArm
+	calr	DrawRobotPart
+	pop	XIY
+	pop	XIX
+	ret
+
+c_207DDF	section	code abs=0x207DDF
+
+; [code+play] wDrawLeftArm image from group 95 (gfx/parts/arm_l), drawn last
+DrawLeftArmPart:
+	or	B,B
+	ret	Z
+	push	XIX
+	push	XIY
+	ld	XIX,LeftArmImages
+	ld	XIY,PartOffsetsLeftArm
+	calr	DrawRobotPart
+	pop	XIY
+	pop	XIX
+	ret
+
+c_207DF5	section	code abs=0x207DF5
+
+; [code] wDrawLegs image (ImageTable group 175) at PartOffsetsLegs[image][wDrawBody]
+DrawLegsPart:
+	or	B,B
+	ret	Z
+	push	XIX
+	push	XIY
+	ld	XIX,LegImages
+	ld	XIY,PartOffsetsLegs
+	calr	DrawRobotPart
+	pop	XIY
+	pop	XIX
+	ret
+
+c_207E0B	section	code abs=0x207E0B
+
+; [code] wDrawBack image (ImageTable group 225) at PartOffsetsBack[image][wDrawBody]
+DrawBackPart:
+	or	B,B
+	ret	Z
+	push	XIX
+	push	XIY
+	ld	XIX,BackImages
+	ld	XIY,PartOffsetsBack
+	calr	DrawRobotPart
+	pop	XIY
+	pop	XIX
 	ret
 
 c_207E21	section	code abs=0x207E21
@@ -121,6 +335,66 @@ DrawRobotPart.skip3:
 	pop	XWA
 	ld	QB,0xC
 	ld	QD,0xB
+	ret
+
+c_207E77	section	code abs=0x207E77
+
+; [code] SetRobotDrawParts(wEquipCore), DrawRobot, colours from GetAffinityPalette(wUnitAffinity)
+DrawEquippedRobot:
+	push	DE
+	push	BC
+	push	WA
+	call	SetEquippedDrawParts
+	ld	HL,(XSP)
+	call	DrawRobot
+	pop	WA
+	pop	BC
+	ld	DE,(XSP)
+	call	DrawTileBlockScr
+	ld	HL,(wUnitAffinity)
+	call	GetAffinityPalette
+	pop	DE
+	call	LoadImagePalette
+	ret
+
+c_207F30	section	code abs=0x207F30
+
+; [code] XHL palette into SCR2 palette 0 (DE >= 0x20) or SCR1 palette 0, + mono palettes
+LoadImagePalette:
+	cp	DE,0x20
+	jr	C,LoadImagePalette.skip
+	ld	A,0x20
+	ld	C,1
+	call	LoadPalettes
+	ld	A,4
+	ld	C,1
+	ld	XHL,MonoPal_220BFC
+	call	LoadMonoPalettes
+	ld	A,5
+	ld	C,1
+	ld	XHL,MonoPal_21F018
+	call	LoadMonoPalettes
+	ret
+LoadImagePalette.skip:
+	ld	A,0x10
+	ld	C,1
+	call	LoadPalettes
+	ld	A,2
+	ld	C,1
+	ld	XHL,MonoPal_220BFC
+	call	LoadMonoPalettes
+	ld	A,3
+	ld	C,1
+	ld	XHL,MonoPal_21F018
+	call	LoadMonoPalettes
+	ret
+
+c_208475	section	code abs=0x208475
+
+; [code] SetRobotDrawParts with XHL = wEquipCore (the equipped parts); caller DrawEquippedRobot
+SetEquippedDrawParts:
+	ld	XHL,wEquipCore
+	call	SetRobotDrawParts
 	ret
 
 c_208489	section	code abs=0x208489

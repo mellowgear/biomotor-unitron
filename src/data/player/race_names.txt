@@ -1,6 +1,6 @@
 ; RaceNames (race_names): 5 strings, 7-byte slots (6 characters + done),
 ; one per id; keep the order and count. Built by unitron text (Makefile).
-; swp_21B9D0: string 0x25E48F + 7 * n (line = n), n from SplitRaceGender (loc_21905B).
+; GetRaceName: string 0x25E48F + 7 * n (line = n), n from SplitRaceGender (DrawCharaStatsPage).
 
 slot 7 FF
 	text "Human"	; 1

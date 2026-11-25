@@ -1,6 +1,6 @@
 ; TalkSlotsPub (talk_slots_pub): 12 records of 4 bytes, one line per id; keep the order and count.
 ; The talk rows (0-based row of tables/talk_pub.asm, so line - 1) listed in the Pub for story stage
-; line - 1 (GetStoryStage), in order; 255 ends the list early (sub_214F3D). Counts and list
+; line - 1 (GetStoryStage), in order; 255 ends the list early (LoadTalkSlots). Counts and list
 ; pointers: tables/talk_slot_lists/.
 ; id: s1, s2, s3, s4
 	db	16,17,255,255	; 1

@@ -1,5 +1,5 @@
 ; BossEnemies (boss_enemies): 9 records of 1 bytes, one line per id; keep the order and count.
-; BossEncounter: enemy id (tables/enemies/) for boss index sub_212C92 + 1; wAreaLevel = the floor
+; BossEncounter: enemy id (tables/enemies/) for boss index GetBossIndex + 1; wAreaLevel = the floor
 ; (8 in the Crystal Mine).
 ; id: enemy
 	db	89	; 1 Ent

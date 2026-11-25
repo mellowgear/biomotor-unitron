@@ -1,7 +1,10 @@
-; strings at 21847A-218488 (part lists: "x/" (only its first byte is read: ld L,(0x21847A)) and the dash line of an empty row)
+; strings at 21847A-218488 (part lists: "×" (read alone: ld L,(TimesText3)) and the dash line of an empty row)
 
 TimesText3:
-    text "×/"
+    text "×"
+
+SlashText4:
+    text "/"
     done
 
 DashText3:

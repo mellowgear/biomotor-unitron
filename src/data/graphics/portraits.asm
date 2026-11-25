@@ -1,7 +1,7 @@
 ; PortraitTable: 68 pointers, one per portrait number (DrawPortrait 0x2103BA: HL = number,
 ; XHL = PortraitTable[HL]), to 66 portrait records (numbers 0x00/0x01 and 0x26/0x27 share one).
-; A record is 6 pointers (DrawPortrait, dyn_210423): +0 colour palette (LoadPalettes, C = 10),
-; +4 colour tiles and +8 colour tilemap (used when wColorFlags bit 4 is set: dyn_210423),
+; A record is 6 pointers (DrawPortrait, DrawPortraitColor): +0 colour palette (LoadPalettes, C = 10),
+; +4 colour tiles and +8 colour tilemap (used when wColorFlags bit 4 is set: DrawPortraitColor),
 ; +0xC mono palette (LoadMonoPalettes), +0x10 mono tiles and +0x14 mono tilemap (bit 4 clear).
 ; Record labels: the first portrait number using it.
 	dl	Portrait00,Portrait00,Portrait02,Portrait03	; 00-03
@@ -141,10 +141,10 @@ Portrait28:	; portrait 0x28
 Portrait29:	; portrait 0x29
 	dl	Pal_29C313,Gfx_29C4B5,Map_29C363	; colour: palette, tiles, tilemap
 	dl	MonoPal_2871E6,Gfx_287340,Map_2871EE	; mono: palette, tiles, tilemap
-Portrait2A:	; portrait 0x2A
+Portrait2A:	; portrait 0x2A; [play] the right half of the arena gate (ArenaPreDuelGate, on SCR2)
 	dl	Pal_29D34A,Gfx_29D518,Map_29D39A	; colour: palette, tiles, tilemap
 	dl	MonoPal_287ECC,Gfx_288052,Map_287ED4	; mono: palette, tiles, tilemap
-Portrait2B:	; portrait 0x2B
+Portrait2B:	; portrait 0x2B; [play] the left half of the arena gate (ArenaPreDuelGate, on SCR1)
 	dl	Pal_29C83F,Gfx_29CA0D,Map_29C88F	; colour: palette, tiles, tilemap
 	dl	MonoPal_2876BC,Gfx_287842,Map_2876C4	; mono: palette, tiles, tilemap
 Portrait2C:	; portrait 0x2C
@@ -177,13 +177,13 @@ Portrait34:	; portrait 0x34
 Portrait35:	; portrait 0x35
 	dl	Pal_2A51F2,Gfx_2A5394,Map_2A5242	; colour: palette, tiles, tilemap
 	dl	MonoPal_28F588,Gfx_28F6E2,Map_28F590	; mono: palette, tiles, tilemap
-Portrait36:	; portrait 0x36
+Portrait36:	; portrait 0x36; [play] ruins seen from the ground (broken white columns and arches, blue sky, a far temple with smoke), the Protector's vision in the Works (WorksProtectorScene)
 	dl	Pal_2A5C2B,Gfx_2A5EAD,Map_2A5C7B	; colour: palette, tiles, tilemap
 	dl	MonoPal_28FF98,Gfx_2901D2,Map_28FFA0	; mono: palette, tiles, tilemap
 Portrait37:	; portrait 0x37
 	dl	Pal_2A6962,Gfx_2A6CAC,Map_2A69B2	; colour: palette, tiles, tilemap
 	dl	MonoPal_290C67,Gfx_290F69,Map_290C6F	; mono: palette, tiles, tilemap
-Portrait38:	; portrait 0x38
+Portrait38:	; portrait 0x38; [play] Satanachia's UNITRON (blue, with a sword), full screen in the Rank CS duel 6 transmission
 	dl	Pal_2A741F,Gfx_2A76A1,Map_2A746F	; colour: palette, tiles, tilemap
 	dl	MonoPal_2916E8,Gfx_291922,Map_2916F0	; mono: palette, tiles, tilemap
 Portrait39:	; portrait 0x39

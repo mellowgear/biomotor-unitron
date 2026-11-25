@@ -1,4 +1,4 @@
-; engine/text: 36 routines (each keeps its ROM address in its own section)
+; engine/text.asm: font glyphs, the text boxes (wTextBoxes: open / place / erase / clear, cursor, state queries, speed, the box cursor sprite) and their text stream with control codes, the Box1/2/3 wrappers, DrawString, message expansion
 
 c_207073	section	code abs=0x207073
 
@@ -8,10 +8,10 @@ GetFontGlyph:
 	jr	Z,GetFontGlyph.skip
 	extz	HL
 	dec	1,HL
-	cp	HL,(0x2C8DA7)
+	cp	HL,(Font)
 	jr	NC,GetFontGlyph.skip
 	mul	XHL,0x10
-	add	XHL,0x2C8DA9
+	add	XHL,Font+2
 	ret
 GetFontGlyph.skip:
 	ld	XHL,BlankGlyph
@@ -19,58 +19,114 @@ GetFontGlyph.skip:
 
 c_207093	section	code abs=0x207093
 
-dyn_207093:
+; [code] L = character, WA = tile: GetFontGlyph, then the glyph's 8 rows into CHAR RAM 0xA000 + 16 * WA with the pixel bits rearranged (not a plain copy like DrawTextChar); callers draw the player and partner names into tiles 0x16C/0x173
+LoadGlyphTile:
 	call	GetFontGlyph
 	ld	XDE,0
 	ld	DE,WA
 	sll	4,XDE
 	add	XDE,0xA000
 	ld	B,8
+LoadGlyphTile.loop:
 	ld	WA,(XHL+)
 	ld	C,8
+LoadGlyphTile.loop2:
 	sll	1,XWA
 	bit	0,QA
 	zcf
 	rl	1,QWA
 	sll	1,WA
-	djnz	C,0x2070AB
+	djnz	C,LoadGlyphTile.loop2
 	ld	WA,QWA
 	ld	(XDE+),WA
-	djnz	B,0x2070A6
+	djnz	B,LoadGlyphTile.loop
+	ret
+
+c_2072CD	section	code abs=0x2072CD
+
+; [code] text box tiles 0x2C8569, Pal_21F010/MonoPal_21F018, all 8 wTextBoxes reset (speed = wOptionMessageSpeed)
+InitTextBoxes:
+	ld	WA,1
+	ld	XHL,RawTiles_2C8569
+	call	LoadRawTiles
+	ld	A,1
+	ld	C,1
+	ld	XHL,MonoPal_21F018
+	call	LoadMonoPalettes
+	ld	A,3
+	ld	C,1
+	ld	XHL,MonoPal_21F018
+	call	LoadMonoPalettes
+	ld	A,5
+	ld	C,1
+	ld	XHL,MonoPal_21F018
+	call	LoadMonoPalettes
+	ld	A,0xF
+	ld	C,1
+	ld	XHL,Pal_21F010
+	call	LoadPalettes
+	ld	A,0x1F
+	ld	C,1
+	ld	XHL,Pal_21F010
+	call	LoadPalettes
+	ld	A,0x2F
+	ld	C,1
+	ld	XHL,Pal_21F010
+	call	LoadPalettes
+	ld	A,8
+	ld	XHL,wTextBoxes
+	ld	XDE,0
+InitTextBoxes.loop:
+	ldw	(XHL+0),0x200
+	ldb	(XHL+2),0x20
+	ldb	(XHL+3),0x20
+	ld	(XHL+4),E
+	ld	(XHL+5),E
+	ld	(XHL+6),E
+	ld	(XHL+7),E
+	ld	(XHL+8),XDE
+	ld	(XHL+0xC),XDE
+	ldb	(XHL+0x10),(wOptionMessageSpeed)
+	ld	(XHL+0x11),E
+	ld	(XHL+0x12),E
+	add	HL,0x13
+	djnz	A,InitTextBoxes.loop
 	ret
 
 c_207361	section	code abs=0x207361
 
-sub_207361:
+; [code] main loop (Reset, after ReadJoypad): for boxes 0-7 with a text pointer (+8) runs the +0x12 state handler from the table at TextBoxStateJumps (TextStep, TextDelayTick, TextWaitButton), then reloads tile 0xB from 0x2C83B9 or 0x2C83CB by bit 3 of wFrameCounter (the blinking tile)
+UpdateTextBoxes:
 	ld	A,0
-sub_207361.loop:
+UpdateTextBoxes.loop:
 	push	A
 	call	GetTextBox
 	ld	XBC,(XWA+8)
 	or	XBC,XBC
-	jr	Z,sub_207361.skip
+	jr	Z,UpdateTextBoxes.skip
 	ld	XHL,0
 	ld	L,(XWA+0x12)
 	sll	2,L
-	add	XHL,0x2073A7
+	add	XHL,TextBoxStateJumps
 	ld	XHL,(XHL)
 	call	XHL
-sub_207361.skip:
+UpdateTextBoxes.skip:
 	pop	A
 	inc	1,A
 	cp	A,8
-	jr	C,sub_207361.loop
+	jr	C,UpdateTextBoxes.loop
 	ld	A,(wFrameCounter)
 	srl	3,A
 	and	A,1
 	ld	XHL,RawTiles_2C83B9
-	jr	Z,sub_207361.skip2
+	jr	Z,UpdateTextBoxes.skip2
 	ld	XHL,RawTiles_2C83CB
-sub_207361.skip2:
+UpdateTextBoxes.skip2:
 	ld	WA,0xB
 	call	LoadRawTiles
 	ret
-	db	0xB3,0x73,0x20,0x00,0x3A,0x74,0x20,0x00,0x43,0x74,0x20,0x00
+TextBoxStateJumps:
+	dl	TextStep,TextDelayTick,TextWaitButton
 
 c_2073B3	section	code abs=0x2073B3
 
@@ -82,7 +138,7 @@ TextStep:
 	ld	L,(XBC+)
 	ld	(XWA+8),XBC
 	cp	L,0xF0
-	jr	NC,dyn_2073D7
+	jr	NC,TextControlCode
 	call	DrawTextChar
 	ld	L,(XWA+0x10)
 	ld	(XWA+0x11),L
@@ -93,20 +149,22 @@ TextStep:
 
 c_2073D7	section	code abs=0x2073D7
 
-dyn_2073D7:
+; [code] TextStep for codes >= 0xF0: calls entry ~code of the table at TextControlJumps (TextCmd_End, TextCmd_Newline, TextCmd_Page, TextCmd_PlayerName, TextCmd_Name2, TextCmd_Wait), then continues TextStep unless the state +0x12 is set
+TextControlCode:
 	cpl	L
 	extz	HL
 	extz	XHL
 	sll	2,XHL
-	add	XHL,0x2073F4
+	add	XHL,TextControlJumps
 	ld	XHL,(XHL)
 	call	XHL
 	ld	L,(XWA+0x12)
 	and	L,0x7F
 	ret	NZ
 	jr	TextStep
-	db	0x0C,0x74,0x20,0x00,0x57,0x76,0x20,0x00,0xD0,0x75,0x20,0x00,0x18,0x74,0x20,0x00
-	db	0x27,0x74,0x20,0x00,0x36,0x74,0x20,0x00
+TextControlJumps:
+	dl	TextCmd_End,TextCmd_Newline,TextCmd_Page,TextCmd_PlayerName
+	dl	TextCmd_Name2,TextCmd_Wait
 
 c_20740C	section	code abs=0x20740C
 
@@ -147,7 +205,8 @@ TextCmd_Wait:
 
 c_20743A	section	code abs=0x20743A
 
-dyn_20743A:
+; [code] text box state 1 (table TextBoxStateJumps in UpdateTextBoxes): counts +0x11 down, then back to state 0 (TextStep)
+TextDelayTick:
 	decb	1,(XWA+0x11)
 	ret	NZ
 	decb	1,(XWA+0x12)
@@ -155,7 +214,8 @@ dyn_20743A:
 
 c_207443	section	code abs=0x207443
 
-dyn_207443:
+; [code] text box state 2 (TextCmd_Wait adds 2): puts tile 0x3E0B at the box's bottom-right frame cell; on A or B (wJoyPressed & 0x30) state -= 2 and the cell back to frame tile 0x3E09
+TextWaitButton:
 	ld	C,(XWA+2)
 	add	C,(XWA+4)
 	dec	2,C
@@ -166,7 +226,7 @@ dyn_207443:
 	ld	D,1
 	push	XWA
 	ld	WA,0x3E0B
-	call	sub_206768
+	call	FillScrRect
 	pop	XWA
 	ld	L,(wJoyPressed)
 	and	L,0x30
@@ -182,7 +242,7 @@ dyn_207443:
 	ld	D,1
 	push	XWA
 	ld	WA,0x3E09
-	call	sub_206768
+	call	FillScrRect
 	pop	XWA
 	ret
 
@@ -230,7 +290,7 @@ c_2074C4	section	code abs=0x2074C4
 ; [code] PlaceTextBox with XWA = the box already
 PlaceTextBoxXWA:
 	bit	7,(XWA+0x12)
-	jrl	NZ,dyn_207559
+	jrl	NZ,PlaceTextBoxNoFrame
 	ld	(XWA+2),C
 	ld	(XWA+3),E
 	ld	XHL,0
@@ -250,11 +310,12 @@ PlaceTextBoxXWA:
 	dec	2,B
 	ld	C,2
 	inc	2,DE
+PlaceTextBoxXWA.loop:
 	ldw	(XHL+C),0x3E07
 	ldw	(XHL+DE),0x3E09
 	inc	2,C
 	inc	2,DE
-	djnz	B,0x207500
+	djnz	B,PlaceTextBoxXWA.loop
 	ldw	(XHL+C),0x3E02
 	ldw	(XHL+DE),0x3E06
 	ld	E,(XWA+5)
@@ -262,22 +323,25 @@ PlaceTextBoxXWA:
 	ld	QD,E
 	ld	DE,(XWA+0)
 	or	DE,0x3E00
+PlaceTextBoxXWA.loop2:
 	add	HL,0x40
 	ldw	(XHL),0x3E08
 	ld	B,(XWA+4)
 	dec	2,B
 	ld	C,2
+PlaceTextBoxXWA.loop3:
 	ld	(XHL+C),DE
 	inc	1,DE
 	inc	2,C
-	djnz	B,0x207541
+	djnz	B,PlaceTextBoxXWA.loop3
 	ldw	(XHL+C),0x3E0A
-	djnz	QD,0x207532
+	djnz	QD,PlaceTextBoxXWA.loop2
 	ret
 
 c_207559	section	code abs=0x207559
 
-dyn_207559:
+; [code] PlaceTextBoxXWA for a frameless box (+0x12 bit 7): box at column C, row E, only its tile grid (full width +4 x height +5, tiles from +0) into SCR1 0x9000
+PlaceTextBoxNoFrame:
 	ld	(XWA+2),C
 	ld	(XWA+3),E
 	ld	XHL,0
@@ -291,19 +355,22 @@ dyn_207559:
 	ld	QD,E
 	ld	DE,(XWA+0)
 	or	DE,0x3E00
+PlaceTextBoxNoFrame.loop:
 	ld	B,(XWA+4)
 	ld	C,0
+PlaceTextBoxNoFrame.loop2:
 	ld	(XHL+C),DE
 	inc	1,DE
 	inc	2,C
-	djnz	B,0x207583
+	djnz	B,PlaceTextBoxNoFrame.loop2
 	add	HL,0x40
-	djnz	QD,0x20757E
+	djnz	QD,PlaceTextBoxNoFrame.loop
 	ret
 
 c_207598	section	code abs=0x207598
 
-sub_207598:
+; [code] A = box: clears the text pointers +8/+0xC, fills the box's screen rectangle (+2..+5) with tile 0 (FillScrRect), reloads speed +0x10 from wOptionMessageSpeed, +0x11/+0x12 = 0; EraseTextBox3 is this for box 3
+EraseTextBox:
 	call	GetTextBox
 	ld	XHL,0
 	ld	(XWA+8),XHL
@@ -314,7 +381,7 @@ sub_207598:
 	ld	D,(XWA+5)
 	push	XWA
 	ld	WA,0
-	call	sub_206768
+	call	FillScrRect
 	pop	XWA
 	ld	XDE,0
 	ld	(XWA+8),XDE
@@ -363,7 +430,8 @@ TextCmd_Page.skip:
 
 c_207611	section	code abs=0x207611
 
-dyn_207611:
+; [code] A = box: clears the text pointers +8/+0xC and state +0x12, speed +0x10 = wOptionMessageSpeed, delay +0x11 = 0 (no screen change, unlike EraseTextBox)
+ResetTextBox:
 	call	GetTextBox
 	ld	XHL,0
 	ld	(XWA+8),XHL
@@ -375,14 +443,16 @@ dyn_207611:
 
 c_207629	section	code abs=0x207629
 
-swp_207629:
+; [code] A = box: GetTextBox, then falls into AdvanceTextCursorXWA
+AdvanceTextCursor:
 	call	GetTextBox
 
 c_20762D	section	code abs=0x20762D
 
-sub_20762D:
+; [code] DrawTextChar after each glyph: cursor column +6 += 1; at the inner width (+4 - 2, or +4 for frameless boxes, bit 7 of +0x12) a newline (TextCmd_Newline / TextNewlineNoFrame)
+AdvanceTextCursorXWA:
 	bit	7,(XWA+0x12)
-	jr	NZ,sub_20762D.skip
+	jr	NZ,AdvanceTextCursorXWA.skip
 	incb	1,(XWA+6)
 	ld	B,(XWA+4)
 	dec	2,B
@@ -390,17 +460,18 @@ sub_20762D:
 	ret	C
 	call	TextCmd_Newline
 	ret
-sub_20762D.skip:
+AdvanceTextCursorXWA.skip:
 	incb	1,(XWA+6)
 	ld	B,(XWA+4)
 	cp	(XWA+6),B
 	ret	C
-	calr	sub_207674
+	calr	TextNewlineNoFrame
 	ret
 
 c_207653	section	code abs=0x207653
 
-swp_207653:
+; [code] A = box: GetTextBox, then falls into TextCmd_Newline
+TextNewline:
 	call	GetTextBox
 
 c_207657	section	code abs=0x207657
@@ -408,7 +479,7 @@ c_207657	section	code abs=0x207657
 ; FE
 TextCmd_Newline:
 	bit	7,(XWA+0x12)
-	jr	NZ,sub_207674
+	jr	NZ,TextNewlineNoFrame
 	ldb	(XWA+6),0
 	incb	1,(XWA+7)
 	ld	B,(XWA+5)
@@ -420,16 +491,50 @@ TextCmd_Newline:
 	rcf
 	ret
 
+c_207674	section	code abs=0x207674
+
+; [code] TextCmd_Newline for frameless boxes (bit 7 of +0x12): column +6 = 0, row +7 += 1, clamped to height +5 - 1
+TextNewlineNoFrame:
+	ldb	(XWA+6),0
+	incb	1,(XWA+7)
+	ld	B,(XWA+5)
+	cp	(XWA+7),B
+	ret	C
+	dec	1,B
+	ld	(XWA+7),B
+	rcf
+	ret
+
+c_20768A	section	code abs=0x20768A
+
+; [code] A = box: GetTextBox, then falls into SetTextBoxCursorXWA (cursor column +6 = C, row +7 = E)
+SetTextBoxCursor:
+	call	GetTextBox
+
+c_20768E	section	code abs=0x20768E
+
+; [code] XWA = box: cursor column +6 = C, row +7 = E (the fields TextCmd_Page zeroes and DrawTextChar advances)
+SetTextBoxCursorXWA:
+	ld	(XWA+6),C
+	ld	(XWA+7),E
+	ret
+
+c_207695	section	code abs=0x207695
+
+; [code] A = box: GetTextBox, then falls into DrawTextChar (L = character)
+DrawTextCharInBox:
+	call	GetTextBox
+
 c_207699	section	code abs=0x207699
 
 DrawTextChar:
 	cp	L,0xF0
 	jr	NC,DrawTextChar.skip
-	call	sub_207720
+	call	GetTextCursorTile
 	call	GetFontGlyph
 	ld	BC,8
 	ldirw	(XDE+),(XHL+)
-	call	sub_20762D
+	call	AdvanceTextCursorXWA
 	rcf
 	ret
 DrawTextChar.skip:
@@ -437,13 +542,100 @@ DrawTextChar.skip:
 	extz	HL
 	extz	XHL
 	sll	2,XHL
-	add	XHL,0x2076C6
+	add	XHL,DrawTextCharJumps
 	ld	XHL,(XHL)
 	call	XHL
 	scf
 	ret
-	db	0xDE,0x76,0x20,0x00,0x57,0x76,0x20,0x00,0xD0,0x75,0x20,0x00,0xDF,0x76,0x20,0x00
-	db	0xE9,0x76,0x20,0x00,0xDE,0x76,0x20,0x00
+DrawTextCharJumps:
+	dl	swp_2076DE,TextCmd_Newline,TextCmd_Page,DrawPlayerName
+	dl	DrawPartnerName,swp_2076DE
+
+c_2076DE	section	code abs=0x2076DE
+
+swp_2076DE:
+	ret
+
+c_2076DF	section	code abs=0x2076DF
+
+; [code] DrawString wPlayerName
+DrawPlayerName:
+	ld	XHL,wPlayerName
+	call	DrawString
+	ret
+
+c_2076E9	section	code abs=0x2076E9
+
+; [code] DrawString wPartnerName
+DrawPartnerName:
+	ld	XHL,wPartnerName
+	call	DrawString
+	ret
+
+c_2076F3	section	code abs=0x2076F3
+
+; [code] A = box, XHL = 0xFF-terminated string: DrawTextChar per byte
+DrawBoxString:
+	call	GetTextBox
+
+c_2076F7	section	code abs=0x2076F7
+
+; [code] DrawBoxString with XWA = the box already
+DrawString:
+	ld	XBC,XHL
+DrawString.loop:
+	ld	XHL,0
+	ld	L,(XBC+)
+	cp	L,0xFF
+	ret	Z
+	push	XBC
+	call	DrawTextChar
+	pop	XBC
+	jr	DrawString.loop
+
+c_20770B	section	code abs=0x20770B
+
+; [code] A = box -> XDE = CHAR RAM address of the box's first tile (0xA000 + 16 * tile +0); the box 4 slide code and ScrollBox2UpFromBox4 copy pixels with it
+GetBoxTilesAddr:
+	call	GetTextBox
+	ld	XDE,0
+	ld	DE,(XWA+0)
+	sll	4,DE
+	add	DE,0xA000
+	ret
+
+c_20771C	section	code abs=0x20771C
+
+; [code] A = box: GetTextBox, then GetTextCursorTile (XDE = CHAR RAM address of the cell under the cursor); no callers
+GetBoxCursorTile:
+	call	GetTextBox
+
+c_207720	section	code abs=0x207720
+
+; [code] XWA = box -> XDE = CHAR RAM address (0xA000 + 16 * tile) of the cell under the cursor: tile +0 + row +7 * inner width + column +6 (full width +4 for frameless boxes); DrawTextChar writes the glyph there
+GetTextCursorTile:
+	bit	7,(XWA+0x12)
+	jr	NZ,GetTextCursorTile.skip
+	ld	XDE,0
+	ld	E,(XWA+4)
+	dec	2,E
+	mul	DE,(XWA+7)
+	add	E,(XWA+6)
+	adc	D,0
+	add	DE,(XWA+0)
+	sll	4,DE
+	add	DE,0xA000
+	ret
+GetTextCursorTile.skip:
+	ld	XDE,0
+	ld	E,(XWA+4)
+	mul	DE,(XWA+7)
+	add	E,(XWA+6)
+	adc	D,0
+	add	DE,(XWA+0)
+	sll	4,DE
+	add	DE,0xA000
+	ret
 
 c_2084F2	section	code abs=0x2084F2
 
@@ -628,3 +820,483 @@ CopyString:
 	ret	Z
 	ld	(XDE+),A
 	jr	CopyString
+
+c_2166B3	section	code abs=0x2166B3
+
+; [code] OpenTextBox 1: 0x14 x 5, tiles from 0x10 (registers saved); with PlaceBox1 / EraseBox1 / ClearTextBox1
+OpenBox1:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	HL,0x10
+	ld	A,1
+	ld	C,0x14
+	ld	E,5
+	call	OpenTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2166C9	section	code abs=0x2166C9
+
+; [code] PlaceTextBox 1 at column 0, row 0x2E (registers saved)
+PlaceBox1:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,1
+	ld	C,0
+	ld	E,0x2E
+	call	PlaceTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2166DC	section	code abs=0x2166DC
+
+; [code] EraseTextBox 1 (registers saved); byte-identical copy of EraseWorldMapNameBox, EraseAreaNameBox (the ROM has each)
+EraseBox1:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,1
+	call	EraseTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2166EB	section	code abs=0x2166EB
+
+; [code] whole body = A=1, call ClearTextBox, all registers (XWA/XBC/XDE/XHL) saved; called directly from arena.asm x4 and town.asm x5
+ClearTextBox1:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,1
+	call	ClearTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2166FA	section	code abs=0x2166FA
+
+; [code] OpenTextBox 2: 8 x 0xE, tiles from 0x46 (registers saved); paired in OpenBoxes1And2Tall; a copy of OpenBox2 that differs only in the height (0xE, OpenBox2 0xB)
+OpenBox2Tall:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	HL,0x46
+	ld	A,2
+	ld	C,8
+	ld	E,0xE
+	call	OpenTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216710	section	code abs=0x216710
+
+; [code] PlaceTextBox 2 at column 0xC, row 0x20 (registers saved); paired in PlaceBoxes1And2Tall; byte-identical copy of PlaceBox2 (the ROM has each)
+PlaceBox2Tall:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,2
+	ld	C,0xC
+	ld	E,0x20
+	call	PlaceTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216723	section	code abs=0x216723
+
+; [code] EraseTextBox 2 (registers saved); paired in EraseBoxes1And2Tall; byte-identical copy of EraseWorldMapBox2, EraseDungeonStatusBox, EraseBox2 (the ROM has each)
+EraseBox2Tall:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,2
+	call	EraseTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216732	section	code abs=0x216732
+
+; [code] ClearTextBox 2 (registers saved), the copy next to the 8 x 0xE box helpers; byte-identical copy of ClearBox2 (the ROM has each)
+ClearBox2Tall:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,2
+	call	ClearTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216741	section	code abs=0x216741
+
+; [code] OpenTextBox 2: 8 x 0xB, tiles from 0x46 (registers saved); OpenBox2Tall is a copy that differs only in the height (0xE)
+OpenBox2:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	HL,0x46
+	ld	A,2
+	ld	C,8
+	ld	E,0xB
+	call	OpenTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216757	section	code abs=0x216757
+
+; [code] PlaceTextBox 2 at column 0xC, row 0x20 (registers saved); byte-identical copy of PlaceBox2Tall (the ROM has each)
+PlaceBox2:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,2
+	ld	C,0xC
+	ld	E,0x20
+	call	PlaceTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_21676A	section	code abs=0x21676A
+
+; [code] EraseTextBox 2 (registers saved); byte-identical copy of EraseWorldMapBox2, EraseDungeonStatusBox, EraseBox2Tall (the ROM has each)
+EraseBox2:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,2
+	call	EraseTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216779	section	code abs=0x216779
+
+; [code] ClearTextBox 2 (registers saved); byte-identical copy of ClearBox2Tall (the ROM has each)
+ClearBox2:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,2
+	call	ClearTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216788	section	code abs=0x216788
+
+; [code] OpenTextBox 3: 8 x 3, tiles from 0x8E (registers saved)
+OpenBox3:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	HL,0x8E
+	ld	A,3
+	ld	C,8
+	ld	E,3
+	call	OpenTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_21679E	section	code abs=0x21679E
+
+; [code] PlaceTextBox 3 at column 0xC, row 0x2B (registers saved)
+PlaceBox3:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,3
+	ld	C,0xC
+	ld	E,0x2B
+	call	PlaceTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2167B1	section	code abs=0x2167B1
+
+; [code] EraseTextBox 3 (registers saved); byte-identical copy of EraseEnterPromptBox, EraseTextBox3 (the ROM has each)
+EraseBox3:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,3
+	call	EraseTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2167C0	section	code abs=0x2167C0
+
+; [code] ClearTextBox 3 (registers saved)
+ClearBox3:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	ld	A,3
+	call	ClearTextBox
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2167CF	section	code abs=0x2167CF
+
+; [code] OpenBox1, OpenBox2, OpenBox3
+OpenBoxes123:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	call	OpenBox1
+	call	OpenBox2
+	call	OpenBox3
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2167E4	section	code abs=0x2167E4
+
+; [code] PlaceBox1, PlaceBox2, PlaceBox3
+PlaceBoxes123:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	call	PlaceBox1
+	call	PlaceBox2
+	call	PlaceBox3
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_2167F9	section	code abs=0x2167F9
+
+; [code] EraseBox1, EraseBox2, EraseBox3
+EraseBoxes123:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	call	EraseBox1
+	call	EraseBox2
+	call	EraseBox3
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_21680E	section	code abs=0x21680E
+
+; [code] OpenBox1, OpenBox2Tall
+OpenBoxes1And2Tall:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	call	OpenBox1
+	call	OpenBox2Tall
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_21681F	section	code abs=0x21681F
+
+; [code] PlaceBox1, PlaceBox2Tall
+PlaceBoxes1And2Tall:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	call	PlaceBox1
+	call	PlaceBox2Tall
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216830	section	code abs=0x216830
+
+; [code] EraseBox1, EraseBox2Tall
+EraseBoxes1And2Tall:
+	push	XHL
+	push	XDE
+	push	XBC
+	push	XWA
+	call	EraseBox1
+	call	EraseBox2Tall
+	pop	XWA
+	pop	XBC
+	pop	XDE
+	pop	XHL
+	ret
+
+c_216841	section	code abs=0x216841
+
+; [code] WA = 0x1E4: the first tile OpenArenaBox4 gives text box 4 (its only caller)
+GetArenaBox4Tile:
+	ld	WA,0x1E4
+	ret
+
+c_21721E	section	code abs=0x21721E
+
+; [code] A = box -> B = screen column +2, C = row +3 (both & 0x1F)
+GetTextBoxPos:
+	call	GetTextBox
+	ld	B,(XWA+2)
+	ld	C,(XWA+3)
+	and	B,0x1F
+	and	C,0x1F
+	ret
+
+c_21722F	section	code abs=0x21722F
+
+; [code] A = box, B/C = cell in the box: the 1x2 sprite 0x3E04 (DrawSpriteGrid) at pixel 8 * (box column + B) + 2, 8 * (box row + C) + 4; CursorTask draws the list cursor with it
+DrawBoxCursorSprite:
+	push	BC
+	call	GetTextBoxPos
+	pop	DE
+	add	B,D
+	add	C,E
+	ld	E,C
+	ld	C,B
+	extz	BC
+	extz	DE
+	sll	3,BC
+	sll	3,DE
+	add	BC,2
+	add	DE,4
+	ld	WA,0x3E04
+	ld	QB,1
+	ld	QD,2
+	call	DrawSpriteGrid
+	ret
+
+c_21725D	section	code abs=0x21725D
+
+; [code] A = box -> carry when its text pointer +8 is set
+IsTextBoxPrinting:
+	call	GetTextBox
+	ld	XHL,(XWA+8)
+	or	XHL,XHL
+	ret	Z
+	scf
+	ret
+
+c_21726A	section	code abs=0x21726A
+
+; [code] A = box -> carry when its state (+0x12 & 0x7F) is 2 (TextWaitButton)
+IsTextBoxWaitingButton:
+	call	GetTextBox
+	ld	A,(XWA+0x12)
+	and	A,0x7F
+	cp	A,2
+	rcf
+	ret	NZ
+	scf
+	ret
+
+c_21727B	section	code abs=0x21727B
+
+; [code] A = box -> carry when its state +0x12 is 1 (TextDelayTick)
+IsTextBoxDelaying:
+	call	GetTextBox
+	ld	A,(XWA+0x12)
+	cp	A,1
+	rcf
+	ret	NZ
+	scf
+	ret
+
+c_217289	section	code abs=0x217289
+
+; [code] A = box: speed +0x10 = B (0 = whole page at once: TextStep loops while the delay is 0)
+SetTextBoxSpeed:
+	call	GetTextBox
+	ld	(XWA+0x10),B
+	ret
+
+c_217291	section	code abs=0x217291
+
+; [code] A = box: text pointer +8 = XHL (starts printing)
+SetTextBoxText:
+	call	GetTextBox
+	ld	(XWA+8),XHL
+	ret
+
+c_21734E	section	code abs=0x21734E
+
+; [code] A = box: SetTextBoxCursor 0,0 then ClearTextBox
+ClearTextBoxHome:
+	push	WA
+	ld	E,0
+	ld	C,0
+	call	SetTextBoxCursor
+	pop	WA
+	call	ClearTextBox
+	ret

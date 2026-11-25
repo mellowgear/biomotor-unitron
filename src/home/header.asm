@@ -5,7 +5,7 @@ d_200000	section	romdata abs=0x200000
 Header:
 	db	" LICENSED BY SNK CORPORATION"	; recognition code, third-party form (28 B)
 	dl	Start		; startup address (little endian)
-HeaderCartId:			; 0x200020: copied into every save slot header (loc_20DBDE, data/save/flash.asm)
+HeaderCartId:			; 0x200020: copied into every save slot header (SaveOptions, data/save/flash.asm)
 	dw	0x0053		; software ID code (little-endian BCD)
 	db	0x00		; ID sub-code (version)
 	db	0x10		; compatible system: 0x10 = colour

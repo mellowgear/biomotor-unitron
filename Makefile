@@ -1,17 +1,22 @@
 # Biomotor Unitron: rebuild the ROM from source.
 #   make          build the asset products (PNG/text -> bytes -> db), assemble src/main.asm with
 #                 unitron asm, check sha1
-#   (make regen / make extract are retired: src/ is the source now, edited by hand;
-#    regenerating it from the ROM would throw away what was put into it. See HANDOFF.md.)
-#   make ram      RAM_MAP.md + RAM_REFERENCE.md for the play agent (ram.txt + play runs.md)
-PY     := python3
-TOOLS  := tlcs900
-ROM    := baserom.ngp
+#   make compare  compare biomotor.ngp with your original ROM byte for byte (BASEROM)
+#   make UNITRON=/path/to/unitron   when unitron is not on PATH
+# src/ is the source, edited by hand (make regen / make extract are retired).
 SHA1   := $(shell command -v sha1sum >/dev/null 2>&1 && echo sha1sum || echo "shasum -a 1")
 MAKEFLAGS += -j$(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
 
-# unitron (the C++ build; override with make UNITRON=/path/to/unitron)
+# your original ROM, only for make compare (never read by the build): make BASEROM=...
+BASEROM ?= baserom.ngp
+
+# unitron, the toolchain (https://github.com/mellowgear/unitron): on PATH, or make UNITRON=...
 UNITRON ?= unitron
+ifneq ($(filter-out clean,$(or $(MAKECMDGOALS),all)),)
+ifeq ($(shell command -v $(UNITRON) 2>/dev/null),)
+$(error unitron not found: put it on PATH or run make UNITRON=/path/to/unitron)
+endif
+endif
 export UNITRON
 
 # Every file the assembly reads, from `unitron asm -M` (like rgbasm -M;
@@ -75,6 +80,11 @@ build/gfx/monsters/%.pal: src/gfx/monsters/%.png
 	@$(UNITRON) gfx palette $< $@ --colors 4 > /dev/null
 # tile sheets: u16 tile count + LZSS(tiles + one blank tile)
 build/%.2bpp.lz: GFXFLAGS = --trim
+# the dungeon floor blockset as a tile map (biogfx blockmap: the 441 2x2 metatiles, 16 to a row),
+# the layout of dungeon_tiles.png
+build/gfx/blocksets/%.tilemap: src/gfx/blocksets/%.bst $(BIOGFX)
+	@mkdir -p $(@D)
+	@$(BIOGFX) blockmap --width 16 $< $@
 # sheets laid out as their screens: per-file --map/--count (src/gfx/tiles/layout.mk)
 include src/gfx/tiles/layout.mk
 build/%.2bpp.lz: src/%.png $(BIOGFX)
@@ -97,7 +107,7 @@ build/gfx/font/font.2bpp: src/gfx/font/font.png
 	@mkdir -p $(@D)
 	@$(UNITRON) gfx frompng $< $@ --count 128 > /dev/null
 
-# raw tile sets of the dungeon screen (tools/rawtiles.py): 2bpp tiles, no header (the dw is in
+# raw tile sets of the dungeon screen: 2bpp tiles, no header (the dw is in
 # gfx/dungeon_sprites.asm); a record is 4 tiles, the player sheet 219 (must match its dw)
 build/gfx/dungeon_sprites/%.2bpp: GFXFLAGS = --count 4
 build/gfx/dungeon_sprites/player.2bpp: GFXFLAGS = --count 219
@@ -116,15 +126,16 @@ build/gfx/raw_tiles/%.2bpp: src/gfx/raw_tiles/%.png
 # (none needed for the original files)
 
 regen extract:
-	@echo "make $@ is retired: src/ is the source (edit it by hand; see HANDOFF.md)." >&2; exit 1
+	@echo "make $@ is retired: src/ is the source (edit it by hand)." >&2; exit 1
 
-ram:
-	$(PY) tools/ram_reference.py
 
+compare: biomotor.ngp
+	@test -f "$(BASEROM)" || { echo "no original ROM at $(BASEROM): put it there or run make compare BASEROM=/path/to/rom" >&2; exit 1; }
+	@cmp -l "$(BASEROM)" biomotor.ngp | head -20; cmp -s "$(BASEROM)" biomotor.ngp && echo "biomotor.ngp matches $(BASEROM)" || true
 
 clean:
 	rm -rf build biomotor.ngp
 
-.PHONY: all regen extract ram clean
+.PHONY: all regen extract compare clean
 # a failed step (e.g. an assembler error) must not leave a stale biomotor.ngp behind
 .DELETE_ON_ERROR:

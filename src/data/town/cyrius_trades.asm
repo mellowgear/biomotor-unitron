@@ -1,6 +1,6 @@
 ; CyriusTradeMenu (cyrius_trades): 5 records of 12 bytes, one line per id; keep the order and count.
 ; Cyrius's Emblem trade menu, line = race r + 1 (as start_equipment). Value <= 0x100 = item id
-; (tables/items/), else part id = value - 0x100 (sub_216BA8 / sub_216BC9); the pick goes to AddItem.
+; (tables/items/), else part id = value - 0x100 (GetItemOrPartName / GetItemOrPartDesc); the pick goes to AddItem.
 ; After a trade CyriusTrade clears the emblem flags 0x10-0x13 and, at story stage >= 0x0A, the
 ; Lords flags 0x60-0x63 (they respawn). (Play: all five race menus match.)
 ; id: t1, t2, t3, t4, t5, t6

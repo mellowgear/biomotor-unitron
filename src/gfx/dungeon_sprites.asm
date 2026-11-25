@@ -1,4 +1,4 @@
-; gfx/dungeon_sprites.asm: raw tile sets of the dungeon screen (written once by tools/rawtiles.py; edited by hand since)
+; gfx/dungeon_sprites.asm: raw tile sets of the dungeon screen
 ; Each record: the u16 tile count LoadRawTiles reads, then the tiles (a PNG in storage order).
 
 d_2275D9	section	romdata abs=0x2275D9
@@ -16,32 +16,37 @@ BossMapSpritePalettes:    ; LoadBossMapSprite: 0-7 boss alive, 8-11 beaten, 12 n
 	dw	0xFFF,0x952,0x940,0x421
 	dw	0xFFF,0xEBA,0x842,0x410
 	dw	0xFFF,0xABC,0xB95,0x641
-d_227645	section	romdata abs=0x227645
-MapSpriteChest:    ; sub_2118F4: chest content not 0xFD / 0xFE
+d_227641	section	romdata abs=0x227641
+; [code] LoadBossMapSprite, after LoadPalettes A = 0x19, C = 1: XHL = 0x227641, A = 2, C = 1 (the arguments
+; of LoadMonoPalettes, the slot LoadDungeonFloor gives DungeonMonoPalettes) and returns without the call, so
+; it is never read: a mono palette (4 shades 0-7)
+UnusedBossMapSpriteMonoPal:
+	db	0x00,0x02,0x04,0x06
+MapSpriteChest:    ; LoadFloorChestSprites: chest content not 0xFD / 0xFE
 	dw	4
 $include "build/gfx/dungeon_sprites/chest.2bpp.asm"	; build/gfx/dungeon_sprites/chest.2bpp
 d_227687	section	romdata abs=0x227687
-MapSpriteChestOpened:    ; sub_2118F4: content 0xFD (MarkChestOpened)
+MapSpriteChestOpened:    ; LoadFloorChestSprites: content 0xFD (MarkChestOpened)
 	dw	4
 $include "build/gfx/dungeon_sprites/chest_opened.2bpp.asm"	; build/gfx/dungeon_sprites/chest_opened.2bpp
 d_2276C9	section	romdata abs=0x2276C9
-MapSpriteChestFE1:    ; sub_2118F4: content 0xFE, DUNGEON_ID 1
+MapSpriteChestFE1:    ; LoadFloorChestSprites: content 0xFE, DUNGEON_ID 1
 	dw	4
 $include "build/gfx/dungeon_sprites/chest_fe_1.2bpp.asm"	; build/gfx/dungeon_sprites/chest_fe_1.2bpp
 d_22770B	section	romdata abs=0x22770B
-MapSpriteChestFE2:    ; sub_2118F4: content 0xFE, DUNGEON_ID 2
+MapSpriteChestFE2:    ; LoadFloorChestSprites: content 0xFE, DUNGEON_ID 2
 	dw	4
 $include "build/gfx/dungeon_sprites/chest_fe_2.2bpp.asm"	; build/gfx/dungeon_sprites/chest_fe_2.2bpp
 d_22774D	section	romdata abs=0x22774D
-MapSpriteChestFE3:    ; sub_2118F4: content 0xFE, DUNGEON_ID 3
+MapSpriteChestFE3:    ; LoadFloorChestSprites: content 0xFE, DUNGEON_ID 3
 	dw	4
 $include "build/gfx/dungeon_sprites/chest_fe_3.2bpp.asm"	; build/gfx/dungeon_sprites/chest_fe_3.2bpp
 d_22778F	section	romdata abs=0x22778F
-MapSpriteChestFE4:    ; sub_2118F4: content 0xFE, DUNGEON_ID 4
+MapSpriteChestFE4:    ; LoadFloorChestSprites: content 0xFE, DUNGEON_ID 4
 	dw	4
 $include "build/gfx/dungeon_sprites/chest_fe_4.2bpp.asm"	; build/gfx/dungeon_sprites/chest_fe_4.2bpp
 d_2277D1	section	romdata abs=0x2277D1
-MapSpriteChestFE5:    ; sub_2118F4: content 0xFE, DUNGEON_ID 5
+MapSpriteChestFE5:    ; LoadFloorChestSprites: content 0xFE, DUNGEON_ID 5
 	dw	4
 $include "build/gfx/dungeon_sprites/chest_fe_5.2bpp.asm"	; build/gfx/dungeon_sprites/chest_fe_5.2bpp
 d_227813	section	romdata abs=0x227813
@@ -265,6 +270,6 @@ MapSpriteBeaten3:    ; LoadBossMapSprite: beaten boss record 3
 	dw	4
 $include "build/gfx/dungeon_sprites/beaten_3.2bpp.asm"	; build/gfx/dungeon_sprites/beaten_3.2bpp
 d_270063	section	romdata abs=0x270063
-PlayerDungeonTiles:    ; LoadPlayerDungeonSprite / LoadDungeonPalettes (swp_206941 copies the tiles the sprite maps name); colours: race 0 (Human)
+PlayerDungeonTiles:    ; LoadPlayerDungeonSprite / LoadDungeonPalettes (LoadMappedTiles copies the tiles the sprite maps name); colours: race 0 (Human)
 	dw	219	; tile count (the Makefile's --count for player.png must match)
 $include "build/gfx/dungeon_sprites/player.2bpp.asm"	; build/gfx/dungeon_sprites/player.2bpp

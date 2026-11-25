@@ -1,7 +1,7 @@
-; 4 strings at 20DFD2-20E012 (pinned: stay within 64 bytes)
+; 4 strings at 20DFCE-20E012 (pinned: stay within 68 bytes)
 
-OkYesNoText:
-    text " Ok?  Yes No"
+LoadOkYesNoText:
+    text "Load Ok?  Yes No"
     done
 
 ClearOkYesNoText:

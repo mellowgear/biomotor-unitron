@@ -1,14 +1,14 @@
 ; EnemyAttacks (enemy_attacks): 472 records of 15 bytes, one line per id; keep the order and count.
 ; GetEnemyAttackSlots 0x2082EB: 4 slots of 15 bytes per enemy (line id = enemy.slot).
 ; attack: id in tables/attack_names.txt (255 = empty slot). power: base damage, scaled by the
-; area's ap % for scaled enemies. action: battle handler table 0x20B4E5 [action + 1]
+; area's ap % for scaled enemies. action: battle handler table EnemyActionJumps [action + 1]
 ; (255 = handler 0, plain attack; 11/12 = attack with the robot's right/left arm, wEnemyParts +2/+3 as the equipment slots);
 ; 1-4 also inflict a status with chance wEnemyStatusChance (1 paralysis, 2 rust, 3 EP leak,
 ; 4 confusion: wEnemyAttackStatus).
 ; ep: EP cost; the enemy picks the default attack
 ; 0x22540B when its EP is below the cost. affinity: element bit, compared with the target's.
 ; pct: chance to pick this slot, tried in order (100 = always, 101 = only below half HP).
-; f0, effects: as tables/arm_effects.asm (f0 picks EnemyHitResult1/2/3, effects = battle effect
+; f0, effects: as tables/arm_effects.asm (f0 picks EnemyHitResult2/3/4, effects = battle effect
 ; ids, FF ends). `empty` = unused slot (15 x FF).
 ; One enemy_attack record per line (src/macros/tables.inc).
 ; An empty record is 15 bytes of 0xFF (dfb 15,0xFF).

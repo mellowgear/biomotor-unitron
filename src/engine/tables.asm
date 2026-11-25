@@ -1,17 +1,18 @@
-; engine/tables: 60 routines (each keeps its ROM address in its own section)
+; engine/tables: 62 routines (each keeps its ROM address in its own section)
 
 c_208220	section	code abs=0x208220
 
-; [code] affinity -> glyph code from 0x208235 (the AT icon)
+; [code] affinity -> glyph code from AffinityIconChars (the AT icon)
 GetAffinityIcon:
 	push	WA
 	ld	WA,HL
 	call	AffinityIndex
-	ld	XHL,0x208235
+	ld	XHL,AffinityIconChars
 	ld	L,(XHL+WA)
 	extz	HL
 	pop	WA
 	ret
+AffinityIconChars:
 	db	0x6C,0x6E,0x6D,0x70,0x6F,0x6A,0x6B,0x73
 
 c_208272	section	code abs=0x208272
@@ -71,7 +72,7 @@ GetMonsterImage:
 	dec	1,HL
 	extz	XHL
 	sll	2,XHL
-	add	XHL,0x220FAC
+	add	XHL,MonsterImages
 	ld	XHL,(XHL)
 	ret
 
@@ -110,6 +111,7 @@ c_2082FA	section	code abs=0x2082FA
 ; L = part id -> PartNames + 7*(id-1)
 GetPartName:
 	ld	H,0
+GetPartName.withHL:
 	dec	1,HL
 	mul	XHL,7
 	add	XHL,PartNames
@@ -122,7 +124,7 @@ GetBodyName:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart)
-	jp	0x2082FC
+	jp	GetPartName.withHL
 
 c_208316	section	code abs=0x208316
 
@@ -130,7 +132,7 @@ GetCoreName:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x2)
-	jp	0x2082FC
+	jp	GetPartName.withHL
 
 c_208323	section	code abs=0x208323
 
@@ -138,7 +140,7 @@ GetLegsName:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x4)
-	jp	0x2082FC
+	jp	GetPartName.withHL
 
 c_208330	section	code abs=0x208330
 
@@ -146,7 +148,7 @@ GetBackName:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x6)
-	jp	0x2082FC
+	jp	GetPartName.withHL
 
 c_20833D	section	code abs=0x20833D
 
@@ -154,7 +156,7 @@ GetArmName:
 	ld	H,0
 	dec	1,HL
 	add	HL,(PartCategoryStart+0x8)
-	jp	0x2082FC
+	jp	GetPartName.withHL
 
 c_20834A	section	code abs=0x20834A
 
@@ -280,7 +282,7 @@ GetEnemyScaling.skip:
 	ld	C,7
 GetEnemyScaling.skip2:
 	mul	XBC,0xE
-	ld	XDE,0x22475C
+	ld	XDE,EnemyScaling+0x70
 	ld	HL,EVENT_STAGE_ENDING
 	call	CheckEventFlag
 	jr	NZ,GetEnemyScaling.skip3
@@ -311,7 +313,7 @@ GetEnemyScaling.skip4:
 	ret
 GetEnemyScaling.skip5:
 	pop	XHL
-	ld	XHL,0x2247BE
+	ld	XHL,EnemyScaling+0xD2
 	ret
 
 c_2106A1	section	code abs=0x2106A1
@@ -370,7 +372,7 @@ GetEncounterEnemy:
 
 c_2132FC	section	code abs=0x2132FC
 
-; [code] A = scene; A < 0x50 returned as is, else A = ArenaGenderScenes[(A-0x50) + IsPlayerMale] (female/male byte pairs, arena_gender_scenes.txt header already documents this routine); ArenaSceneEnd (loc_2135C5) stores the result in task +0x12 (scene)
+; [code] A = scene; A < 0x50 returned as is, else A = ArenaGenderScenes[(A-0x50) + IsPlayerMale] (female/male byte pairs, arena_gender_scenes.txt header already documents this routine); ArenaSceneEnd (ArenaSceneCmdGenderScene) stores the result in task +0x12 (scene)
 GetArenaGenderScene:
 	push	XHL
 	push	XDE
@@ -520,7 +522,7 @@ GetArenaTalkRow.skip15:
 
 c_213413	section	code abs=0x213413
 
-; [code] W = ArenaRankFirstScene[task+0x15 - 2] (through sub_2132FC when < 0x70) if the chosen rank task+0x15 > GetStageArenaRank, else scene 2 (scene 3 when stage rank = 9); only caller sub_2149DC stores W in task +0x12 (scene); matches arena_first_scenes.txt header
+; [code] W = ArenaRankFirstScene[task+0x15 - 2] (through GetArenaGenderScene when < 0x70) if the chosen rank task+0x15 > GetStageArenaRank, else scene 2 (scene 3 when stage rank = 9); only caller ArenaRoundsComplete stores W in task +0x12 (scene); matches arena_first_scenes.txt header
 GetArenaRankFirstScene:
 	push	XHL
 	push	XDE
@@ -578,9 +580,10 @@ GetTalkRow:
 	extz	XWA
 	mul	XWA,8
 	add	XHL,XWA
-	jr	0x214DC6
+	jr	GetTalkRow.skip2
 GetTalkRow.skip:
 	ld	XHL,TalkDefaultRow
+GetTalkRow.skip2:
 	pop	XWA
 	pop	XBC
 	pop	XDE
@@ -645,26 +648,29 @@ GetItemOrPartDesc.skip2:
 
 c_216BEE	section	code abs=0x216BEE
 
-dyn_216BEE:
+; [code] XHL = tilemap address: zeroes the top-left 12 x 14 entries (rows 0x20 words apart), registers saved; callers ClearArenaPortraitArea / ClearArenaPortraitArea2 (SCR2 0x9800) and the town talk code
+ClearPictureMap:
 	push	XHL
 	push	XDE
 	push	XBC
 	push	XWA
 	ld	WA,0
 	ld	B,0
+ClearPictureMap.loop:
 	ld	C,0
+ClearPictureMap.loop2:
 	ld	(XHL),WA
 	inc	2,XHL
 	inc	1,C
 	cp	C,0xC
-	jr	C,0x216BF8
+	jr	C,ClearPictureMap.loop2
 	ld	XDE,0x20
 	sub	XDE,0xC
 	sll	1,XDE
 	add	XHL,XDE
 	inc	1,B
 	cp	B,0xE
-	jr	C,0x216BF6
+	jr	C,ClearPictureMap.loop
 	pop	XWA
 	pop	XBC
 	pop	XDE
@@ -700,10 +706,10 @@ GetShopTier.skip:
 
 c_21A2E2	section	code abs=0x21A2E2
 
-; [code] count of item 0x6207 invalid or >= 9: YouHaveTooManyText, else AreYouSureText
+; [code] count of item wTradeShownOther (the entry the partner offers) invalid or >= 9: YouHaveTooManyText, else AreYouSureText
 GetTradeConfirmText:
-	ld	WA,(0x6207)
-	call	sub_219701
+	ld	WA,(wTradeShownOther)
+	call	GetEntryCountBy
 	ld	XHL,YouHaveTooManyText
 	ld	XDE,YouHaveTooManyText
 	ret	NC
@@ -713,9 +719,20 @@ GetTradeConfirmText:
 	ld	XHL,AreYouSureText
 	ld	XDE,AreYouSureText
 	ret
-	db	0x33,0x05,0x0C,0x06,0xFF,0x2F,0x14,0x08,0x05,0x12,0xFF,0x59,0x59,0xFF,0x2F,0x2B
-	db	0xFF,0x2E,0x2F,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0x00,0x00,0x00,0x00,0x00
-	db	0x00,0x00,0x00,0xFF
+SelfText:
+	db	0x33,0x05,0x0C,0x06,0xFF	; "Self"
+OtherText:
+	db	0x2F,0x14,0x08,0x05,0x12,0xFF	; "Other"
+DashText15:
+	db	0x59,0x59,0xFF	; "--"
+OKText:
+	db	0x2F,0x2B,0xFF	; "OK"
+NOText:
+	db	0x2E,0x2F,0xFF	; "NO"
+BlankText5:
+	db	0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "      "
+BlankText6:
+	db	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "        "
 
 c_21B8A7	section	code abs=0x21B8A7
 
@@ -739,7 +756,7 @@ c_21B8C0	section	code abs=0x21B8C0
 ; [code] WA = ItemGroupStarts[W] + A - 1 (0-based item id from group W, index A)
 ItemGroupToIndex:
 	push	XHL
-	ld	XHL,0x25B2E6
+	ld	XHL,ItemGroupStarts-1
 	ld	L,(XHL+W)
 	extz	HL
 	dec	1,A
@@ -761,7 +778,8 @@ GetItemGroupSize:
 
 c_21B8E4	section	code abs=0x21B8E4
 
-swp_21B8E4:
+; [code] XHL = ItemNamesWorks + 7 * XWA
+GetItemNameWorks:
 	mul	XWA,7
 	ld	XHL,ItemNamesWorks
 	lda	XHL,XHL+WA
@@ -769,7 +787,8 @@ swp_21B8E4:
 
 c_21B8F3	section	code abs=0x21B8F3
 
-swp_21B8F3:
+; [code] XHL = ItemDescsWorks + 0x13 * XWA
+GetItemDescWorks:
 	mul	XWA,0x13
 	ld	XHL,ItemDescsWorks
 	lda	XHL,XHL+WA
@@ -788,6 +807,7 @@ GetItemGroupIds:
 
 c_21B911	section	code abs=0x21B911
 
+; [code] WA = ItemValues_25B379[WA] (no other reader of that column); no callers
 swp_21B911:
 	push	XHL
 	add	WA,WA
@@ -798,13 +818,50 @@ swp_21B911:
 
 c_21B920	section	code abs=0x21B920
 
-; [code] WA = ItemAffinity[WA] (item_works.txt); called only by swp_217444 (no caller)
+; [code] WA = ItemAffinity[WA] (item_works.txt); called only by GetEntryAffinity (no caller)
 GetItemAffinity:
 	push	XHL
 	add	WA,WA
 	ld	XHL,ItemAffinity
 	ld	WA,(XHL+WA)
 	pop	XHL
+	ret
+
+c_21B92F	section	code abs=0x21B92F
+
+; [code] XWA = ItemPrices[WA] (u32, packed BCD as HalveBCD treats it)
+GetItemPrice:
+	push	XHL
+	sll	2,WA
+	ld	XHL,ItemPrices
+	ld	XWA,(XHL+WA)
+	pop	XHL
+	ret
+; [code] part count per group W (GetPartGroupSize, CheckPartGroupIndex): 0 = all parts, 1 body,
+; 2 core, 3 legs, 4 back, 5 arm. The arm entry is also PartGroupFirstIds[0].
+PartGroupSizes:
+	db	227, 15, 15, 44, 20
+; [code] PartGroupToIndex: first 0-based part id of group W = 1-5 (body 0, core 15, legs 30,
+; back 74, arm 94); entry 0 is the arm count of PartGroupSizes (the two tables overlap)
+PartGroupFirstIds:
+	db	133
+	db	0, 15, 30, 74, 94
+
+c_21B94A	section	code abs=0x21B94A
+
+; [code] carry when W is part group 1-5 and 1 <= A <= size (sizes: PartGroupSizes)
+CheckPartGroupIndex:
+	dec	1,W
+	cp	W,5
+	inc	1,W
+	jr	NC,CheckPartGroupIndex.done
+	push	XHL
+	ld	XHL,PartGroupSizes
+	dec	1,A
+	cp	A,(XHL+W)
+	inc	1,A
+	pop	XHL
+CheckPartGroupIndex.done:
 	ret
 
 c_21B963	section	code abs=0x21B963
@@ -834,7 +891,8 @@ GetPartGroupSize:
 
 c_21B987	section	code abs=0x21B987
 
-swp_21B987:
+; [code] XHL = PartNamesWorks + 7 * XWA
+GetPartNameWorks:
 	mul	XWA,7
 	ld	XHL,PartNamesWorks
 	lda	XHL,XHL+WA
@@ -842,7 +900,8 @@ swp_21B987:
 
 c_21B996	section	code abs=0x21B996
 
-swp_21B996:
+; [code] XHL = PartDescsWorks + 0x13 * XWA
+GetPartDescWorks:
 	mul	XWA,0x13
 	ld	XHL,PartDescsWorks
 	lda	XHL,XHL+WA
@@ -861,7 +920,8 @@ GetPartIdWord:
 
 c_21B9B4	section	code abs=0x21B9B4
 
-sub_21B9B4:
+; [code] XHL = PartStatsWorks + 0x18 * WA
+GetPartStatsWorks:
 	mul	WA,0x18
 	ld	XHL,PartStatsWorks
 	lda	XHL,XHL+WA
@@ -872,7 +932,7 @@ c_21B9C2	section	code abs=0x21B9C2
 ; [code] XHL = rank_titles.txt string WA (0x25E450 + 7 * WA)
 GetRankTitle:
 	mul	WA,7
-	ld	XHL,0x25E450
+	ld	XHL,RankTitles-7
 	lda	XHL,XHL+WA
 	ret
 
@@ -881,7 +941,7 @@ c_21B9D0	section	code abs=0x21B9D0
 ; [code] XHL = race_names.txt string WA (0x25E48F + 7 * WA)
 GetRaceName:
 	mul	WA,7
-	ld	XHL,0x25E48F
+	ld	XHL,RaceNames-7
 	lda	XHL,XHL+WA
 	ret
 

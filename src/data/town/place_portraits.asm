@@ -1,5 +1,5 @@
 ; PlacePortraits (place_portraits): 7 records of 1 bytes, one line per id; keep the order and count.
-; dyn_214D23: the picture (DrawPortrait) for town place line - 1 (task +0x15; 0 Square, 1 Pub,
+; DrawTownPlace: the picture (DrawPortrait) for town place line - 1 (task +0x15; 0 Square, 1 Pub,
 ; 2 D-town, 3 Forest, 4 Spring, 5 Works, 6 Shop as the names at 0x249EAB).
 ; id: portrait
 	db	39	; 1 Square

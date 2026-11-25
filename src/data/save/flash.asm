@@ -1,8 +1,8 @@
-; data/save/flash: raw data identified from the code (tools/regions.py), one section per piece
+; data/save/flash: raw data identified from the code, one section per piece
 
 d_2FA000	section	romdata abs=0x2FA000
-; [code] Flash the save code writes (cart offset 0xFA000; dyn_20DACC: slot 0 = 0x30 bytes here,
-; written by loc_20DBDE as the cart header 0x200020-0x20002F + 2 bytes of RAM 0x5280; slot n = 1-3
+; [code] Flash the save code writes (cart offset 0xFA000; GetSaveSlotOffset: slot 0 = 0x30 bytes here,
+; written by SaveOptions as the cart header 0x200020-0x20002F + 2 bytes of RAM 0x5280; slot n = 1-3
 ; at 0xFA030 + 0x290 * (n - 1): 16-byte header + RAM 0x5013-0x527F (play)). As shipped: slot 0
 ; filled in, the rest erased flash (0xFF).
 SaveArea:

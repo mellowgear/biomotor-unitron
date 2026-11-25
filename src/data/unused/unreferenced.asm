@@ -1,4 +1,4 @@
-; data/unused/unreferenced: raw data identified from the code (tools/regions.py), one section per piece
+; data/unused/unreferenced: raw data identified from the code, one section per piece
 
 d_21DA1D	section	romdata abs=0x21DA1D
 ; No code immediate or data pointer reaches these bytes (every odd byte 0x83).

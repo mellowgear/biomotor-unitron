@@ -1,8 +1,9 @@
 # Biomotor Unitron (Neo Geo Pocket Color) — disassembly
 
 A disassembly of *Biomotor Unitron* (Yumekobo / SNK, 1999) that rebuilds the original ROM byte for
-byte from editable source: TLCS-900 assembly, PNG graphics, text files and data tables. In the
-spirit of [pokered](https://github.com/pret/pokered): read how the game works, change it, rebuild.
+byte from editable source: TLCS-900 assembly, PNG graphics, text files and data tables. Its style
+and approach are heavily influenced by the awesome [pokered](https://github.com/pret/pokered): read
+how the game works, change it, rebuild.
 
 This repo holds only the game. The assembler and converters are a separate, general NGPC toolchain,
 **unitron**.
@@ -11,40 +12,63 @@ This repo holds only the game. The assembler and converters are a separate, gene
 |---|---|---|
 | What | assembler for Toshiba's asm900 syntax, disassembler, macro preprocessor, LZSS, graphics and tile-map converters, NGPC hardware names | asm source, PNGs, text, tables, Makefile, converters for this game's own formats (`tools/`) |
 | Used by | any NGPC decomp or homebrew | Biomotor Unitron only |
-| Licence | MIT | see LICENSE |
 
 ## Building
 
-You need unitron, a C++17 compiler (for this game's tools in `tools/`), `make`, and your own copy
-of the ROM. `make` runs no Python; Python 3.10+ is needed only for `make ram`
-and the analysis tools in `tools/`. The ROM is not included and never will be.
+You need [unitron](https://github.com/mellowgear/unitron), a C++17 compiler, CMake and `make`.
+No Python, and not the original ROM, which is not included and never will be.
+
+### 1. unitron
+
+On macOS you need the Xcode command-line tools (`xcode-select --install`) and CMake
+(`brew install cmake`).
 
 ```sh
-# 1. toolchain: unitron (C++, CMake) next to this repo, and Python for tools/
-cmake -S unitron -B unitron/build && cmake --build unitron/build
-python3 -m venv .venv && pip install -r tlcs900/requirements.txt
-#    (unitron elsewhere: make UNITRON=/path/to/unitron)
+git clone https://github.com/mellowgear/unitron
+cmake -S unitron -B unitron/build -DCMAKE_BUILD_TYPE=Release && cmake --build unitron/build
+```
 
-# 2. your ROM, checked against the original
-cp /path/to/your/biomotor.ngp baserom.ngp
-sha1sum baserom.ngp   # ff74d5877bf58164419710888923e46b9cfb415e
+Put `unitron/build/unitron` on your PATH, or pass it to make each time.
 
-# 3. build
-make            # -> biomotor.ngp, then "biomotor.ngp: OK" if it matches the original
+### 2. Build the ROM
+
+```sh
+make                                          # unitron on PATH
+make UNITRON=/path/to/unitron/build/unitron   # or point to it
 ```
 
 What `make` does:
 
+0. Builds this game's own converters (`tools/biogfx`, `tools/biosong`) with plain `c++`.
 1. Converts each editable asset into the bytes the game expects: PNG -> tiles (with the game's
    LZSS compression), map files -> map data, text and the text tables -> the game's character
    codes (`unitron text`). Each result becomes `db` lines (`unitron bin2db`), since asm900 has no
    binary include. Palettes and numeric tables are asm900 source already (`dw`/`db` lines and
    records), so they need no step. Only what changed is rebuilt.
 2. Assembles `src/main.asm` and everything it includes into `biomotor.ngp` (`unitron asm`).
+   It is one unit of about 1,500 `$include`s. Toshiba's own asm900 allows 99 per unit, so unitron
+   prints a warning about it; the build is fine. Building with the original asm900 would need the source
+   split into separately assembled modules.
 3. Compares the SHA1 with the original. Unedited sources print `biomotor.ngp: OK`; after a mod a
    mismatch is expected.
 
-SETUP.md has the full setup (Python environment for the analysis tools); docs/ASSETS.md explains how assets are declared and built.
+The first build compresses every graphic (about half a minute on 8 cores; `make` runs in
+parallel by itself); after that only changed files are rebuilt.
+
+### 3. Optional: compare with your original ROM
+
+Put your own copy of the ROM in this folder as `baserom.ngp` (`*.ngp` is ignored by git), or
+point to it:
+
+```sh
+shasum -a 1 baserom.ngp     # macOS (sha1sum on Linux); expected ff74d5877bf58164419710888923e46b9cfb415e
+make compare
+make compare BASEROM=/path/to/your/rom.ngp
+```
+
+`make compare` lists the first differing bytes (offset, original, yours) or says the two match.
+
+docs/ASSETS.md explains how assets are declared and built.
 
 ## Modding
 
@@ -65,7 +89,7 @@ Edit a PNG, a text file, a table or an assembly routine, then run `make`.
   the game reads it.
 - **Palettes:** in `src/gfx/palettes.asm` at their labels: `dw` lines of 4 colours (0x0BGR) for colour
   palettes, `db` lines for the mono ones.
-- **Code:** `src/engine/**`. Routines by subsystem, named where the code or play proves the name.
+- **Code:** `src/engine/**`. Routines by subsystem (docs/FILING.md: which file holds what), named where the code or play proves the name.
 
 Every routine and data piece stays at its original ROM address (each section is `abs=` its
 address, by design), so an edit must fit in the space of the original. If it grows too big, the
@@ -77,17 +101,15 @@ assembler stops and names both clashing pieces.
 |---|---|
 | `src/main.asm` | Top level: constants, RAM names, then every code and data file |
 | `src/home/` | Cartridge header, system code |
-| `src/engine/` | Game code by subsystem: battle, dungeon, arena, events, menus (title, town, shop, works), scenes, gfx, text, tables, player |
+| `src/engine/` | Game code by subsystem, one level deeper: `battle/` (init, calc, menu, player_turn, enemy_turn, effects, status, tasks, end), `dungeon/` (core, load, map, encounter, chests, camp, boss, world_map), `arena/` (scenes, entry, opponents, duel), `gfx/` (palettes, tiles, tilemap, sprites, window, portraits, robot), `menus/` (main_menu, new_game, save, menu_helpers, print, `works/`, `shop/`, `town/`), and events, scenes, text, tables, player; one line per file in docs/FILING.md |
 | `src/audio/` | Sound engine (main CPU), Z80 sound driver (Z80 source, `unitron z80 asm`), song table, song headers and voice records (asm), the 70 tracks as text (`tracks/*.song`, tools/biosong; docs/SONGS.md) |
 | `src/constants/`, `src/macros/`, `src/ram/` | `.inc` files: hardware names (cited), struct fields, joypad, event flags, item ids; the `task_wait` macro and the table record macros; work-RAM names |
 | `src/gfx/` | Tile sheets, monster images, robot parts, battle-effect sheets and frames, dungeon tiles, tile maps, palettes |
 | `src/maps/dungeon/` | The 57 dungeon floor maps |
 | `src/text/` | All dialogue and menu text |
 | `src/data/<subject>/` | The game database by subject: one file per table part (asm900 records, or text slot files), `tables.asm` / `pointers.asm` per subject; also the dungeon and battle-effect containers, the save area |
-| `src/data/unknown/` | The data blocks not identified yet (`unknown.asm` + one `.bin` each; 9 blocks, 263 bytes, no reader found) |
+| `src/data/unknown/` | The data blocks not identified yet (`unknown.asm` + one `.bin` each; 3 blocks, 47 bytes, no reader found) |
 | `tools/` | Converters for this game's own formats |
-| `symbols.txt`, `ram.txt` | Names for routines, tables and RAM; evidence tags `[code]` / `[play]` |
-| `GAME_DATA.md` | Generated player reference: stats, rewards, formulas |
 
 ## How it was made
 
@@ -107,7 +129,6 @@ assembler stops and names both clashing pieces.
 ## Status
 
 - Byte-identical rebuild.
-- Unidentified data: 116 blocks, about 46 KB of the 1 MB ROM. These are mostly accessor tables,
-  event scripts and the song data.
+- Unidentified data: 3 blocks, 47 bytes (`src/data/unknown/`), with no reader found in the code.
 - Pinned by design: every piece keeps its original address (no relocation, no shifting).
-- About 1,250 routines still have address names.
+- 16 routines still have address names (`sub_`/`swp_`).

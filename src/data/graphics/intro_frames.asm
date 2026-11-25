@@ -12,11 +12,11 @@ IntroCockpitFramesMono:
 IntroLetterMaps:
 	dl	Map_2DF674,Map_2DF96E,Map_2DFC68
 
-; [code] swp_20EB87: sprite map (dyn_2069C8) per frame: entry (counter / 2) & 3
+; [code] IntroMeteorTask: sprite map (DrawSpriteMap) per frame: entry (counter / 2) & 3
 Data_226B59:
 	dl	Map_2DE95A,Map_2DE95A,Map_2DE980,Map_2DE9A6
 
-; [code] swp_20EAA6: SCR2 tilemap records (DrawTilemapScr2): pointer, x, y (in tiles). The
+; [code] IntroImpactTask: SCR2 tilemap records (DrawTilemapScr2): pointer, x, y (in tiles). The
 ; frame table Data_226B99 picks 1-5; record 0 (the planet, IntroPlanetGraphics) is not picked.
 Data_226B69:
 	dl	Map_2DE660
@@ -32,10 +32,12 @@ Data_226B69:
 	dl	Map_2DEAA2
 	dw	0,9
 
-; [code] swp_20EAA6: 60 words, a Data_226B69 record per frame (13 x 1, 13 x 2, 13 x 3, 12 x 4,
+; [code] IntroImpactTask: 60 words, a Data_226B69 record per frame (13 x 1, 13 x 2, 13 x 3, 12 x 4,
 ; 9 x 5). The code reads the word at +4 * frame for frames 0-59 (task +0x18; it ends the task
 ; after 0x3C frames), so it uses every second word and, from frame 30 on, reads past the table
-; (into the bytes from 0x226C11). Whether the task is ended earlier by its parent: not checked.
+; (into the bytes from 0x226C11). [play] it runs all 60 frames (not ended early); most past-the-end
+; words give x/y >= 0x20 (nothing drawn); at zoom frame 34 word 0 redraws the planet on SCR2 over the
+; impact rings, so the rings vanish during the fade to white.
 Data_226B99:
 	dw	1,1,1,1,1,1,1,1,1,1,1,1,1
 	dw	2,2,2,2,2,2,2,2,2,2,2,2,2

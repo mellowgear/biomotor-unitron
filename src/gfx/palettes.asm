@@ -1,4 +1,4 @@
-; gfx/palettes.asm: palettes (LoadPalettes / LoadMonoPalettes), in ROM order (written once by tools/assets.py extract; edited by hand since). Each keeps its address in its own section;
+; gfx/palettes.asm: palettes (LoadPalettes / LoadMonoPalettes), in ROM order. Each keeps its address in its own section;
 ; the included product says how the Makefile builds it (see README).
 ; Palettes are written in place: colour palettes (Pal_, AffinityPalettes) as dw lines of 4
 ; colours, 0x0BGR with 4 bits per channel; the 4-byte MonoPal_ palettes as db lines.
@@ -68,8 +68,19 @@ AffinityPalettes:
 	dw	0xFFF,0xFB7,0x0BF,0x000
 	dw	0xFFF,0x0FF,0xA0A,0x000
 d_26FDD7	section	romdata abs=0x26FDD7
-Pal_26FDD7:
-	dw	0xF60,0xFFF,0x02F,0x027
+; [code] LoadPlayerDungeonSprite / LoadDungeonPalettes: sprite palette 0 = PlayerDungeonSpritePalettes + 8 * ((wPlayerRace - 1) / 2),
+; one palette per race pair (races 1-10, the 5 pairs of PlayerDungeonSprites and CyriusTradeMenu)
+; (was Pal_26FDD7)
+PlayerDungeonSpritePalettes:
+	dw	0xF60,0xFFF,0x02F,0x027	; races 1-2
+	dw	0xF00,0xFFF,0x0FD,0x050	; races 3-4
+	dw	0xF00,0xFFF,0xBA0,0x550	; races 5-6
+	dw	0xF00,0xFFF,0xFA3,0x930	; races 7-8
+	dw	0xF00,0xFFF,0x37A,0x025	; races 9-10
+; [code] a sixth palette: index 5 would need race 11 or 12, which no race reaches (DefaultNames holds races
+; 1-10); no other reader (no immediate or pointer)
+UnusedPal_26FDFF:
+	dw	0x000,0xFFF,0xF99,0xF22
 d_26FE07	section	romdata abs=0x26FE07
 MonoPal_26FE07:
 	db	0x07,0x00,0x03,0x07
@@ -1142,6 +1153,12 @@ Pal_2C82CE:
 d_2C865D	section	romdata abs=0x2C865D
 Pal_2C865D:
 	dw	0xFFF,0x0CF,0x00F,0x222
+d_2C8665	section	romdata abs=0x2C8665
+; [code] no reader (no immediate or pointer; LoadWorldMapMarkerTiles loads only Pal_2C865D): a mono
+; palette (4 shades 0-7) in the palette, mono palette, maps, tile sheet order of the other assets;
+; the maps UnusedMap_2C8669-2C8687 and Gfx_2C8691 follow
+UnusedMonoPal_2C8665:
+	db	0x00,0x00,0x04,0x06
 d_2C8772	section	romdata abs=0x2C8772
 Pal_2C8772:
 	dw	0xFFF,0x07F,0x05F,0x222
@@ -1185,6 +1202,11 @@ MonoPal_2DD55D:
 	db	0x07,0x00,0x03,0x07
 d_2DE017	section	romdata abs=0x2DE017
 Pal_2DE017:
+	dw	0xFFF,0xBBB,0x666,0x222
+d_2DE01F	section	romdata abs=0x2DE01F
+; [code] no reader (no immediate or pointer; Intro199YearsAgo loads Pal_2DE017 with C = 1): a second
+; colour palette between Pal_2DE017 and MonoPal_2DE027, the same colours as Pal_2DE017
+UnusedPal_2DE01F:
 	dw	0xFFF,0xBBB,0x666,0x222
 d_2DE027	section	romdata abs=0x2DE027
 MonoPal_2DE027:
@@ -1246,6 +1268,20 @@ Pal_2E6618:
 	dw	0xFFF,0x8BA,0x477,0x343
 	dw	0xFFF,0xEDD,0xDBB,0xDA9
 	dw	0xFFF,0xEDD,0x9EE,0xBAA
+d_2E6658	section	romdata abs=0x2E6658
+; [code] no reader (no immediate or pointer; StorySceneSunBegan loads the 8 of Pal_2E6618, C = 8, and
+; its maps Map_2E66A0 / Map_2E699A use palettes 0-7 only); [play] a read watch over the whole human run
+; and the ending saw no reads: 8 more colour palettes before MonoPal_2E6698, the layout of Pal_2E6618
+; in greys (0x999 first)
+UnusedPal_2E6658:
+	dw	0x999,0x888,0x554,0x222
+	dw	0x999,0x199,0x588,0x199
+	dw	0x999,0x888,0x554,0x222
+	dw	0x999,0x488,0x488,0x134
+	dw	0x999,0x888,0x554,0x222
+	dw	0x999,0x488,0x477,0x222
+	dw	0x999,0x888,0x888,0x888
+	dw	0x999,0x888,0x488,0x666
 d_2E6698	section	romdata abs=0x2E6698
 MonoPal_2E6698:
 	db	0x00,0x02,0x04,0x06
@@ -1259,3 +1295,16 @@ Pal_2E766D:
 	dw	0xFFF,0xFC9,0x766,0x222
 	dw	0xFFF,0xA62,0x766,0x222
 	dw	0xFFF,0x17B,0x766,0x222
+d_2E76A5	section	romdata abs=0x2E76A5
+; [code] no reader (no immediate or pointer; StorySceneDestruction loads the 7 of Pal_2E766D, C = 7, and
+; its map Map_2E76DD uses palettes 0-6 only); [play] a read watch over the whole human run and the
+; ending saw no reads: 7 more colour palettes before Map_2E76DD, the layout of Pal_2E766D in greys
+; (0x999 first)
+UnusedPal_2E76A5:
+	dw	0x999,0x126,0x544,0x222
+	dw	0x999,0x565,0x289,0x642
+	dw	0x999,0x976,0x247,0x222
+	dw	0x999,0x289,0x544,0x222
+	dw	0x999,0x976,0x544,0x222
+	dw	0x999,0x642,0x544,0x222
+	dw	0x999,0x247,0x544,0x222

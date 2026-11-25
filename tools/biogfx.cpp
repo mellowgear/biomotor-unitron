@@ -12,8 +12,14 @@
 //       DrawPartImage 0x2070C7: bytes 04, w, h, then LZSS of 4-bit pixels, high nibble first;
 //       an odd count is padded with 4 (clear). Every pixel must be 0-4.
 //       PIXELS = unitron gfx frompng --indices.
+//   biogfx blockmap --width N BLOCKSET.bst OUT.tilemap
+//       A blockset (GetMetatileTiles 0x206EE6: per 2x2 metatile 4 tile words, top left, top
+//       right, bottom left, bottom right) as a wh8 tile map for `unitron gfx --map`: the metatiles
+//       left to right, N to a row, each as its 2x2 cells; cells after the last metatile are 0
+//       (no tile). The words are copied as they are: a metatile's tile number n (bits 0-8, 0 =
+//       none) is sheet tile n - 1 (drawn at wDungeonTileBase + n - 1), which is --base 0.
 //
-// Same bytes as tools/assets.py (bd_2bpp_lz, bd_img2, bd_img4); the LZSS is tools/lzss.hpp.
+// The LZSS is tools/lzss.hpp.
 #include <algorithm>
 #include <cstdio>
 #include <fstream>
@@ -62,7 +68,8 @@ Bytes header(uint8_t kind, uint32_t w, uint32_t h, const std::string& png) {
 int usage() {
     std::cerr << "usage: biogfx sheet TILES.2bpp OUT.2bpp.lz\n"
                  "       biogfx img2 --png SRC.png TILES.2bpp OUT.img2\n"
-                 "       biogfx img4 --png SRC.png PIXELS OUT.img4\n";
+                 "       biogfx img4 --png SRC.png PIXELS OUT.img4\n"
+                 "       biogfx blockmap --width N BLOCKSET.bst OUT.tilemap\n";
     return 2;
 }
 
@@ -81,6 +88,28 @@ int main(int argc, char** argv) {
             Bytes z = lzss::compress(tiles);
             out.insert(out.end(), z.begin(), z.end());
             write_file(a[2], out);
+            return 0;
+        }
+        if (a.size() == 5 && a[0] == "blockmap" && a[1] == "--width") {
+            size_t per_row = 0;
+            try { per_row = std::stoul(a[2]); } catch (std::exception&) {}
+            if (per_row == 0 || per_row > 127) throw std::runtime_error("--width " + a[2] + ": not 1-127 metatiles");
+            Bytes bst = read_file(a[3]);
+            if (bst.empty() || bst.size() % 8) throw std::runtime_error(a[3] + ": not whole 8-byte metatiles");
+            size_t blocks = bst.size() / 8, rows = (blocks + per_row - 1) / per_row;
+            size_t w = 2 * per_row, h = 2 * rows;
+            if (h > 255) throw std::runtime_error(a[3] + ": " + std::to_string(rows) + " rows of metatiles don't fit the one-byte height");
+            Bytes out(2 + 2 * w * h, 0);
+            out[0] = uint8_t(w);
+            out[1] = uint8_t(h);
+            for (size_t b = 0; b < blocks; b++)
+                for (size_t k = 0; k < 4; k++) {   // k: 0 top left, 1 top right, 2 bottom left, 3 bottom right
+                    size_t x = 2 * (b % per_row) + k % 2, y = 2 * (b / per_row) + k / 2;
+                    size_t o = 2 + 2 * (y * w + x);
+                    out[o] = bst[8 * b + 2 * k];
+                    out[o + 1] = bst[8 * b + 2 * k + 1];
+                }
+            write_file(a[4], out);
             return 0;
         }
         if (a.size() == 5 && (a[0] == "img2" || a[0] == "img4") && a[1] == "--png") {

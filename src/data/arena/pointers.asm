@@ -1,4 +1,4 @@
-; data/arena/pointers: pointer tables read by the code (tools/pointers.py), one section each
+; data/arena/pointers: pointer tables read by the code, one section each
 
 d_249B8C	section	romdata abs=0x249B8C
 ; [code] stage 0-11 -> its list in StageRequiredTalkLists (sub_213326)
@@ -8,30 +8,30 @@ StageRequiredTalks:
 	dl	StageRequiredTalkLists+0xC,StageRequiredTalkLists+0xD,StageRequiredTalkLists+0xE,StageRequiredTalkLists+0x19
 
 d_249BC9	section	romdata abs=0x249BC9
-; [code] ArenaEntryMenuInput / sub_2138B7: string per cursor (Entry, Quit)
+; [code] ArenaEntryMenuInput / ArenaEntryMenuChoose: string per cursor (Entry, Quit)
 ArenaEntryMenuTexts:
 	dl	EntryText,QuitText2
 
 d_249C0F	section	romdata abs=0x249C0F
-; [code] sub_213A68 / swp_213903 / swp_213BE1: rank name per menu choice
+; [code] ArenaRankListChoose / ShowArenaRankList / ShowArenaBracket: rank name per menu choice
 ArenaRankNames:
 	dl	RankEText,RankDText,RankCText,RankBText
 	dl	RankAText,RankSText,CSText,RankXText
 
 d_249C63	section	romdata abs=0x249C63
-; [code] sub_213972: entry cost string per menu choice
+; [code] DrawArenaEntryCost: entry cost string per menu choice
 ArenaEntryCostTexts:
 	dl	EntryCost200Text,EntryCost500Text,EntryCost1000Text,EntryCost2000Text
 	dl	EntryCost3000Text,EntryCost5000Text,EntryCost10000Text,EntryCost0Text
 
 d_249CB8	section	romdata abs=0x249CB8
-; [code] sub_214028: string per entry (index clamped to 5)
+; [code] GetArenaBracketLine: string per entry (index clamped to 5)
 Pointers_249CB8:
 	dl	Round1Text,Round2Text,Round3Text,Round4Text
 	dl	Round5Text,FinalText
 
 d_249D2E	section	romdata abs=0x249D2E
-; [code] sub_213C2E: ArenaBrackets row per rank - 2
+; [code] RollArenaBracket: ArenaBrackets row per rank - 2
 ArenaBracketRows:
 	dl	ArenaBrackets,ArenaBrackets+0x6,ArenaBrackets+0xC,ArenaBrackets+0x12
 	dl	ArenaBrackets+0x18,ArenaBrackets+0x1E,ArenaBrackets+0x24,ArenaBrackets+0x2A

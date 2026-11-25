@@ -1,5 +1,5 @@
 ; LevelBonus (level_bonus): 10 records of 4 bytes, one line per id; keep the order and count.
-; dyn_207B12: extra random gain 0..n per stat on each level up; line = 0x5021.
+; TryLevelUp: extra random gain 0..n per stat on each level up; line = 0x5021.
 ; id: ap, sp, rp, mp
 	db	2,1,1,1	; 1
 	db	1,1,2,1	; 2

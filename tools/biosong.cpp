@@ -7,7 +7,7 @@
 // Z80 block (driver 0x0522-0x05D4): u16 L | (k-1)<<14 (L = block length), k channel words
 // chan<<14 | offset (stream start = address after the word + offset), the map bytes, then the
 // streams. Streams are bit streams read MSB first (driver reader 0x048F); fields wider than 8
-// bits are read as the low 8 bits first, then the rest. evidence/songs_2026-11-25.md section 3.
+// bits are read as the low 8 bits first, then the rest. See docs/SONGS.md.
 //
 // The source keeps the choices the ROM made (which note fields are sent, `=` against a value);
 // biosong computes the rest: L, E, the offsets, the 4/8-bit width of waits and gates, the call

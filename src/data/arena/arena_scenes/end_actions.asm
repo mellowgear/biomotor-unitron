@@ -4,7 +4,7 @@
 ; prize item arena_prizes.txt, prize GP), 3 SetJonNotReadySeen, else nothing.
 ; next (ArenaSceneEnd): below 0x50 = the next scene; 0x50-0x6F = a pair in
 ; tables/arena_gender_scenes.asm; 0xF2-0xFE = commands (ArenaSceneEnd's jump list), 0xFF = end.
-; cast: portrait drawn by DrawArenaParticipants (sub_2132D2, only when it changes): 0 = none,
+; cast: DrawArenaSceneCast passes it to DrawArenaParticipants (only when it changes): 0 = none,
 ; 255 / 254 = the player's own portrait (1 or 0x0B + race/gender), 0x38 / 0x3A handled apart.
 ; id: end_action
 	db	0	; 1 scene 0

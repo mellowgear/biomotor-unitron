@@ -1,6 +1,6 @@
 ; ArenaPilotLegs: 6 ranks x 5 pilot groups x 3 legs ids; entry (line * 5 + g) * 3 + Random() % count
 ; (the count per rank is the table before this one; 0 = unused choice).
-; How sub_213C2E builds a random pilot's parts, and the line order: body_base.asm.
+; How RollArenaBracket builds a random pilot's parts, and the line order: body_base.asm.
 ; one line per rank and pilot group: 3 ids
 	db	 4,18, 0	; Rank S, Alex/Crofrd/Lester: Paladn, Hero
 	db	 8, 9, 0	; Rank S, Kaldrl/Fandel/Leygos: Jester, Kalon

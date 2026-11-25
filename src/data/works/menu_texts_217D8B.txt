@@ -1,4 +1,4 @@
-; strings at 217D8B-217DA6 (sub_217DD3)
+; strings at 217D8B-217DA6 (SetupItemCategoryMenu)
 
 ItemText6:
     text "Item"

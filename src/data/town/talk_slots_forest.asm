@@ -1,6 +1,6 @@
 ; TalkSlotsForest (talk_slots_forest): 12 records of 2 bytes, one line per id; keep the order and count.
 ; The talk rows (0-based row of tables/talk_forest.asm, so line - 1) listed in the Forest for story stage
-; line - 1 (GetStoryStage), in order; 255 ends the list early (sub_214F3D). Counts and list
+; line - 1 (GetStoryStage), in order; 255 ends the list early (LoadTalkSlots). Counts and list
 ; pointers: tables/talk_slot_lists/.
 ; id: s1, s2
 	db	  8,255	; 1

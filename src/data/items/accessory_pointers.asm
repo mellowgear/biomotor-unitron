@@ -1,29 +1,29 @@
-; data/items/accessory_pointers: pointer tables read by the code (tools/pointers.py), one section each
+; data/items/accessory_pointers: pointer tables read by the code, one section each
 
 d_207A43	section	romdata abs=0x207A43
-; [code] sub_207A32: per accessor id (wEquipAcc1/2, 0 = none) a routine pointer
+; [code] ApplyBattleAccessory: per accessor id (wEquipAcc1/2, 0 = none) a routine pointer
 Pointers_207A43:
-	dl	swp_207ADB,swp_207ADB,swp_207ADB,swp_207ADB
-	dl	swp_207ADB,swp_207ADB,swp_207ADB,swp_207ADB
-	dl	swp_207ADB,swp_207ADC,swp_207AE2,swp_207AE8
-	dl	swp_207AEE,swp_207AF4,swp_207AFA,swp_207B00
-	dl	swp_207B06,swp_207B0C,swp_207ADB,swp_207ADB
-	dl	swp_207ADB,swp_207ADB,swp_207ADB,swp_207ADB
-	dl	swp_207ADB,swp_207ADB,swp_207ADB,swp_207ADB
-	dl	swp_207ADB,swp_207ADB,swp_207ADB,swp_207ADB
-	dl	swp_207ADB,swp_207ADB,swp_207ADB,swp_207ADB
-	dl	swp_207ADB,swp_207ADB
+	dl	AccBattleNone,AccBattleNone,AccBattleNone,AccBattleNone
+	dl	AccBattleNone,AccBattleNone,AccBattleNone,AccBattleNone
+	dl	AccBattleNone,AccBattleRadar5,AccBattleRadar8,AccBattleRadr10
+	dl	AccBattleCycl10,AccBattleCycl20,AccBattleCycl30,AccBattlePanl15
+	dl	AccBattlePanl30,AccBattlePanl50,AccBattleNone,AccBattleNone
+	dl	AccBattleNone,AccBattleNone,AccBattleNone,AccBattleNone
+	dl	AccBattleNone,AccBattleNone,AccBattleNone,AccBattleNone
+	dl	AccBattleNone,AccBattleNone,AccBattleNone,AccBattleNone
+	dl	AccBattleNone,AccBattleNone,AccBattleNone,AccBattleNone
+	dl	AccBattleNone,AccBattleNone
 
 d_20888E	section	romdata abs=0x20888E
-; [code] CalcUnitStats -> dyn_208879: jp through entry wEquipAcc1/2 (accessory id; 0 returns first)
+; [code] CalcUnitStats -> ApplyAccessoryStats: jp through entry wEquipAcc1/2 (accessory id; 0 returns first)
 Pointers_20888E:
-	dl	swp_208926,swp_208927,swp_20892C,swp_208931
-	dl	swp_208936,swp_20893B,swp_208940,swp_208945
-	dl	swp_20894A,swp_208926,swp_208926,swp_208926
-	dl	swp_208926,swp_208926,swp_208926,swp_208926
-	dl	swp_208926,swp_208926,swp_20894F,swp_208956
-	dl	swp_20895D,swp_208964,swp_20896B,swp_208972
-	dl	swp_208979,swp_208980,swp_208987,swp_20898E
-	dl	swp_208995,swp_20899C,swp_2089A3,swp_2089AA
-	dl	swp_2089B1,swp_2089B8,swp_2089BF,swp_2089C6
-	dl	swp_208926,swp_208926
+	dl	AccStatsNone,AccStatsFlrCt,AccStatsRefCt,AccStatsIceCt
+	dl	AccStatsWindCt,AccStatsErthCt,AccStatsLghtCt,AccStatsDarkCt
+	dl	AccStatsMirrCt,AccStatsNone,AccStatsNone,AccStatsNone
+	dl	AccStatsNone,AccStatsNone,AccStatsNone,AccStatsNone
+	dl	AccStatsNone,AccStatsNone,AccStatsArmr25,AccStatsArmr50
+	dl	AccStatsArmr80,AccStatsTank15,AccStatsTank30,AccStatsTank60
+	dl	AccStatsBst10,AccStatsBst20,AccStatsBst30,AccStatsPlt10
+	dl	AccStatsPlt20,AccStatsPlt30,AccStatsAxel10,AccStatsAxel20
+	dl	AccStatsAxel30,AccStatsBurn10,AccStatsBurn20,AccStatsBurn30
+	dl	AccStatsNone,AccStatsNone

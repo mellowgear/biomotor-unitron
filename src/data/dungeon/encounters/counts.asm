@@ -1,5 +1,5 @@
 ; EncounterCounts (encounters): 33 records of 1 bytes, one line per id; keep the order and count.
-; Random dungeon battles (sub_212BAB): line = (DUNGEON_ID - 1) * 7 + floor, enemy =
+; Random dungeon battles (GetEncounterEnemy): line = (DUNGEON_ID - 1) * 7 + floor, enemy =
 ; list[Random() % count] (list = an address in tables/encounter_enemies.asm), then StartDungeonBattle
 ; -> LoadEnemy. Dungeons 1-4 have 7 floors, the Crystal Mine (5) 5.
 ; id: count

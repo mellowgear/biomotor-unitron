@@ -1,5 +1,5 @@
 ; audio/sound_init.asm: SoundInit (0x200E67, 31 bytes), read by PlaySong and UploadZ80Driver.
-; Format read from the code: evidence/songs_2026-11-25.md sections 2.1, 3.5 and 3.6.
+; Format read from the code: docs/SONGS.md sections 2.1, 3.5 and 3.6.
 
 d_200E67	section	romdata abs=0x200E67
 ; [code] voice records, 9 bytes each. A song header's voice id k makes PlaySong copy
@@ -19,7 +19,7 @@ SoundInit:
 	db	0x2E,0x2D,0x06,0x00,0x00,0x00,0x02,0x14,0x20	; voice 1
 	db	0x0E,0x2D,0x08,0x00,0x00,0x00,0x00,0x00,0x00	; voice 2
 ; [code] UploadZ80Driver: a u16 byte count, then that many bytes copied to Z80 0x0ABB. The
-; driver reads it as the table for commands 0xC0+2n (game sound ids n < 0x20 in sub_2002C8):
+; driver reads it as the table for commands 0xC0+2n (game sound ids n < 0x20 in SoundIdToCommand):
 ; entry n = func, arg; func 0 = Z80 0x05FA, func 1 = Z80 0x0054 (jump table at Z80 0x04F6).
 Z80CmdTable:
 	dw	2

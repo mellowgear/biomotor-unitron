@@ -1,4 +1,4 @@
-; data/dungeon/dungeon.asm: the dungeon data set (tools/dungeon.py; make extract rewrites it).
+; data/dungeon/dungeon.asm: the dungeon data set. Edited by hand.
 ; Read by sub_211B35 through DungeonData; maps indexed by DungeonMaps (map id).
 
 d_228741	section	romdata abs=0x228741

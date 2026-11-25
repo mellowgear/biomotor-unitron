@@ -1,5 +1,5 @@
 ; ShopPartStock (shop_part_stock): 227 records of 1 bytes, one line per id; keep the order and count.
-; As tables/shop_item_stock.asm, for parts (sub_21D1BB <- swp_21753D <- sub_21757B; line = part id).
+; As tables/shop_item_stock.asm, for parts (GetShopPartTier <- GetShopTier <- IsShopEntryStocked; line = part id).
 ; id: tier
 	db	0	; 1 Body1
 	db	0	; 2 Body2

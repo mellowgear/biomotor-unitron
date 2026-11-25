@@ -1,15 +1,15 @@
 # Biomotor's Z80 sound driver
 
 Analysis of the Z80 sound driver in Biomotor (`src/audio/z80_driver.z80`, Z80 source of 2,741 bytes
-at ROM 0x2003B2, sha256 a675ebd7...57eb), moved here from unitron's docs/Z80_PLAN.md on 2026-11-25 (user:
-Biomotor-specific things live in the decomp; unitron keeps only generic Z80 tooling and findings).
+at ROM 0x2003B2, sha256 a675ebd7...57eb). Biomotor-specific things live here; unitron keeps only
+the generic Z80 tooling and findings.
 Addresses are this version of the driver. The driver is shared (the same bytes are the homebrew
 template's `NeoTracker_Driver[]`, and SNK vs. Capcom has another version), so the interface parts may
-hold for other games too; unitron's docs/Z80_PLAN.md and docs/z80.md have the generic side.
+hold for other games too; unitron's docs/z80.md has the generic side.
 
 Tools: `unitron z80 dis src/audio/z80_driver.bin --hints src/audio/z80_driver.hints` (listing) and
-`-o DIR` (source that assembles back to the same bytes); `unitron z80 roundtrip`. Sources are cited as
-in unitron's plan: `Doc l.N` = `ngpc-project-template/official-docs/Doc/Doc.md`; "template" =
+`-o DIR` (source that assembles back to the same bytes); `unitron z80 roundtrip`. Sources are cited
+as: `Doc l.N` = `ngpc-project-template/official-docs/Doc/Doc.md`; "template" =
 `ngpc-project-template/` (homebrew: evidence, not a source).
 
 ## 1. What the code shows (evidence, not a source)
@@ -104,7 +104,7 @@ The rest:
 finds 637 instructions (1,049 bytes). With 8 `code` hints (the 7 jump table targets above plus
 0x0010) it finds 1,149 instructions covering 1,961 bytes. That is the same count as the scratch
 trace. The hints file is our own analysis (addresses and names only). It is Biomotor-specific, so
-it lives in the decomp (untracked there for now): `biomotor-unitron/src/audio/z80_driver.hints`.
+it lives in the decomp: `src/audio/z80_driver.hints`.
 
 ### 4.2 The command byte
 
@@ -126,7 +126,7 @@ and keeps its own 16-entry queue. That is game behavior, so it stays in the deco
 
 ## 5. Music data: what this version shows
 
-Fully read from the code in `evidence/songs_2026-11-25.md`; the data is now source (docs/SONGS.md).
+Fully read from the code; the details are in docs/SONGS.md, and the data is source.
 - **There is no "group" blob in Biomotor's ROM.** PlaySong (0x200122) builds the Z80 image at
   0x0AB5 piece by piece: the song header's three Z80 pointers (voice records, music blocks, SFX
   blocks; read by the driver at 0x0AB5/0x0AB7/0x0AB9), UploadZ80Driver's 2-byte table at 0x0ABB

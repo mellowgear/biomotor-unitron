@@ -1,6 +1,6 @@
 ; PartIdWords (part_id_words): 239 records of 2 bytes, one line per id; keep the order and count.
-; One u16 per part (line = part id), in the Works copy; swp_21B9A5 reads it, but nothing calls
-; swp_21B9A5. part = the line's part id; bits = 0x10 for bodies, 0 cores, 0x20 legs, 0x40 backs,
+; One u16 per part (line = part id), in the Works copy; GetPartIdWord reads it, but nothing calls
+; GetPartIdWord. part = the line's part id; bits = 0x10 for bodies, 0 cores, 0x20 legs, 0x40 backs,
 ; 0x80 arms. Lines 228-239 are zero.
 ; id: part, bits
 	db	  1, 16	; 1 Body1

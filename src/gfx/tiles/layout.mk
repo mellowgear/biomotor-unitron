@@ -286,3 +286,54 @@ build/gfx/tiles/2E6C94.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2E699A.tilemap --c
 build/gfx/tiles/2E6C94.2bpp.lz: src/gfx/maps/2E699A.tilemap
 build/gfx/tiles/2E79D7.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2E76DD.tilemap --count 336
 build/gfx/tiles/2E79D7.2bpp.lz: src/gfx/maps/2E76DD.tilemap
+
+# Sheets drawn by several maps (LoadCompressedTiles and the maps' Draw* calls at the same tile base
+# in one routine or one scene's tasks): laid out by the main map; the tiles only the other maps use
+# follow in storage order below it, rows of the main map's width. Coloured per tile from the first
+# map that uses it, with the palettes its routine loads.
+# DrawBattleScreen: the four 2x2 status icons (Map_2C82DE paralysis, then confusion, EP leak, rust
+# below it: each icon is four consecutive tiles), SCR1 palettes 1-4 = Pal_2C82AE
+build/gfx/tiles/2C8306.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2C82DE.tilemap --count 16
+build/gfx/tiles/2C8306.2bpp.lz: src/gfx/maps/2C82DE.tilemap
+# Intro199YearsAgo: Map_2DE033 ("199 years ago"), then Map_2DE32D (Planet "Elscea", drawn over it at
+# row 9 by Intro199YearsAgoStep), SCR1 palette 0 = Pal_2DE017
+build/gfx/tiles/2DE3A7.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2DE033.tilemap --count 65
+build/gfx/tiles/2DE3A7.2bpp.lz: src/gfx/maps/2DE033.tilemap
+# IntroPlanetGraphics: Map_2DE660 (the planet, SCR1), then the IntroMeteorTask sprite maps
+# (Data_226B59: Map_2DE95A, 2DE980, 2DE9A6) and the IntroImpactTask SCR2 maps (Data_226B69:
+# Map_2DE9CC ... 2DEAA2); Pal_2DE648 (3 palettes) in all three planes
+build/gfx/tiles/2DEB58.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2DE660.tilemap --count 262
+build/gfx/tiles/2DEB58.2bpp.lz: src/gfx/maps/2DE660.tilemap
+# IntroLettersGraphics (tile 0x12C), drawn on SCR2 by IntroBioLetters / IntroMotorScene /
+# IntroUnitronScene / CycleIntroLetters: Map_2DFC68 (UNITRON, the most tiles), then the tiles only
+# Map_2DF674 (BIO) and Map_2DF96E (MOTOR) use; Pal_2DF63C
+build/gfx/tiles/2DFF62.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2DFC68.tilemap --count 67
+build/gfx/tiles/2DFF62.2bpp.lz: src/gfx/maps/2DFC68.tilemap
+# IntroLettersGraphics (tile 0x17C): Map_2E3616 (the head, IntroHeadCutTask, SCR2), then the 9 tiles
+# only Map_2E3910 (the changed mouth, IntroHeadMouthCutTask) uses; palette 6 of Pal_2DF63C
+build/gfx/tiles/2E3C0A.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2E3616.tilemap --count 94
+build/gfx/tiles/2E3C0A.2bpp.lz: src/gfx/maps/2E3616.tilemap
+# IntroTitleScene (SCR1, tile 0xC): Map_2E3FB8 (the top banner, SlideInTitleBanners), then the
+# tiles only Map_2E405A / 2E40FC / 2E419E (the other banners), Map_2E4240 (the bottom line) and the
+# TitleBlinkTask sprite map Map_2E4292 (PRESS A BUTTON) use; Pal_2E3F68 (SCR1 and sprites)
+build/gfx/tiles/2E42CE.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2E3FB8.tilemap --count 218
+build/gfx/tiles/2E42CE.2bpp.lz: src/gfx/maps/2E3FB8.tilemap
+# IntroTitleScene (SCR2, tile 0xE7): Map_2E4EE3 (the title logo, TitleScreen / IntroBackground),
+# then the tiles only Map_2E513D (its flash frame) and Map_2E4D97 (TitleReveal) use, coloured with
+# Pal_2E4D3F; then the tiles only the mono maps (Map_2E5397, 2E573D, 2E54E3) use, in grey
+build/gfx/tiles/2E5997.2bpp.lz: GFXFLAGS = --map src/gfx/maps/2E4EE3.tilemap --count 262
+build/gfx/tiles/2E5997.2bpp.lz: src/gfx/maps/2E4EE3.tilemap
+
+# LoadDungeonFloor (tile 0x37 = wDungeonTileBase): the dungeon floor sheet, drawn only through the
+# 441 2x2 metatiles of DungeonMetatiles (src/gfx/blocksets/dungeon.bst, GetMetatileTiles). Laid out
+# as those metatiles, 16 to a row, metatile 0 at the top left (build/gfx/blocksets/dungeon.tilemap,
+# made by the Makefile with biogfx blockmap); every tile is used, each shown where its first
+# metatile has it. Coloured with the palette bits of the metatile words and Pal_228649 (dungeons
+# 1-2, DungeonPalettes; dungeons 3-5 use Pal_2286C5)
+build/gfx/tiles/dungeon_tiles.2bpp.lz: GFXFLAGS = --map build/gfx/blocksets/dungeon.tilemap --count 392
+build/gfx/tiles/dungeon_tiles.2bpp.lz: build/gfx/blocksets/dungeon.tilemap
+
+# Sprite sheets need no entry: 2C8691 (LoadWorldMapMarkerTiles, the 4 frames of the 2x2 flag that
+# DrawWorldMapMarker draws with DrawSpriteGrid, sprite palette 1 = Pal_2C865D) and 2C8D88
+# (NameEntrySetup, the cursor corner tiles of Map_2C8D74 / Map_2C8D7E, Pal_2C8D6C) are plain
+# sheets 2 tiles wide, so each 2x2 frame shows whole (DrawSpriteGrid counts tiles row by row).

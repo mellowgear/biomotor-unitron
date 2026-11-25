@@ -7,9 +7,9 @@
 ; enemy record; the body's affinity replaces the robot's. CalcUnitStats 0x20868B: robot
 ; AP/SP/RP/MP = pilot stats + each part's ap..mp; max HP/EP = the sum of the hp/ep of all six
 ; equipped parts (CalcUnitStats; accessories are added after).
-; image: picture within the part's slot group (0 = none); sub_208489 reads it for the
+; image: picture within the part's slot group (0 = none); SetRobotDrawParts reads it for the
 ; equipped Body, Arms (left and right image sets), Legs and Back. Cores are not drawn.
-; See PART_GROUPS in tools/tables.py; gfx/parts/<slot>/ is named after these parts.
+; gfx/parts/<slot>/ is named after these parts.
 ; ep_cost: EP an arm's attack costs (EnemyChooseAttack reads it for robot enemies).
 ; price: buy price in GP, 4-byte BCD (play: shop prices match, e.g. Demon 650000; sell = half).
 ; status: what an arm's hit can inflict on the enemy (battle.s after the hit roll: a random

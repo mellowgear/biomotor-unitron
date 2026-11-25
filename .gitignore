@@ -3,9 +3,22 @@
 build/
 __pycache__/
 *.pyc
-# TLCS-900 manual page scans: reference only, not needed to build
-tlcs900/manual_pages/
 
-# third-party reference docs (not ours; never commit)
-tlcs900/tlcs-900-report.pdf
-tlcs900/tlcs-900-report.txt
+# local TLCS-900 manuals and notes (the references live in unitron)
+/tlcs900/
+
+# working files (agent handoffs, plans, play data, evidence): local only
+/ASM900_PLAN.md
+/BLOBS_PLAN.md
+/HANDOFF.md
+/HANDOFF_NEXT.md
+/PLAY_REQUESTS.md
+/RAM_MAP.md
+/RAM_REFERENCE.md
+/REORG_PLAN.md
+/UNITRON_REQUESTS.md
+/emu/
+/evidence/
+
+# local working area (handoffs, analysis tools, play data)
+/.claude/

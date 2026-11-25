@@ -1,4 +1,4 @@
-; Biomotor Unitron character map, read by tlcs900/asm.py (.charmap).
+; Biomotor Unitron character map, read by unitron text.
 ; Font 0x2C8DA9: code n draws glyph n-1; text engine 0x2073B3.
 
 char " " 00

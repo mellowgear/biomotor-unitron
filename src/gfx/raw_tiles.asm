@@ -3,19 +3,19 @@
 ; in storage order; Makefile rule build/gfx/raw_tiles/%.2bpp).
 
 d_2C83B9	section	romdata abs=0x2C83B9
-RawTiles_2C83B9:    ; [code] sub_207361 (text engine): blinks with RawTiles_2C83CB every 8 frames (wFrameCounter bit 3), to tile 0xB
+RawTiles_2C83B9:    ; [code] UpdateTextBoxes (text engine): blinks with RawTiles_2C83CB every 8 frames (wFrameCounter bit 3), to tile 0xB
 	dw	1
 $include "build/gfx/raw_tiles/2C83B9.2bpp.asm"	; build/gfx/raw_tiles/2C83B9.2bpp
 d_2C83CB	section	romdata abs=0x2C83CB
-RawTiles_2C83CB:    ; [code] sub_207361: the other blink frame, to tile 0xB
+RawTiles_2C83CB:    ; [code] UpdateTextBoxes: the other blink frame, to tile 0xB
 	dw	1
 $include "build/gfx/raw_tiles/2C83CB.2bpp.asm"	; build/gfx/raw_tiles/2C83CB.2bpp
 d_2C83DD	section	romdata abs=0x2C83DD
-RawTiles_2C83DD:    ; [code] swp_207C0F copies tiles from here by address (+2, +0x82 = tile 8); no LoadRawTiles of the record itself
+RawTiles_2C83DD:    ; [code] DrawBarTiles copies tiles from here by address (+2, +0x82 = tile 8); no LoadRawTiles of the record itself
 	dw	9
 $include "build/gfx/raw_tiles/2C83DD.2bpp.asm"	; build/gfx/raw_tiles/2C83DD.2bpp
 d_2C846F	section	romdata abs=0x2C846F
-RawTiles_2C846F:    ; [code] swp_207C7B copies tiles from here by address (+2, +0x10, +0x90, the last backwards); no LoadRawTiles of the record itself
+RawTiles_2C846F:    ; [code] DrawBarTilesReversed copies tiles from here by address (+2, +0x10, +0x90, the last backwards); no LoadRawTiles of the record itself
 	dw	9
 $include "build/gfx/raw_tiles/2C846F.2bpp.asm"	; build/gfx/raw_tiles/2C846F.2bpp
 d_2C8501	section	romdata abs=0x2C8501

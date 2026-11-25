@@ -1,67 +1,9 @@
-; engine/scenes: 47 routines (each keeps its ROM address in its own section)
-
-c_20E141	section	code abs=0x20E141
-
-; [code+play] frame set by swp_20E131 (0x5DF7 = 2): cursor at x 0x58 + 0x20*(0x5DF7-1), D_LEFT 0x5DF7 = 1, D_RIGHT = 2 (sound 0x80), A -> sound 0x81 + EndTask, B -> 0x5DF7 = 0 + EndTask; callers MainMenuLoadTask and works.asm 463/631/665 all test 0x5DF7 == 1 after "Load/Save/Over/Clear Ok? Yes No" (sub_20DF80/sub_20E012 texts 0x20DFCE..0x20E001)
-YesNoPromptInput:
-	ld	C,(wYesNoChoice)
-	dec	1,C
-	mul	BC,0x20
-	add	BC,0x58
-	ld	DE,0x44
-	ld	WA,0x3E04
-	ld	QB,1
-	ld	QD,2
-	call	sub_206BFF
-	ld	A,(wJoyPressed)
-	bit	BIT_D_LEFT,A
-	jr	NZ,YesNoPromptInput.skip
-	bit	3,A
-	jr	NZ,YesNoPromptInput.skip2
-	bit	4,A
-	jr	NZ,YesNoPromptInput.skip3
-	bit	5,A
-	jr	NZ,YesNoPromptInput.skip4
-	ret
-YesNoPromptInput.skip:
-	cpb	(wYesNoChoice),1
-	ret	Z
-	ld	WA,0x80
-	call	SoundCommand
-	ldb	(wYesNoChoice),1
-	ret
-YesNoPromptInput.skip2:
-	cpb	(wYesNoChoice),2
-	ret	Z
-	ld	WA,0x80
-	call	SoundCommand
-	ldb	(wYesNoChoice),2
-	ret
-YesNoPromptInput.skip3:
-	ld	WA,0x81
-	call	SoundCommand
-	call	EndTask
-	ret
-YesNoPromptInput.skip4:
-	ld	WA,0x82
-	call	SoundCommand
-	ldb	(wYesNoChoice),0
-	call	EndTask
-	ret
-
-c_20E1BC	section	code abs=0x20E1BC
-
-swp_20E1BC:
-	ldw	(XIZ+0x12),0x1E
-	ldw	(XIZ+TASK_FUNC),0xE1CB
-	ldw	(XIZ+TASK_FUNC_HI),0x20
-	decw	1,(XIZ+0x12)
-	jp	Z,EndTask
-	ret
+; engine/scenes: 53 routines (each keeps its ROM address in its own section)
 
 c_20E1D4	section	code abs=0x20E1D4
 
-dyn_20E1D4:
+; [code] child task: ends (EndTask) when its parent (+4) is gone or after TASK_ARG (+0xE, set by the starter) frames; used by IntroSequence, the story scenes and the credits as a timed wait
+WaitFramesTask:
 	cpw	(XIZ+4),0
 	jp	Z,EndTask
 	decw	1,(XIZ+TASK_ARG)
@@ -70,7 +12,8 @@ dyn_20E1D4:
 
 c_20E1E7	section	code abs=0x20E1E7
 
-dyn_20E1E7:
+; [code] XHL = colours, BC = palette count, WA = first palette: copies BC*4 words straight into palette RAM 0x8200 + 8*WA and sets wFadeLevelShown = wFadeLevel (no shadow, no fade pass)
+WritePalettesDirect:
 	push	XDE
 	push	XHL
 	extz	BC
@@ -82,14 +25,15 @@ dyn_20E1E7:
 	add	XDE,XWA
 	ldirw	(XDE+),(XHL+)
 	ld	A,(wFadeLevel)
-	ld	(0x585C),A
+	ld	(wFadeLevelShown),A
 	pop	XHL
 	pop	XDE
 	ret
 
 c_20E209	section	code abs=0x20E209
 
-dyn_20E209:
+; [code] the monochrome counterpart of WritePalettesDirect: BC*4 bytes into 0x8100 + 4*WA, wFadeLevelShown = wFadeLevel
+WriteMonoPalettesDirect:
 	push	XDE
 	push	XHL
 	extz	BC
@@ -101,21 +45,23 @@ dyn_20E209:
 	add	XDE,XWA
 	ldir	(XDE+),(XHL+)
 	ld	A,(wFadeLevel)
-	ld	(0x585C),A
+	ld	(wFadeLevelShown),A
 	pop	XHL
 	pop	XDE
 	ret
 
 c_20E22B	section	code abs=0x20E22B
 
-dyn_20E22B:
+; [code] child task: over TASK_ARG (+0xE) frames sets wFadeLevel = +0x12 + (+0x14 - +0x12) * frame / TASK_ARG (the starter sets the from / to levels), then EndTask
+FadeLevelTask:
 	ldw	(XIZ+0x16),0
 	ld	A,(XIZ+0x14)
 	sub	A,(XIZ+0x12)
 	exts	WA
 	ld	(XIZ+0x1A),WA
-	ldw	(XIZ+TASK_FUNC),0xE245
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),FadeLevelTask.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),FadeLevelTask.resume >> 16
+FadeLevelTask.resume:
 	ld	WA,(XIZ+0x1A)
 	muls	WA,(XIZ+0x16)
 	divs	WA,(XIZ+TASK_ARG)
@@ -129,38 +75,42 @@ dyn_20E22B:
 
 c_20E264	section	code abs=0x20E264
 
-dyn_20E264:
+; [code] IntroBackground's child: starts IntroSequence, then resumes at IntroSkipCheck (0x20E278)
+RunIntroTask:
 	ld	XHL,IntroSequence
 	call	StartChildTask
-	ldw	(XIZ+TASK_FUNC),0xE278
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroSkipCheck & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroSkipCheck >> 16
 	ret
 
 c_20E278	section	code abs=0x20E278
 
-dyn_20E278:
+; [code] RunIntroTask's resume step: A -> IntroSkip; ends when IntroSequence is done (TASK_CHILDREN = 0)
+IntroSkipCheck:
 	ld	A,(wJoyPressed)
 	and	A,A_BUTTON
-	jr	NZ,dyn_20E28C
+	jr	NZ,IntroSkip
 	cpw	(XIZ+TASK_CHILDREN),0
 	jp	Z,EndTask
 	ret
 
 c_20E28C	section	code abs=0x20E28C
 
-dyn_20E28C:
-	call	dyn_20636D
+; [code] EndChildTasks (stops IntroSequence and its scenes), EndTask once TASK_CHILDREN = 0
+IntroSkip:
+	call	EndChildTasks
 	cpw	(XIZ+TASK_CHILDREN),0
 	jp	Z,EndTask
 	ret
 
 c_20E29B	section	code abs=0x20E29B
 
-dyn_20E29B:
+; [code] TASK_ARG = 0x258 (TitleWaitA's countdown), parent +0xE = 0, then TitleTaskStart
+TitleTaskInit:
 	ldw	(XIZ+TASK_ARG),0x258
 	ldw	(XIY+0xE),0
-	ldw	(XIZ+TASK_FUNC),0xE2B0
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),TitleTaskStart & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),TitleTaskStart >> 16
 	ret
 
 c_20E3AF	section	code abs=0x20E3AF
@@ -168,14 +118,14 @@ c_20E3AF	section	code abs=0x20E3AF
 ; [play] all intro screens and the title
 IntroBackground:
 	ldb	(0x5CE2),0
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ldb	(0x5853),0
-	ldb	(0x5855),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ldb	(wScr2ScrollX),0
+	ldb	(wScr2ScrollY),0
 	ldb	(wFadeLevel),0
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ld	XHL,dyn_20E264
+	ld	XHL,RunIntroTask
 	call	StartChildTask
 	task_wait
 	ld	XHL,TitleRevealSequence
@@ -184,35 +134,37 @@ IntroBackground:
 	ld	XHL,Map_2E513D
 	ld	A,(wColorFlags)
 	and	A,0x10
-	jr	NZ,0x20E414
+	jr	NZ,IntroBackground.skip
 	ld	XHL,Map_2E573D
+IntroBackground.skip:
 	ld	WA,0xE7
 	ld	BC,0
 	ld	DE,2
 	call	DrawTilemapScr2
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),5
 	task_wait
 	ld	XHL,Map_2E4EE3
 	ld	A,(wColorFlags)
 	and	A,0x10
-	jr	NZ,0x20E44E
+	jr	NZ,IntroBackground.skip2
 	ld	XHL,Map_2E54E3
+IntroBackground.skip2:
 	ld	WA,0xE7
 	ld	BC,0
 	ld	DE,2
 	call	DrawTilemapScr2
-	ld	XHL,dyn_20E29B
+	ld	XHL,TitleTaskInit
 	call	StartChildTask
 	task_wait
 	cpw	(XIZ+TASK_ARG),0
 	jrl	Z,IntroBackground
 	ldb	(0x5CE2),1
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ldb	(0x5853),0
-	ldb	(0x5855),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ldb	(wScr2ScrollX),0
+	ldb	(wScr2ScrollY),0
 	call	EndTask
 	ret
 
@@ -227,9 +179,9 @@ IntroSequence:
 	task_wait
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ld	XHL,dyn_20E1D4
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x14
 	task_wait
@@ -240,19 +192,19 @@ IntroSequence:
 	call	StartChildTask
 	task_wait
 	calr	IntroPlanetGraphics
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x12C
 	task_wait
-	ld	XHL,swp_20EB87
+	ld	XHL,IntroMeteorTask
 	call	StartChildTask
 	task_wait
 	ld	WA,0xAF
 	call	SoundCommand
-	ld	XHL,swp_20EAA6
+	ld	XHL,IntroImpactTask
 	call	StartChildTask
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x5A
 	task_wait
@@ -260,35 +212,35 @@ IntroSequence:
 	ld	XHL,IntroBioLetters
 	call	StartChildTask
 	task_wait
-	ld	XHL,swp_20EBF9
+	ld	XHL,IntroHeadCutTask
 	call	StartChildTask
 	task_wait
 	ld	XHL,IntroMotorScene
 	call	StartChildTask
 	task_wait
-	ld	XHL,swp_20EBF9
+	ld	XHL,IntroHeadCutTask
 	call	StartChildTask
 	task_wait
 	ld	XHL,IntroUnitronScene
 	call	StartChildTask
 	task_wait
-	ld	XHL,swp_20EBF9
+	ld	XHL,IntroHeadCutTask
 	call	StartChildTask
 	task_wait
 	ld	XHL,IntroMotorUnitronLetters
 	call	StartChildTask
 	task_wait
-	ld	XHL,swp_20EBF9
+	ld	XHL,IntroHeadCutTask
 	call	StartChildTask
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x14
 	task_wait
-	ld	XHL,swp_20EC21
+	ld	XHL,IntroHeadMouthCutTask
 	call	StartChildTask
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0
@@ -297,13 +249,13 @@ IntroSequence:
 	ld	XHL,IntroCockpitScene
 	call	StartChildTask
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x14
 	ld	XHL,IntroCockpitAnim
 	call	StartChildTask
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x1E
 	task_wait
@@ -315,10 +267,10 @@ c_20E6E4	section	code abs=0x20E6E4
 ; [play] intro_199_years_ago
 Intro199YearsAgo:
 	ldb	(wFadeLevel),0x7F
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ldb	(0x5853),0
-	ldb	(0x5855),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ldb	(wScr2ScrollX),0
+	ldb	(wScr2ScrollY),0
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
 	ldb	(wFadeLevel),0
@@ -339,8 +291,8 @@ Intro199YearsAgo:
 	ld	DE,0
 	call	DrawTilemapScr1
 	ldw	(XIZ+TASK_ARG),0x168
-	ldw	(XIZ+TASK_FUNC),0xE753
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),Intro199YearsAgoStep & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),Intro199YearsAgoStep >> 16
 	ldb	(wFadeLevel),0
 	ret
 
@@ -358,8 +310,9 @@ Intro199YearsAgoStep.skip:
 	ld	BC,0
 	ld	DE,9
 	call	DrawTilemapScr1
-	ldw	(XIZ+TASK_FUNC),0xE779
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),Intro199YearsAgoStep.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),Intro199YearsAgoStep.resume >> 16
+Intro199YearsAgoStep.resume:
 	decw	1,(XIZ+TASK_ARG)
 	jr	Z,Intro199YearsAgoStep.skip2
 	ret
@@ -368,15 +321,40 @@ Intro199YearsAgoStep.skip2:
 	call	EndTask
 	ret
 
+c_20E789	section	code abs=0x20E789
+
+; [code+play] IntroTitleScene, title banner tasks, TitleReveal, clear SCR2
+TitleRevealSequence:
+	calr	IntroTitleScene
+	ld	WA,0x32
+	call	SoundCommand
+	ld	XHL,SlideInTitleBanners
+	call	StartChildTask
+	task_wait
+	ld	XHL,SlideInMiddleTitleBanners
+	call	StartChildTask
+	task_wait
+	ld	XHL,TitleReveal
+	call	StartChildTask
+	task_wait
+	calr	ClearTilemapScr2
+	ld	XHL,WaitFramesTask
+	call	StartChildTask
+	ldw	(XHL+0xE),0x14
+	task_wait
+	calr	ClearTilemapScr2
+	call	EndTask
+	ret
+
 c_20E7FF	section	code abs=0x20E7FF
 
 ; [play] intro_title_reveal
 IntroTitleScene:
 	ldb	(wFadeLevel),0x7F
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ldb	(0x5853),0
-	ldb	(0x5855),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ldb	(wScr2ScrollX),0
+	ldb	(wScr2ScrollY),0
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
 	ldb	(wFadeLevel),0
@@ -424,8 +402,9 @@ SlideInTitleBanners:
 	ldb	(wFadeLevel),0
 	ldw	(XIZ+TASK_ARG),0xFFEC
 	ldw	(XIZ+0x10),0x14
-	ldw	(XIZ+TASK_FUNC),0xE8B4
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),SlideInTitleBanners.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),SlideInTitleBanners.resume >> 16
+SlideInTitleBanners.resume:
 	ld	WA,0xC
 	ld	XHL,Map_2E3FB8
 	ld	BC,(XIZ+TASK_ARG)
@@ -444,11 +423,13 @@ SlideInTitleBanners:
 
 c_20E8E8	section	code abs=0x20E8E8
 
-dyn_20E8E8:
+; [code] TitleRevealSequence: Map_2E40FC (row 5) from column -20 and Map_2E419E (row 9) from column 20 slide to the centre on SCR1 (the middle two banners; SlideInTitleBanners does rows 1 and 13); [play] intro_title_reveal (four banners)
+SlideInMiddleTitleBanners:
 	ldw	(XIZ+TASK_ARG),0xFFEC
 	ldw	(XIZ+0x10),0x14
-	ldw	(XIZ+TASK_FUNC),0xE8FC
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),SlideInMiddleTitleBanners.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),SlideInMiddleTitleBanners.resume >> 16
+SlideInMiddleTitleBanners.resume:
 	ld	WA,0xC
 	ld	XHL,Map_2E40FC
 	ld	BC,(XIZ+TASK_ARG)
@@ -465,6 +446,29 @@ dyn_20E8E8:
 	jp	GE,EndTask
 	ret
 
+c_20E930	section	code abs=0x20E930
+
+; [play] intro_title_reveal
+TitleReveal:
+	ldw	(XIZ+TASK_ARG),0x14
+	ldw	(XIZ+TASK_FUNC),TitleReveal.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),TitleReveal.resume >> 16
+TitleReveal.resume:
+	ld	XHL,Map_2E4D97
+	ld	A,(wColorFlags)
+	and	A,0x10
+	jr	NZ,TitleReveal.skip
+	ld	XHL,Map_2E5397
+TitleReveal.skip:
+	ld	BC,(XIZ+TASK_ARG)
+	ld	WA,0xE7
+	ld	DE,2
+	call	DrawTilemapScr2
+	decw	1,(XIZ+TASK_ARG)
+	cpw	(XIZ+TASK_ARG),0
+	jp	LT,EndTask
+	ret
+
 c_20E96C	section	code abs=0x20E96C
 
 ; [play] ran on yumekobo_logo, intro_199_years_ago
@@ -472,7 +476,7 @@ IntroLogoScene:
 	ldb	(wFadeLevel),0x7F
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x14
 	task_wait
@@ -481,7 +485,7 @@ IntroLogoScene:
 	ld	E,0
 	ld	B,0x20
 	ld	D,0x13
-	call	sub_206768
+	call	FillScrRect
 	ld	A,0x10
 	ld	C,2
 	ld	XHL,Pal_2DD54D
@@ -508,18 +512,19 @@ IntroLogoScene:
 	call	DrawTilemapScr2
 	ldw	(XIZ+TASK_ARG),0xFFE8
 	ldb	(wFadeLevel),0x7F
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0x7F
 	ldb	(XHL+0x14),0
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x28
 	task_wait
-	ldw	(XIZ+TASK_FUNC),0xEA46
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroLogoScene.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroLogoScene.resume >> 16
+IntroLogoScene.resume:
 	ld	WA,0xC
 	ld	XHL,Map_2DD565
 	ld	BC,(XIZ+TASK_ARG)
@@ -528,11 +533,11 @@ IntroLogoScene:
 	incw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0x14
 	ret	NZ
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x14
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0
@@ -543,22 +548,27 @@ IntroLogoScene:
 
 c_20EAA6	section	code abs=0x20EAA6
 
-swp_20EAA6:
+; [code] the intro zoom, after IntroMeteorTask and sound 0xAF: 60 frames of Data_226B99 maps on SCR2 (reads past the table from frame 30);
+; from frame 7 a FadeLevelTask (0x20 frames, 0 -> 0x7F) fades to white
+; [play] seen in play: the meteor hits the planet: a red impact on the blue face grows into white shock rings while the
+; screen fades to white (the rings vanish at frame 34, see intro_frames.asm) (was swp_20EAA6)
+IntroImpactTask:
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
 	ldw	(XIZ+0x12),0x3C
 	ldw	(XIZ+0x18),0
-	ldw	(XIZ+TASK_FUNC),0xEAC4
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroImpactTask.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroImpactTask.resume >> 16
+IntroImpactTask.resume:
 	ld	WA,(XIZ+0x18)
 	cp	WA,7
-	jr	NZ,swp_20EAA6.skip
-	ld	XHL,dyn_20E22B
+	jr	NZ,IntroImpactTask.skip
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0x7F
-swp_20EAA6.skip:
+IntroImpactTask.skip:
 	ld	HL,(XIZ+0x18)
 	extz	XHL
 	sll	2,XHL
@@ -618,15 +628,17 @@ IntroPlanetGraphics:
 
 c_20EB87	section	code abs=0x20EB87
 
-swp_20EB87:
+; [code] IntroSequence after IntroPlanetGraphics: 0x78 frames of a sprite map from Data_226B59 (4 frames, every 2nd frame) at x 0xA0 (- 1 per frame), y 0x18 (+ 1 every 2nd frame), DrawSpriteMap; [play] intro_planet_meteor
+IntroMeteorTask:
 	ldw	(XIZ+TASK_ARG),0xA0
 	ldw	(XIZ+0x10),0x18
 	ldw	(XIZ+0x12),0x78
 	ldw	(XIZ+0x14),1
 	ldw	(XIZ+0x16),2
 	ldw	(XIZ+0x18),0
-	ldw	(XIZ+TASK_FUNC),0xEBAF
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroMeteorTask.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroMeteorTask.resume >> 16
+IntroMeteorTask.resume:
 	ld	WA,0xC
 	ld	HL,(XIZ+0x18)
 	srl	1,HL
@@ -640,59 +652,65 @@ swp_20EB87:
 	incw	1,(XIZ+0x18)
 	decw	1,(XIZ+0x12)
 	jp	Z,EndTask
-	call	dyn_2069C8
+	call	DrawSpriteMap
 	decw	1,(XIZ+0x14)
-	jr	NZ,swp_20EB87.skip
+	jr	NZ,IntroMeteorTask.skip
 	ldw	(XIZ+0x14),1
 	decw	1,(XIZ+TASK_ARG)
-swp_20EB87.skip:
+IntroMeteorTask.skip:
 	decw	1,(XIZ+0x16)
-	jr	NZ,swp_20EB87.done
+	jr	NZ,IntroMeteorTask.done
 	ldw	(XIZ+0x16),2
 	incw	1,(XIZ+0x10)
-swp_20EB87.done:
+IntroMeteorTask.done:
 	ret
 
 c_20EBF9	section	code abs=0x20EBF9
 
-swp_20EBF9:
+; [code] 20 frames: Map_2E3616 on SCR2 at 0, 0 (tiles from 0x17C; the letters stay on SCR1); IntroSequence runs it after IntroBioLetters, IntroMotorScene, IntroUnitronScene and IntroMotorUnitronLetters
+; [play] seen in play: a full-screen cut, black but for a purple three-eyed mechanical head (Map_2E3616) (was swp_20EBF9)
+IntroHeadCutTask:
 	ldw	(XIZ+TASK_ARG),0x14
 	ld	WA,0x17C
 	ld	XHL,Map_2E3616
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
-	ldw	(XIZ+TASK_FUNC),0xEC18
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroHeadCutTask.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroHeadCutTask.resume >> 16
+IntroHeadCutTask.resume:
 	decw	1,(XIZ+TASK_ARG)
 	jp	Z,EndTask
 	ret
 
 c_20EC21	section	code abs=0x20EC21
 
-swp_20EC21:
+; [code] the IntroHeadCutTask shape with Map_2E3910 (the same head, 9 cells of rows 11-12 differ); IntroSequence runs it once before the fade to white and IntroCockpitScene
+; [play] seen in play: the head again with the mouth / jaw line changed (was swp_20EC21)
+IntroHeadMouthCutTask:
 	ldw	(XIZ+TASK_ARG),0x14
 	ld	WA,0x17C
 	ld	XHL,Map_2E3910
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
-	ldw	(XIZ+TASK_FUNC),0xEC40
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroHeadMouthCutTask.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroHeadMouthCutTask.resume >> 16
+IntroHeadMouthCutTask.resume:
 	decw	1,(XIZ+TASK_ARG)
 	jp	Z,EndTask
 	ret
 
 c_20EC49	section	code abs=0x20EC49
 
-; [code] dyn_206768 fill 0x20 x 0x20 with 0 on SCR1
+; [code] FillScrRect fill 0x20 x 0x20 with 0 on SCR1
 ClearTilemapScr1:
 	ld	WA,0
 	ld	C,0
 	ld	E,0
 	ld	B,0x20
 	ld	D,0x20
-	call	sub_206768
+	call	FillScrRect
 	ret
 
 c_20EC58	section	code abs=0x20EC58
@@ -704,7 +722,7 @@ ClearTilemapScr2:
 	ld	E,0x20
 	ld	B,0x20
 	ld	D,0x20
-	call	sub_206768
+	call	FillScrRect
 	ret
 
 c_20EC67	section	code abs=0x20EC67
@@ -737,17 +755,18 @@ IntroCockpitScene.skip:
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
 	ldb	(wFadeLevel),0
-	ldw	(XIZ+TASK_FUNC),0xECCB
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroCockpitPan & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroCockpitPan >> 16
 	ret
 
 c_20ECCB	section	code abs=0x20ECCB
 
-swp_20ECCB:
+; [code] IntroCockpitScene's resume step (TASK_FUNC 0x20ECCB): wScr1ScrollX = TASK_ARG / 2, wScr1ScrollY = +0x10 (0), TASK_ARG + 1 each frame, EndTask at 0xC0 (the cockpit picture scrolls 0x5F px over 0xC0 frames); [play] runs during the intro's cockpit picture
+IntroCockpitPan:
 	ld	WA,(XIZ+TASK_ARG)
 	srl	1,WA
-	ld	(0x584B),A
-	ldb	(0x584D),(XIZ+0x10)
+	ld	(wScr1ScrollX),A
+	ldb	(wScr1ScrollY),(XIZ+0x10)
 	incw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0xC0
 	jp	Z,EndTask
@@ -759,8 +778,9 @@ c_20ECE8	section	code abs=0x20ECE8
 IntroCockpitAnim:
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
-	ldw	(XIZ+TASK_FUNC),0xECFC
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroCockpitAnim.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroCockpitAnim.resume >> 16
+IntroCockpitAnim.resume:
 	ld	HL,(XIZ+TASK_ARG)
 	sll	2,HL
 	extz	XHL
@@ -845,12 +865,13 @@ IntroBioLetters:
 	call	DrawTilemapScr1
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
-	ldw	(XIZ+TASK_FUNC),0xEDF8
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroBioLetters.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroBioLetters.resume >> 16
+IntroBioLetters.resume:
 	ld	WA,(XIZ+TASK_ARG)
 	srl	1,WA
-	ld	(0x584B),A
-	ldb	(0x584D),(XIZ+0x10)
+	ld	(wScr1ScrollX),A
+	ldb	(wScr1ScrollY),(XIZ+0x10)
 	decw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0xFF88
 	jr	Z,IntroBioLetters.skip
@@ -881,12 +902,13 @@ IntroMotorScene:
 	call	DrawTilemapScr1
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
-	ldw	(XIZ+TASK_FUNC),0xEE60
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroMotorScene.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroMotorScene.resume >> 16
+IntroMotorScene.resume:
 	ld	WA,(XIZ+TASK_ARG)
 	srl	1,WA
-	ld	(0x584B),A
-	ldb	(0x584D),(XIZ+0x10)
+	ld	(wScr1ScrollX),A
+	ldb	(wScr1ScrollY),(XIZ+0x10)
 	incw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0x30
 	jr	Z,IntroMotorScene.skip
@@ -917,12 +939,13 @@ IntroUnitronScene:
 	call	DrawTilemapScr1
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
-	ldw	(XIZ+TASK_FUNC),0xEEC8
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),IntroUnitronScene.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroUnitronScene.resume >> 16
+IntroUnitronScene.resume:
 	ld	WA,(XIZ+TASK_ARG)
 	srl	1,WA
-	ld	(0x584B),A
-	ldb	(0x584D),(XIZ+0x10)
+	ld	(wScr1ScrollX),A
+	ldb	(wScr1ScrollY),(XIZ+0x10)
 	decw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0xFFD0
 	jr	Z,IntroUnitronScene.skip
@@ -955,19 +978,20 @@ IntroMotorUnitronLetters:
 	ldw	(XIZ+0x10),0xFF4C
 	ld	XHL,CycleIntroLetters
 	call	StartChildTask
-	ldw	(XIZ+TASK_FUNC),0xEF39
-	ldw	(XIZ+TASK_FUNC_HI),0x20
-	ldb	(0x584B),(XIZ+TASK_ARG)
+	ldw	(XIZ+TASK_FUNC),IntroMotorUnitronLetters.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),IntroMotorUnitronLetters.resume >> 16
+IntroMotorUnitronLetters.resume:
+	ldb	(wScr1ScrollX),(XIZ+TASK_ARG)
 	ld	WA,(XIZ+0x10)
 	srl	1,WA
-	ld	(0x584D),A
+	ld	(wScr1ScrollY),A
 	incw	1,(XIZ+0x10)
 	cpw	(XIZ+0x10),0
 	jr	Z,IntroMotorUnitronLetters.skip
 	ret
 IntroMotorUnitronLetters.skip:
-	ldb	(0x584B),0
-	ldb	(0x584D),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
 	calr	ClearTilemapScr1
 	call	EndTask
 	ret
@@ -979,8 +1003,9 @@ CycleIntroLetters:
 	ldw	(XIZ+0x14),0
 	ldw	(XIZ+0x16),0x14
 	ldw	(XIZ+0x18),0
-	ldw	(XIZ+TASK_FUNC),0xEF7E
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),CycleIntroLetters.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),CycleIntroLetters.resume >> 16
+CycleIntroLetters.resume:
 	cpw	(XIZ+4),0
 	jp	Z,EndTask
 	ld	HL,(XIZ+0x18)
@@ -1021,8 +1046,8 @@ StorySceneUniticeSetup:
 	calr	ClearTilemapScr2
 	ld	XWA,4
 	call	PlayMusic
-	ldw	(XIZ+TASK_FUNC),0xEFF4
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),StorySceneUnitice & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),StorySceneUnitice >> 16
 	ret
 
 c_20EFF4	section	code abs=0x20EFF4
@@ -1050,7 +1075,7 @@ StorySceneUnitice:
 	ld	XDE,ItAllBeganWithText
 	ld	(XHL+0xE),XDE
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0
@@ -1062,17 +1087,17 @@ StorySceneUnitice:
 	ld	BC,0
 	ld	DE,0
 	call	DrawPortrait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0x81
 	ldb	(XHL+0x14),0
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x28
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0
@@ -1086,31 +1111,32 @@ StorySceneUnitice.resume5:
 	ld	A,0x20
 	ld	C,1
 	ld	XHL,Pal_225C3D
-	calr	dyn_20E1E7
+	calr	WritePalettesDirect
 	ld	A,4
 	ld	C,1
 	ld	XHL,MonoPal_225C45
-	calr	dyn_20E209
+	calr	WriteMonoPalettesDirect
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,TheseCrystalsCalledUniText
 	ld	(XHL+0xE),XDE
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0xD8
 	ld	A,(wColorFlags)
 	and	A,0x10
-	jr	NZ,0x20F143
+	jr	NZ,StorySceneUnitice.skip
 	ldb	(XHL+0x12),0xB0
+StorySceneUnitice.skip:
 	ldb	(XHL+0x14),0x81
 	task_wait
 	ldb	(0x5CE2),1
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ldb	(0x5853),0
-	ldb	(0x5855),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ldb	(wScr2ScrollX),0
+	ldb	(wScr2ScrollY),0
 	ld	HL,EVENT_STAGE_TOWN
 	call	SetEventFlag
 	call	EndTask
@@ -1118,7 +1144,8 @@ StorySceneUnitice.resume5:
 
 c_20F179	section	code abs=0x20F179
 
-swp_20F179:
+; [code] street task (0x5FF8 = 4, StreetEndingScenes): wFadeLevel 0x81, ClearTilemapScr1/2, PlayMusic 0x12, sound 0x33, then TASK_FUNC = 0x20F1A4 = StorySceneDestruction (as StorySceneUniticeSetup)
+StorySceneDestructionSetup:
 	ldb	(wFadeLevel),0x81
 	ldb	(0x5CE2),0
 	calr	ClearTilemapScr1
@@ -1127,8 +1154,8 @@ swp_20F179:
 	call	PlayMusic
 	ld	WA,0x33
 	call	SoundCommand
-	ldw	(XIZ+TASK_FUNC),0xF1A4
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),StorySceneDestruction & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),StorySceneDestruction >> 16
 	ret
 
 c_20F1A4	section	code abs=0x20F1A4
@@ -1151,17 +1178,17 @@ StorySceneDestruction:
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0x81
 	ldb	(XHL+0x14),0
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x5A
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0
@@ -1175,17 +1202,17 @@ StorySceneDestruction.resume3:
 	ld	A,0x20
 	ld	C,1
 	ld	XHL,Pal_225C3D
-	calr	dyn_20E1E7
+	calr	WritePalettesDirect
 	ld	A,4
 	ld	C,1
 	ld	XHL,MonoPal_225C45
-	calr	dyn_20E209
+	calr	WriteMonoPalettesDirect
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,WithTheDestructionOfText
 	ld	(XHL+0xE),XDE
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0xD8
@@ -1197,8 +1224,8 @@ StorySceneDestruction.skip:
 	ldb	(XHL+0x14),0x81
 	task_wait
 	calr	ClearTilemapScr1
-	ldw	(XIZ+TASK_FUNC),0xF2C1
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),StorySceneSunBegan & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),StorySceneSunBegan >> 16
 	ret
 
 c_20F2C1	section	code abs=0x20F2C1
@@ -1226,11 +1253,11 @@ StorySceneSunBegan.skip:
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr1
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x3C
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0x81
@@ -1244,17 +1271,17 @@ StorySceneSunBegan.resume2:
 	ld	A,0x20
 	ld	C,1
 	ld	XHL,Pal_225C3D
-	calr	dyn_20E1E7
+	calr	WritePalettesDirect
 	ld	A,4
 	ld	C,1
 	ld	XHL,MonoPal_225C45
-	calr	dyn_20E209
+	calr	WriteMonoPalettesDirect
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,TheSunBeganToText
 	ld	(XHL+0xE),XDE
 	task_wait
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x20
 	ldb	(XHL+0x12),0xD8
@@ -1265,13 +1292,13 @@ StorySceneSunBegan.resume2:
 StorySceneSunBegan.skip2:
 	ldb	(XHL+0x14),0
 	task_wait
-	ld	XHL,dyn_20E1D4
+	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x3C
 	task_wait
 	ldb	(wFadeLevel),0x81
-	ldw	(XIZ+TASK_FUNC),0xF3E6
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),CreditsScreen & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),CreditsScreen >> 16
 	ret
 
 c_20F3E6	section	code abs=0x20F3E6
@@ -1324,13 +1351,14 @@ CreditsScreen:
 	ld	HL,EVENT_BEAT_BEHEMOTH
 	call	ClearEventFlag
 CreditsScreen.skip:
-	ldw	(XIZ+TASK_FUNC),0xF4A5
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),CreditsScreen.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),CreditsScreen.resume >> 16
+CreditsScreen.resume:
 	ld	A,(wJoyPressed)
 	and	A,A_BUTTON|B_BUTTON
 	ret	Z
 	ldb	(0x5CE2),1
-	ld	XHL,dyn_20E22B
+	ld	XHL,FadeLevelTask
 	call	StartChildTask
 	ldw	(XHL+0xE),0x3C
 	ldb	(XHL+0x12),0
@@ -1338,10 +1366,10 @@ CreditsScreen.skip:
 	task_wait
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ldb	(0x5853),0
-	ldb	(0x5855),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ldb	(wScr2ScrollX),0
+	ldb	(wScr2ScrollY),0
 	call	EndTask
 	ret
 
@@ -1376,18 +1404,19 @@ StorySceneTheEnd:
 	ld	XDE,ItWasTheEndText
 	ld	(XHL+0xE),XDE
 	task_wait
-	ldw	(XIZ+TASK_FUNC),0xF56C
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),StorySceneTheEnd.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),StorySceneTheEnd.resume >> 16
+StorySceneTheEnd.resume:
 	ld	A,(wJoyPressed)
 	and	A,A_BUTTON|B_BUTTON
 	ret	Z
 	ldb	(0x5CE2),1
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ldb	(0x584B),0
-	ldb	(0x584D),0
-	ldb	(0x5853),0
-	ldb	(0x5855),0
+	ldb	(wScr1ScrollX),0
+	ldb	(wScr1ScrollY),0
+	ldb	(wScr2ScrollX),0
+	ldb	(wScr2ScrollY),0
 	call	EndTask
 	ret
 
@@ -1396,7 +1425,7 @@ c_20F599	section	code abs=0x20F599
 ; [code] GAME OVER
 GameOverScreen:
 	ldb	(wFadeLevel),0
-	call	sub_2067E1
+	call	ClearTilemaps
 	call	InitTextBoxes
 	ld	A,0x2F
 	ld	C,1
@@ -1423,24 +1452,27 @@ GameOverScreen:
 	ldb	(XWA+0x10),0x14
 	ld	XHL,GAMEOVERText
 	ld	(XWA+8),XHL
-	ldw	(XIZ+TASK_FUNC),0xF5FF
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),GameOverScreen.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),GameOverScreen.resume >> 16
+GameOverScreen.resume:
 	ld	A,0
 	call	GetTextBox
 	ld	XHL,(XWA+8)
 	cp	XHL,0
-	jr	Z,loc_20F61B
+	jr	Z,GameOverWaitB
 	ret
 
 c_20F611	section	code abs=0x20F611
 
-swp_20F611:
-	ldw	(XIZ+TASK_FUNC),0xF61B
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+; [code] TASK_FUNC = GameOverWaitB, then falls into it; no callers (after a ret; GameOverScreen's resume step GameOverScreen.resume jumps to GameOverWaitB itself)
+GameOverSetWaitB:
+	ldw	(XIZ+TASK_FUNC),GameOverWaitB & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),GameOverWaitB >> 16
 
 c_20F61B	section	code abs=0x20F61B
 
-loc_20F61B:
+; [code] GAME OVER screen, after its text: B -> EndTask
+GameOverWaitB:
 	ld	A,(wJoyPressed)
 	and	A,B_BUTTON
 	jp	NZ,EndTask
@@ -1451,77 +1483,83 @@ c_20F628	section	code abs=0x20F628
 ; [play] staff credits (credits_* screens)
 CreditsTask:
 	calr	ClearTilemapScr2
-	ldb	(0x5855),0
+	ldb	(wScr2ScrollY),0
 	ld	XDE,wPlayerName
 	ld	B,6
 	ld	WA,0x16C
+CreditsTask.loop:
 	ld	L,(XDE)
 	push	B
 	push	XDE
 	push	WA
-	call	dyn_207093
+	call	LoadGlyphTile
 	pop	WA
 	pop	XDE
 	pop	B
 	inc	1,XDE
 	inc	2,WA
-	djnz	B,0x20F63A
+	djnz	B,CreditsTask.loop
 	ld	XDE,wPartnerName
 	ld	B,6
 	ld	WA,0x173
+CreditsTask.loop2:
 	ld	L,(XDE)
 	push	B
 	push	XDE
 	push	WA
-	call	dyn_207093
+	call	LoadGlyphTile
 	pop	WA
 	pop	XDE
 	pop	B
 	inc	1,XDE
 	inc	2,WA
-	djnz	B,0x20F659
+	djnz	B,CreditsTask.loop2
 	ld	WA,0x186
 	ld	(XIZ+0x18),WA
 	ldb	(XIZ+0x12),0
 	ldw	(XIZ+0x14),5
 	ld	WA,(XIZ+0x14)
 	ld	(XIZ+0x16),WA
-	ld	XHL,dyn_20F6E0
+	ld	XHL,CreditsLineTask
 	call	StartChildTask
-	ldw	(XIZ+TASK_FUNC),0xF6AB
-	ldw	(XIZ+TASK_FUNC_HI),0x20
+	ldw	(XIZ+TASK_FUNC),CreditsTask.resume & 0xFFFF
+	ldw	(XIZ+TASK_FUNC_HI),CreditsTask.resume >> 16
 	ld	XDE,0x5DF8
 	ld	BC,0x100
 	extz	XBC
+CreditsTask.loop3:
 	ldw	(XDE+),0xFFFF
 	dec	1,BC
 	cp	BC,0
-	jr	NZ,0x20F6A0
+	jr	NZ,CreditsTask.loop3
+CreditsTask.resume:
 	cpw	(XIZ+TASK_CHILDREN),0
 	jp	Z,EndTask
 	ld	A,(wJoyPressed)
 	and	A,B_BUTTON
-	jr	Z,dyn_20F6CA
+	jr	Z,CreditsScrollStep
 	calr	ClearTilemapScr2
-	call	dyn_20636D
+	call	EndChildTasks
 	call	EndTask
 	ret
 
 c_20F6CA	section	code abs=0x20F6CA
 
-dyn_20F6CA:
+; [code] CreditsTask each frame without B: every +0x14 (5) frames wScr2ScrollY = +0x12, +0x12 + 1
+CreditsScrollStep:
 	decw	1,(XIZ+0x16)
 	ret	NZ
 	ld	WA,(XIZ+0x14)
 	ld	(XIZ+0x16),WA
 	ld	A,(XIZ+0x12)
-	ld	(0x5855),A
+	ld	(wScr2ScrollY),A
 	incb	1,(XIZ+0x12)
 	ret
 
 c_20F6E0	section	code abs=0x20F6E0
 
-dyn_20F6E0:
+; [code] child task of CreditsTask (parent XIY): on a frame the parent scrolled (+0x16 = +0x14) at a multiple of 8 lines, writes the next text line (parent +0xE) into the SCR2 row just below the screen ((+0x12 / 8 + 0x13) & 0x1F at 0x9800): 0xFF -> CreditsLineEnd, 0xFE blanks the rest of the 20 cells, 0xFC / 0xFB the player / partner name tiles (0x16C / 0x173), else CreditsLineChar
+CreditsLineTask:
 	ld	WA,(XIY+0x14)
 	cp	(XIY+0x16),WA
 	ret	NZ
@@ -1538,13 +1576,97 @@ dyn_20F6E0:
 	add	XWA,0x9800
 	ldw	(XIZ+TASK_ARG),0
 	ld	XHL,(XIY+0xE)
+CreditsLineTask.loop:
 	ld	C,(XHL)
 	cp	C,0xFE
-	jr	Z,0x20F754
+	jr	Z,CreditsLineChar.skip
 	cp	C,0xFF
-	jrl	Z,loc_20F7A8
+	jrl	Z,CreditsLineEnd
 	cp	C,0xFC
-	jr	NZ,dyn_20F730
+	jr	NZ,CreditsLinePartnerName
 	ld	DE,0x16C
 	ld	XBC,wPlayerName
-	jr	loc_20F73D
+	jr	CreditsLineNameTiles
+
+c_20F730	section	code abs=0x20F730
+
+; [code] CreditsLineTask code 0xFB: the partner name tiles from 0x173 (wPartnerName); else CreditsLineChar
+CreditsLinePartnerName:
+	cp	C,0xFB
+	jr	NZ,CreditsLineChar
+	ld	DE,0x173
+	ld	XBC,wPartnerName
+
+c_20F73D	section	code abs=0x20F73D
+
+; [code] tile DE, DE + 2, ... into the map row for each char of the name at XBC (to 0xFF), then the next code
+CreditsLineNameTiles:
+	ld	(XWA+),DE
+	inc	2,DE
+	inc	1,XBC
+	cpb	(XBC),0xFF
+	jr	NZ,CreditsLineNameTiles
+	inc	1,XHL
+	jr	CreditsLineTask.loop
+
+c_20F74D	section	code abs=0x20F74D
+
+; [code] CreditsLineTask, a text char: 0 (space) -> blank cell; else CreditsLineCachedGlyph
+CreditsLineChar:
+	ld	C,(XHL+)
+	cp	C,0
+	jr	NZ,CreditsLineCachedGlyph
+CreditsLineChar.skip:
+	ldw	(XWA+),0
+	jr	CreditsLineLoadGlyph.skip
+
+c_20F75B	section	code abs=0x20F75B
+
+; [code] the char's tile from the cache 0x5DF8 + 2 * char (0xFFFF = not loaded yet -> CreditsLineLoadGlyph)
+CreditsLineCachedGlyph:
+	exts	BC
+	ld	DE,BC
+	extz	XDE
+	sll	1,XDE
+	add	XDE,0x5DF8
+	push	XDE
+	ld	DE,(XDE)
+	cp	DE,0xFFFF
+	jr	Z,CreditsLineLoadGlyph
+	ld	(XWA+),DE
+	pop	XDE
+	jr	CreditsLineLoadGlyph.skip
+
+c_20F779	section	code abs=0x20F779
+
+; [code] char not in the cache: LoadGlyphTile into the parent's next free tile +0x18, cached at 0x5DF8 + 2 * char, +0x18 + 1; after 20 cells the line pointer (parent +0xE) moves past the line
+CreditsLineLoadGlyph:
+	pop	XDE
+	push	XHL
+	ld	HL,(XIY+0x18)
+	ld	(XDE),HL
+	pop	XHL
+	push	XWA
+	push	XHL
+	ld	L,C
+	ld	WA,(XIY+0x18)
+	call	LoadGlyphTile
+	pop	XHL
+	pop	XWA
+	ld	BC,(XIY+0x18)
+	ld	(XWA+),BC
+	incw	1,(XIY+0x18)
+CreditsLineLoadGlyph.skip:
+	incw	1,(XIZ+TASK_ARG)
+	cpw	(XIZ+TASK_ARG),0x14
+	jrl	NZ,CreditsLineTask.loop
+	inc	1,XHL
+	ld	(XIY+0xE),XHL
+	ret
+
+c_20F7A8	section	code abs=0x20F7A8
+
+; [code] EndTask (code 0xFF: the end of the credits text)
+CreditsLineEnd:
+	call	EndTask
+	ret

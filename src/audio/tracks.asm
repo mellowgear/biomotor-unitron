@@ -1,6 +1,6 @@
 ; audio/tracks.asm: the 70 track records (u16 track id, u8 E, then the Z80 block), in ROM order.
 ; Each is built from its .song text by tools/biosong (syntax: docs/SONGS.md; format:
-; evidence/songs_2026-11-25.md sections 2.2 and 3.2-3.4).
+; docs/SONGS.md sections 2.2 and 3.2-3.4).
 
 d_201659	section	romdata abs=0x201659
 Track_20:

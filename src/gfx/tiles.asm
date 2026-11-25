@@ -1,4 +1,4 @@
-; gfx/tiles.asm: tile sheets (LoadCompressedTiles), in ROM order (written once by tools/assets.py extract; edited by hand since). Each keeps its address in its own section;
+; gfx/tiles.asm: tile sheets (LoadCompressedTiles), in ROM order. Each keeps its address in its own section;
 ; the included product says how the Makefile builds it (see README).
 
 d_2846FE	section	romdata abs=0x2846FE

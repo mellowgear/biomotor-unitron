@@ -57,8 +57,8 @@ StatusRecovery:
 d_22540B	section	romdata abs=0x22540B
 #include "src/data/battle/default_attack.asm"
 d_225BAA	section	romdata abs=0x225BAA
-; [code] EnemyHitResult1 and 3 more (battle.asm): message per wInflictStatus (0-4) when an
-; enemy hit inflicts a status on the player's unit
+; [code] EnemyHitResult2-4 (wEnemyAttackStatus) and ConfusedPlayerHitResult (wInflictStatus): message per status (0-4) when a hit
+; inflicts a status on the player's unit
 PlayerStatusTexts:
 	dl	YouDodgedTheExtraText,YouveBeenParalyzedText,YourUNITRONRustedText,YoureLeakingEnergyText
 	dl	YouveBecomeConfusedText

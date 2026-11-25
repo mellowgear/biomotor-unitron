@@ -2,7 +2,7 @@
 d_2191AF	section	romdata abs=0x2191AF
 $include "build/data/works/menu_texts_2191AF.asm"	; src/data/works/menu_texts_2191AF.txt
 d_2191C8	section	romdata abs=0x2191C8
-; [code] works.asm (ld XHL,0x2191C8): swp_217207, 7 lines
+; [code] works.asm (ld XHL,0x2191C8): PrintStringTable, 7 lines
 MenuLines_2191C8:
 	menu_item	0,0,HPText3
 	menu_item	0,1,EPText2
@@ -14,7 +14,7 @@ MenuLines_2191C8:
 d_2191F2	section	romdata abs=0x2191F2
 $include "build/data/works/menu_texts_2191F2.asm"	; src/data/works/menu_texts_2191F2.txt
 d_21920E	section	romdata abs=0x21920E
-; [code] works.asm (ld XHL,0x21920E): swp_217207, 7 lines at column 3
+; [code] works.asm (ld XHL,0x21920E): PrintStringTable, 7 lines at column 3
 MenuLines_21920E:
 	menu_item	3,0,DashText4
 	menu_item	3,1,DashText5

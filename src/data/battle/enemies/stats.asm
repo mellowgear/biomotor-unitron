@@ -15,8 +15,7 @@
 ; off EXP-to-next (0x5023); gp is added to GP (0x5041, BCD, max 999999); drop (item, or part
 ; if the high byte is set) is given with drop_pct % chance (100+ = always).
 ; [play] the four bosses (89-92) always drop their part with 65000 GP: Ent Seed, Kraken Cape, Roc Seraph,
-; Behemt Bardos, each with its Emblem (wEventFlags 0x5062 bits 0-3); same in the male and female runs
-; (play runs DECOMP_REQUESTS B8).
+; Behemt Bardos, each with its Emblem (wEventFlags 0x5062 bits 0-3); same in the male and female runs.
 ; One enemy_stat record per line (src/macros/tables.inc).
 ; id: level, f01, hp, ep, ap, sp, rp, mp, affinity, image, exp, gp, drop, drop_pct, f19
 	enemy_stat	255,255,  30,  30,0, 25, 10, 10, 2,    2, 10,  170, 39, 30,0	; 1 Stump

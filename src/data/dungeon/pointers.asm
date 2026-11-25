@@ -1,4 +1,4 @@
-; data/dungeon/pointers: pointer tables read by the code (tools/pointers.py), one section each
+; data/dungeon/pointers: pointer tables read by the code, one section each
 
 d_2274D7	section	romdata abs=0x2274D7
 ; [code] dungeon.asm (sub_2105xx area, 2 readers): name per DUNGEON_ID 0-4 (DrawBoxString). Name 0
@@ -9,7 +9,7 @@ DungeonNames:
 	dl	MazeOfStoneText
 
 d_227580	section	romdata abs=0x227580
-; [code] swp_210929 / dungeon.asm: description per DUNGEON_ID - 1 (box 2)
+; [code] WorldMapDungeonTextBox2 / dungeon.asm: description per DUNGEON_ID - 1 (box 2)
 DungeonDescriptions:
 	dl	DungeonMadeOfTreesText,CaveOnSeaFloorText,FloatingRuinsWindAffinityText,BuriedDeepInTheText
 
@@ -59,13 +59,13 @@ DungeonMaps:
 	dl	DungeonMap_56,DungeonChests_56
 
 d_249903	section	romdata abs=0x249903
-; [code] sub_212890: floor name per DUNGEON_FLOOR
+; [code] DrawAreaName: floor name per DUNGEON_FLOOR
 AreaNames:
 	dl	Area0Text,Area1Text,Area2Text,Area3Text
 	dl	Area4Text,Area5Text,Area6Text,Area7Text
 
 d_24B37A	section	romdata abs=0x24B37A
-; [code] the BossEncounter talk runner (0x212CD5): message per boss index (sub_212C92) * 4 +
+; [code] the BossEncounter talk runner (0x212CD5): message per boss index (GetBossIndex) * 4 +
 ; (task +0x2A - 3); 0 = none. Bosses 4-6 have one message, boss 7 the last entry.
 BossTalkTexts:
 	dl	IAmEntIText,TheAnswerHasBeenText,YourTaskIsToText,YouHaveDefeatedMeText

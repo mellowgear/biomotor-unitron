@@ -1,4 +1,4 @@
-; gfx/parts.asm: robot part images (DrawPartImage), in ROM order (written once by tools/assets.py extract; edited by hand since). Each keeps its address in its own section;
+; gfx/parts.asm: robot part images (DrawPartImage), in ROM order. Each keeps its address in its own section;
 ; the included product says how the Makefile builds it (see README).
 
 d_25EF50	section	romdata abs=0x25EF50

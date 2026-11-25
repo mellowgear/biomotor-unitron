@@ -27,14 +27,17 @@ game loaders':
 | `build/gfx/font/font.2bpp` | `src/gfx/font/font.png` | 128 raw 2bpp glyphs, no compression (`unitron gfx frompng --count 128`); `dw 128` before it in gfx/font.asm (GetFontGlyph 0x207073) |
 | (none) | `src/data/S/T.asm` or `src/data/S/T/P.asm` | a numeric table part: `db`/`dw`/`dd` lines or record macros (`src/macros/tables.inc`), `#include`d from `src/data/S/tables.asm` (S = subject) |
 | `build/data/S/T.asm`, `build/data/S/T/P.asm` | `src/data/S/T.txt`, `src/data/S/T/P.txt` | a text table part: fixed-size slots (`slot 7 FF`), `unitron text` |
-| (none) | `src/gfx/maps/X.tilemap`, `.bst`, `.blk` | included as they are (`build/src/...asm`): u8 w, h + u16 entries (DrawTilemap 0x206B37) |
+| (none) | `src/gfx/maps/X.tilemap`, `.blk` | included as they are (`build/src/...asm`): u8 w, h + u16 entries (DrawTilemap 0x206B37) |
+| (none) | `src/gfx/blocksets/dungeon.bst` | included as it is: 441 metatiles of 4 u16 tile words, no header (GetMetatileTiles 0x206EE6) |
+| `build/gfx/blocksets/X.tilemap` | `src/gfx/blocksets/X.bst` | not in the ROM: the blockset as a u8 w, h + u16 map, the metatiles 16 to a row (`tools/biogfx blockmap`), the `--map` that lays out `dungeon_tiles.png` |
 | `build/text/B.asm` | `src/text/B.txt` | the bank's strings in the game's character codes (`unitron text`, TextStep 0x2073B3) |
 
-LZSS is Okumura's LZSS.C (`tlcs900/ngpc_lzss.py`), which reproduces every original stream. A
+LZSS is Okumura's LZSS.C, which reproduces every original stream. A
 sheet's tile count is read from its PNG: every tile up to the last one in the last row that is not
 all pixel index 0. Per-file options go in the Makefile: the count for a sheet that
-ends in blank tiles (none of the original sheets need it), and for the 132 sheets laid out as their
-screens `--map <tilemap> --count N` (src/gfx/tiles/layout.mk, included by the Makefile):
+ends in blank tiles (none of the original sheets need it), and for the sheets laid out as their
+screens `--map <tilemap> --count N` (src/gfx/tiles/layout.mk, included by the Makefile; the
+dungeon floor sheet's map is made from its blockset by `tools/biogfx blockmap`):
 
 ```
 build/gfx/tiles/XXXXXX.2bpp.lz: ASSETFLAGS = --tiles 140
@@ -43,8 +46,8 @@ build/gfx/tiles/XXXXXX.2bpp.lz: ASSETFLAGS = --tiles 140
 Bytes read by two loaders are declared once: the mono palette at 0x2DB3CF is palettes 10-11 of
 `Pal_2DB37F`, so `gfx/palettes.asm` has `MonoPal_2DB3CF equ Pal_2DB37F + 0x50`.
 
-These declarations were first written from the ROM (tools/assets.py, text.py, dungeon.py,
-battle_fx.py: the retired `make extract`); since 2026-11-25 they are edited by hand like the rest
+These declarations were first written from the ROM (by extraction tools since retired:
+the old `make extract`); since 2026-11-25 they are edited by hand like the rest
 of `src/`. To add an asset: put its source in `src/<dir>/`, declare it (section at its address,
 label, `$include` of the product) in the subject's .asm, and cut its bytes out of the
 `src/data/unknown/` block it came from.

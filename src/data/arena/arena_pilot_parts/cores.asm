@@ -1,5 +1,5 @@
 ; ArenaPilotCores: 6 x u8, core id per rank.
-; How sub_213C2E builds a random pilot's parts, and the line order: body_base.asm.
+; How RollArenaBracket builds a random pilot's parts, and the line order: body_base.asm.
 ; id: core
 	db	9	; 1 Rank S: Core9
 	db	8	; 2 Rank A: Core8

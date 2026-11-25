@@ -2,9 +2,8 @@
 //
 // The game's own tool was Haruhiko Okumura's LZSS.C (1989, public domain) with N = 1024, F = 18,
 // THRESHOLD = 2 and a ring buffer filled with zeros (LZSS.C fills it with spaces). The last match
-// is cut to the bytes left, as in LZSS.C. This is a C++ port of compress_okumura(clamp=True) in
-// tlcs900/ngpc_lzss.py, which reproduces every stream in the ROM; decompress() is the game's
-// decoder (ngpc_lzss.decompress).
+// is cut to the bytes left, as in LZSS.C. This reproduces every stream in the ROM; decompress() is the game's
+// decoder.
 //
 // Stream format: a flag byte announces 8 items, lowest bit first: 1 = a literal byte, 0 = a match
 // of 2 bytes A, W: ring offset ((W >> 4) << 8) | A, length (W & 15) + 3. The first write into the

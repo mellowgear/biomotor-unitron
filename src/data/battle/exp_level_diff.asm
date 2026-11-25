@@ -1,5 +1,5 @@
 ; ExpLevelDiff (exp_level_diff): 11 records of 1 bytes, one line per id; keep the order and count.
-; EXP per kill, by how the enemy's level compares with yours (swp_208A36):
+; EXP per kill, by how the enemy's level compares with yours (ExpForKill):
 ;   exp gained = enemy exp (tables/enemies/) x exp_pct / 100, rounded up.
 ; Line 1 = enemy 5 or more levels below you ... line 6 = same level ... line 11 = enemy
 ; 5 or more above you (difference clamped to -5..+5).

@@ -1,5 +1,5 @@
 ; EnemyScaling (enemy_scaling): 16 records of 14 bytes, one line per id; keep the order and count.
-; sub_20840A: stats of scaled enemies (level 255) x pct / 100, level = base + 1..rand.
+; GetEnemyScaling: stats of scaled enemies (level 255) x pct / 100, level = base + 1..rand.
 ; Row = area level (0x5DDB) - 1, clamped to 1-8. Rows 1-8 are used before event flag 0xA
 ; or 0xB is set, rows 9-16 after. Row 16 is also used for enemy ids 0x59-0x61 and 0x71+
 ; once a flag is set.

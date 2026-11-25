@@ -1,4 +1,4 @@
-; gfx/maps.asm: tile maps (DrawTilemap), in ROM order (written once by tools/assets.py extract; edited by hand since). Each keeps its address in its own section;
+; gfx/maps.asm: tile maps (DrawTilemap), in ROM order. Each keeps its address in its own section;
 ; the included product says how the Makefile builds it (see README).
 
 d_2844CC	section	romdata abs=0x2844CC
@@ -19,9 +19,11 @@ $include "build/src/gfx/maps/2868DF.tilemap.asm"	; src/gfx/maps/2868DF.tilemap
 d_2871EE	section	romdata abs=0x2871EE
 Map_2871EE:
 $include "build/src/gfx/maps/2871EE.tilemap.asm"	; src/gfx/maps/2871EE.tilemap
+; [code] MainMenuGraphics (mono units): left half of the main menu background (DrawMainMenuSplit)
 d_2876C4	section	romdata abs=0x2876C4
 Map_2876C4:
 $include "build/src/gfx/maps/2876C4.tilemap.asm"	; src/gfx/maps/2876C4.tilemap
+; [code] MainMenuGraphics (mono units): right half of the main menu background (DrawMainMenuSplit)
 d_287ED4	section	romdata abs=0x287ED4
 Map_287ED4:
 $include "build/src/gfx/maps/287ED4.tilemap.asm"	; src/gfx/maps/287ED4.tilemap
@@ -115,9 +117,11 @@ $include "build/src/gfx/maps/29BA07.tilemap.asm"	; src/gfx/maps/29BA07.tilemap
 d_29C363	section	romdata abs=0x29C363
 Map_29C363:
 $include "build/src/gfx/maps/29C363.tilemap.asm"	; src/gfx/maps/29C363.tilemap
+; [code] MainMenuGraphics (colour): left half of the main menu door picture (SCR1, DrawMainMenuSplit); [play] seen in play: a rusty brown metal door
 d_29C88F	section	romdata abs=0x29C88F
 Map_29C88F:
 $include "build/src/gfx/maps/29C88F.tilemap.asm"	; src/gfx/maps/29C88F.tilemap
+; [code] MainMenuGraphics (colour): right half of the main menu door picture (SCR1, DrawMainMenuSplit); [play] seen in play: a rusty brown metal door
 d_29D39A	section	romdata abs=0x29D39A
 Map_29D39A:
 $include "build/src/gfx/maps/29D39A.tilemap.asm"	; src/gfx/maps/29D39A.tilemap
@@ -409,8 +413,27 @@ $include "build/src/gfx/maps/2C82F2.tilemap.asm"	; src/gfx/maps/2C82F2.tilemap
 d_2C82FC	section	romdata abs=0x2C82FC
 Map_2C82FC:
 $include "build/src/gfx/maps/2C82FC.tilemap.asm"	; src/gfx/maps/2C82FC.tilemap
-; [code] sub_214675: an 18x5 map drawn one column at a time into SCR1 (colour when wColorFlags
-; is not 0, else the next one); sub_214700: the same for the 10x3 maps into SCR2
+; [code] no reader (no immediate or pointer): four 2x2 maps (u8 w, h + u16 per tile, DrawTilemap format) of
+; sheet tiles 0-15 of Gfx_2C8691 (16 tiles), frame n = tiles 4n..4n+3: the frames DrawWorldMapMarker
+; draws as sprites with DrawSpriteGrid (tile 0x10 + 4 * frame), which does not read these
+d_2C8669	section	romdata abs=0x2C8669
+UnusedMap_2C8669:
+	db	2,2
+	dw	0x0001,0x0002,0x0003,0x0004
+d_2C8673	section	romdata abs=0x2C8673
+UnusedMap_2C8673:
+	db	2,2
+	dw	0x0005,0x0006,0x0007,0x0008
+d_2C867D	section	romdata abs=0x2C867D
+UnusedMap_2C867D:
+	db	2,2
+	dw	0x0009,0x000A,0x000B,0x000C
+d_2C8687	section	romdata abs=0x2C8687
+UnusedMap_2C8687:
+	db	2,2
+	dw	0x000D,0x000E,0x000F,0x0010
+; [code] DrawDuelSwordColumn: an 18x5 map drawn one column at a time into SCR1 (colour when wColorFlags
+; is not 0, else the next one); DrawDuelLetterColumn: the same for the 10x3 maps into SCR2
 d_2C87AA	section	romdata abs=0x2C87AA
 Map_2C87AA:
 $include "build/src/gfx/maps/2C87AA.tilemap.asm"	; src/gfx/maps/2C87AA.tilemap
@@ -423,7 +446,7 @@ $include "build/src/gfx/maps/2C8916.tilemap.asm"	; src/gfx/maps/2C8916.tilemap
 d_2C8954	section	romdata abs=0x2C8954
 Map_2C8954:
 $include "build/src/gfx/maps/2C8954.tilemap.asm"	; src/gfx/maps/2C8954.tilemap
-; [code] sub_214616 / sub_214639: 6 sprite maps each (dyn_2069C8), Map_2C8992 / Map_2C89CE +
+; [code] DrawDuelNumberColor / DrawDuelNumberMono: 6 sprite maps each (DrawSpriteMap), Map_2C8992 / Map_2C89CE +
 ; 10 * task +0x1E
 d_2C8992	section	romdata abs=0x2C8992
 Map_2C8992:
@@ -461,7 +484,7 @@ $include "build/src/gfx/maps/2C89F6.tilemap.asm"	; src/gfx/maps/2C89F6.tilemap
 d_2C8A00	section	romdata abs=0x2C8A00
 Map_2C8A00:
 $include "build/src/gfx/maps/2C8A00.tilemap.asm"	; src/gfx/maps/2C8A00.tilemap
-; [code] dyn_20FBBF (name entry): the blinking cursor sprite, frame by task +0x2A bit 4
+; [code] NameEntryAddChar (name entry): the blinking cursor sprite, frame by task +0x2A bit 4
 d_2C8D74	section	romdata abs=0x2C8D74
 Map_2C8D74:
 $include "build/src/gfx/maps/2C8D74.tilemap.asm"	; src/gfx/maps/2C8D74.tilemap
@@ -511,7 +534,7 @@ $include "build/src/gfx/maps/2DE32D.tilemap.asm"	; src/gfx/maps/2DE32D.tilemap
 d_2DE660	section	romdata abs=0x2DE660
 Map_2DE660:
 $include "build/src/gfx/maps/2DE660.tilemap.asm"	; src/gfx/maps/2DE660.tilemap
-; [code] swp_20EB87: 3 sprite maps (dyn_2069C8) through Data_226B59, frame (n / 2) & 3
+; [code] IntroMeteorTask: 3 sprite maps (DrawSpriteMap) through Data_226B59, frame (n / 2) & 3
 d_2DE95A	section	romdata abs=0x2DE95A
 Map_2DE95A:
 $include "build/src/gfx/maps/2DE95A.tilemap.asm"	; src/gfx/maps/2DE95A.tilemap
@@ -521,7 +544,7 @@ $include "build/src/gfx/maps/2DE980.tilemap.asm"	; src/gfx/maps/2DE980.tilemap
 d_2DE9A6	section	romdata abs=0x2DE9A6
 Map_2DE9A6:
 $include "build/src/gfx/maps/2DE9A6.tilemap.asm"	; src/gfx/maps/2DE9A6.tilemap
-; [code] swp_20EAA6: 5 SCR2 tilemaps through the records Data_226B69 1-5
+; [code] IntroImpactTask: 5 SCR2 tilemaps through the records Data_226B69 1-5
 d_2DE9CC	section	romdata abs=0x2DE9CC
 Map_2DE9CC:
 $include "build/src/gfx/maps/2DE9CC.tilemap.asm"	; src/gfx/maps/2DE9CC.tilemap
@@ -558,9 +581,11 @@ $include "build/src/gfx/maps/2E2025.tilemap.asm"	; src/gfx/maps/2E2025.tilemap
 d_2E2B88	section	romdata abs=0x2E2B88
 Map_2E2B88:
 $include "build/src/gfx/maps/2E2B88.tilemap.asm"	; src/gfx/maps/2E2B88.tilemap
+; [code] IntroHeadCutTask (SCR2, 20 x 19 cells, tiles from 0x17C); [play] a purple three-eyed mechanical head on black
 d_2E3616	section	romdata abs=0x2E3616
 Map_2E3616:
 $include "build/src/gfx/maps/2E3616.tilemap.asm"	; src/gfx/maps/2E3616.tilemap
+; [code] IntroHeadMouthCutTask; Map_2E3616 with 9 cells of rows 11-12 (columns 7-12) changed; [play] the same head, mouth / jaw line changed
 d_2E3910	section	romdata abs=0x2E3910
 Map_2E3910:
 $include "build/src/gfx/maps/2E3910.tilemap.asm"	; src/gfx/maps/2E3910.tilemap
@@ -597,12 +622,14 @@ $include "build/src/gfx/maps/2E54E3.tilemap.asm"	; src/gfx/maps/2E54E3.tilemap
 d_2E573D	section	romdata abs=0x2E573D
 Map_2E573D:
 $include "build/src/gfx/maps/2E573D.tilemap.asm"	; src/gfx/maps/2E573D.tilemap
-; [code] dyn_20E36F: a 14x1 sprite map (dyn_2069C8 at x 0x18, y 0x58) that alternates with
+; [code] TitleBlinkTask: a 14x1 sprite map (DrawSpriteMap at x 0x18, y 0x58) that alternates with
 ; the next one every 32 frames, for 0x348 frames
+; [play] seen in play: the title "PRESS A BUTTON" prompt under the UNITRON logo (14 sprites, map tiles 0x0CD-0x0DA, one per character)
 d_2E4292	section	romdata abs=0x2E4292
 Map_2E4292:
 $include "build/src/gfx/maps/2E4292.tilemap.asm"	; src/gfx/maps/2E4292.tilemap
 d_2E42B0	section	romdata abs=0x2E42B0
+; [code] 14 cells of tile 0 (DrawSpriteMap skips them): the off phase of the prompt; [play] seen in play: the title with no prompt
 Map_2E42B0:
 $include "build/src/gfx/maps/2E42B0.tilemap.asm"	; src/gfx/maps/2E42B0.tilemap
 d_2E66A0	section	romdata abs=0x2E66A0
