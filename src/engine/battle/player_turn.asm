@@ -2,7 +2,8 @@
 
 c_209E01	section	code abs=0x209E01
 
-; [code] BattleMainMenuJumps entry 3 and the end of the command / item choice (TASK_FUNC 0x9E01): wRoundSecondTurn = 0, then PlayerTurn first when TurnOrderMargin >= 0 (or always when wDungeonBattle = 0 and wBattleMenuCursor = 3), else EnemyTurn
+; [code] task step after the command (or item) choice: clears the menu box, wRoundSecondTurn = 0, then PlayerTurn
+; when TurnOrderMargin >= 0, else EnemyTurn; outside dungeons (wDungeonBattle 0) fleeing (cursor 3) always goes first
 StartBattleRound:
 	ld	A,3
 	call	EraseTextBox
@@ -31,7 +32,8 @@ StartBattleRound.skip2:
 
 c_209E45	section	code abs=0x209E45
 
-; [code] the player's turn (StartBattleRound, EnemyTurnEnd): ComputeStatBuffs, a SCR1 slide task (UnitSlideInShiftedTask as the second turn of the round, else UnitShiftRightTask), then the handler for wBattleMenuCursor from the table BattleMenuJumps (CheckCanAttack, 0x20A1D6, 0x20A26A, 0x20A308)
+; [code] the unit's turn: ComputeStatBuffs, slide the unit in (UnitSlideInShiftedTask when it moves second), then the
+; handler for wBattleMenuCursor: attack, item, recharge, flee
 PlayerTurn:
 	calr	ComputeStatBuffs
 	ldb	(wScr2ScrollX),0x60
@@ -51,14 +53,17 @@ PlayerTurn.skip:
 	ld	XHL,(XHL)
 	ld	(XIZ+TASK_FUNC),XHL
 	ret
+; [code] PlayerTurn handlers by wBattleMenuCursor 0-3
 BattleMenuJumps:
 	dl	CheckCanAttack,BattleUseItem,BattleRecharge,TryFlee
 
 c_209E9E	section	code abs=0x209E9E
 
-; [code] Not enough EP / Confused / You can't attack
+; [code] attack or skill chosen: not enough EP ends the turn; confusion shows its message and carries on (the
+; hit lands on the unit); loads the arm or skill record (+0x10) and effects (+0x14); skills with a
+; status code >= 5 run a SkillEffects handler, the rest attack through PlayerParalysisCheck
 CheckCanAttack:
-	cpb	(wStatusParalyzed),0
+	cpb	(wStatusParalyzed),0	; paralysed: skip the EP check, PlayerParalysisCheck ends the turn
 	jr	NZ,CheckCanAttack.skip2
 	ld	WA,(wAttackEPCost)
 	cp	(wUnitEP),WA
@@ -82,6 +87,7 @@ CheckCanAttack.skip:
 	task_wait
 CheckCanAttack.skip2:
 	ld	XHL,0
+	; wBattleChoice 0 = right arm, 1 = left arm, 2 / 3 = skill 1 / 2
 	cpw	(wBattleChoice),1
 	ld	L,(wEquipRightArm)
 	jrl	C,LoadArmAttack
@@ -102,6 +108,7 @@ CheckCanAttack.skip3:
 	ld	A,(XHL+0x10)
 	cp	A,0xFF
 	jr	Z,PlayerParalysisCheck
+	; record +0x10: status code; 0-4 / 0xFF = attack, 5+ = non-attack skill
 	cp	A,5
 	jr	C,PlayerParalysisCheck
 	ld	XHL,0
@@ -114,8 +121,8 @@ CheckCanAttack.skip3:
 	call	StartChildTask
 	task_wait
 	ld	XHL,(XIZ+0x10)
-	ld	A,(XHL+0x10)
-	sub	A,5
+	ld	A,(XHL+0x10)	; status to inflict, 0 / 0xFF = none
+	sub	A,5	; SkillEffects index = code - 5
 	ld	W,0
 	sll	2,WA
 	extz	XWA
@@ -125,9 +132,10 @@ CheckCanAttack.skip3:
 	ret
 
 d_209F95	section	romdata abs=0x209F95
+; [code] skill handlers for status codes 5-11
 SkillEffects:
-	db	0x47,0xAA,0x20,0x00,0x2E,0xAB,0x20,0x00,0x29,0xAC,0x20,0x00,0xCB,0xAC,0x20,0x00
-	db	0x38,0xAD,0x20,0x00,0xC4,0xAD,0x20,0x00,0x4F,0xAE,0x20,0x00
+	dl	ShowStatUp,ShowStatDown,ShowFullHeal,SkillTimeStop
+	dl	SkillRecvr,SkillAirbag,SkillFullCharge
 
 c_209FB1	section	code abs=0x209FB1
 
@@ -171,6 +179,7 @@ PlayerAttack:
 	call	StartChildTask
 	task_wait
 	ld	XHL,(XIZ+0x10)
+	; confused: the unit attacks itself (own RP / SP / affinity, damage / 4)
 	cpb	(wStatusConfused),0
 	jrl	NZ,PlayerAttack.skip3
 	ld	WA,(wUnitRP)
@@ -183,6 +192,7 @@ PlayerAttack:
 	ld	W,(wEnemyLevel)
 	call	HitMargin
 	ld	(wPlayerHitMargin),W
+	; attack = record +4 (power) + AP; record +0xE = affinity
 	ld	WA,(XHL+4)
 	add	WA,(wUnitAP)
 	call	ApplyPlayerAPBuff
@@ -198,6 +208,7 @@ PlayerAttack:
 	call	ApplyAffinity
 	call	AtLeastOne
 	ld	(wPlayerDamage),WA
+	; crit chance %: threshold pct*256/100 against Random's low byte
 	ld	B,(wCritChance)
 	ld	C,0
 	add	BC,0x63
@@ -215,7 +226,7 @@ PlayerAttack:
 	jr	Z,PlayerAttack.skip
 	cp	A,0xFF
 	jr	Z,PlayerAttack.skip
-	ldb	(wInflictStatus),0
+	ldb	(wInflictStatus),0	; 0 = status roll missed (texts entry 0), else the status id
 	ld	B,(wStatusChance)
 	ld	C,0
 	add	BC,0x63
@@ -227,6 +238,7 @@ PlayerAttack:
 	jr	NC,PlayerAttack.skip
 	ld	A,(XHL+0x10)
 	ld	(wInflictStatus),A
+; first effect-list byte picks the hit-result shape: 0, 1, 2+
 PlayerAttack.skip:
 	ld	XHL,(XIZ+0x14)
 	ld	A,(XHL+)
@@ -263,7 +275,7 @@ PlayerAttack.skip3:
 	ld	DE,(wUnitAffinity)
 	call	ApplyAffinity
 	call	ApplyAirbag
-	inc	3,WA
+	inc	3,WA	; self-hit = ceil(damage / 4)
 	srl	2,WA
 	ld	(wPlayerDamage),WA
 	ld	B,(wCritChance)
@@ -295,6 +307,7 @@ PlayerAttack.skip3:
 	jr	NC,PlayerAttack.skip4
 	ld	A,(XHL+0x10)
 	ld	(wInflictStatus),A
+; skip the shape byte, and one more word for shape 1 (?)
 PlayerAttack.skip4:
 	ld	XHL,(XIZ+0x14)
 	ld	A,(XHL+)
@@ -313,7 +326,8 @@ PlayerAttack.skip5:
 
 c_20A1D6	section	code abs=0x20A1D6
 
-; [code] "You used <item>"
+; [code] battle item (wBattleChoice = item id): remove it, "You used <item>", load its effect list (+0x14),
+; wAttackEPCost = 0, then its handler from BattleItemJumps
 BattleUseItem:
 	ld	WA,(wBattleChoice)
 	call	RemoveItem
@@ -331,12 +345,13 @@ BattleUseItem:
 	ldw	(wAttackEPCost),0
 	ld	XHL,0
 	ld	L,(wBattleChoice)
-	sub	L,0x26
+	sub	L,ITEM_FIXIT1
 	sll	2,HL
 	add	XHL,BattleItemJumps
 	ld	XHL,(XHL)
 	ld	(XIZ+TASK_FUNC),XHL
 	ret
+; [code] handlers for items ITEM_FIXIT1 (38) to ItemMagFlr, in item-id order
 BattleItemJumps:
 	dl	ItemFixIt1,ItemFixIt2,ItemFixIt3,ItemFixIt4
 	dl	ItemFullFx,ShowStatusCured,ItemPowDrv,ItemEField
@@ -345,14 +360,14 @@ BattleItemJumps:
 
 c_20A26A	section	code abs=0x20A26A
 
-; [code] YouRechargedYourEnergyText, EP gain message, wAttackEPCost = 0
+; [code] Recharge: effect, EP gain of GetRechargeAmount (wRechargePercent % of max EP), no EP cost, then PlayerTurnEnd
 BattleRecharge:
 	ld	XHL,YouRechargedYourEnergyText
 	call	ShowMessage
 	ld	XHL,WaitBattleMessageTask
 	call	StartChildTask
 	task_wait
-	ld	XHL,DefaultEnemyAttack+SLOT_EFFECTS
+	ld	XHL,DefaultEnemyAttack+SLOT_EFFECTS	; reuses the default attack's effect list for the charge animation (?)
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
@@ -379,7 +394,8 @@ BattleRecharge:
 
 c_20A308	section	code abs=0x20A308
 
-; [code] You fled / But it chases you (event flags, Random)
+; [code] Flee: Satana can't be fled until the ending or Rank X flag; outside dungeons or when the enemy is
+; paralysed it always works; else wFleeChance % -> BattleRetreat, a miss -> "But it chases you", PlayerTurnEnd
 TryFlee:
 	cpb	(wEnemyId),ENEMY_SATANA
 	jr	NZ,TryFlee.skip
@@ -391,7 +407,7 @@ TryFlee:
 	jr	NZ,TryFlee.skip
 	jr	TryFlee.skip2
 TryFlee.skip:
-	cpb	(wDungeonBattle),0
+	cpb	(wDungeonBattle),0	; arena / link battles: free retreat
 	jr	Z,TryFlee.skip3
 	cpb	(wEnemyParalyzed),0
 	jr	NZ,TryFlee.skip3
@@ -426,7 +442,8 @@ TryFlee.skip3:
 
 c_20A3A7	section	code abs=0x20A3A7
 
-; [code] two scroll tasks (UnitSlideOutLeftTask, UnitSlideInShiftedTask), then You missed / Critical hit / can't damage / takes damage; PlayerAttack picks it for f0 = 0
+; [code] hit-result shape 0: slide the unit out and back, then miss / effect and shake / crit x2 / no damage
+; or damage to the enemy (EnemyHPLossTask) and the status message; sets the inflicted status's bit 7
 PlayerHitResult1:
 	ld	XHL,UnitSlideOutLeftTask
 	call	StartChildTask
@@ -438,6 +455,7 @@ PlayerHitResult1:
 	call	StartChildTask
 	ldb	(XHL+TASK_ARG),0xF
 	task_wait
+	; negative margin = miss
 	cpb	(wPlayerHitMargin),0
 	jr	PL,PlayerHitResult1.skip
 	ld	XHL,YouMissedText
@@ -509,7 +527,7 @@ PlayerHitResult1.skip4:
 	ld	A,(wInflictStatus)
 	or	A,A
 	jr	Z,PlayerHitResult1.skip5
-	ld	XHL,wEnemyParalyzed-1
+	ld	XHL,wEnemyParalyzed-1	; status ids 1-4 index wEnemyParalyzed..; bit 7 = on
 	orb	(XHL+A),0x80
 PlayerHitResult1.skip5:
 	ldw	(XIZ+TASK_FUNC),PlayerTurnEnd & 0xFFFF
@@ -518,7 +536,8 @@ PlayerHitResult1.skip5:
 
 c_20A55D	section	code abs=0x20A55D
 
-; [code] as PlayerHitResult1 with PlayNextEffect twice (scroll registers set directly) in place of the two scroll tasks; picked for f0 = 1
+; [code] hit-result shape 1: as PlayerHitResult1, with two PlayNextEffect steps (unit half, then enemy half in view)
+; in place of the slide tasks
 PlayerHitResult2:
 	ldb	(wScr1ScrollX),0xC0
 	ldb	(wScr1ScrollY),0
@@ -536,7 +555,7 @@ PlayerHitResult2:
 	call	StartChildTask
 	ldw	(XHL+TASK_ARG),0
 	task_wait
-	cpb	(wPlayerHitMargin),0
+	cpb	(wPlayerHitMargin),0	; negative margin = miss
 	jr	PL,PlayerHitResult2.skip
 	ld	XHL,YouMissedText
 	call	ShowMessage
@@ -616,13 +635,13 @@ PlayerHitResult2.skip5:
 
 c_20A733	section	code abs=0x20A733
 
-; [code] as PlayerHitResult1 without the two scroll tasks (wScr1ScrollX/Y set to 0x60 / 0); picked for f0 = 2 and up
+; [code] hit-result shape 2+: as PlayerHitResult1 with no slide, enemy half of the screen in view
 PlayerHitResult3:
 	ldb	(wScr1ScrollX),0x60
 	ldb	(wScr1ScrollY),0
 	ldb	(wScr2ScrollX),0
 	ldb	(wScr2ScrollY),0
-	cpb	(wPlayerHitMargin),0
+	cpb	(wPlayerHitMargin),0	; negative margin = miss
 	jr	PL,PlayerHitResult3.skip
 	ld	XHL,YouMissedText
 	call	ShowMessage

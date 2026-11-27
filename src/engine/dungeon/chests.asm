@@ -2,7 +2,8 @@
 
 c_2116BC	section	code abs=0x2116BC
 
-; [code] weighted pick (ChestOdds) from WorldChests[dungeon, floor]
+; Rolls one chest's content for floor XIZ+0x22 of this dungeon: row WorldChests[(dungeon - 1) * 7 + floor]
+; of 7 codes, column by Random % 100 against the cumulative ChestOdds -> A = chest code [code]
 PickWorldChest:
 	push	XHL
 	push	XDE
@@ -25,6 +26,7 @@ PickWorldChest:
 	ld	A,W
 	pop	W
 	ld	C,0
+	; r % 100 walks down ChestOdds until it goes negative
 	ld	XDE,ChestOdds
 PickWorldChest.loop:
 	ld	W,(XDE)
@@ -67,9 +69,11 @@ ClearChestTable:
 
 c_21172A	section	code abs=0x21172A
 
-; [code] MineChests[floor], skipping chests whose event flag is set
+; Crystal Mine floor XIZ+0x22: the 6 chests are fixed (MineChests[floor * 6 + i]); one already opened
+; (event flag 0x70 + 7 * floor + its attr word) stays 0xFD. Fills code, x, y, attr from the map's chest list [code]
 SetMineChests:
 	push	XHL
+	; the floor's chest position list from its map record
 	push	XDE
 	push	XBC
 	push	XWA
@@ -108,6 +112,7 @@ SetMineChests.loop2:
 	ld	A,(XHL+0)
 	cp	A,0xFD
 	jr	NZ,SetMineChests.skip
+	; still closed unless its event flag says it was opened before
 	ld	A,(XIZ+0x22)
 	extz	WA
 	mul	WA,7
@@ -137,6 +142,7 @@ SetMineChests.loop2:
 	ld	(XHL+0),A
 	pop	XDE
 SetMineChests.skip:
+	; x, y, attr words from the map (bytes for x / y)
 	ld	WA,(XDE)
 	ld	(XHL+1),A
 	inc	2,XDE
@@ -156,7 +162,8 @@ SetMineChests.skip:
 
 c_2117E2	section	code abs=0x2117E2
 
-; [code] A = floor: Crystal Mine -> SetMineChests, else 1 empty + 5 x PickWorldChest
+; Rolls the chests of floor A (0-based, kept in XIZ+0x22): the mine uses SetMineChests; elsewhere 5 of the
+; 6 map chest spots get a PickWorldChest code and one stays 0xFC (empty). Writes wChestTable [code]
 RollFloorChests:
 	push	XHL
 	push	XDE
@@ -193,6 +200,7 @@ RollFloorChests.skip:
 	pop	XWA
 	ld	C,6
 	push	XHL
+	; all 6 slots start as 0xFC (empty)
 RollFloorChests.loop:
 	ld	A,0xFC
 	ld	(XHL+0),A
@@ -201,6 +209,7 @@ RollFloorChests.loop:
 	pop	XHL
 	ld	C,6
 	ld	B,5
+	; mark 5 distinct random slots 0xFD (to fill)
 RollFloorChests.loop2:
 	push	XHL
 	call	Random
@@ -222,6 +231,7 @@ RollFloorChests.skip2:
 	pop	XHL
 	djnz	B,RollFloorChests.loop2
 	ld	C,6
+	; fill the marked slots, and copy every spot's position from the map
 RollFloorChests.loop3:
 	ld	A,(XHL+0)
 	cp	A,0xFD
@@ -269,7 +279,8 @@ RollAllChests.loop:
 
 c_2118B2	section	code abs=0x2118B2
 
-; [code] C/E = cell x/y -> W = content of the wChestTable entry of DUNGEON_FLOOR at that cell (6 entries of 5 bytes, stops at content 0xFF), 0xFF if none
+; C / E = cell -> W = the code of the current floor's chest there (0xFC empty, 0xFD opened, 0xFE (?)
+; special, else contents), 0xFF if none; stops at an 0xFF slot [code]
 GetChestAt:
 	push	XHL
 	push	XDE
@@ -311,7 +322,8 @@ GetChestAt.skip2:
 
 c_2118F4	section	code abs=0x2118F4
 
-; [code] for each wChestTable entry of DUNGEON_FLOOR (up to 6, stops at 0xFF): LoadRawTiles of MapSpriteChestFE1 + 0x42 * (DUNGEON_ID - 1) for content 0xFE, MapSpriteChestOpened for 0xFD, else MapSpriteChest, to tile 0x169 + 4 * (attr & 0xF)
+; Loads the sprite of each current-floor chest (stops at 0xFF): 0xFE a per-dungeon one (MapSpriteChestFE1),
+; 0xFD opened, else closed; to tile 0x169 + 4 * (attr & 0xF) [code]
 LoadFloorChestSprites:
 	push	XHL
 	push	XDE
@@ -437,6 +449,7 @@ c_2119C8	section	code abs=0x2119C8
 
 ; [code] A = chest code -> A = 1 when >= 0x4A (OpenChest then shows GetChestGoldText and AddGP of GetChestGold), else 0 (an item: GetChestContent, AddItem)
 IsGoldChestCode:
+	; codes 0x4A-0x59 are gold, below are items / parts
 	push	XHL
 	push	XDE
 	push	XBC
@@ -458,6 +471,7 @@ c_2119DE	section	code abs=0x2119DE
 
 ; [code] chest code -> WA = item id, or part CoreX (72) / Grav (73)
 GetChestContent:
+	; 0x48 / 0x49 are the parts CoreX / Grav
 	push	XHL
 	push	XDE
 	push	XBC
@@ -562,7 +576,9 @@ MarkChestOpened.skip:
 
 c_211A80	section	code abs=0x211A80
 
-; 6 distinct rand%12 for floors 1-6, boss map for floor 7 -> wFloorMaps
+; On dungeon entry: picks floors 1-6 from 6 distinct random maps of 12 and floor 7 = map 12 (the boss),
+; offset by (dungeon - 1) * 13; the mine has 5 fixed floors (maps 0x34-0x38). Then rolls every floor's
+; chests. Writes DUNGEON_FLOOR_COUNT, DUNGEON_FLOOR_MAPS, wChestTable [code]
 RollFloorMaps:
 	push	XHL
 	push	XDE
@@ -587,6 +603,7 @@ RollFloorMaps.loop:
 	sub	B,C
 	jr	Z,RollFloorMaps.skip
 	ld	XDE,XHL
+	; re-roll while it matches an earlier floor
 RollFloorMaps.loop2:
 	dec	1,XDE
 	ld	W,(XDE)
@@ -597,6 +614,7 @@ RollFloorMaps.skip:
 	ld	(XHL),A
 	inc	1,XHL
 	djnz	C,RollFloorMaps.loop
+	; floor 7: the boss map
 	ld	A,0xC
 	ld	(XIZ+0x1D),A
 	ld	XHL,XIZ
@@ -712,7 +730,9 @@ StartOpenChest:
 
 c_21267C	section	code abs=0x21267C
 
-; [code+play] Found / You found / It's empty; chest screens
+; DUNGEON_MODE 0xC, per frame, state XIZ+0x2A: 1-2 "Do you open? Yes No" (cursor +0x20), 3 input, 4 open
+; chest XIZ+0x21: item (AddItem; full bag leaves it closed), gold (AddGP) or empty (0xFC), 5-7 the result
+; box (OpenChestShowResult) [code+play]
 OpenChest:
 	push	XHL
 	push	XDE
@@ -744,7 +764,8 @@ OpenChest.skip2:
 	ld	(XIZ+0x2A),A
 	jrl	OpenChestEnd
 OpenChest.skip3:
-	bit	5,A
+	; B = No
+	bit	BIT_B_BUTTON,A
 	jr	Z,OpenChest.skip4
 	ld	A,1
 	ld	(XIZ+0x20),A
@@ -796,6 +817,7 @@ OpenChest.skip9:
 	call	ClearTextBox
 	ld	A,(XIZ+0x21)
 	call	GetChestCode
+	; 0xFC: an empty chest
 	cp	A,0xFC
 	jrl	Z,OpenChest.skip12
 	push	A
@@ -807,6 +829,7 @@ OpenChest.skip9:
 	call	GetChestContent
 	call	AddItem
 	pop	A
+	; carry = bag full: say so and leave the chest closed (not marked)
 	jr	NC,OpenChest.skip10
 	push	A
 	call	GetChestContent
@@ -836,6 +859,7 @@ OpenChest.skip10:
 	call	DrawBoxString
 	jr	OpenChest.skip13
 OpenChest.skip11:
+	; gold
 	push	A
 	ld	A,5
 	ld	XHL,EmptyText2
@@ -905,7 +929,7 @@ OpenChestShowResult.skip:
 	ld	(XIZ+0x2A),A
 	jr	OpenChestEnd
 OpenChestShowResult.skip2:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,OpenChestShowResult.skip3
 	ld	A,7
 	ld	(XIZ+0x2A),A

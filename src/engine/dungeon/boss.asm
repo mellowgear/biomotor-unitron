@@ -8,11 +8,13 @@ GetFloorBossBeaten:
 	push	XDE
 	push	XBC
 	push	W
+	; bosses stand on floor 7 and up, and on every mine floor
 	ld	A,(XIZ+DUNGEON_ID)
 	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,GetFloorBossBeaten.skip
 	ld	W,(XIZ+DUNGEON_FLOOR)
 	cp	W,7
+	; flag 0x60 + boss index: that boss beaten
 	jr	C,GetFloorBossBeaten.skip3
 GetFloorBossBeaten.skip:
 	call	GetBossIndex
@@ -267,9 +269,12 @@ ResetBossTalk:
 
 c_212CD5	section	code abs=0x212CD5
 
-; [code] box 6 talk runner for BossEncounter (only caller): message = pointer table 0x24B37A[boss index (GetBossIndex) * 4 + (+0x2A - 3)]; A/B during printing sets speed +0x10 = 0 (saved in +0x23/+0x24), waits on the TextCmd_Wait state (+0x12 & 0x7F == 2)
+; Runs one frame of the boss talk in box 6 (BossEncounter's only helper): starts the line BossTalkTexts
+; [GetBossIndex * 4 + state - 3], lets A/B skip printing (speed 0 for a frame, saved in +0x23/+0x24)
+; and past waits; +0x25 = 1 when the box is done. RAM: XIZ+0x23..0x26 [code]
 BossTalkStep:
 	push	XHL
+	; +0x23 = saved print speed, 0xFF = none: restore it after the 1-frame burst
 	push	XDE
 	push	XBC
 	push	XWA
@@ -291,9 +296,11 @@ BossTalkStep.skip:
 	ld	XHL,(XWA+8)
 	cp	XHL,0
 	jr	Z,BossTalkStep.skip4
+	; box idle (no string): start the next line or report done
 	ld	C,(XWA+0x12)
 	and	C,0x7F
 	cp	C,2
+	; text waiting for a key (state 2): the next A/B only clears the wait
 	jr	NZ,BossTalkStep.skip2
 	ld	A,1
 	ld	(XIZ+0x26),A
@@ -308,6 +315,7 @@ BossTalkStep.skip2:
 	ld	(XIZ+0x26),A
 	jr	BossTalkStepEnd
 BossTalkStep.skip3:
+	; A/B while printing: speed 0 for one frame to flush the line
 	ld	A,6
 	call	GetTextBox
 	ld	C,(XWA+0x10)
@@ -318,6 +326,7 @@ BossTalkStep.skip3:
 	ld	(XWA+0x10),C
 	jr	BossTalkStepEnd
 BossTalkStep.skip4:
+	; +0x25: 0 not started, 2 printing, 1 done
 	ld	A,(XIZ+0x25)
 	cp	A,0
 	jr	Z,BossTalkStep.skip5
@@ -325,6 +334,7 @@ BossTalkStep.skip4:
 	ld	(XIZ+0x25),A
 	jr	BossTalkStepEnd
 BossTalkStep.skip5:
+	; four lines per boss, picked by the BossEncounter state (3 meet, 4 yes, 5 no, 6 after the win)
 	ld	XHL,0
 	call	GetBossIndex
 	extz	WA
@@ -389,7 +399,9 @@ BossBattleIntro:
 
 c_212DBD	section	code abs=0x212DBD
 
-; [code+play] world/mine boss talk and battle: portrait, LoadEnemy, win flag (Ent, Catble, Squidl, Simrug, Behemoth screens)
+; DUNGEON_MODE 0xD, per frame, state XIZ+0x2A: 1-2 box (the mine's last boss shows its portrait), 3 talk,
+; then fight, or on the last floor ask Try / Join? (7, cursor +0x20) and talk 4 (yes) / 5 (no: leave);
+; 8 wipe and battle, 9 result, 0xA white fade back, 6 the win talk, 0xB done, 0xC the final boss shake [code+play]
 BossEncounter:
 	ld	A,(XIZ+0x2A)
 	cp	A,1
@@ -426,6 +438,7 @@ BossEncounter.skip2:
 	cp	A,1
 	jrl	NZ,BossEncounter.skip37
 	ld	W,(XIZ+DUNGEON_FLOOR_COUNT)
+	; not on the last floor: straight to the battle
 	ld	A,(XIZ+DUNGEON_FLOOR)
 	cp	A,W
 	jr	NC,BossEncounter.skip3
@@ -437,6 +450,7 @@ BossEncounter.skip3:
 	calr	PlaceBossYesNoBox
 	call	GetBossIndex
 	cp	A,8
+	; the cursor starts on the left choice (0), on the right (1) for the mine's last boss
 	jr	Z,BossEncounter.skip4
 	ld	A,0
 	jr	BossEncounter.skip5
@@ -470,6 +484,7 @@ BossEncounter.skip7:
 	ld	(XIZ+0x2A),A
 	jr	BossEncounter.skip11
 BossEncounter.skip8:
+	; pad: left picks the left choice (0), right the right one (1)
 	and	A,0xF
 	jr	Z,BossEncounter.skip12
 	cp	A,4
@@ -512,6 +527,7 @@ BossEncounter.skip13:
 	jrl	NZ,BossEncounter.skip37
 	calr	EraseDungeonBox6
 	ld	A,(XIZ+DUNGEON_ID)
+	; Join? Yes in the mine: no battle, back out (TASK_ARG 5) (?)
 	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,BossEncounter.skip14
 	calr	BossBattleIntro
@@ -541,6 +557,7 @@ BossEncounter.skip16:
 	calr	BossBattleIntro
 	jrl	BossEncounter.skip37
 BossEncounter.skip17:
+	; state 8: after the wipe load the boss at area level DUNGEON_FLOOR (8 in the mine) and fight
 	cp	A,8
 	jr	NZ,BossEncounter.skip20
 	call	BattleWipeStep
@@ -569,6 +586,7 @@ BossEncounter.skip19:
 	ld	(XIZ+0x2A),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip20:
+	; state 9: lost -> leave the dungeon (TASK_ARG 5); won -> fade white
 	cp	A,9
 	jr	NZ,BossEncounter.skip23
 	ld	A,(wBattleResult)
@@ -600,6 +618,7 @@ BossEncounter.skip22:
 	ld	(XIZ+0x2A),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip23:
+	; state 0xA: once white, redraw the floor (or the final portrait) and fade back in
 	cp	A,0xA
 	jr	NZ,BossEncounter.skip28
 	ld	A,(wFadeLevel)
@@ -613,6 +632,7 @@ BossEncounter.skip23:
 	cp	A,4
 	jr	C,BossEncounter.skip25
 	extz	WA
+	; mine bosses (4-7) are marked beaten here, with no win talk
 	ld	HL,EVENT_BEAT_ENT
 	add	HL,WA
 	call	SetEventFlag
@@ -650,6 +670,7 @@ BossEncounter.skip28:
 	cp	A,1
 	jrl	NZ,BossEncounter.skip37
 BossEncounter.skip29:
+	; the four dungeon bosses: flag 0x60 + index beaten and 0x10 + dungeon - 1 (dungeon cleared?)
 	call	GetBossIndex
 	cp	A,8
 	jr	Z,BossEncounter.skip32
@@ -676,6 +697,7 @@ BossEncounter.skip31:
 	ld	(XIZ+0x2A),A
 	jr	BossEncounter.skip37
 BossEncounter.skip32:
+	; the final boss (index 8): shake the screen 0x80 frames while fading to white, then leave
 	ld	XHL,ShakeScr2Amp4Task
 	call	StartChildTask
 	ldw	(XHL+TASK_ARG),0x80
@@ -714,6 +736,7 @@ BossEncounter.skip36:
 	ld	A,1
 	ld	(XIZ+0x2A),A
 BossEncounter.skip37:
+	; the Yes / No cursor while asking
 	ld	A,(XIZ+0x2A)
 	cp	A,7
 	jr	NZ,BossEncounter.done

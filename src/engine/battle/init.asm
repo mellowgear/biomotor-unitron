@@ -2,7 +2,8 @@
 
 c_2077D1	section	code abs=0x2077D1
 
-; A = enemy id: copies its record into battle RAM 0x5DA3-0x5DB9
+; [code] A = enemy id, XHL = 6 part ids or 0: sets wEnemyId / wEnemyParts and loads the record's level and stats;
+; a negative level means scaled by GetEnemyScaling (wEnemyScaled = 0xFF); robots below Fenril add their parts' stats
 LoadEnemy:
 	ld	(wEnemyId),A
 	ld	XWA,0
@@ -35,6 +36,7 @@ LoadEnemy.skip:
 	ld	WA,(XHL+ENEMY_IMAGE)
 	ld	(wEnemyImage),WA
 	ldb	(wEnemyScaled),0
+	; level < 0: a scaled enemy; ids below Alex get HP / EP +-5 here and again after scaling
 	ld	A,(wEnemyLevel)
 	or	A,A
 	jrl	PL,LoadEnemy.skip3
@@ -51,7 +53,7 @@ LoadEnemy.skip:
 	add	(wEnemyMaxEP),WA
 LoadEnemy.skip2:
 	call	GetEnemyScaling
-	ld	WA,(XHL+0)
+	ld	WA,(XHL+0)	; scaling record: +0..+0xA stat %, +0xC base level, +0xD random level range
 	mul	XWA,(wEnemyMaxHP)
 	div	XWA,0x64
 	ld	(wEnemyMaxHP),WA
@@ -90,6 +92,7 @@ LoadEnemy.skip2:
 	call	RandomRange
 	dec	6,WA
 	add	(wEnemyMaxEP),WA
+; arena robots (Alex..Dupon, and Ent..Uniti if they have parts): body sets the affinity, every part adds HP / EP / SP / RP / MP
 LoadEnemy.skip3:
 	cpb	(wEnemyId),ENEMY_FENRIL
 	jrl	NC,LoadEnemy.done
@@ -124,6 +127,7 @@ LoadEnemy.skip3:
 	add	(wEnemyRP),WA
 	ld	WA,(XHL+PART_MP)
 	add	(wEnemyMP),WA
+	; arms add no AP: their power is per attack
 	ld	L,(wEnemyParts+2)
 	call	GetArmRecord
 	ld	WA,(XHL+PART_HP)
@@ -269,7 +273,8 @@ AccBattlePanl50:
 
 c_207C00	section	code abs=0x207C00
 
-; [code] wBattleResult = 0xFF, StartTask(BattleStart); callers StartDungeonBattle, BossEncounter, ArenaStartBattle (their callers wait for wBattleResult != 0xFF)
+; [code] wBattleResult = BATTLE_RESULT_NONE, StartTask(BattleStart); callers StartDungeonBattle, BossEncounter,
+; ArenaStartBattle wait for wBattleResult to change
 StartBattleTask:
 	ldb	(wBattleResult),BATTLE_RESULT_NONE
 	ld	XHL,BattleStart
@@ -278,7 +283,8 @@ StartBattleTask:
 
 c_207E9A	section	code abs=0x207E9A
 
-; wEnemyImage -> GetMonsterImage, LoadMonsterImage; images 0x5E+ are portraits (EnemyImagePortraits)
+; [code] BC / DE = position: draws the enemy: a monster image (+palette), a robot from wEnemyParts (wEnemyImage 0xFFFF,
+; affinity palette), or a portrait for images 0x5E+ (EnemyImagePortraits)
 LoadEnemyImage:
 	ld	HL,(wEnemyImage)
 	cp	HL,0xFFFF
@@ -295,7 +301,7 @@ LoadEnemyImage:
 	pop	WA
 	pop	BC
 	ld	DE,(XSP)
-	cp	QB,6
+	cp	QB,6	; narrow images (width <= 6) are centred 2 tiles in
 	jr	GT,LoadEnemyImage.skip
 	inc	2,BC
 	inc	2,DE
@@ -320,7 +326,7 @@ LoadEnemyImage.skip2:
 	pop	BC
 	ld	DE,(XSP)
 	inc	1,DE
-	or	WA,0x8000
+	or	WA,0x8000	; flip the robot to face left (?)
 	ld	QB,0xC
 	ld	QD,0xB
 	call	DrawTileBlockScr
@@ -344,7 +350,8 @@ EnemyImagePortraits:
 
 c_207F7C	section	code abs=0x207F7C
 
-; [code] adds LevelGapCrit/Flee/Status[clamp(level gap + 11, 0, 22)] to both sides' chances
+; [code] adds LevelGapCrit / Flee / Status[clamp(gap + 11, 0, 22)] to both sides' chances (gap = own level - other's);
+; against bosses (Ent..Uniti, Fenril..Satana) the unit's flee and status chances are then 0
 AddLevelGapChances:
 	ld	XHL,LevelGapCrit
 	ld	XDE,LevelGapFlee
@@ -367,7 +374,7 @@ AddLevelGapChances:
 	add	(wEnemyFleeChance),W
 	ld	W,(XBC+A)
 	add	(wEnemyStatusChance),W
-	cpb	(wEnemyId),ENEMY_ENT
+	cpb	(wEnemyId),ENEMY_ENT	; dungeon monsters and arena robots keep them
 	ret	C
 	cpb	(wEnemyId),ENEMY_ALEX
 	jr	C,AddLevelGapChances.skip
@@ -394,7 +401,8 @@ LevelGapIndex.skip:
 
 c_208007	section	code abs=0x208007
 
-; cheapest enemy attack -> wEnemyMinAttackEP
+; [code] at each round's draw: wEnemyMinAttackEP = cheapest non-zero cost of the enemy's first 4 slots (an arm's EP
+; cost for actions 11 / 12); wCommandEPCosts[4] = the unit's arm / skill costs (ScaleEPCost), wMinEPCost their minimum; all 0 under FullCharge
 CalcEnemyMinAttackEP:
 	ld	WA,0xFFFF
 	ld	(wCommandEPCosts),WA
@@ -407,14 +415,14 @@ CalcEnemyMinAttackEP:
 	call	GetEnemyAttackSlots
 	ld	C,4
 CalcEnemyMinAttackEP.loop:
-	ld	A,(XHL+3)
+	ld	A,(XHL+SLOT_ACTION)	; actions 11 / 12 use the enemy's arm parts' costs
 	cp	A,0xB
 	ld	W,(wEnemyParts+2)
 	jr	Z,CalcEnemyMinAttackEP.skip
 	cp	A,0xC
 	ld	W,(wEnemyParts+3)
 	jr	Z,CalcEnemyMinAttackEP.skip
-	ld	WA,(XHL+4)
+	ld	WA,(XHL+SLOT_EP)
 	jr	CalcEnemyMinAttackEP.skip2
 CalcEnemyMinAttackEP.skip:
 	push	XHL
@@ -423,7 +431,7 @@ CalcEnemyMinAttackEP.skip:
 	ld	WA,(XHL+PART_EP_COST)
 	pop	XHL
 CalcEnemyMinAttackEP.skip2:
-	cp	WA,0xFFFF
+	cp	WA,0xFFFF	; 0xFFFF ends the slot list
 	jr	Z,CalcEnemyMinAttackEP.skip4
 	or	WA,WA
 	jr	Z,CalcEnemyMinAttackEP.skip3
@@ -456,7 +464,7 @@ CalcEnemyMinAttackEP.skip6:
 	or	L,L
 	jr	Z,CalcEnemyMinAttackEP.skip7
 	call	GetSkillRecord
-	ld	WA,(XHL+0xC)
+	ld	WA,(XHL+0xC)	; skill record +0xC = EP cost
 	call	ScaleEPCost
 	ld	(wCommandEPCosts+4),WA
 	cp	(wMinEPCost),WA
@@ -474,6 +482,7 @@ CalcEnemyMinAttackEP.skip7:
 	jr	C,CalcEnemyMinAttackEP.skip8
 	ld	(wMinEPCost),WA
 CalcEnemyMinAttackEP.skip8:
+	; FullCharge skill: every command is free
 	cpb	(wFullChargeActive),0
 	jr	Z,CalcEnemyMinAttackEP.done
 	ld	WA,0
@@ -495,7 +504,9 @@ SetEnemyDrawParts:
 
 c_20933B	section	code abs=0x20933B
 
-; [code+play] battle screen setup: enemy image, battle RAM reset, AddLevelGapChances, PlayMusic (every encounter screen)
+; [code+play] battle task start: fade out, the battle layout (boxes, HP / EP bars, unit and enemy images), resets both
+; sides' battle RAM (full EP, chances, statuses, buffs; rust stays), accessories and level-gap chances,
+; starts BattleHPEPDisplayTask (+0x2C), the music by enemy, fade in, BattleEncounterMessage
 BattleStart:
 	ld	XHL,FadeOutToBlackTask
 	call	StartChildTask
@@ -605,11 +616,12 @@ BattleStart:
 	ld	BC,0
 	ld	DE,0x20
 	call	LoadEnemyImage
+	; battle starts with full EP; HP carries over
 	ldw	(wUnitEP),(wUnitMaxEP)
 	ld	A,0
 	ld	(wCritChance),A
 	ld	(wFleeChance),A
-	ldb	(wEPCostPercent),0x64
+	ldb	(wEPCostPercent),0x64	; EP costs at 100 %, recharge 30 % of max EP until accessories change them
 	ldb	(wRechargePercent),0x1E
 	ld	(wStatusChance),A
 	ld	(wStatusParalyzed),A
@@ -653,7 +665,7 @@ BattleStart:
 	call	AddLevelGapChances
 	ld	XHL,BattleHPEPDisplayTask
 	call	StartTask
-	ld	(XIZ+0x2C),HL
+	ld	(XIZ+0x2C),HL	; kept for BattleEnd to end it
 ; [code] the battle song by wEnemyId: < 0x59 song 0xA, 0x59-0x60 0xC, 0x61 0xD, 0x62-0x75 0xB, >= 0x76 0xC; SoundCommand 0x20 + song
 ; [play] seen in play: song 0xA (SoundCommand 0x2A) in a random battle (Spidey), song 0xC (0x2C) in the Ent and Kraken boss battles
 	ld	E,(wEnemyId)
@@ -686,10 +698,11 @@ BattleStart.skip2:
 	ldw	(XIZ+TASK_FUNC_HI),BattleEncounterMessage >> 16
 	ret
 ; [code] "??" + FF (charmap 64 = "?"), drawn by DrawString at 0x2093BA and 0x2093CB
+; [code] "??": BattleStart's placeholder for both sides' level numbers (?)
 QuestionMarksText:
 	text "??"
 	done
-; [code] BattleStart's task resumes here (TASK_FUNC 0x2095E6 above): EnemySlideInTask (wScr2ScrollX 0x60 -> 0), YouEncounteredEnemyText, EnemySlideOutTask (0 -> 0x60), then task 0x209647; [play] executed in all runs (D10)
+; [code] enemy slides in, "You encountered <ENEMY>", slides back out, then DrawBattleScreen
 BattleEncounterMessage:
 	ld	XHL,EnemySlideInTask
 	call	StartChildTask
@@ -712,7 +725,8 @@ c_2095F3	section	code abs=0x2095F3
 
 c_209647	section	code abs=0x209647
 
-; [code] battle tiles, palettes, status icon maps
+; [code] start of every round: stat buffs, EP costs (CalcEnemyMinAttackEP), the unit slides in, level box and
+; status icons for paralysis / rust / EP leak / confusion; cursor and choice 0, then EnemyChooseAttack
 DrawBattleScreen:
 	calr	ComputeStatBuffs
 	ldw	(wAttackEPCost),0

@@ -2,7 +2,8 @@
 
 c_20CAE0	section	code abs=0x20CAE0
 
-; [code] You win, EXP, GP, drop, level up
+; [code] enemy beaten: victory effects and music, "You win", EXP (ExpForKill), then in dungeons GP and the
+; ENEMY_DROP_PCT % drop (AddItem); "Wait" after any reward, level-ups until TryLevelUp fails, BattleEnd(BATTLE_RESULT_WON)
 BattleVictory:
 	ld	XHL,ShakeScr2Amp8Task
 	call	StartTask
@@ -36,7 +37,7 @@ BattleVictory:
 	or	WA,WA
 	jr	Z,BattleVictory.skip
 	ld	(XIZ+0x10),WA
-	sub	(wExpToNext),WA
+	sub	(wExpToNext),WA	; EXP counts down to the next level
 	ld	XHL,YouGainEXPText
 	call	ShowMessage
 	ld	XHL,WaitBattleMessageTask
@@ -44,6 +45,7 @@ BattleVictory:
 	task_wait
 	incw	1,(XIZ+TASK_ARG)
 BattleVictory.skip:
+	; arena / link wins give EXP only
 	cpb	(wDungeonBattle),0
 	jrl	Z,BattleVictory.skip6
 	ld	L,(wEnemyId)
@@ -74,12 +76,12 @@ BattleVictory.skip2:
 	cp	WA,BC
 	jr	NC,BattleVictory.skip6
 BattleVictory.skip3:
-	ld	WA,(XHL+0x16)
+	ld	WA,(XHL+ENEMY_DROP)
 	push	WA
 	call	AddItem
 	pop	HL
 	jr	C,BattleVictory.skip6
-	or	H,H
+	or	H,H	; ids >= 0x100 are parts, else items
 	jr	Z,BattleVictory.skip4
 	call	GetPartName
 	jr	BattleVictory.skip5
@@ -120,7 +122,8 @@ BattleVictory.skip7:
 
 c_20CC9C	section	code abs=0x20CC9C
 
-; [code] You lost / You are unable to move
+; [code] unit down: defeat effects and music, "You lost" (arena / link) or "You are unable to move" (dungeon),
+; HP / EP back to max, BattleEnd(BATTLE_RESULT_LOST)
 BattleDefeat:
 	ld	XHL,ShakeScr1Amp8Task
 	call	StartTask
@@ -159,7 +162,8 @@ BattleDefeat.skip:
 
 c_20CD32	section	code abs=0x20CD32
 
-; [code] player escapes: reached from TryFlee (TASK_FUNC 0xCD32) on a successful flee or always when 0x5DDA = 0; shows YouGaveUpText (0x5DDA = 0) or 0x22599D "You were able to retreat..." (decoded), then BattleEnd with TASK_ARG 2
+; [code] the unit escaped (TryFlee): slide out, "You gave up" outside dungeons or "You were able to retreat",
+; BattleEnd(BATTLE_RESULT_RETREAT)
 BattleRetreat:
 	ld	XHL,UnitSlideOutRightTask
 	call	StartChildTask
@@ -181,7 +185,8 @@ BattleRetreat.skip:
 
 c_20CD89	section	code abs=0x20CD89
 
-; [code] clears paralysis, EP leak, confusion (not rust), screen, InitTextBoxes, scrolls; EndTask
+; [code] TASK_ARG = result: clears paralysis, EP leak and confusion (rust stays), ends BattleHPEPDisplayTask (+0x2C, BattleStart), clears
+; the screen, boxes and scrolls, stops the music; wBattleResult = result, EndTask
 BattleEnd:
 	ld	A,0
 	ld	(wStatusParalyzed),A
@@ -189,7 +194,7 @@ BattleEnd:
 	ld	(wStatusConfused),A
 	ld	HL,(XIZ+0x2C)
 	extz	XHL
-	set	7,(XHL+7)
+	set	TASK_END_BIT,(XHL+TASK_FLAGS)
 	call	ClearTilemaps
 	call	ClearSprites
 	call	InitTextBoxes
@@ -214,7 +219,7 @@ BattleEnd:
 
 c_20CDEB	section	code abs=0x20CDEB
 
-; [code] HP fully restored / gained HP
+; [code] HL = HP gain -> XHL = YourHPAreFullyText when it reaches wUnitMaxHP, else YouGainedHPText
 ShowHPGain:
 	add	HL,(wUnitHP)
 	cp	HL,(wUnitMaxHP)
@@ -247,7 +252,7 @@ ShowEnemyHPGain:
 
 c_20CE2A	section	code abs=0x20CE2A
 
-; [code] EP fully restored / gained EP
+; [code] HL = EP gain -> XHL = SEPAreFullyText when it reaches wEnemyMaxEP, else GainedEPText
 ShowEnemyEPGain:
 	add	HL,(wEnemyEP)
 	cp	HL,(wEnemyMaxEP)

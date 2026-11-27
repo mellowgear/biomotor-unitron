@@ -2,7 +2,9 @@
 
 c_2115AC	section	code abs=0x2115AC
 
-; [code] GetFloorBossBeaten (FF = no boss on this floor) / boss index GetBossIndex: beaten -> 0x228641[i] record at 0x228539 + palette 0x2275D9 + 8*(rec+8); alive -> 0x227813 + 0x42*(3i + frame) ((+0x2D>>3)&3) + palette 0x2275D9 + 8i; index 8 (mine floor 5) -> 9 records from 0x227E43; LoadRawTiles to tile 0x182 / 0x19B, LoadPalettes A=0x19
+; Loads this floor's boss map sprite (none when GetFloorBossBeaten = 0xFF): beaten, the BossBeatenSprites
+; remains to tile 0x182; alive, frame (XIZ+0x2D >> 3) & 3 (3 -> 1) of its 3-frame set, or for boss 8
+; (mine floor 5) 9 Uniti parts to tile 0x19B; palette 0x19 from BossMapSpritePalettes [code]
 LoadBossMapSprite:
 	push	XHL
 	push	XDE
@@ -13,8 +15,10 @@ LoadBossMapSprite:
 	jrl	Z,LoadBossMapSprite.skip6
 	cp	A,0
 	jr	Z,LoadBossMapSprite.skip
+	; beaten
 	call	GetBossIndex
 	cp	A,8
+	; boss 8 has no remains sprite
 	jrl	Z,LoadBossMapSprite.skip6
 	extz	WA
 	extz	XWA
@@ -27,6 +31,7 @@ LoadBossMapSprite:
 	ld	XDE,MapSpriteBeaten0
 	add	XDE,XWA
 	ld	A,(XHL)
+	; palette index = remains id + 8
 	add	A,8
 	extz	WA
 	extz	XWA
@@ -36,9 +41,11 @@ LoadBossMapSprite:
 	ld	WA,0x182
 	jrl	LoadBossMapSprite.skip5
 LoadBossMapSprite.skip:
+	; alive
 	call	GetBossIndex
 	cp	A,8
 	jr	NZ,LoadBossMapSprite.skip3
+	; ping-pong walk frame 0, 1, 2, 1
 	ld	XWA,0
 	ld	A,(XIZ+0x2D)
 	sra	3,A
@@ -68,6 +75,7 @@ LoadBossMapSprite.loop:
 	djnz	C,LoadBossMapSprite.loop
 	jr	LoadBossMapSprite.skip6
 LoadBossMapSprite.skip3:
+	; 3 frames of 0x42 bytes per boss
 	extz	WA
 	extz	XWA
 	push	XWA
@@ -100,6 +108,7 @@ LoadBossMapSprite.skip5:
 	ld	A,0x19
 	ld	C,1
 	call	LoadPalettes
+	; the mono palette is pointed at but never loaded
 	ld	XHL,UnusedBossMapSpriteMonoPal
 	ld	A,2
 	ld	C,1
@@ -115,6 +124,7 @@ c_211B13	section	code abs=0x211B13
 ; [code] XHL = DungeonMaps + DUNGEON_MAP_SIZE * (DUNGEON_FLOOR_MAPS byte of DUNGEON_FLOOR - 1); LoadDungeonFloor
 GetFloorDungeonMap:
 	push	XWA
+	; the floor's map id: XIZ+0x17 is the per-floor map list, DUNGEON_FLOOR 1-based
 	xor	XWA,XWA
 	ld	A,(XIZ+0x11)
 	dec	1,A
@@ -131,7 +141,9 @@ GetFloorDungeonMap:
 
 c_211B35	section	code abs=0x211B35
 
-; [code] DungeonPalettes/MonoPalettes, DungeonData metatiles/tiles/attrs, wMapPtr from DungeonMaps, chests
+; Loads the floor's look and map: the dungeon's colour and mono palettes (XIZ+0x10 = dungeon), the
+; metatile tables and tile sheet from DungeonData (tiles at 0x37), wMapPtr, chest and boss sprites, then
+; draws the map at the current scroll [code]
 LoadDungeonFloor:
 	push	XHL
 	push	XDE
@@ -159,6 +171,7 @@ LoadDungeonFloor:
 	ld	C,1
 	ld	A,2
 	call	LoadMonoPalettes
+	; DungeonData: tiles ptr, tile sheet, attr ptr
 	ld	XHL,DungeonData
 	ld	XWA,(XHL)
 	ld	(wMetatileTilesPtr),XWA
@@ -200,7 +213,8 @@ GetDungeonTilesPtr:
 
 c_211C7F	section	code abs=0x211C7F
 
-; [play] every dungeon screen; palettes by race
+; Loads the player's walking frame for this frame: race pair (race - 1) / 2, facing XIZ+0x15 (0 and 1
+; swapped in the sheet), frame (XIZ+0x2D >> 3) & 3 ping-pong, to tile 0xC, plus the race palette [code+play]
 LoadDungeonPalettes:
 	push	XHL
 	push	XDE
@@ -262,7 +276,8 @@ LoadDungeonPalettes.skip3:
 
 c_211D03	section	code abs=0x211D03
 
-; [code] sprite maps 0x26FE0B + race*0x78 + frame*0x1E, tiles from 0x270063, PlayerDungeonSpritePalettes per race
+; As LoadDungeonPalettes but for the dead / dying modes (0xF and up): facing (XIZ+0x2D >> 4) & 3 with 1
+; and 2 swapped (the spin), always pose 1 [code]
 LoadPlayerDungeonSprite:
 	push	XHL
 	push	XDE
@@ -290,6 +305,7 @@ LoadPlayerDungeonSprite.skip:
 LoadPlayerDungeonSprite.skip2:
 	mul	WA,0x1E
 	add	XHL,XWA
+	; pose fixed at 1; the cp is left over
 	ld	XWA,1
 	cp	A,3
 	mul	WA,0xA

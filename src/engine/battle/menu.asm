@@ -2,9 +2,10 @@
 
 c_209872	section	code abs=0x209872
 
-; [code+play] cursor 0x5DE0 0-3 on U/D, A jumps through BattleMainMenuJumps
+; [code+play] "What do you do?" box: Up / Down move wBattleMenuCursor 0-3 (Attack, Item, Charge, Flee), A runs
+; BattleMainMenuJumps[cursor]; each key also calls Random to stir the seed
 BattleMainMenuInput:
-	bit	4,(wFrameCounter)
+	bit	4,(wFrameCounter)	; cursor blinks: drawn every other 16 frames
 	jr	Z,BattleMainMenuInput.skip
 	ld	E,(wBattleMenuCursor)
 	ld	D,0
@@ -19,9 +20,9 @@ BattleMainMenuInput.skip:
 	ld	A,(wJoyPressed)
 	bit	BIT_D_UP,A
 	jr	NZ,BattleMainMenuInput.skip2
-	bit	1,A
+	bit	BIT_D_DOWN,A
 	jr	NZ,BattleMainMenuInput.skip3
-	bit	4,A
+	bit	BIT_A_BUTTON,A
 	jr	NZ,BattleMainMenuInput.skip4
 	ret
 BattleMainMenuInput.skip2:
@@ -64,7 +65,7 @@ BattleMainMenuJumps:
 
 c_20990F	section	code abs=0x20990F
 
-; [code] "EP at max"
+; [code] Charge chosen: with EP already full, "EP at max" and back to the menu (EnemyChooseAttack), else StartBattleRound
 ShowEPAtMax:
 	ld	WA,(wUnitEP)
 	cp	WA,(wUnitMaxEP)
@@ -84,12 +85,12 @@ ShowEPAtMax.skip:
 
 c_20994F	section	code abs=0x20994F
 
-; [code] "LV" + FF (charmap 2C 36): DrawBattleScreen draws it with DrawString before wPlayerLevel
+; [code] "LV": DrawBattleScreen draws it with DrawString before wPlayerLevel
 LevelText:
 	text "LV"
 	done
-; [code+play] battle_command_menu; ShowWeaponInfo. [play] entered at 0x209952 in all runs (D10);
-; BattleMainMenuJumps entry 0 and ShowNotEnoughEP (TASK_FUNC 0x9952) lead here (was "the task resume after StartBattleRound")
+; [code+play] Attack chosen: box 2 lists the right arm, left arm, skill 1 and skill 2, ShowWeaponInfo for wBattleChoice,
+; then BattleCommandMenuTask; ShowNotEnoughEP returns here
 BattleCommandMenu:
 	ld	A,2
 	ld	C,8
@@ -124,7 +125,8 @@ BattleCommandMenu:
 
 c_2099C1	section	code abs=0x2099C1
 
-; [code+play] task set by BattleCommandMenu (split pointer 0x99C1/0x20): cursor for wBattleChoice drawn when wFrameCounter bit 4 is set (DrawSpriteGrid), wJoyPressed Up/Down/A/B; [play] trace: runs every frame of the menu
+; [code+play] runs every frame of the attack list: Up / Down move wBattleChoice 0-3 (skipping empty skill slots),
+; A takes it when wCommandEPCosts[choice] <= wUnitEP (wAttackEPCost, StartBattleRound), else buzzer and ShowNotEnoughEP; B backs out
 BattleCommandMenuTask:
 	bit	4,(wFrameCounter)
 	jr	Z,BattleCommandMenuTask.skip
@@ -140,11 +142,11 @@ BattleCommandMenuTask.skip:
 	ld	A,(wJoyPressed)
 	bit	BIT_D_UP,A
 	jr	NZ,BattleCommandMenuTask.skip2
-	bit	1,A
+	bit	BIT_D_DOWN,A
 	jr	NZ,BattleCommandMenuTask.skip4
-	bit	4,A
+	bit	BIT_A_BUTTON,A
 	jr	NZ,BattleCommandMenuTask.skip6
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jrl	NZ,BattleCommandMenuBack
 	ret
 BattleCommandMenuTask.skip2:
@@ -154,6 +156,7 @@ BattleCommandMenuTask.skip2:
 	ld	WA,(wBattleChoice)
 	dec	1,WA
 	and	WA,3
+; choices 2 / 3 are skills: an empty slot (0) moves the cursor on
 BattleCommandMenuTask.loop:
 	ld	(wBattleChoice),WA
 	cp	WA,2
@@ -190,7 +193,7 @@ BattleCommandMenuTask.skip5:
 	ld	WA,3
 	jr	BattleCommandMenuTask.loop2
 BattleCommandMenuTask.skip6:
-	ld	XHL,wCommandEPCosts
+	ld	XHL,wCommandEPCosts	; EP cost per choice, worked out at battle start (?)
 	ld	WA,(wBattleChoice)
 	sll	1,WA
 	ld	WA,(XHL+WA)
@@ -215,7 +218,7 @@ BattleCommandMenuTask.skip7:
 
 c_209AB5	section	code abs=0x209AB5
 
-; [code]
+; [code] "Not enough EP" for the chosen attack, then back to BattleCommandMenu
 ShowNotEnoughEP:
 	ld	XHL,NotEnoughEPText
 	call	ShowMessage
@@ -228,7 +231,7 @@ ShowNotEnoughEP:
 
 c_209AE0	section	code abs=0x209AE0
 
-; [code] B in BattleCommandMenuTask: sound 0x82, erases box 2, clears box 0, back to EnemyChooseAttack (0x20974E, the "What do you do?" menu)
+; [code] B in the attack list: cancel sound, erase box 2, clear box 0, back to the "What do you do?" menu (EnemyChooseAttack)
 BattleCommandMenuBack:
 	ld	WA,SFX_CANCEL
 	call	SoundCommand
@@ -243,7 +246,7 @@ BattleCommandMenuBack:
 
 c_209B02	section	code abs=0x209B02
 
-; [code] arm / skill record and description in battle
+; [code] box 0: the chosen arm's or skill's description, EP cost (wCommandEPCosts) and its affinity icon when it has one
 ShowWeaponInfo:
 	ld	A,0
 	call	ClearTextBox
@@ -296,7 +299,8 @@ ShowWeaponInfo.skip3:
 
 c_209B8B	section	code abs=0x209B8B
 
-; [code] BattleMainMenuJumps entry 1: opens text box 2, DrawBattleItemPage, wBattleChoice = 0, the description, then task BattleItemListInput (0x9BC4)
+; [code] Item chosen: box 2 with the first page (DrawBattleItemPage), wBattleChoice = 0 and its description,
+; then BattleItemListInput
 OpenBattleItemList:
 	ld	A,2
 	ld	C,0xA
@@ -318,7 +322,8 @@ OpenBattleItemList:
 
 c_209BC4	section	code abs=0x209BC4
 
-; [code] task func set by OpenBattleItemList (opens box 2, wBattleChoice = 0): U/D row 0-5 and L/R page 0-2 of wBattleChoice (6 per page, GetItemListPageRow/SetBattleItemChoice draw GetItemDesc of item choice+0x26), A: choice < 0xE and GetInventoryByte(item) -> wBattleChoice += 0x26 (battle items 38-51) and StartBattleRound, else sound 0x83; B -> 0x20974E
+; [code] battle item list, every frame: Up / Down row 0-5, Left / Right page 0-2 (6 per page), A uses an item
+; held (wBattleChoice += ITEM_FIXIT1, StartBattleRound), else buzzer; B back to EnemyChooseAttack
 BattleItemListInput:
 	calr	GetItemListPageRow
 	bit	4,(wFrameCounter)
@@ -334,15 +339,15 @@ BattleItemListInput.skip:
 	ld	A,(wJoyPressed)
 	bit	BIT_D_UP,A
 	jr	NZ,BattleItemListInput.skip2
-	bit	1,A
+	bit	BIT_D_DOWN,A
 	jr	NZ,BattleItemListInput.skip3
-	bit	2,A
+	bit	BIT_D_LEFT,A
 	jr	NZ,BattleItemListInput.skip4
-	bit	3,A
+	bit	BIT_D_RIGHT,A
 	jr	NZ,BattleItemListInput.skip6
-	bit	4,A
+	bit	BIT_A_BUTTON,A
 	jr	NZ,BattleItemListInput.skip8
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jrl	NZ,BattleItemListInput.skip11
 	ret
 BattleItemListInput.skip2:
@@ -387,11 +392,12 @@ BattleItemListInput.skip6:
 BattleItemListInput.skip7:
 	calr	SetBattleItemChoice
 	jrl	DrawBattleItemPage
+; only the 14 battle items ITEM_FIXIT1..ITEM_MAGFLR can be used; the third page's last 4 rows are empty
 BattleItemListInput.skip8:
 	ld	WA,(wBattleChoice)
-	cp	WA,0xE
+	cp	WA,ITEM_MAGFLR+1-ITEM_FIXIT1
 	jr	NC,BattleItemListInput.skip9
-	add	WA,0x26
+	add	WA,ITEM_FIXIT1
 	call	GetInventoryByte
 	or	A,A
 	jr	NZ,BattleItemListInput.skip10
@@ -406,7 +412,7 @@ BattleItemListInput.skip10:
 	call	EraseTextBox
 	ld	A,0
 	call	ClearTextBox
-	addw	(wBattleChoice),0x26
+	addw	(wBattleChoice),ITEM_FIXIT1
 	ldw	(XIZ+TASK_FUNC),StartBattleRound & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),StartBattleRound >> 16
 	ret
@@ -433,7 +439,8 @@ GetItemListPageRow:
 
 c_209CDC	section	code abs=0x209CDC
 
-; [code] wBattleChoice = WA * 6 + DE; clears box 0 and, for a choice < 0xE whose item (choice + 0x26) GetInventoryByte doesn't flag as none held, draws its GetItemDesc (Str1Text)
+; [code] WA = page, DE = row -> wBattleChoice = WA * 6 + DE; box 0 shows the item's GetItemDesc when it is a
+; battle item that is held
 SetBattleItemChoice:
 	extz	XWA
 	mul	XWA,6
@@ -442,9 +449,9 @@ SetBattleItemChoice:
 	ld	A,0
 	call	ClearTextBox
 	ld	WA,(wBattleChoice)
-	cp	WA,0xE
+	cp	WA,ITEM_MAGFLR+1-ITEM_FIXIT1
 	ret	NC
-	add	WA,0x26
+	add	WA,ITEM_FIXIT1
 	push	WA
 	call	GetInventoryByte
 	pop	HL
@@ -464,7 +471,7 @@ SetBattleItemChoice:
 
 c_209D2F	section	code abs=0x209D2F
 
-; [code] box 2: the page number (wBattleChoice / 6 + 1) and up to 6 rows of items 0x26 + n (n < 0xE): GetItemName and count (RenderNumberTiles), or the dash line DashText12 when GetInventoryByte sets carry
+; [code] box 2: page number "n/03" and the page's 6 battle items: name and count, or a dash line when none held
 DrawBattleItemPage:
 	ld	A,2
 	call	ClearTextBox
@@ -494,8 +501,8 @@ DrawBattleItemPage:
 DrawBattleItemPage.loop:
 	push	BC
 	push	XWA
-	ld	A,(XSP+4)
-	add	A,0x26
+	ld	A,(XSP+4)	; row's item index, from the pushed BC (C)
+	add	A,ITEM_FIXIT1
 	extz	WA
 	call	GetInventoryByte
 	ld	C,A
@@ -520,7 +527,7 @@ DrawBattleItemPage.skip:
 	ld	E,(XSP+1)
 	call	SetTextBoxCursorXWA
 	ld	L,(XSP+0)
-	add	L,0x26
+	add	L,ITEM_FIXIT1
 	call	GetItemName
 	call	DrawString
 	ld	C,6
@@ -531,20 +538,24 @@ DrawBattleItemPage.skip:
 DrawBattleItemPage.skip2:
 	pop	BC
 	inc	1,C
-	cp	C,0xE
+	cp	C,ITEM_MAGFLR+1-ITEM_FIXIT1
 	jr	NC,DrawBattleItemPage.done
 	inc	1,B
 	cp	B,6
 	jr	C,DrawBattleItemPage.loop
 DrawBattleItemPage.done:
 	ret
+; [code] DrawBattleItemPage strings: page count, " 0" drawn over the page number (?), count mark, empty row
 Slash03Text:
 	text "/03"
 	done
+; [code] see Slash03Text
 BlankZeroText:
 	text " 0"
 	done
+; [code] see Slash03Text
 TimesText5:
 	db	0x69,0xFF	; "×"
+; [code] see Slash03Text
 DashText12:
 	db	0x59,0x59,0x59,0x59,0x59,0x59,0x59,0x59,0xFF	; "--------"

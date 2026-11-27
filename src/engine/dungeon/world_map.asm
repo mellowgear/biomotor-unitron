@@ -4,6 +4,7 @@ c_2104EF	section	code abs=0x2104EF
 
 ; [code] A = 1: DrawPortrait 0x3C at tile 0x20 (WorldMapOpen); A = 0: DrawPortrait 0x30 + DUNGEON_ID - 1 at tile 0x94 (ShowDungeonEntrance: the dungeon's picture)
 DrawWorldMapPortrait:
+	; A = 1: the world map picture, else the dungeon's entrance picture
 	push	XHL
 	push	XDE
 	push	XBC
@@ -262,6 +263,7 @@ DrawWorldMapMarker:
 	sub	BC,8
 	sub	DE,0xC
 	pop	A
+	; frame cycles every 8 frames, offset by marker so they don't animate in step
 	ld	W,(XIZ+0x2D)
 	sra	3,W
 	add	A,W
@@ -272,6 +274,7 @@ DrawWorldMapMarker:
 	ld	HL,0
 	sll	13,HL
 	or	WA,HL
+	; tile | palette 1 << 9
 	ld	HL,1
 	sll	9,HL
 	or	WA,HL
@@ -288,6 +291,7 @@ c_210675	section	code abs=0x210675
 
 ; [code] DrawWorldMapMarker(i) for each event flag 0x60 + i (i = 0-3) that is set (BossEncounter sets 0x60 + GetBossIndex after the win); WorldMapDispatch modes 4-5
 DrawBeatenDungeonMarkers:
+	; flags 0x60-0x63: the four dungeon bosses beaten
 	push	XHL
 	push	XDE
 	push	XBC
@@ -398,7 +402,7 @@ WorldMapIntroWait:
 	jr	Z,WorldMapIntroWait.skip
 	jr	WorldMapIntroWait.skip3
 WorldMapIntroWait.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,WorldMapIntroWait.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -407,6 +411,7 @@ WorldMapIntroWait.skip:
 	calr	StartWorldMapExit
 	jr	WorldMapIntroWait.done
 WorldMapIntroWait.skip2:
+	; DUNGEON_STEPS is a frame timer here
 	ld	A,(XIZ+DUNGEON_STEPS)
 	inc	1,A
 	ld	(XIZ+DUNGEON_STEPS),A
@@ -425,6 +430,7 @@ WorldMapInput:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
 	jr	Z,WorldMapInput.skip2
+	; A: enter the selected dungeon, or leave on the town
 	push	WA
 	ld	WA,SFX_CONFIRM
 	call	SoundCommand
@@ -439,7 +445,7 @@ WorldMapInput.skip:
 	calr	StartWorldMapExit
 	jr	WorldMapInput.done
 WorldMapInput.skip2:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,WorldMapInput.skip3
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -449,6 +455,7 @@ WorldMapInput.skip2:
 	calr	StartWorldMapExit
 	jr	WorldMapInput.done
 WorldMapInput.skip3:
+	; pad bits -> direction 0 up 1 down 2 left 3 right, 4-7 the diagonals (up-right, down-right, down-left, up-left)
 	and	A,0xF
 	jr	Z,WorldMapInput.done
 	cp	A,1
@@ -493,6 +500,7 @@ WorldMapInput.skip10:
 WorldMapInput.skip11:
 	jr	WorldMapInput.done
 WorldMapInput.skip12:
+	; moved: the old selection effect child is ended so a new one starts
 	calr	DungeonSelectMove
 	cp	A,0xFF
 	jr	Z,WorldMapInput.done
@@ -508,6 +516,7 @@ c_2107F9	section	code abs=0x2107F9
 
 ; [code] DUNGEON_ID = DungeonSelectMoves[DUNGEON_ID * 8 + A] unless 0xFF (A = d-pad direction, WorldMapInput)
 DungeonSelectMove:
+	; DungeonSelectMoves: 8 targets per place, 0xFF = no move that way
 	push	XHL
 	push	XDE
 	push	XBC
@@ -581,6 +590,7 @@ WorldMapCloseStep:
 	calr	ShowDungeonEntrance
 	jr	WorldMapCloseStep.done
 WorldMapCloseStep.skip:
+	; leaving: TASK_ARG 5 ends the dungeon task (back to the street) (?)
 	ld	A,1
 	ld	(XIZ+DUNGEON_MODE),A
 	ld	A,5
@@ -617,6 +627,7 @@ ShowDungeonEntrance:
 	calr	PlaceWorldMapBox2
 	ld	A,0
 	ld	(XIZ+0x20),A
+	; the iris opens from the selected place's position
 	call	SetupWindowIris
 	calr	GetDungeonSelectCursor
 	ld	L,C
@@ -654,7 +665,7 @@ DungeonEntranceWait:
 	jr	Z,DungeonEntranceWait.skip
 	jr	DungeonEntranceWait.skip3
 DungeonEntranceWait.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,DungeonEntranceWait.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -663,6 +674,7 @@ DungeonEntranceWait.skip:
 	calr	CancelDungeonEntry
 	jr	DungeonEntranceWait.done
 DungeonEntranceWait.skip2:
+	; auto-advance after 0x5A frames
 	ld	A,(XIZ+DUNGEON_STEPS)
 	inc	1,A
 	ld	(XIZ+DUNGEON_STEPS),A
@@ -747,6 +759,7 @@ WorldMapDungeonTextBox2.skip6:
 	call	SetTextBoxWait
 	jr	WorldMapDungeonTextBox2End
 WorldMapDungeonTextBox2.skip7:
+	; start the description; +0x25 = 2 while printing, 1 done
 	ld	XWA,0
 	ld	A,(XIZ+DUNGEON_ID)
 	sub	A,1
@@ -777,14 +790,14 @@ WorldMapDungeonTextBox2End:
 
 c_2109F4	section	code abs=0x2109F4
 
-; [code] box 2 is placed (PlaceWorldMapBox2), box 4 (same 0x14 x 5 size) is only opened and holds the dungeon description: moves the 3 x 0x12 tiles of box 2 up one pixel row (row 0 of each tile line into row 7 of the line above) and copies pixel row +0x2C of box 4 into box 2's bottom row; WorldMapDungeonText calls it for +0x2C = 0..0x17, every 7th call (every call once A or B sets DUNGEON_STEPS 0), so the 3 text lines scroll in
-; [play] seen in play: the three description lines scroll up into the lower box one pixel row per call, 24 calls (+0x2C 0..0x17), all from
-; WorldMapDungeonText: every 7th frame, then every frame once A is pressed; at +0x2C = 0x18 the text sits in place ("Dungeon made of / trees: Wood /
-; affinity") and the wait arrow appears
+; Scrolls the description up one pixel row: box 2's tiles move up a row (a tile line's row 0 into row 7 of
+; the line above) and pixel row XIZ+0x2C of box 4 (where the text was drawn off-screen) fills box 2's
+; bottom row. WorldMapDungeonText calls it for rows 0-0x17 [code+play]
 ScrollBox2UpFromBox4:
 	push	XHL
 	push	XDE
 	push	XBC
+	; +2: rows are 2 bytes; 3 tile lines of 0x12 tiles, 7 rows each
 	push	XWA
 	ld	A,2
 	call	GetBoxTilesAddr
@@ -834,6 +847,7 @@ ScrollBox2UpFromBox4.loop4:
 	pop	W
 	jr	ScrollBox2UpFromBox4.loop
 ScrollBox2UpFromBox4.skip:
+	; the new bottom row from box 4: tile line row / 8, row row & 7
 	push	XDE
 	ld	A,4
 	call	GetBoxTilesAddr
@@ -866,7 +880,9 @@ ScrollBox2UpFromBox4.loop5:
 
 c_210AA4	section	code abs=0x210AA4
 
-; [code] WorldMapDispatch mode 8: box 4 = the dungeon's description from the pointer table 0x227580[DUNGEON_ID - 1] ("Dungeon made of trees; Wood affinity", "Cave on sea floor; Water affinity", "Floating ruins; Wind affinity", "Buried deep in the ground; Earth affinity"), ScrollBox2UpFromBox4 for 0x18 pixel rows (+0x2C), SetTextBoxWait; A after the text -> mode 9; B -> CancelDungeonEntry; [play] seen in play: the Forest's description scrolls up into the lower box, then the wait arrow
+; WorldMapDispatch mode 8: draws DungeonDescriptions[DUNGEON_ID - 1] into box 4 and scrolls it into box 2
+; one row every 7 frames (every frame after A / B), then the wait arrow; A after that -> mode 9, B any
+; time -> CancelDungeonEntry. RAM: XIZ+0x25/0x26 state, 0x27 frame count, 0x2C row, DUNGEON_STEPS delay [code+play]
 WorldMapDungeonText:
 	ld	A,(wJoyPressed)
 	bit	BIT_B_BUTTON,A
@@ -896,6 +912,7 @@ WorldMapDungeonText.skip3:
 	cp	A,0
 	jr	Z,WorldMapDungeonText.skip9
 	ld	A,(wJoyPressed)
+	; A / B: delay 0, scroll every frame
 	and	A,A_BUTTON|B_BUTTON
 	jr	Z,WorldMapDungeonText.skip4
 	ld	A,0
@@ -920,6 +937,7 @@ WorldMapDungeonText.skip5:
 	call	SetTextBoxWait
 	jr	WorldMapDungeonText.done
 WorldMapDungeonText.skip6:
+	; XIZ+0x27 counts up to the delay in DUNGEON_STEPS, then the next row scrolls
 	ld	A,(XIZ+0x27)
 	ld	W,(XIZ+DUNGEON_STEPS)
 	cp	A,W
@@ -933,6 +951,7 @@ WorldMapDungeonText.skip8:
 	ld	(XIZ+0x27),A
 	jr	WorldMapDungeonText.done
 WorldMapDungeonText.skip9:
+	; first frame: print the text into the hidden box 4, delay 6
 	ld	A,4
 	call	ClearTextBox
 	ld	XWA,0
@@ -991,7 +1010,7 @@ EnterPromptInput.skip:
 	calr	CancelDungeonEntry
 	jr	EnterPromptInput.done
 EnterPromptInput.skip2:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,EnterPromptInput.skip3
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -1095,7 +1114,9 @@ CloseDungeonEntrance.done:
 
 c_210C4E	section	code abs=0x210C4E
 
-; [code] switch on DUNGEON_MODE 1-0xC: 1 WorldMapOpen, 2 WorldMapWaitOpen, 3 WorldMapIntroWait, 4 WorldMapInput, 5-7 window steps, 8 WorldMapDungeonText, 9 / 0xA / 0xB, 0xC -> TASK_ARG 3; in modes 4-5 LoadDungeonPalettes, GetDungeonSelectCursor, the selection effect (PlayBattleEffect 0xCF + DUNGEON_ID); mode 0xA draws the Yes/No cursor; [play] wmap_select_* and dungeon_*_enter_prompt screens
+; The world map task body per frame on DUNGEON_MODE: 1-4 open, wait, select (WorldMapInput), 5 iris close,
+; 6-0xA entrance picture, description and Enter? Yes / No, 0xB close back, 0xC TASK_ARG 3 = enter the
+; dungeon. Modes 4-5 draw the player and beaten markers, and mode 4 the selection effect (0xCF + id) [code+play]
 WorldMapDispatch:
 	ld	A,(XIZ+DUNGEON_MODE)
 	cp	A,1
@@ -1162,6 +1183,7 @@ WorldMapDispatch.skip12:
 	ld	A,1
 	ld	(XIZ+DUNGEON_MODE),A
 WorldMapDispatch.skip13:
+	; player sprite on the selected place, and the beaten markers
 	ld	A,(XIZ+DUNGEON_MODE)
 	cp	A,4
 	jr	C,WorldMapDispatch.skip14
@@ -1177,6 +1199,7 @@ WorldMapDispatch.skip13:
 	ld	WA,(XIZ+TASK_CHILDREN)
 	cp	WA,0
 	jr	NZ,WorldMapDispatch.skip14
+	; selection sparkle: battle effect 0xCF + DUNGEON_ID as a child task, restarted when it ends
 	ld	XHL,PlayBattleEffect
 	call	StartChildTask
 	ld	WA,0
@@ -1187,6 +1210,7 @@ WorldMapDispatch.skip13:
 	ld	(XHL+0x20),WA
 	jr	WorldMapDispatch.skip17
 WorldMapDispatch.skip14:
+	; the Enter? Yes / No cursor
 	cp	A,0xA
 	jr	NZ,WorldMapDispatch.skip17
 	ld	XWA,0

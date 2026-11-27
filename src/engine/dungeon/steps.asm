@@ -5,6 +5,7 @@ c_21101C	section	code abs=0x21101C
 ; [code] A = direction (0 y-1, 1 y+1, 2 x-1, 3 x+1, 0xFF the cell itself; others -> A = 0xFF): C/E = DUNGEON_X/Y + step, HL = GetMapCellAttr (the cell attributes)
 GetCellAttrInDirection:
 	push	WA
+	; H = y step, L = x step (0xFF = -1)
 	ld	HL,0
 	cp	A,0xFF
 	jr	Z,GetCellAttrInDirection.skip5
@@ -28,6 +29,7 @@ GetCellAttrInDirection.skip3:
 	ld	L,1
 	jr	GetCellAttrInDirection.skip5
 GetCellAttrInDirection.skip4:
+	; not a direction: A = 0xFF, step 0 (the cell itself)
 	ld	A,0xFF
 GetCellAttrInDirection.skip5:
 	ld	BC,0
@@ -52,6 +54,7 @@ c_211060	section	code abs=0x211060
 CheckDirectionPassable:
 	push	W
 	calr	GetCellAttrInDirection
+	; bit 15: a chest cell; blocked unless the chest entry is 0xFF / 0xFE (?)
 	push	HL
 	and	HL,0x8000
 	cp	HL,0x8000
@@ -65,6 +68,7 @@ CheckDirectionPassable:
 	ld	A,0xFF
 	jr	CheckDirectionPassable.skip3
 CheckDirectionPassable.skip:
+	; 0x9000 (boss cell) is passable here; FindAdjacentBossCell catches it first
 	push	HL
 	and	HL,0x9000
 	cp	HL,0x9000
@@ -72,6 +76,7 @@ CheckDirectionPassable.skip:
 	jr	NZ,CheckDirectionPassable.skip2
 	jr	CheckDirectionPassable.skip3
 CheckDirectionPassable.skip2:
+	; bit 12 alone: a wall
 	push	HL
 	and	HL,0x1000
 	cp	HL,0x1000
@@ -91,6 +96,7 @@ FindAdjacentBossCell:
 	push	XDE
 	push	XBC
 	push	W
+	; the boss cell only counts while this floor's boss is alive
 	call	GetFloorBossBeaten
 	cp	A,0
 	jr	NZ,FindAdjacentBossCell.skip
@@ -139,6 +145,7 @@ FindAdjacentChest:
 	push	XDE
 	push	XBC
 	push	W
+	; same test for each of the four neighbours: bit 15 plus a live chest entry
 	ld	A,0
 	calr	GetCellAttrInDirection
 	push	HL
@@ -203,6 +210,7 @@ FindAdjacentChest.skip3:
 	jr	Z,FindAdjacentChest.skip4
 	jr	FindAdjacentChest.skip5
 FindAdjacentChest.skip4:
+	; no chest next to the party
 	ld	A,0xFF
 FindAdjacentChest.skip5:
 	pop	W
@@ -215,6 +223,7 @@ c_2111A2	section	code abs=0x2111A2
 
 ; [code] DungeonStep mode 0xE (after the ShakeScr1Amp4Task CheckEncounter starts on a step while wStatusRust): wUnitHP -= ceil(wUnitMaxHP / 20) and mode 3; at 0 HP: HideDungeonBoxes, wUnitHP 0, box 6 with PlayerIsDeadText, mode 0xF
 RustStepDamage:
+	; ceil(max HP / 20)
 	push	XHL
 	push	XDE
 	push	XBC
@@ -224,6 +233,7 @@ RustStepDamage:
 	sub	WA,1
 	extz	XWA
 	div	XWA,0x14
+	; HP - damage; above 0: back to walking (mode 3)
 	ld	HL,(wUnitHP)
 	sub	HL,WA
 	ld	WA,HL
@@ -234,6 +244,7 @@ RustStepDamage:
 	ld	(XIZ+DUNGEON_MODE),A
 	jr	RustStepDamage.skip2
 RustStepDamage.skip:
+	; dead: the "player is dead" box, then mode 0xF waits for it
 	call	HideDungeonBoxes
 	ld	WA,0
 	ld	(wUnitHP),WA
@@ -245,6 +256,7 @@ RustStepDamage.skip:
 	ld	(XWA+8),XHL
 	ld	A,(XIZ+DUNGEON_FACING)
 	sla	4,A
+	; facing * 16 restarts the sprite frame counter (?)
 	ld	(XIZ+0x2D),A
 	ld	A,0xF
 	ld	(XIZ+DUNGEON_MODE),A
@@ -257,13 +269,17 @@ RustStepDamage.skip2:
 
 c_211202	section	code abs=0x211202
 
-; wStepsSinceBattle -> chance table 0x2275C0
+; DUNGEON_MODE 3, the walk, every frame: finishes a 16-frame step (stairs, adjacent boss, encounter roll on
+; EncounterChance by DUNGEON_STEPS, rust damage); standing: A opens an adjacent chest, B the camp, the pad
+; starts a step to XIZ+0x1E/1F (or bumps). Changes DUNGEON_X/Y/FACING/STEPS/MODE, wMapScrollStepX/Y [code]
 CheckEncounter:
+	; XIZ+0x2C = frames left of the 16-frame step; 0 = standing
 	ld	A,(XIZ+0x2C)
 	and	A,A
 	jrl	Z,CheckEncounter.skip5
 	dec	1,A
 	ld	(XIZ+0x2C),A
+	; step done: commit the target cell (XIZ+0x1E/1F) and stop scrolling
 	jrl	NZ,CheckEncounter.done
 	xor	WA,WA
 	ld	(wMapScrollStepX),WA
@@ -274,6 +290,7 @@ CheckEncounter:
 	ld	(XIZ+DUNGEON_Y),A
 	ld	A,0xFF
 	calr	CheckDirectionPassable
+	; attr bit 8: stairs to floor - 1 (XIZ+0x12 = 2), bit 9: to floor + 1 (= 1)
 	ld	DE,HL
 	and	HL,0x100
 	jr	Z,CheckEncounter.skip
@@ -296,6 +313,7 @@ CheckEncounter.skip2:
 	calr	StartBossEncounter
 	jrl	CheckEncounter.done
 CheckEncounter.skip3:
+	; encounter roll: battle when Random % 100 < EncounterChance[steps - 1]
 	ld	A,(XIZ+DUNGEON_STEPS)
 	inc	1,A
 	ld	(XIZ+DUNGEON_STEPS),A
@@ -313,6 +331,7 @@ CheckEncounter.skip3:
 	pop	W
 	cp	A,W
 	jr	NC,CheckEncounter.skip4
+	; battle: encounter music, step counter reset, mode 5 (the flash)
 	call	HideDungeonBoxes
 	call	PlayEncounterMusic
 	ld	A,0
@@ -321,6 +340,7 @@ CheckEncounter.skip3:
 	ld	(XIZ+DUNGEON_MODE),A
 	jrl	CheckEncounter.done
 CheckEncounter.skip4:
+	; no battle: rust shakes the screen 15 frames, then RustStepDamage (mode 0xE)
 	ld	A,(wStatusRust)
 	cp	A,0
 	jr	Z,CheckEncounter.skip5
@@ -331,6 +351,7 @@ CheckEncounter.skip4:
 	ld	(XIZ+DUNGEON_MODE),A
 	jrl	CheckEncounter.done
 CheckEncounter.skip5:
+	; standing: no pad / A / B keeps the status boxes' timer running
 	ld	A,(wJoyHeld)
 	and	A,D_PAD|A_BUTTON|B_BUTTON
 	jr	NZ,CheckEncounter.skip6
@@ -339,6 +360,7 @@ CheckEncounter.skip5:
 CheckEncounter.skip6:
 	call	HideDungeonBoxesOnInput
 	ld	A,(wJoyPressed)
+	; A next to a chest: open it
 	bit	BIT_A_BUTTON,A
 	jr	Z,CheckEncounter.skip7
 	calr	FindAdjacentChest
@@ -356,6 +378,7 @@ CheckEncounter.skip6:
 CheckEncounter.skip7:
 	ld	A,(wJoyPressed)
 	bit	BIT_B_BUTTON,A
+	; B: the camp menu
 	jr	Z,CheckEncounter.skip8
 	ld	WA,SFX_CAMP_OPEN
 	call	SoundCommand
@@ -365,7 +388,9 @@ CheckEncounter.skip8:
 	ld	A,(wJoyHeld)
 	and	A,D_PAD
 	jrl	Z,CheckEncounter.done
+	; W = second direction tried on a diagonal (0xFF = none)
 	ld	W,0xFF
+	; pad bits: 1 up, 2 down, 4 left, 8 right; diagonals try the axis not already faced first
 	cp	A,1
 	jr	NZ,CheckEncounter.skip9
 	ld	A,0
@@ -470,6 +495,7 @@ CheckEncounter.skip26:
 CheckEncounter.skip27:
 	jr	CheckEncounter.skip28
 CheckEncounter.skip28:
+	; first direction blocked: try the diagonal's other one, else bump
 	calr	CheckDirectionPassable
 	cp	A,0xFF
 	jr	NZ,CheckEncounter.skip30
@@ -484,6 +510,7 @@ CheckEncounter.skip29:
 	call	SoundCommand
 	jr	CheckEncounter.done
 CheckEncounter.skip30:
+	; start a 16-frame step to C/E; scroll step = target - current
 	ld	(XIZ+DUNGEON_FACING),A
 	ld	(XIZ+0x1E),C
 	ld	(XIZ+0x1F),E
@@ -504,8 +531,10 @@ CheckEncounter.done:
 
 c_211421	section	code abs=0x211421
 
-; [code+play] CheckEncounter after a step; ran into every battle_encounter_*
+; The dungeon task's per-frame body: runs the DUNGEON_MODE handler, then (outside battle and full-screen
+; sub-screens) draws the player and boss sprites and the status boxes; XIZ+0x2D counts frames [code+play]
 DungeonStep:
+	; dispatch on DUNGEON_MODE (1 enter .. 0x10 dead, waiting for A/B)
 	ld	A,(XIZ+DUNGEON_MODE)
 	cp	A,1
 	jr	NZ,DungeonStep.skip
@@ -574,6 +603,7 @@ DungeonStep.skip12:
 	calr	DungeonBossStep
 	jr	DungeonStep.skip17
 DungeonStep.skip13:
+	; mode 0xE: wait for the rust shake child task to end
 	cp	A,0xE
 	jr	NZ,DungeonStep.skip14
 	ld	WA,(XIZ+TASK_CHILDREN)
@@ -582,6 +612,7 @@ DungeonStep.skip13:
 	calr	RustStepDamage
 	jr	DungeonStep.skip17
 DungeonStep.skip14:
+	; mode 0xF: wait until the dead box is fully open (state 2)
 	cp	A,0xF
 	jr	NZ,DungeonStep.skip15
 	ld	A,6
@@ -594,6 +625,7 @@ DungeonStep.skip14:
 	ld	(XIZ+DUNGEON_MODE),A
 	jr	DungeonStep.skip17
 DungeonStep.skip15:
+	; mode 0x10: A/B after death -> mode 2 with TASK_ARG 5 (leave the dungeon?)
 	cp	A,0x10
 	jr	NZ,DungeonStep.skip16
 	ld	A,(wJoyPressed)
@@ -608,6 +640,7 @@ DungeonStep.skip16:
 	ld	A,1
 	ld	(XIZ+DUNGEON_MODE),A
 DungeonStep.skip17:
+	; per-frame drawing, skipped in battle (7) and during boss / camp sub-screens that own the screen
 	ld	A,(XIZ+DUNGEON_MODE)
 	cp	A,7
 	jr	Z,DungeonStep.done
@@ -631,6 +664,7 @@ DungeonStep.skip18:
 	cp	W,8
 	jr	Z,DungeonStep.skip22
 DungeonStep.skip19:
+	; modes 0xF and up reload the player sprite, others the palettes (?)
 	cp	A,0xF
 	jr	C,DungeonStep.skip20
 	call	LoadPlayerDungeonSprite
@@ -642,6 +676,7 @@ DungeonStep.skip21:
 	call	UpdateFloorBossSprite
 	call	DungeonBoxesStep
 DungeonStep.skip22:
+	; XIZ+0x2D: animation frame counter
 	ld	A,(XIZ+0x2D)
 	inc	1,A
 	ld	(XIZ+0x2D),A

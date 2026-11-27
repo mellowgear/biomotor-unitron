@@ -2,7 +2,9 @@
 
 c_20974E	section	code abs=0x20974E
 
-; pick a slot by chance, or the default attack if EP is short
+; [code] start of the round: the enemy picks its action slot (wEnemyAttackSlot) by the slots' chances, or
+; DefaultEnemyAttack when EP is short; then "What do you do?" and the command box (Flee, or Quit outside dungeons)
+; and BattleMainMenuInput
 EnemyChooseAttack:
 	ld	WA,(wEnemyMinAttackEP)
 	cp	(wEnemyEP),WA
@@ -10,12 +12,12 @@ EnemyChooseAttack:
 	jr	C,EnemyChooseAttack.skip
 	ld	L,(wEnemyId)
 	call	GetEnemyAttackSlots
-	call	Random
+	call	Random	; one roll walks the slots: subtract each slot's share until it goes negative
 	extz	WA
 EnemyChooseAttack.loop:
-	ld	B,(XHL+7)
+	ld	B,(XHL+SLOT_PCT)
 	calr	GetEnemySlotChance
-	cp	B,0x64
+	cp	B,0x64	; a 100 % slot (the low-HP heal) is taken outright
 	jr	Z,EnemyChooseAttack.skip
 	ld	C,0
 	add	BC,0x63
@@ -23,17 +25,18 @@ EnemyChooseAttack.loop:
 	div	XBC,0x64
 	sub	WA,BC
 	jr	C,EnemyChooseAttack.skip
-	add	XHL,0xF
+	add	XHL,0xF	; next slot (15 bytes each)
 	jr	EnemyChooseAttack.loop
 EnemyChooseAttack.skip:
-	ld	A,(XHL+3)
+	ld	A,(XHL+SLOT_ACTION)	; slot action doubles as the status to inflict (0 / 0xFF = none)
+	; actions 11 / 12 attack with the enemy's arm part 2 / 3: its EP cost is the arm record's
 	cp	A,0xB
 	ld	W,(wEnemyParts+2)
 	jr	Z,EnemyChooseAttack.skip2
 	cp	A,0xC
 	ld	W,(wEnemyParts+3)
 	jr	Z,EnemyChooseAttack.skip2
-	ld	WA,(XHL+4)
+	ld	WA,(XHL+SLOT_EP)
 	jr	EnemyChooseAttack.skip3
 EnemyChooseAttack.skip2:
 	push	XHL
@@ -60,6 +63,7 @@ EnemyChooseAttack.skip4:
 	ld	XHL,AttackItemChargeText
 	call	ExpandMessage
 	call	DrawString
+	; same rule as TryFlee: no Flee entry against Satana before the ending or Rank X
 	cpb	(wEnemyId),ENEMY_SATANA
 	jr	NZ,EnemyChooseAttack.skip5
 	ld	HL,EVENT_STAGE_ENDING
@@ -91,7 +95,7 @@ c_20984D	section	code abs=0x20984D
 
 ; [code] B = attack slot chance byte (slot +7, EnemyChooseAttack) -> B: <= 100 kept; 0x65 = 100 only while wEnemyFullHealUsed = 0 and wEnemyHP < wEnemyMaxHP / 2, else 0; above 0x65 = 0
 GetEnemySlotChance:
-	cp	B,0x65
+	cp	B,0x65	; 0x65 = "only when hurt": the one-shot full heal below half HP
 	ret	C
 	jr	Z,GetEnemySlotChance.skip
 	ld	B,0
@@ -120,6 +124,7 @@ ConfusedPlayerHitResult:
 	ldb	(wScr1ScrollY),0
 	ldb	(wScr2ScrollX),0x60
 	ldb	(wScr2ScrollY),0
+	; negative margin = the hit misses
 	cpb	(wPlayerHitMargin),0
 	jr	PL,ConfusedPlayerHitResult.skip
 	ld	XHL,YouDodgedTheAttackText
@@ -191,7 +196,7 @@ ConfusedPlayerHitResult.skip4:
 	ld	A,(wInflictStatus)
 	or	A,A
 	jr	Z,ConfusedPlayerHitResult.skip5
-	ld	XHL,wStatusParalyzed-1
+	ld	XHL,wStatusParalyzed-1	; status ids 1-4 index wStatusParalyzed..; bit 7 = on
 	orb	(XHL+A),0x80
 ConfusedPlayerHitResult.skip5:
 	ldw	(XIZ+TASK_FUNC),PlayerTurnEnd & 0xFFFF
@@ -220,19 +225,22 @@ EnemyTurn:
 	ldw	(XIZ+TASK_FUNC),EnemyTurnEnd & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),EnemyTurnEnd >> 16
 	ret
+; EP cost now, paid in EnemyTurnEnd; the handler is EnemyActionJumps[action + 1] (action 0xFF = plain attack)
 EnemyTurn.skip:
 	ld	XHL,(wEnemyAttackSlot)
 	ld	WA,(XHL+SLOT_EP)
 	call	ApplyEnemyEPCostBuff
 	ld	(wEnemyAttackEPCost),WA
 	ld	XWA,0
-	ld	A,(XHL+3)
+	ld	A,(XHL+SLOT_ACTION)
 	inc	1,A
 	sll	2,WA
 	add	XWA,EnemyActionJumps
 	ld	XWA,(XWA)
 	ld	(XIZ+TASK_FUNC),XWA
 	ret
+; [code] enemy handlers by slot action + 1: -1..4 attack (1-4 inflict that status), 5 flee, 6 SP up, 7 heal 50,
+; 8 cure, 9 full heal, 10 heal 100, 11 / 12 arm attacks, 13 recharge
 EnemyActionJumps:
 	dl	EnemyCheckCanAttack,EnemyCheckCanAttack,EnemyCheckCanAttack,EnemyCheckCanAttack
 	dl	EnemyCheckCanAttack,EnemyCheckCanAttack,EnemyFlee,EnemyStatUpAttack
@@ -241,7 +249,8 @@ EnemyActionJumps:
 
 c_20B521	section	code abs=0x20B521
 
-; [code] enemy: Can't attack / Not enough EP / Is confused
+; [code] attack actions: paralysis or too little EP (or none at all) end the turn with a message; confusion
+; shows its message, then EnemyAttack
 EnemyCheckCanAttack:
 	cpb	(wEnemyParalyzed),0
 	jr	Z,EnemyCheckCanAttack.skip
@@ -294,6 +303,7 @@ EnemyAttack:
 	ld	XHL,WaitBattleMessageTask
 	call	StartChildTask
 	task_wait
+	; confused: hits itself with its own RP / SP / affinity, damage / 4
 	cpb	(wEnemyConfused),0
 	jrl	NZ,EnemyAttack.skip3
 	ld	WA,(wEnemyRP)
@@ -318,12 +328,13 @@ EnemyAttack:
 	ld	A,(wEnemyLevel)
 	ld	W,(wPlayerLevel)
 	call	DamageRoll
-	ld	C,(XHL+6)
+	ld	C,(XHL+SLOT_AFFINITY)
 	ld	B,0
 	ld	DE,(wUnitAffinity)
 	call	ApplyAffinity
 	call	ApplyAirbag
 	ld	(wEnemyDamage),WA
+	; crit and status chances in %: threshold pct*256/100 against Random's low byte
 	ld	B,(wEnemyCritChance)
 	ld	C,0
 	add	BC,0x63
@@ -335,7 +346,7 @@ EnemyAttack:
 	scc	C,A
 	ld	(wEnemyCritHit),A
 	ldb	(wEnemyAttackStatus),0xFF
-	ld	A,(XHL+3)
+	ld	A,(XHL+SLOT_ACTION)
 	or	A,A
 	jr	Z,EnemyAttack.skip
 	cp	A,0xFF
@@ -350,11 +361,12 @@ EnemyAttack:
 	extz	WA
 	cp	WA,BC
 	jr	NC,EnemyAttack.skip
-	ld	A,(XHL+3)
+	ld	A,(XHL+SLOT_ACTION)
 	ld	(wEnemyAttackStatus),A
+; slot +8 = hit-result shape (0, 1, 2+), effects follow at SLOT_EFFECTS
 EnemyAttack.skip:
 	ld	A,(XHL+8)
-	lda	XHL,XHL+9
+	lda	XHL,XHL+SLOT_EFFECTS
 	ld	(XIZ+0x14),XHL
 	cp	A,1
 	ld	XHL,EnemyHitResult2
@@ -386,12 +398,12 @@ EnemyAttack.skip3:
 	ld	A,(wEnemyLevel)
 	ld	W,A
 	call	DamageRoll
-	ld	C,(XHL+6)
+	ld	C,(XHL+SLOT_AFFINITY)
 	ld	B,0
 	ld	DE,(wEnemyAffinity)
 	call	ApplyAffinity
 	call	AtLeastOne
-	inc	3,WA
+	inc	3,WA	; self-hit = ceil(damage / 4)
 	srl	2,WA
 	ld	(wEnemyDamage),WA
 	ld	B,(wEnemyCritChance)
@@ -405,7 +417,7 @@ EnemyAttack.skip3:
 	scc	C,A
 	ld	(wEnemyCritHit),A
 	ldb	(wEnemyAttackStatus),0xFF
-	ld	A,(XHL+3)
+	ld	A,(XHL+SLOT_ACTION)
 	or	A,A
 	jr	Z,EnemyAttack.skip4
 	cp	A,0xFF
@@ -420,11 +432,12 @@ EnemyAttack.skip3:
 	extz	WA
 	cp	WA,BC
 	jr	NC,EnemyAttack.skip4
-	ld	A,(XHL+3)
+	ld	A,(XHL+SLOT_ACTION)
 	ld	(wEnemyAttackStatus),A
+; skip one more word for shape 1, as in PlayerAttack (?)
 EnemyAttack.skip4:
 	ld	A,(XHL+8)
-	lda	XHL,XHL+9
+	lda	XHL,XHL+SLOT_EFFECTS
 	cp	A,1
 	ld	W,0
 	jr	C,EnemyAttack.skip5
@@ -440,9 +453,8 @@ EnemyAttack.skip5:
 
 c_20B7AF	section	code abs=0x20B7AF
 
-; [code] the enemy's turn with its arm 0x5DD3: wEnemyParalyzed -> CantAttackText and the turn ends
-; (task 0x20C4FB); else "Enemy's <arm>" (GetArmName of 0x5DD3), then EnemyArmAttack (task 0x20B89D).
-; EnemyArmTurn2 is the same for the arm 0x5DD4. (Was EnemyArmTurn1/2: only the paralysed branch says that.)
+; [code] actions 11 / 12: the enemy attacks with its arm part wEnemyParts+2 (EnemyArmTurn2: +3); paralysis ends the turn,
+; else "<ENEMY>'s <arm>" and EnemyArmAttack with +0x10 = arm id
 EnemyArmTurn1:
 	cpb	(wEnemyParalyzed),0
 	jr	Z,EnemyArmTurn1.skip
@@ -473,7 +485,7 @@ EnemyArmTurn1.skip:
 
 c_20B826	section	code abs=0x20B826
 
-; [code]
+; [code] as EnemyArmTurn1 for the arm wEnemyParts+3
 EnemyArmTurn2:
 	cpb	(wEnemyParalyzed),0
 	jr	Z,EnemyArmTurn2.skip
@@ -515,7 +527,7 @@ EnemyArmAttack:
 	call	GetArmRecord
 	ld	(XIZ+0x10),XHL
 	ld	XHL,(XIZ+0x10)
-	ld	WA,(XHL+0xC)
+	ld	WA,(XHL+0xC)	; arm EP cost replaces the slot's (PART_EP_COST)
 	call	ApplyEnemyEPCostBuff
 	ld	(wEnemyAttackEPCost),WA
 	ld	B,(wEnemyCritChance)
@@ -547,6 +559,7 @@ EnemyArmAttack:
 	jr	NC,EnemyArmAttack.skip
 	ld	A,(XHL+0x10)
 	ld	(wEnemyAttackStatus),A
+; arm record: +4 power (no ApplyEnemyScaling), +0xE affinity
 EnemyArmAttack.skip:
 	cpb	(wEnemyConfused),0
 	jr	NZ,EnemyArmAttack.skip3
@@ -610,7 +623,7 @@ EnemyArmAttack.skip3:
 	ld	DE,(wEnemyAffinity)
 	call	ApplyAffinity
 	call	AtLeastOne
-	inc	3,WA
+	inc	3,WA	; self-hit = ceil(damage / 4)
 	srl	2,WA
 	ld	(wEnemyDamage),WA
 	ld	XHL,(XIZ+0x14)
@@ -642,7 +655,7 @@ EnemyHitResult2:
 	call	StartChildTask
 	ldb	(XHL+TASK_ARG),0xF
 	task_wait
-	cpb	(wEnemyHitMargin),0
+	cpb	(wEnemyHitMargin),0	; negative margin = miss
 	jr	PL,EnemyHitResult2.skip
 	ld	XHL,YouDodgedTheAttackText
 	call	ShowMessage
@@ -713,7 +726,7 @@ EnemyHitResult2.skip4:
 	ld	A,(wEnemyAttackStatus)
 	or	A,A
 	jr	Z,EnemyHitResult2.skip5
-	ld	XHL,wStatusParalyzed-1
+	ld	XHL,wStatusParalyzed-1	; status ids 1-4 index wStatusParalyzed..; bit 7 = on
 	orb	(XHL+A),0x80
 EnemyHitResult2.skip5:
 	ldw	(XIZ+TASK_FUNC),EnemyTurnEnd & 0xFFFF
@@ -740,7 +753,7 @@ EnemyHitResult3:
 	call	StartChildTask
 	ldw	(XHL+TASK_ARG),1
 	task_wait
-	cpb	(wEnemyHitMargin),0
+	cpb	(wEnemyHitMargin),0	; negative margin = miss
 	jr	PL,EnemyHitResult3.skip
 	ld	XHL,YouDodgedTheAttackText
 	call	ShowMessage
@@ -826,7 +839,7 @@ EnemyHitResult4:
 	ldb	(wScr2ScrollY),0
 	ldb	(wScr1ScrollX),0xC0
 	ldb	(wScr1ScrollY),0
-	cpb	(wEnemyHitMargin),0
+	cpb	(wEnemyHitMargin),0	; negative margin = miss
 	jr	PL,EnemyHitResult4.skip
 	ld	XHL,YouDodgedTheAttackText
 	call	ShowMessage
@@ -906,7 +919,8 @@ EnemyHitResult4.skip5:
 
 c_20C0B1	section	code abs=0x20C0B1
 
-; [code] enemy action: "<ENEMY> fled!!", unless a roll >= wFleeChance: "But you are able to chase it!!"
+; [code] action 5: "<ENEMY> fled!!", then wFleeChance % (the unit's, see BUGS.md) -> EnemyFleeSucceeded, else "But you are able to chase it!!"
+; and EnemyTurnEnd
 EnemyFlee:
 	ld	XHL,EnemyFledText
 	call	ShowMessage
@@ -937,7 +951,7 @@ EnemyFlee.skip:
 
 c_20C121	section	code abs=0x20C121
 
-; [code] "<enemy>'s SP went up" via its attack
+; [code] action 6: the attack's effect and "SP went up": wEnemySPUpTurns = 5, then EnemyTurnEnd
 EnemyStatUpAttack:
 	ld	XHL,(wEnemyAttackSlot)
 	ld	L,(XHL+SLOT_ATTACK)
@@ -949,7 +963,7 @@ EnemyStatUpAttack:
 	call	StartChildTask
 	task_wait
 	ld	XHL,(wEnemyAttackSlot)
-	lda	XHL,XHL+9
+	lda	XHL,XHL+SLOT_EFFECTS
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
@@ -967,7 +981,7 @@ EnemyStatUpAttack:
 
 c_20C1A5	section	code abs=0x20C1A5
 
-; [code] enemy attack action 7 (table EnemyActionJumps [action+1]; Bonryu/Scaley "Revive"): message 0x2254A8 "<ENEMY>'s <STR1>!!" with GetAttackName, then EnemyHealGain with +0x10 = 50 (ShowEnemyHPGain, enemy HP gain task EnemyHPGainTask)
+; [code] action 7 (Bonryu / Scaley "Revive"): "<ENEMY>'s <attack>!!", then EnemyHealGain of 50 HP (+0x10)
 EnemyHeal50:
 	ld	XHL,(wEnemyAttackSlot)
 	ld	L,(XHL+SLOT_ATTACK)
@@ -985,7 +999,7 @@ EnemyHeal50:
 
 c_20C1E3	section	code abs=0x20C1E3
 
-; [code] "<enemy>'s status returned to normal"
+; [code] action 8: the attack's effect, "status returned to normal", clears the four enemy statuses; EnemyTurnEnd
 EnemyCureAttack:
 	ld	XHL,(wEnemyAttackSlot)
 	ld	L,(XHL+SLOT_ATTACK)
@@ -997,7 +1011,7 @@ EnemyCureAttack:
 	call	StartChildTask
 	task_wait
 	ld	XHL,(wEnemyAttackSlot)
-	lda	XHL,XHL+9
+	lda	XHL,XHL+SLOT_EFFECTS
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
@@ -1019,7 +1033,8 @@ EnemyCureAttack:
 
 c_20C274	section	code abs=0x20C274
 
-; [code] '<ENEMY>'s HP / EP are fully restored'
+; [code] action 9: full HP and EP (9999, capped), once per battle (wEnemyFullHealUsed = 0xFF stops the low-HP
+; slot), no EP cost
 EnemyHealAttack:
 	ldb	(wEnemyFullHealUsed),0xFF
 	ld	XHL,(wEnemyAttackSlot)
@@ -1032,7 +1047,7 @@ EnemyHealAttack:
 	call	StartChildTask
 	task_wait
 	ld	XHL,(wEnemyAttackSlot)
-	lda	XHL,XHL+9
+	lda	XHL,XHL+SLOT_EFFECTS
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
@@ -1065,7 +1080,7 @@ EnemyHealAttack:
 
 c_20C360	section	code abs=0x20C360
 
-; [code] enemy attack action 10 (table EnemyActionJumps; Uniti "Repair"): same as EnemyHeal50 with +0x10 = 100
+; [code] action 10 (Uniti "Repair"): as EnemyHeal50 with 100 HP
 EnemyHeal100:
 	ld	XHL,(wEnemyAttackSlot)
 	ld	L,(XHL+SLOT_ATTACK)
@@ -1083,10 +1098,11 @@ EnemyHeal100:
 
 c_20C39E	section	code abs=0x20C39E
 
-; [code] resumed by EnemyHeal50 / EnemyHeal100 (TASK_FUNC 0xC39E, +0x10 = HP): PlayEffectList of the slot's effects, ShowEnemyHPGain message, EnemyHPGainTask of +0x10, then EnemyTurnEnd (0xC4FB)
+; [code] EnemyHeal50 / EnemyHeal100 tail, +0x10 = HP: the slot's effect, the HP-gain message and EnemyHPGainTask,
+; then EnemyTurnEnd
 EnemyHealGain:
 	ld	XHL,(wEnemyAttackSlot)
-	lda	XHL,XHL+9
+	lda	XHL,XHL+SLOT_EFFECTS
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
@@ -1110,7 +1126,7 @@ EnemyHealGain:
 
 c_20C412	section	code abs=0x20C412
 
-; [code] "recharged its energy"
+; [code] action 13: charge animation (the default attack's effects), EP gain of GetEnemyRechargeAmount, no EP cost
 EnemyRecharge:
 	ld	XHL,RechargedItsEnergyText
 	call	ShowMessage
@@ -1144,7 +1160,7 @@ EnemyRecharge:
 
 c_20C4B0	section	code abs=0x20C4B0
 
-; [code] EnemyFlee when the chase roll fails (TASK_FUNC 0xC4B0): EnemySlideOutTask (SCR2 slide), EnemyFledText2 "<ENEMY> fled...", then BattleEnd with TASK_ARG (wBattleResult) 1
+; [code] the enemy got away: slide it out, "<ENEMY> fled...", BattleEnd with BATTLE_RESULT_ENEMY_FLED
 EnemyFleeSucceeded:
 	ld	XHL,EnemySlideOutTask
 	call	StartChildTask

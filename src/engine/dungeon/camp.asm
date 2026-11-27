@@ -267,12 +267,14 @@ ShowCampItemList:
 
 c_211F6C	section	code abs=0x211F6C
 
-; [code+play] Status: Normal / Rusted (camp item list)
+; Box 2 of the camp item list: "HP hp/max" (each capped at 999 for display) and "Status: Normal" or
+; "Rusted" from wStatusRust [code+play]
 DrawStatusLabel:
 	ld	A,2
 	call	ClearTextBox
 	ld	XHL,HPText4
 	ld	A,2
+	; 999 is the most the 3 digits can show
 	call	DrawBoxString
 	ld	WA,(wUnitHP)
 	cp	WA,0x3E7
@@ -316,14 +318,15 @@ DrawStatusLabel.skip4:
 
 c_211FE8	section	code abs=0x211FE8
 
-; [code] box 4: items 0x26-0x2B (items.asm 38-43: FixIt1-4, FullFx, Clear), each GetItemName + count digit string 0x2497B5 + count*2, or the dash line 0x2497A8 when GetInventoryByte sets carry (none held); callers ShowCampItemList, CampItemUseMenu; [play] camp_item_use_list_fixit1_x4
+; Box 4: the six camp items FixIt1-4, FullFx, Clear (item ids 0x26-0x2B), each as name + "x" + count, or
+; a dash line when none are held; from ShowCampItemList and after a use [code+play]
 DrawCampItemList:
 	ld	A,4
 	call	ClearTextBox
 	ld	A,4
 	ld	XHL,ItemText3
 	call	DrawBoxString
-	ld	WA,0x26
+	ld	WA,ITEM_FIXIT1
 	ld	C,6
 DrawCampItemList.loop:
 	push	WA
@@ -345,6 +348,7 @@ DrawCampItemList.skip:
 	call	DrawBoxString
 	pop	C
 	push	C
+	; count column 8 on the item's row
 	ld	E,6
 	sub	E,C
 	ld	C,8
@@ -381,12 +385,12 @@ DrawCampItemDesc:
 	push	XWA
 	ld	A,(XIZ+0x20)
 	extz	WA
-	add	WA,0x26
+	add	WA,ITEM_FIXIT1
 	call	GetInventoryByte
 	jr	C,DrawCampItemDesc.skip
 	ld	A,(XIZ+0x20)
 	extz	WA
-	add	WA,0x26
+	add	WA,ITEM_FIXIT1
 	call	GetItemOrPartDesc
 	ld	A,1
 	call	DrawBoxString
@@ -397,14 +401,17 @@ DrawCampItemDesc.skip:
 
 c_212093	section	code abs=0x212093
 
-; [code+play] camp_item_use_list; RemoveItem, CampUseHealItem, DrawStatusLabel
+; Item > Use list input (CampItemMenuDispatch +0x21 = 3): U/D move the cursor +0x20 over rows 0-5 with
+; wrap and redraw the description; A uses a held item (RemoveItem, CampUseHealItem, ItemUseTexts line,
+; +0x21 = 5) or buzzes; B selects row 6 = close (CloseCampItemList) [code+play]
 CampItemUseMenu:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
 	jr	Z,CampItemUseMenu.skip2
 	ld	A,(XIZ+0x20)
 	extz	WA
-	add	WA,0x26
+	; camp items start at 0x26 (FixIt1)
+	add	WA,ITEM_FIXIT1
 	call	GetInventoryByte
 	jr	C,CampItemUseMenu.skip
 	cp	A,0
@@ -416,8 +423,9 @@ CampItemUseMenu.skip:
 	call	SoundCommand
 	pop	WA
 CampItemUseMenu.skip2:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CampItemUseMenu.skip3
+	; B: row 6 is the hidden "close" row
 	push	WA
 	ld	WA,SFX_CANCEL
 	call	SoundCommand
@@ -468,6 +476,7 @@ CampItemUseMenu.skip7:
 	jr	Z,CampItemUseMenu.skip8
 	calr	DrawCampItemDesc
 CampItemUseMenu.skip8:
+	; cursor at y = 12 + 8 * row
 	ld	BC,0
 	ld	XWA,0
 	ld	A,(XIZ+0x20)
@@ -480,7 +489,8 @@ CampItemUseMenu.skip9:
 	ld	A,(XIZ+0x20)
 	cp	A,6
 	jr	Z,CampItemUseMenu.skip10
-	add	A,0x26
+	add	A,ITEM_FIXIT1
+	; XIZ+0x22 = the item used
 	ld	(XIZ+0x22),A
 	ld	A,(XIZ+0x22)
 	extz	WA
@@ -492,7 +502,7 @@ CampItemUseMenu.skip9:
 	calr	DrawStatusLabel
 	call	ClearTextBox1
 	ld	A,(XIZ+0x22)
-	sub	A,0x26
+	sub	A,ITEM_FIXIT1
 	extz	WA
 	extz	XWA
 	sll	2,XWA
@@ -513,16 +523,18 @@ CampItemUseMenu.done:
 
 c_212192	section	code abs=0x212192
 
-; [code+play] FixIt1-4 add FixItHP (30/50/100/150, capped at max HP), FullFx heals fully, Clear cures status
+; WA = camp item id: FixIt1-4 add FixItHP[i] (30 / 50 / 100 / 150) up to max HP, FullFx (4) fills HP,
+; Clear (5) cures rust, paralysis, EP leak and confusion; plays the heal or recover sound [code+play]
 CampUseHealItem:
 	push	XHL
 	push	XWA
-	sub	WA,0x26
+	sub	WA,ITEM_FIXIT1
 	cp	WA,5
 	jr	Z,CampUseHealItem.skip3
 	cp	WA,4
 	jr	Z,CampUseHealItem.skip
 	push	WA
+	; FixIt: HP + FixItHP[i], capped at max HP
 	ld	WA,SFX_HEAL
 	call	SoundCommand
 	pop	WA
@@ -569,10 +581,11 @@ CampItemMessageWait:
 	jr	Z,CampItemMessageWait.skip
 	jr	CampItemMessageWait.skip3
 CampItemMessageWait.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CampItemMessageWait.skip2
 	jr	CampItemMessageWait.skip3
 CampItemMessageWait.skip2:
+	; draw the cursor as a 1 x 2 sprite (tile 4) while the message waits (?)
 	ld	BC,0
 	ld	XWA,0
 	ld	A,(XIZ+0x20)
@@ -615,7 +628,8 @@ CloseCampItemList:
 
 c_212273	section	code abs=0x212273
 
-; [code] CampMenuDispatch state 8 (set by CampItemSubmenuInput after ShowCampItemList draws the heal item list and sets +0x21 = 3): switch on +0x21, 3 -> CampItemUseMenu, 5 -> CampItemMessageWait (A/B, back to 3), 1/2/4/6 idle, else +0x2A = 1
+; CampMenuDispatch state 8, the Item > Use screen: on XIZ+0x21, 3 = CampItemUseMenu, 5 =
+; CampItemMessageWait; 1/2/4/6 do nothing; any other value restarts the camp (state 1) [code]
 CampItemMenuDispatch:
 	ld	A,(XIZ+0x21)
 	cp	A,1
@@ -651,7 +665,9 @@ CampItemMenuDispatch.done:
 
 c_2122A6	section	code abs=0x2122A6
 
-; [code] CampMenuDispatch state 3: the whole 4-row camp menu (task +0x20 = row, U/D wrap 0-3, cursor at y 0x1C + 8 * row, B -> row 3); A: row 0 "Item" -> DrawCampItemSubmenu, state 4; row 1 "Stats" -> wCampWorksMode = 4, child CampWorksScreenTask, state 6; row 2 "Leave" -> "Camp" / "Leave" + OpenLeaveOKBox, state 5 (CampLeavePrompt); row 3 "Close" -> EndDungeonCamp (was CampMenuInput: only row 2 leaves)
+; CampMenuDispatch state 3: the Camp menu (cursor +0x20, rows Item / Stats / Leave / Close, U/D wrap, B =
+; Close). A on Item: the item submenu (state 4); Stats: the Works stats screen as a child task (state 6);
+; Leave: Leave OK? (state 5, cursor No); Close: EndDungeonCamp. Row saved in XIZ+0x1E [code]
 CampMenuInput:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -662,7 +678,7 @@ CampMenuInput:
 	pop	WA
 	jr	CampMenuInput.skip7
 CampMenuInput.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CampMenuInput.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -708,6 +724,7 @@ CampMenuInput.skip5:
 	ld	(XIZ+0x20),A
 	jr	CampMenuInput.skip6
 CampMenuInput.skip6:
+	; cursor at x 0x68, y 0x1C + 8 * row
 	ld	BC,0x68
 	ld	XWA,0
 	ld	A,(XIZ+0x20)
@@ -731,6 +748,7 @@ CampMenuInput.skip8:
 	cp	A,1
 	jr	NZ,CampMenuInput.skip9
 	calr	EraseTextBox3
+	; Stats: hide the boxes, scroll 0, run the Works screen (WORKS_MODE_CAMP_STATS) over the dungeon
 	call	EraseDungeonBoxes
 	ld	A,0
 	ld	(wScr1ScrollX),A
@@ -745,6 +763,7 @@ CampMenuInput.skip8:
 CampMenuInput.skip9:
 	cp	A,2
 	jr	NZ,CampMenuInput.skip10
+	; Leave: the box keeps "Camp" and "Leave" only, under the Leave OK? Yes / No box
 	call	EraseDungeonStatusBox
 	ld	A,3
 	call	ClearTextBox
@@ -775,7 +794,8 @@ CampMenuInput.done:
 
 c_2123C2	section	code abs=0x2123C2
 
-; [code+play] Camp > Leave "Leave OK?" (camp_leave_ok_prompt, mine floor 5)
+; CampMenuDispatch state 5, "Leave OK?" (cursor +0x20, 0 Yes / 1 No, starts on No; B = No): Yes erases the
+; boxes and StartDungeonExit; No back to the Camp menu at the saved row (state 3) [code+play]
 CampLeavePrompt:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -786,7 +806,7 @@ CampLeavePrompt:
 	pop	WA
 	jr	CampLeavePrompt.skip8
 CampLeavePrompt.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CampLeavePrompt.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -826,6 +846,7 @@ CampLeavePrompt.skip3:
 CampLeavePrompt.skip4:
 	jr	CampLeavePrompt.skip5
 CampLeavePrompt.skip5:
+	; cursor: Yes at x 0x58, No at 0x78
 	ld	XWA,0
 	ld	A,(XIZ+0x20)
 	and	A,A
@@ -848,6 +869,7 @@ CampLeavePrompt.skip8:
 	call	StartDungeonExit
 	jr	CampLeavePrompt.done
 CampLeavePrompt.skip9:
+	; No: restore the Camp menu and status box
 	calr	EraseLeaveOKBox
 	calr	DrawCampMenu
 	call	DrawDungeonStatus
@@ -862,9 +884,9 @@ CampLeavePrompt.done:
 
 c_212476	section	code abs=0x212476
 
-; [code] CampMenuDispatch state 4: rows Use 0 / List 1 / (blank row 2 skipped) / Exit 3 drawn by DrawCampItemSubmenu, B -> Exit; A: Use -> ShowCampItemList (heal item list), state 8; List -> wCampWorksMode = 5, child CampWorksScreenTask, state 7; Exit -> DrawCampMenu, back to state 3 at the saved row
-; [play] Use / List / (blank) / Exit; Down Use-List-Exit, the blank row is never selected; B runs Exit at once
-; (same as A on Exit: back to the Camp menu on Item)
+; CampMenuDispatch state 4, the Item submenu (rows Use 0 / List 1 / blank 2 never selected / Exit 3, U/D
+; wrap, B = Exit; row saved in XIZ+0x1F). A on Use: ShowCampItemList (state 8); List: the Works item
+; screen (WORKS_MODE_CAMP_ITEMS) as a child task (state 7); Exit: back to the Camp menu (state 3) [code+play]
 CampItemSubmenuInput:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -875,7 +897,7 @@ CampItemSubmenuInput:
 	pop	WA
 	jrl	CampItemSubmenuInput.skip9
 CampItemSubmenuInput.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CampItemSubmenuInput.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -889,6 +911,7 @@ CampItemSubmenuInput.skip2:
 	jr	Z,CampItemSubmenuInput.skip8
 	cp	A,1
 	jr	NZ,CampItemSubmenuInput.skip5
+	; up from Exit skips the blank row to List
 	push	WA
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
@@ -914,6 +937,7 @@ CampItemSubmenuInput.skip5:
 	jr	NZ,CampItemSubmenuInput.skip8
 	push	WA
 	ld	WA,SFX_CURSOR
+	; down from List skips the blank row to Exit
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -982,7 +1006,9 @@ StartCampMenu:
 
 c_212563	section	code abs=0x212563
 
-; [code] switch on task +0x2A (states 1-9): DrawCampMenu, CampMenuInput, CampLeavePrompt, fades
+; DUNGEON_MODE 0xA, the camp, per frame on state XIZ+0x2A: 1-2 open and show the Camp box, 3 CampMenuInput,
+; 4 CampItemSubmenuInput, 5 CampLeavePrompt, 6 / 7 wait for the Works child task to end and redraw,
+; 8 CampItemMenuDispatch, 9 redraw under a black fade; anything else restarts at 1 [code]
 CampMenuDispatch:
 	ld	A,(XIZ+0x2A)
 	cp	A,1
@@ -1018,6 +1044,7 @@ CampMenuDispatch.skip4:
 	calr	CampLeavePrompt
 	jr	CampMenuDispatch.done
 CampMenuDispatch.skip5:
+	; back from Stats: hold the screen dark one frame, redraw in state 9
 	cp	A,6
 	jr	NZ,CampMenuDispatch.skip6
 	ld	WA,(XIZ+TASK_CHILDREN)
@@ -1029,6 +1056,7 @@ CampMenuDispatch.skip5:
 	ld	(XIZ+0x2A),A
 	jr	CampMenuDispatch.done
 CampMenuDispatch.skip6:
+	; back from the item list: redraw the dungeon with the Item submenu
 	cp	A,7
 	jr	NZ,CampMenuDispatch.skip7
 	ld	WA,(XIZ+TASK_CHILDREN)

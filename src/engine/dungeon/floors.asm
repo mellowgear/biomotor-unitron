@@ -2,7 +2,9 @@
 
 c_210D95	section	code abs=0x210D95
 
-; [code] LoadDungeonFloor, FindFloorStartCell, SetMapScrollToPlayer, OpenDungeonBoxes, facing 1, DUNGEON_STEPS 0, the iris window opening (SetupWindowIris, StartWindowAnimToA), ShowAreaName, sound 0x85; callers EnterDungeon, DungeonFloorChangeStep
+; Builds and shows the current floor: loads it, puts the party on its start cell facing down, opens the
+; status boxes, irises the window open with the area name; DUNGEON_STEPS and XIZ+0x2D = 0. From
+; EnterDungeon and DungeonFloorChangeStep [code]
 StartDungeonFloor:
 	push	XHL
 	push	XDE
@@ -47,7 +49,8 @@ WaitDungeonFloorOpen.done:
 
 c_210DEB	section	code abs=0x210DEB
 
-; [code] only called by CheckEncounter after the cell attr test 0x100 (sets +0x12 = 2) or 0x200 (+0x12 = 1); starts the 0x60F1.. transition (SetupWindowIris, StartWindowIrisClose), sound 0x85, DUNGEON_MODE 4, whose handler DungeonFloorChangeStep does floor +1 (1) / -1 (2) / 0 (3)
+; Stairs taken (CheckEncounter, XIZ+0x12 = 1 down / 2 up already set): irises the window closed with the
+; floor-change sound and sets DUNGEON_MODE 4 (DungeonFloorChangeStep) [code]
 StartFloorChange:
 	push	XHL
 	push	XDE
@@ -87,7 +90,9 @@ StartDungeonExit:
 
 c_210E23	section	code abs=0x210E23
 
-; [code] DungeonStep mode 4, once UpdateWindowAnim is done: HideDungeonBoxes; +0x12 = 1 floor +1 (up to DUNGEON_FLOOR_COUNT), 2 floor -1, 3 floor 0; floor 0: SCR1 scroll 0 and TASK_ARG 1 (world map), the mine TASK_ARG 5 + SetFadeBlack; else StartDungeonFloor, mode 2
+; DUNGEON_MODE 4, after the iris closes: applies XIZ+0x12 (1 floor + 1 up to DUNGEON_FLOOR_COUNT, 2 floor - 1,
+; 3 floor 0); floor 0 leaves (TASK_ARG 1 = world map, the mine TASK_ARG 5 with a black fade), else
+; StartDungeonFloor and mode 2 [code]
 DungeonFloorChangeStep:
 	call	UpdateWindowAnim
 	cp	A,1
@@ -121,6 +126,7 @@ DungeonFloorChangeStep.skip3:
 	ld	A,0
 	ld	(XIZ+0x12),A
 DungeonFloorChangeStep.skip4:
+	; floor 0 = out of the dungeon
 	ld	A,(XIZ+DUNGEON_FLOOR)
 	and	A,A
 	jr	NZ,DungeonFloorChangeStep.skip6
@@ -134,6 +140,7 @@ DungeonFloorChangeStep.skip4:
 	ld	(XIZ+TASK_ARG),A
 	jr	DungeonFloorChangeStep.done
 DungeonFloorChangeStep.skip5:
+	; the crystal mine returns to the arena, not the world map (?)
 	ld	A,5
 	ld	(XIZ+TASK_ARG),A
 	ld	A,0

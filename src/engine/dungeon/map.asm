@@ -15,6 +15,7 @@ c_206E25	section	code abs=0x206E25
 
 ; [code] every main-loop frame (Reset): wMapScrollY += wMapScrollStepY and wMapScrollX += wMapScrollStepX, their low bytes to wScr1ScrollY / wScr1ScrollX; on crossing a 16-pixel cell it draws the new map row (DrawMapRow) or column (DrawMapColumn); a step >= 16 redraws everything (RedrawMapAtScroll)
 UpdateMapScroll:
+	; a step of 16 or more pixels (a jump) redraws the whole screen
 	ld	WA,(wMapScrollStepY)
 	or	WA,WA
 	jr	PL,UpdateMapScroll.skip
@@ -30,6 +31,7 @@ UpdateMapScroll.skip2:
 	cp	WA,0x10
 	jp	NC,RedrawMapAtScroll
 	ld	DE,(wMapScrollStepY)
+	; vertical: on entering a new cell row draw it, at the bottom edge (+12) when moving down
 	or	DE,DE
 	jr	Z,UpdateMapScroll.skip4
 	ld	WA,(wMapScrollY)
@@ -49,6 +51,7 @@ UpdateMapScroll.skip3:
 	dec	2,DE
 	call	DrawMapRow
 UpdateMapScroll.skip4:
+	; horizontal: the same for columns, the right edge being +13
 	ld	BC,(wMapScrollStepX)
 	or	BC,BC
 	jr	Z,UpdateMapScroll.done
@@ -75,6 +78,7 @@ c_206EB6	section	code abs=0x206EB6
 
 ; [code] BC / DE = cell x / y (wrapped to the map's width / height, words +0 / +2 of wMapPtr) -> HL = the map word at wMapPtr + 4 + 2 * (y * width + x)
 GetMapCell:
+	; signed modulo, so negative cells wrap round the map
 	ld	XWA,(wMapPtr)
 	exts	XBC
 	divs	XBC,(XWA)
@@ -122,6 +126,7 @@ GetMetatileTiles.skip2:
 	ex	BC,QBC
 	ex	DE,QDE
 GetMetatileTiles.skip3:
+	; flip / palette bits into every tile; tile 0 stays blank, others are offset to the loaded sheet
 	ld	QHL,HL
 	xor	XBC,XHL
 	xor	XDE,XHL
@@ -245,6 +250,7 @@ FindFloorStartCell:
 	push	BC
 	push	XWA
 	ld	A,(XIZ+0x12)
+	; arriving by stairs: look for the matching stairs (0x200 after floor - 1, 0x100 after floor + 1); XIZ+0x2C is scratch
 	cp	A,2
 	jr	Z,FindFloorStartCell.skip
 	ld	HL,0x100
@@ -280,6 +286,7 @@ FindFloorStartCell.loop:
 	jr	C,FindFloorStartCell.loop
 	ld	BC,0
 	ld	DE,0
+	; no stairs: the first open cell
 FindFloorStartCell.loop2:
 	push	WA
 	push	BC
@@ -311,6 +318,7 @@ c_211C52	section	code abs=0x211C52
 ; [code] wMapScrollX = (DUNGEON_X - 5) * 16 + 8, wMapScrollY = (DUNGEON_Y - 5) * 16 + 0xC, then RedrawMapAtScroll (full redraw)
 SetMapScrollToPlayer:
 	push	XWA
+	; party 5 cells from the left / top; X < 5 wraps the byte (map wraps anyway) (?)
 	xor	WA,WA
 	ld	A,(XIZ+DUNGEON_X)
 	sub	A,5

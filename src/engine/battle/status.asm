@@ -2,7 +2,7 @@
 
 c_2083FB	section	code abs=0x2083FB
 
-; [code] L = turns -> L = StatusRecovery[turns]
+; [code] L = turns so far -> HL = StatusRecovery[L], the % chance a paralysis / confusion wears off now
 GetStatusRecovery:
 	ld	H,0
 	extz	XHL
@@ -13,8 +13,11 @@ GetStatusRecovery:
 
 c_20B34D	section	code abs=0x20B34D
 
-; [code] player status recovery, turn counters, wAttackEPCost, then EnemyTurn or BattleStatusEffects
+; [code] task step after the player's action: roll paralysis and confusion recovery, count down the AP/SP/RP/MP
+; buff turns, drain wAttackEPCost, then the enemy's turn when it has not moved this round (wRoundSecondTurn),
+; else BattleStatusEffects (also when either side is at 0 HP)
 PlayerTurnEnd:
+	; status byte: bit 7 = on, low bits = turns so far; recovery chance grows with the count (capped at 21 = 0x95)
 	cpb	(wStatusParalyzed),0
 	jr	Z,PlayerTurnEnd.loop
 	ld	A,(wStatusParalyzed)
@@ -39,6 +42,7 @@ PlayerTurnEnd.skip2:
 	jr	NC,PlayerTurnEnd.skip3
 	incb	1,(wStatusConfused)
 PlayerTurnEnd.skip3:
+	; buff counters tick down one per turn, skill and item buffs separately
 	cpb	(wSkillAPUpTurns),0
 	jr	Z,PlayerTurnEnd.skip4
 	decb	1,(wSkillAPUpTurns)
@@ -75,7 +79,7 @@ PlayerTurnEnd.skip11:
 	call	StartChildTask
 	ld	WA,(wAttackEPCost)
 	ld	(XHL+TASK_ARG),WA
-	ldw	(XHL+0x10),0xF
+	ldw	(XHL+0x10),0xF	; 0x10 = frames per step of the bar animation (?)
 	task_wait
 	cpw	(wEnemyHP),0
 	jr	Z,PlayerTurnEnd.skip12
@@ -86,6 +90,7 @@ PlayerTurnEnd.skip12:
 	ldw	(XIZ+TASK_FUNC_HI),BattleStatusEffects >> 16
 	ret
 PlayerTurnEnd.skip13:
+	; first mover of the round: hand over to the other side, else the round ends
 	cpb	(wRoundSecondTurn),0
 	ld	XHL,BattleStatusEffects
 	jr	NZ,PlayerTurnEnd.skip14
@@ -97,7 +102,8 @@ PlayerTurnEnd.skip14:
 
 c_20B440	section	code abs=0x20B440
 
-; [code] A = status byte -> C if the status wears off (StatusRecovery[turns])
+; [code] A = status byte -> C if it wears off: chance StatusRecovery[turns] % (threshold pct*256/100 against
+; Random's low byte); keeps A's bit 7 out of the index
 RollStatusRecovery:
 	and	A,0x7F
 	ld	L,A
@@ -114,7 +120,8 @@ RollStatusRecovery:
 
 c_20C4FB	section	code abs=0x20C4FB
 
-; [code] enemy paralysis/confusion recovery, turn counters, wTimeStopTurns, EP cost, BattleStatusEffects
+; [code] enemy counterpart of PlayerTurnEnd: paralysis / confusion recovery, the enemy's debuff and SP-up counters,
+; wTimeStopTurns, drain wEnemyAttackEPCost, then PlayerTurn or BattleStatusEffects
 EnemyTurnEnd:
 	cpb	(wEnemyParalyzed),0
 	jr	Z,EnemyTurnEnd.loop
@@ -140,6 +147,7 @@ EnemyTurnEnd.skip2:
 	jr	NC,EnemyTurnEnd.skip3
 	incb	1,(wEnemyConfused)
 EnemyTurnEnd.skip3:
+	; the enemy's stat changes count down here, item and skill debuffs separately
 	cpb	(wEnemyAPDownTurns),0
 	jr	Z,EnemyTurnEnd.skip4
 	decb	1,(wEnemyAPDownTurns)
@@ -176,6 +184,7 @@ EnemyTurnEnd.skip11:
 	jr	Z,EnemyTurnEnd.skip12
 	decb	1,(wSkillEnemyMPDownTurns)
 EnemyTurnEnd.skip12:
+	; Time stop runs out on the enemy's turns
 	cpb	(wTimeStopTurns),0
 	jr	Z,EnemyTurnEnd.skip13
 	decb	1,(wTimeStopTurns)
@@ -206,7 +215,9 @@ EnemyTurnEnd.skip16:
 
 c_20C604	section	code abs=0x20C604
 
-; [code] Rust/Paralyzed/EP leak/Confused messages, HP/EP changes
+; [code] round end: rust (1/20 max HP), Recvr / AutoRP revival at 0 HP, EP leak (1/20 max EP), Proplr EP refill,
+; paralysis / confusion messages for the unit, then the enemy's rust, EP leak and status messages;
+; next step DrawBattleScreen, BattleVictory when the enemy is down, BattleDefeat when nothing revives the unit
 BattleStatusEffects:
 	cpw	(wEnemyHP),0
 	jrl	Z,BattleStatusEffects.skip17
@@ -214,6 +225,7 @@ BattleStatusEffects:
 	jrl	Z,BattleStatusEffects.skip
 	cpb	(wStatusRust),0
 	jrl	Z,BattleStatusEffects.skip
+	; unit's half of the screen in view while its messages show
 	ldb	(wScr1ScrollX),0xC0
 	ldb	(wScr1ScrollY),0
 	ldb	(wScr2ScrollX),0x60
@@ -224,6 +236,7 @@ BattleStatusEffects:
 	call	StartChildTask
 	task_wait
 	ld	WA,(wUnitMaxHP)
+	; rust damage = ceil(max HP / 20)
 	add	WA,0x13
 	extz	XWA
 	div	XWA,0x14
@@ -239,6 +252,7 @@ BattleStatusEffects:
 	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
+; unit down: Recvr (wRecvrActive uses) gives 9999 HP, else an equipped AutoRP is used up for half max HP
 BattleStatusEffects.skip:
 	cpw	(wUnitHP),0
 	jrl	NZ,BattleStatusEffects.skip5
@@ -255,13 +269,14 @@ BattleStatusEffects.skip:
 	ret
 BattleStatusEffects.skip2:
 	decb	1,(wRecvrActive)
-	ldw	(XIZ+0x10),0x270F
+	ldw	(XIZ+0x10),0x270F	; 9999: full heal, capped by the HP bar
 	jr	BattleStatusEffects.skip4
 BattleStatusEffects.skip3:
 	ldb	(XBC),0
 	ld	WA,(wUnitMaxHP)
 	srl	1,WA
 	ld	(XIZ+0x10),WA
+; revival clears every unit status
 BattleStatusEffects.skip4:
 	ld	A,0
 	ld	(wStatusParalyzed),A
@@ -291,6 +306,7 @@ BattleStatusEffects.skip4:
 	ldw	(XHL+0x10),0xF
 	task_wait
 	jrl	BattleStatusEffects.skip11
+; EP leak: lose ceil(max EP / 20), at most what is left
 BattleStatusEffects.skip5:
 	cpb	(wStatusEPLeak),0
 	jrl	Z,BattleStatusEffects.skip7
@@ -325,6 +341,7 @@ BattleStatusEffects.skip6:
 	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
+; EP below the cheapest attack's cost: an equipped Proplr is used up to refill EP
 BattleStatusEffects.skip7:
 	ld	WA,(wMinEPCost)
 	cp	(wUnitEP),WA
@@ -351,9 +368,10 @@ BattleStatusEffects.skip8:
 	task_wait
 	ld	XHL,UnitEPGainTask
 	call	StartChildTask
-	ldw	(XHL+TASK_ARG),0x270F
+	ldw	(XHL+TASK_ARG),0x270F	; 9999: refill to max
 	ldw	(XHL+0x10),0xF
 	task_wait
+; paralysis and confusion only show a reminder here; they act at the turn start
 BattleStatusEffects.skip9:
 	cpb	(wStatusParalyzed),0
 	jr	Z,BattleStatusEffects.skip10
@@ -378,6 +396,7 @@ BattleStatusEffects.skip10:
 	ld	XHL,WaitBattleMessageTask
 	call	StartChildTask
 	task_wait
+; enemy side, enemy half of the screen in view
 BattleStatusEffects.skip11:
 	cpb	(wEnemyRusted),0
 	jrl	Z,BattleStatusEffects.skip12
@@ -390,6 +409,7 @@ BattleStatusEffects.skip11:
 	ld	XHL,WaitBattleMessageTask
 	call	StartChildTask
 	task_wait
+	; enemy rust uses current HP, not max HP as for the unit (see BUGS.md)
 	ld	WA,(wEnemyHP)
 	add	WA,0x13
 	extz	XWA
@@ -406,6 +426,7 @@ BattleStatusEffects.skip11:
 	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
+; enemy EP leak, the same 1/20 of max EP as the unit's
 BattleStatusEffects.skip12:
 	cpw	(wEnemyHP),0
 	jrl	Z,BattleStatusEffects.skip17
@@ -466,6 +487,7 @@ BattleStatusEffects.skip15:
 	ld	XHL,WaitBattleMessageTask
 	call	StartChildTask
 	task_wait
+; round over: redraw and start the next one
 BattleStatusEffects.skip16:
 	ldw	(XIZ+TASK_FUNC),DrawBattleScreen & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),DrawBattleScreen >> 16
