@@ -239,7 +239,7 @@ SaveOptions.loop:
 
 c_20DC43	section	code abs=0x20DC43
 
-; Loads slot A (0 -> LoadOptions) into wPlayerName (0x26D bytes), clears wUnk5076; MainMenuLoadTask, WorksLoadTask [code]
+; Loads slot A (0 -> LoadOptions) into wPlayerName (0x26D bytes), clears wEventFlagsB0; MainMenuLoadTask, WorksLoadTask [code]
 LoadGameSlot:
 	or	A,A
 	jp	Z,LoadOptions
@@ -248,7 +248,7 @@ LoadGameSlot:
 	ld	XDE,wPlayerName
 	ld	BC,0x26D
 	ldir	(XDE+),(XHL+)
-	ldw	(wUnk5076),0
+	ldw	(wEventFlagsB0),0
 	ret
 
 c_20DC65	section	code abs=0x20DC65

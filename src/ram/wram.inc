@@ -12,7 +12,7 @@ wVBlankWait	equ	0x500A
 ; [code] 7 bytes BIOS call 2 (RTC get, BCD year, month, day, hour, minute, second, ...) fills in Reset; Reset then seeds SetRandomSeeds from words +0 / +2 / +4 (+4 plus 1); nothing else reads it (wPlayerName follows)
 wBootRtcTime	equ	0x500C
 
-; save data: pilot, partner, GP, equipment, unit stats, event flags, items, parts, options (0x5013-0x5281, LoadGameSlot / SaveGameSlot)
+; save data: pilot, partner, GP, equipment, unit stats, event flags, items, parts, options (slot file 0x5013-0x527F, LoadGameSlot / SaveGameSlot; the two option bytes are saved in slot 0)
 wPlayerName	equ	0x5013
 wPlayerRace	equ	0x5021
 wPlayerLevel	equ	0x5022
@@ -49,8 +49,8 @@ wUnitMaxEP	equ	0x505E
 wEventFlags	equ	0x5060
 wNpcTalked	equ	0x5068
 wBodyUpgrades	equ	0x5074
-; [code] save-data word (inside the 0x26D bytes LoadGameSlot copies): LoadGameSlot zeroes it after the copy; no reader found (?)
-wUnk5076	equ	0x5076
+; [code] event-flag word 11 (flags 0xB0-0xBF, wEventFlags + 0x16): LoadGameSlot zeroes it after loading, so those flags never survive a save; no flag in this range is used (?)
+wEventFlagsB0	equ	0x5076
 wItemCounts	equ	0x507F
 wTetisAutographs	equ	0x517E
 wPartCounts	equ	0x517F
@@ -172,7 +172,7 @@ wEnemyCritChance	equ	0x5DBE
 wEnemyFleeChance	equ	0x5DBF
 wEnemyStatusChance	equ	0x5DC0
 wEnemyEPCostBuff	equ	0x5DC1
-; [code] 30 at battle start (battle.asm 1379); GetEnemyRechargeAmount = this % of wEnemyMaxEP (EnemyRecharge); 0x5DC2 + status id is also the enemy status byte base (written ld XHL,wEnemyParalyzed-1)
+; [code] 30 at battle start (BattleStart); GetEnemyRechargeAmount = this % of wEnemyMaxEP (EnemyRecharge); 0x5DC2 + status id is also the enemy status byte base (written ld XHL,wEnemyParalyzed-1)
 wEnemyRechargePercent	equ	0x5DC2
 wEnemyParalyzed	equ	0x5DC3
 wEnemyRusted	equ	0x5DC4

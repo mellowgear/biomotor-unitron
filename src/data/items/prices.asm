@@ -4,7 +4,7 @@
 ; match); selling gives half. Ids 1-37 are accessories (slots wEquipAcc1/2), 38-51 battle
 ; items, 52-56 tools, 57-71 materials (play: Works item list categories).
 ; Code (BattleStatusEffects 0x20C604, the only way to BattleDefeat): at 0 HP, Recvr
-; (wRecvrActive) revives with 9999 HP; otherwise an equipped AutoRp (36) is used up (its slot
+; (wRecvrActive) revives with 9999 HP (capped at max HP); otherwise an equipped AutoRp (36) is used up (its slot
 ; cleared; A1 checked before A2) and revives with max HP / 2; both clear all four statuses. With EP below the arm's
 ; cost, an equipped Proplr (37) is used up and refills EP. Descriptions say "Cures Paralysis"
 ; / "Cures EP shortage".

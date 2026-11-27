@@ -67,7 +67,21 @@ make compare BASEROM=/path/to/your/rom.ngp
 
 `make compare` lists the first differing bytes (offset, original, yours) or says the two match.
 
-docs/ASSETS.md explains how assets are declared and built.
+## Documentation
+
+| Doc | What it covers |
+|---|---|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | boot, the task system, the game flow, a frame, the ROM and RAM maps, flash saves, BIOS calls, the sound CPU |
+| [docs/VIDEO.md](docs/VIDEO.md) | the K2GE as the game uses it: planes, sprites, palettes (colour and mono), fades, split and shake, window, pictures, text boxes, tile numbers |
+| [docs/DATA_FORMATS.md](docs/DATA_FORMATS.md) | every table the code reads, with field offsets: parts, items, enemies, skills, dungeons, talk rows, text, compression, saves |
+| [docs/GAME_RULES.md](docs/GAME_RULES.md) | the game's rules and formulas (battle, development, shops, arena) |
+| [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) | the story and the route through it |
+| [docs/BUGS.md](docs/BUGS.md) | bugs found in the original code |
+| [docs/NAMES.md](docs/NAMES.md) | renames of routines and RAM, with the evidence |
+| [docs/ASSETS.md](docs/ASSETS.md) | how assets are declared and built |
+| [docs/FILING.md](docs/FILING.md) | which code file holds what |
+| [docs/SONGS.md](docs/SONGS.md), [docs/Z80_DRIVER.md](docs/Z80_DRIVER.md) | the song format and the Z80 sound driver |
+| src/engine/gfx/README.md, src/gfx/README.md | the graphics layer's entry points; the graphics folders |
 
 ## Modding
 
@@ -100,7 +114,7 @@ assembler stops and names both clashing pieces.
 |---|---|
 | `src/main.asm` | Top level: constants, RAM names, then every code and data file |
 | `src/home/` | Cartridge header, system code |
-| `src/engine/` | Game code by subsystem, one level deeper: `battle/` (init, calc, menu, player_turn, enemy_turn, effects, status, tasks, end), `dungeon/` (core, load, map, encounter, chests, camp, boss, world_map), `arena/` (scenes, entry, opponents, duel), `gfx/` (palettes, tiles, tilemap, sprites, window, portraits, robot), `menus/` (main_menu, new_game, save, menu_helpers, print, `works/`, `shop/`, `town/`), and events, scenes, text, tables, player; one line per file in docs/FILING.md |
+| `src/engine/` | Game code by subsystem, one level deeper: `battle/` (init, calc, menu, player_turn, enemy_turn, effects, status, tasks, end), `dungeon/` (task, floors, steps, load, map, encounter, chests, camp, boss, status_boxes, world_map), `arena/` (scenes, entry, opponents, duel), `gfx/` (display, vblank, palettes, tiles, tilemap, sprites, font, window, portraits, robot), `menus/` (main_menu, new_game, save, menu_helpers, print, `works/`, `shop/`, `town/`), and events, scenes, text, tables, player; one line per file in docs/FILING.md |
 | `src/audio/` | Sound engine (main CPU), Z80 sound driver (Z80 source, `unitron z80 asm`), song table, song headers and voice records (asm), the 70 tracks as text (`tracks/*.song`, tools/biosong; docs/SONGS.md) |
 | `src/constants/`, `src/macros/`, `src/ram/` | `.inc` files: hardware names (cited), struct fields, joypad, event flags, item ids; the `task_wait` macro and the table record macros; work-RAM names |
 | `src/gfx/` | Tile sheets, monster images, robot parts, battle-effect sheets and frames, dungeon tiles, tile maps, palettes |
@@ -130,4 +144,8 @@ assembler stops and names both clashing pieces.
 - Byte-identical rebuild.
 - Unidentified data: 3 blocks, 47 bytes (`src/data/unknown/`), with no reader found in the code.
 - Pinned by design: every piece keeps its original address (no relocation, no shifting).
-- 16 routines still have address names (`sub_`/`swp_`).
+- Every routine has a header: 1617 of 1617 routines in 64 code files, 29,716 instructions with 2,324
+  comment lines (one per 13 instructions).
+- No routine is left with an address name (`sub_`/`swp_`).
+- Work RAM: 330 names in `src/ram/wram.inc` and 32 in `src/ram/gfx.inc`; constants in 12 files under
+  `src/constants/` (487 `equ`s).

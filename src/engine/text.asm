@@ -547,7 +547,7 @@ MessagePlaceholders:
 
 c_2085D5	section	code abs=0x2085D5
 
-; <NUM0>-<NUM15>: decimal of argument n (text box +0xE + 2n)
+; <NUM0>-<NUM15>: decimal of argument n, the word at XIZ+0xE+2n of the calling task (not the text box) [code]
 MsgInsertNumber:
 	ld	W,0
 	sll	1,WA
@@ -579,7 +579,7 @@ c_208610	section	code abs=0x208610
 ; (src/text/charmap.txt); the high byte read with it is MsgInsertString's first opcode
 MsgDigitZero:
 	db	0x41
-; <STR0>-<STR15>: copies string argument n (pointer at text box +0xE + 2n). [code] the
+; <STR0>-<STR15>: copies string argument n (the long pointer at XIZ+0xE+2*(n) of the calling task, not the text box). [code] the
 ; MessagePlaceholders entries 0x208581-0x2085BD point here; [play] executed at 0x208611 in all runs (D10)
 MsgInsertString:
 	push	XHL

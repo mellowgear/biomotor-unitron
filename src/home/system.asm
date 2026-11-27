@@ -2,7 +2,7 @@
 
 c_205FA3	section	code abs=0x205FA3
 
-; header entry point: stack, clear RAM, init, main loop
+; header entry point: InitConsoleType, then Reset (stack, RAM clear, init, main loop) [code]
 Start:
 	call	InitConsoleType
 	jp	Reset
@@ -209,7 +209,7 @@ AddItem:
 
 c_2061B6	section	code abs=0x2061B6
 
-; [code] W + 1, then RemoveItem: the part counterpart of RemoveItem (count byte wItemCounts + 0x100 + index - 1); no callers
+; [code] W + 1, then RemoveItem: the part counterpart of RemoveItem (count byte wItemCounts + 0x100 + WA, i.e. wPartCounts + part id); no callers
 RemovePart:
 	inc	1,W
 

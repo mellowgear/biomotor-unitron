@@ -1,7 +1,7 @@
 ; ShopItemStock (shop_item_stock): 71 records of 1 bytes, one line per id; keep the order and count.
 ; Shop list filter (GetShopItemTier <- GetShopItemTierBy <- IsShopItemStocked): an item is listed when tier is not
 ; 0 and tier > the threshold for wArenaRankCopy in the code at ShopTierByRank (4 3 3 2 2 1 1 0 0 0 for
-; ranks 0-9). So 4 = from the start, 3 = from rank 3, 2 = from rank 5, 1 = from rank 7,
+; ranks 0-9). So 4 = from rank 1 (none at rank 0), 3 = from rank 3, 2 = from rank 5, 1 = from rank 7,
 ; 0 = never. (ShopBuyPartMoveHook draws a line only when the filter returns carry.)
 ; id: tier
 	db	3	; 1 FlrCt

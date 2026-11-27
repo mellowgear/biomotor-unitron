@@ -11,7 +11,7 @@ Evidence tags:
 
 | U1 address | Name | What is known | Evidence |
 |---|---|---|---|
-| 0x5076 | wUnk5076 | save-data word LoadGameSlot zeroes after loading; no reader found (?) | generic |
+| 0x5076 | wEventFlagsB0 | event-flag word 11 (flags 0xB0-0xBF); LoadGameSlot zeroes it after loading, no flag in the range is used (was wUnk5076) | [code] |
 | 0x5CDD | wJoyHistory+0xFF | "last frame" slot of the joypad ring, set to SYS_LEVER by InitJoypad | [U2] |
 | 0x5CE2 | wUnk5CE2 | set 0 / 1 by the intro and story scene setups; no reader found (?) | generic |
 | 0x5DF8 | wCreditsGlyphCache | 0x100 words: the tile holding each text char's glyph in the scrolling credits / story text, 0xFFFF until loaded | [code] CreditsTask fills it with 0xFFFF; CreditsLineCachedGlyph / CreditsLineLoadGlyph read and set 0x5DF8 + 2 * char |

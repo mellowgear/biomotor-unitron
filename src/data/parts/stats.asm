@@ -3,7 +3,7 @@
 ; grouped by category: Body 1-15, Core 16-30, Legs 31-74, Back 75-94, Arm 95-227.
 ; PartCategoryStart (0x271882, 5 x u16) holds each category's first id; GetBodyName..GetArmRecord
 ; (0x208309-0x2083A3) take a category-relative id. Moving the boundaries means editing those.
-; LoadEnemy adds hp, ep, p04-p0A of the equipped parts to the same battle stats as the
+; LoadEnemy adds hp, ep, p04-p0A of the equipped parts (the arms without ap) to the same battle stats as the
 ; enemy record; the body's affinity replaces the robot's. CalcUnitStats 0x20868B: robot
 ; AP/SP/RP/MP = pilot stats + each part's ap..mp; max HP/EP = the sum of the hp/ep of all six
 ; equipped parts (CalcUnitStats; accessories are added after).
@@ -12,7 +12,7 @@
 ; gfx/parts/<slot>/ is named after these parts.
 ; ep_cost: EP an arm's attack costs (EnemyChooseAttack reads it for robot enemies).
 ; price: buy price in GP, 4-byte BCD (play: shop prices match, e.g. Demon 650000; sell = half).
-; status: what an arm's hit can inflict on the enemy (battle.s after the hit roll: a random
+; status: what an arm's hit can inflict on the enemy (PlayerAttack after the hit roll: a random
 ; roll against wStatusChance, then the message from 0x225BBE): 1 paralyzed, 2 rusted, 3 leaking
 ; energy, 4 confused; 0 none. Sets bit 7 of wEnemyParalyzed + status - 1.
 ; (Play, Mariner: GrvHmr -> "Bulby is paralyzed!!", 0x5DC3 0x80, then 0x81-0x84 with

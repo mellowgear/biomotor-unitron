@@ -1,6 +1,7 @@
 ; DamageTable (damage): 202 records of 10 bytes, one line per id; keep the order and count.
 ; Base damage of a hit (DamageRoll 0x20819F), before affinity (ApplyAffinity) and criticals:
-;   line = (max(attack - defence, -5) + 9) / 5 + 1, at most 202; column d0..d4 at random.
+;   line = (attack - defence + 9) / 5 + 1, at most 202, with attack - defence taken as -5 whenever
+;   attack < defence (so any such hit uses line 1); column d0..d4 at random.
 ; Player hit: attack = (arm ap + wUnitAP) x AP buff % + LevelRoll(level), defence = enemy
 ; SP x buff % + LevelRoll(the same level: both rolls use the attacker's level).
 ; LevelRoll = random 1..a + b from tables/level_rolls.asm. The default table is about

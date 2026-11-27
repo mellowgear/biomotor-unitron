@@ -222,7 +222,7 @@ SkillRecvr.skip:
 
 c_20ADC4	section	code abs=0x20ADC4
 
-; [code] skill code 10 (Vapor): "Airbag activated! Damage is halved!", wAirbagActive = record +4 turns; no effect while active
+; [code] skill code 10 (Vapor): "Airbag activated! Damage is halved!", wAirbagActive = record +4 (never counted down: the rest of the battle); no effect while active
 SkillAirbag:
 	cpb	(wAirbagActive),0
 	jr	Z,SkillAirbag.skip
@@ -256,7 +256,7 @@ SkillAirbag.skip:
 
 c_20AE4F	section	code abs=0x20AE4F
 
-; [code] skill code 11 (Breath): "Fully charged!! EP costs reduced to 0!!", wFullChargeActive = record +4 turns;
+; [code] skill code 11 (Breath): "Fully charged!! EP costs reduced to 0!!", wFullChargeActive = record +4 (never counted down);
 ; no effect while active
 SkillFullCharge:
 	cpb	(wFullChargeActive),0
@@ -404,7 +404,7 @@ ShowStatusCured:
 
 c_20B05D	section	code abs=0x20B05D
 
-; [code] PowDrv: "AP went up", wItemAPUpTurns = 5 (AP +15 % (?)); the next three are the same for SP / RP / MP
+; [code] PowDrv: "AP went up", wItemAPUpTurns = 5 (AP +30 % in ComputeStatBuffs; the item text says 15 %); the next three are the same for SP / RP / MP
 ItemPowDrv:
 	ld	XHL,(XIZ+0x14)
 	inc	1,XHL
@@ -488,7 +488,7 @@ ItemTurbo:
 
 c_20B1AD	section	code abs=0x20B1AD
 
-; [code] Absorb: "AP went down" on the enemy, wEnemyAPDownTurns = 5 (AP -15 % (?)); the next three are the same for
+; [code] Absorb: "AP went down" on the enemy, wEnemyAPDownTurns = 5 (AP -30 % in ComputeStatBuffs; the item text says 15 %); the next three are the same for
 ; SP / RP / MP
 ItemAbsorb:
 	ldb	(wScr1ScrollX),0x60

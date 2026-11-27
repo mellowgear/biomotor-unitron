@@ -633,7 +633,9 @@ SetMaxPilotStats:
 
 c_21D647	section	code abs=0x21D647
 
-; [code] clear stats, level 0 -> 1, CalcUnitStats
+; [code] New game: runs SelectPlayerTask (no race chosen -> back to MainMenuTask), then clears the event flags, item and part
+; counts and pilot stats, levels 0 -> 1, equips the race's StartingEquipment, fills HP/EP, adds the right arm part, sets
+; engineer level 1 / 5 EXP, 0 GP, arena rank 0, plays the Unitice story scene and continues to StreetGoWorks
 NewGameSetup:
 	call	ResetAllPalettes
 	ld	XHL,SelectPlayerTask
