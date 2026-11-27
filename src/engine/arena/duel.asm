@@ -2,8 +2,8 @@
 
 c_214401	section	code abs=0x214401
 
-; [code] ArenaTask state 7 (ArenaSceneNext 0xF7): wFadeLevel -= 0x10 each frame until it would pass black, then ArenaClearScreen, PlayMusic 4, DrawPortrait 0x2B at tile 0x10 (SCR1, columns 0-9) and 0x2A at tile 0xCE (SCR2, BC 0xA = from column 10, DE 0x20), +0x1E / +0x2C / +0x2D = 0, wFadeLevel 0, TASK_ARG 8
-; [play] seen in play (after Fight, before "Duel 1"): portraits 0x2B and 0x2A are the left and right halves of one picture, a closed rusty metal gate (two riveted door leaves); not a "vs" screen (was ArenaPreDuelPortraits)
+; ArenaTask state 7 (after Fight): fades out 0x10 per frame, then draws the closed gate (portrait 0x2B on SCR1, 0x2A on
+; SCR2: its two leaves, not a "vs" screen) with SONG_STORY; clears +0x1E / +0x2C / +0x2D, wFadeLevel 0, state 8 [code][play]
 ArenaPreDuelGate:
 	push	XHL
 	push	XDE
@@ -11,6 +11,7 @@ ArenaPreDuelGate:
 	push	XWA
 	ld	A,(wFadeLevel)
 	sub	A,0x10
+	; fade would pass black
 	bit	7,A
 	jr	Z,ArenaPreDuelGate.skip
 	ld	(wFadeLevel),A
@@ -47,8 +48,8 @@ ArenaPreDuelGate.skip2:
 
 c_21445B	section	code abs=0x21445B
 
-; [code] ArenaTask state 8: every other frame wScr1ScrollX += +0x1E and wScr2ScrollX -= +0x1E (the two planes move apart), wFadeLevel = +0x2C from frame 0x14 (towards white); +0x1E = 1 at frames 0x14 (PlayMusic 0, sound 0x84), 0x3C, 0x5A (so 1 px per two frames); A / B or frame 0x7F -> ArenaPreDuelEnd
-; [play] seen in play: the gate opens: the left leaf (SCR1) slides left and the right leaf (SCR2) slides right with a white gap between them, while the screen fades to white; then the "Duel 1" title (was ArenaPreDuelScroll)
+; ArenaTask state 8: the gate opens (SCR1 slides left, SCR2 right, 1 px per two frames once started at frame 0x14)
+; while fading to white; A, B or frame 0x7F -> ArenaPreDuelEnd. +0x2C = frame, +0x1E = step [code][play]
 ArenaPreDuelGateOpen:
 	push	XHL
 	push	XDE
@@ -65,6 +66,7 @@ ArenaPreDuelGateOpen.skip:
 	calr	ArenaPreDuelEnd
 	jr	ArenaPreDuelGateOpen.skip7
 ArenaPreDuelGateOpen.skip2:
+	; scroll on even frames, fade to white from frame 0x14
 	ld	A,(XIZ+0x2C)
 	bit	0,A
 	jr	NZ,ArenaPreDuelGateOpen.skip3
@@ -80,6 +82,7 @@ ArenaPreDuelGateOpen.skip2:
 	jr	C,ArenaPreDuelGateOpen.skip3
 	ld	(wFadeLevel),A
 ArenaPreDuelGateOpen.skip3:
+	; the gate moves from frame 0x14 (SONG_EVENT, a shake) and is re-pushed at 0x3C and 0x5A
 	ld	A,(XIZ+0x2C)
 	cp	A,0x14
 	jr	NZ,ArenaPreDuelGateOpen.skip4
@@ -122,7 +125,7 @@ ArenaPreDuelGateOpen.skip7:
 
 c_2144F7	section	code abs=0x2144F7
 
-; [code] +0x1E / +0x1F = 0, +0x2A = 2, ArenaClearScreen, wFadeLevel 0, SCR1 / SCR2 X scroll 0, PlayMusic 4, TASK_ARG 9 (ArenaDuelDispatch: ArenaDuelTitleStart)
+; Clears the gate (screen, fade, scrolls), SONG_STORY, duel index +0x1E and +0x1F = 0, duel state +0x2A = 2, ArenaTask state 9 [code]
 ArenaPreDuelEnd:
 	push	XHL
 	push	XDE
@@ -152,8 +155,8 @@ ArenaPreDuelEnd:
 
 c_21452D	section	code abs=0x21452D
 
-; [code] OpenBox1 / PlaceBox1, scene +0x12 = GetArenaGenderScene(0x5E) (female scene 36, male 37), PlayMusic 0, sound 0x20, TASK_ARG 3, +0x1F = 0
-; [play] seen in play (rank 8 = Rank CS, stage arena rank 7, before duel 6): the partner gets a transmission from the opponent, picture 0x38 (Satanachia's UNITRON) with Lily's voice ("Why am I fighting...?"), then "Satanachia's UNITRON core is out of control!" and the "6 Duel" title; the male and female scenes differ only in the partner's lines
+; Before duel 6 of the Rank CS final: queues the gender scene for 0x5E (Satanachia's runaway UNITRON calls, Lily's voice)
+; with SONG_EVENT; state TASK_ARG 3, +0x1F = 0 [code][play]
 ArenaDuel6Scene:
 	push	XHL
 	push	XDE
@@ -182,7 +185,7 @@ ArenaDuel6Scene:
 
 c_21455F	section	code abs=0x21455F
 
-; [code] XHL = map (u8 w, h): BC = (0x14 - w) / 2, DE = (0x13 - h) / 2 (no caller found)
+; BC / DE = the tile column / row that centre map XHL (u8 width, height) on a 0x14 x 0x13 screen; no caller [code]
 GetCenteredMapPos:
 	push	XHL
 	push	XWA
@@ -202,7 +205,7 @@ GetCenteredMapPos:
 
 c_21457E	section	code abs=0x21457E
 
-; [code] DuelTitlePal (6 palettes) to palette 0, 0x10 and 0x20
+; DuelTitlePal (6) into palettes 0, 0x10 and 0x20 [code]
 LoadDuelTitlePalettes:
 	push	XHL
 	push	XDE
@@ -228,7 +231,7 @@ LoadDuelTitlePalettes:
 
 c_2145AE	section	code abs=0x2145AE
 
-; [code] DuelTitleMonoPal (2 palettes) to mono palette 0, 2 and 4
+; DuelTitleMonoPal (2) into mono palettes 0, 2 and 4 [code]
 LoadDuelTitleMonoPalettes:
 	push	XHL
 	push	XDE
@@ -254,7 +257,7 @@ LoadDuelTitleMonoPalettes:
 
 c_2145DE	section	code abs=0x2145DE
 
-; [code] wScr1ScrollX 0x98, wScr2ScrollX -0x98, wScr2ScrollY 0xFF, LoadCompressedTiles Gfx_2C8A0A (sword, "Duel" letters, digits) at GetPictureFirstTile, LoadDuelTitlePalettes (wColorFlags) or LoadDuelTitleMonoPalettes; [play] the "Duel n" title (arena_duel1_title)
+; Loads the "Duel n" title tiles (sword, letters, digits) and palettes, scrolling SCR1 / SCR2 off to the sides [code][play]
 LoadDuelTitleGfx:
 	push	XHL
 	push	XDE
@@ -285,7 +288,7 @@ LoadDuelTitleGfx.skip2:
 
 c_214616	section	code abs=0x214616
 
-; [code] DrawSpriteMap DuelTitleNumber1Map + 10 * duel index +0x1E at GetPictureFirstTile
+; Sprite map of duel +0x1E's number at BC / DE (colour) [code]
 DrawDuelNumberColor:
 	push	XHL
 	push	XDE
@@ -307,7 +310,7 @@ DrawDuelNumberColor:
 
 c_214639	section	code abs=0x214639
 
-; [code] DrawSpriteMap DuelTitleNumber1MonoMap + 10 * duel index +0x1E
+; Sprite map of duel +0x1E's number at BC / DE (mono) [code]
 DrawDuelNumberMono:
 	push	XHL
 	push	XDE
@@ -329,7 +332,7 @@ DrawDuelNumberMono:
 
 c_21465C	section	code abs=0x21465C
 
-; [code] DrawDuelNumberColor when wColorFlags is not 0, else DrawDuelNumberMono; BC / DE = position
+; Duel +0x1E's number at BC / DE in the colour or mono version [code]
 DrawDuelNumber:
 	push	XHL
 	push	XDE
@@ -351,7 +354,7 @@ DrawDuelNumber.skip2:
 
 c_214829	section	code abs=0x214829
 
-; [code] ArenaDuelDispatch state 2: +0x1F set (ArenaAfterBattle before duel 6 of rank 8 at stage arena rank 7) -> ArenaDuel6Scene; else LoadDuelTitleGfx, speed +0x20 = 4, +0x2C / +0x21 / +0x22 / +0x2D = 0, state 3
+; Duel state 2: the Rank CS duel 6 scene if +0x1F is set, else loads the title and starts the slide-in (state 3, speed +0x20 4) [code]
 ArenaDuelTitleStart:
 	push	XHL
 	push	XDE
@@ -382,7 +385,7 @@ ArenaDuelTitleStart.skip2:
 
 c_214859	section	code abs=0x214859
 
-; [code] ArenaDuelDispatch state 3: DrawDuelSwordColumn, DrawDuelLetterColumn, DrawDuelNumber at y -0x14 + +0x2C / 2; +0x2C += speed +0x20 (4, slowing from +0x2C 0x5C); at 0x98 PlayMusic 0xB, sound 0xA0, state 4; [play] arena_duel1_title, arena_cs_duel6_title
+; Duel state 3: slides the title in, +0x2C = position, braking past 0x5C; at 0x98 starts SONG_PILOT_BATTLE, state 4 [code][play]
 ArenaDuelTitleSlideIn:
 	push	XHL
 	push	XDE
@@ -390,6 +393,7 @@ ArenaDuelTitleSlideIn:
 	push	XWA
 	calr	DrawDuelSwordColumn
 	calr	DrawDuelLetterColumn
+	; number y = position / 2 - 0x14
 	ld	BC,0x48
 	ld	DE,0xFFEC
 	ld	A,(XIZ+0x2C)
@@ -398,6 +402,7 @@ ArenaDuelTitleSlideIn:
 	add	DE,WA
 	calr	DrawDuelNumber
 	ld	A,(XIZ+0x2C)
+	; speed 4 - (position - 0x5C) / 0x14 - 1: brakes near the end
 	cp	A,0x5C
 	jr	C,ArenaDuelTitleSlideIn.skip
 	sub	A,0x5C
@@ -408,6 +413,7 @@ ArenaDuelTitleSlideIn:
 	sub	W,A
 	ld	(XIZ+0x20),W
 ArenaDuelTitleSlideIn.skip:
+	; +0x22 = previous +0x21 (?)
 	ld	A,(XIZ+0x21)
 	ld	(XIZ+0x22),A
 	ld	A,(XIZ+0x2C)
@@ -433,7 +439,7 @@ ArenaDuelTitleSlideIn.skip2:
 
 c_2148C4	section	code abs=0x2148C4
 
-; [code] ArenaDuelDispatch state 4: DrawDuelNumber at 0x48, 0x38 for 0x4B frames, then +0x2C = 0x98, state 5 (ArenaStartBattle slides the title out)
+; Duel state 4: holds the title 0x4B frames, then state 5 [code]
 ArenaDuelTitleHold:
 	push	XHL
 	push	XDE
@@ -460,7 +466,8 @@ ArenaDuelTitleHold.skip:
 
 c_2148ED	section	code abs=0x2148ED
 
-; [code] slides (task+0x2C -= 8, DrawDuelNumber) then: enemy = task+0x18+task+0x1E with parts 0x60CC+6*slot for pilots 0x62-0x70, wAreaLevel = rank (task+0x15) - 1, LoadEnemy, 0x5DDA = 0, StartBattleTask (0x5DD9 = FF, StartTask(BattleStart)), state +0x2A = 6; [play] arena_cs_duel_* screens
+; Duel state 5: slides the title out 8 per frame (+0x2C), then loads opponent +0x18[+0x1E] (pilots get parts wArenaPilotParts + 6 * duel)
+; at wAreaLevel = rank +0x15 - 1 and starts the battle; state 6 [code][play]
 ArenaStartBattle:
 	push	XHL
 	push	XDE
@@ -478,6 +485,7 @@ ArenaStartBattle:
 	ld	A,(XIZ+0x2C)
 	dec	8,A
 	ld	(XIZ+0x2C),A
+	; slides from 0x98 down until the position wraps past 0
 	cp	A,0x98
 	jr	C,ArenaStartBattle.skip3
 	jr	Z,ArenaStartBattle.skip3
@@ -486,6 +494,7 @@ ArenaStartBattle:
 	ld	(wScr1ScrollX),A
 	ld	(wScr2ScrollX),A
 	ld	(wScr2ScrollY),A
+	; opponent of this duel
 	ld	E,(XIZ+0x1E)
 	extz	DE
 	extz	XDE
@@ -493,6 +502,7 @@ ArenaStartBattle:
 	add	XHL,0x18
 	add	XHL,XDE
 	ld	A,(XHL)
+	; pilot opponents (ENEMY_ALEX..ENEMY_FENRIL - 1) carry built parts
 	cp	A,ENEMY_ALEX
 	jr	C,ArenaStartBattle.skip
 	cp	A,ENEMY_FENRIL
@@ -504,6 +514,7 @@ ArenaStartBattle:
 ArenaStartBattle.skip:
 	ld	XHL,0
 ArenaStartBattle.skip2:
+	; +0x15 = rank row + 2
 	ld	W,(XIZ+0x15)
 	sub	W,2
 	inc	1,W
@@ -522,7 +533,7 @@ ArenaStartBattle.skip3:
 
 c_214979	section	code abs=0x214979
 
-; [code] ArenaDuelDispatch state 6: state 7 (ArenaAfterBattle) once wBattleResult != 0xFF (StartBattleTask sets 0xFF when the battle starts)
+; Duel state 6: state 7 once the battle sets wBattleResult [code]
 ArenaWaitBattleEnd:
 	push	XHL
 	push	XDE
@@ -542,7 +553,8 @@ ArenaWaitBattleEnd.skip:
 
 c_214990	section	code abs=0x214990
 
-; [code] state 7 of ArenaDuelDispatch (after ArenaWaitBattleEnd sees 0x5DD9 != FF): battle result 0 (BattleVictory) or 1 (enemy fled, EnemyFleeSucceeded) -> next opponent task+0x1E += 1, all task+0x16 done -> ArenaRoundsComplete, else state 2; result 2/3 (gave up / BattleDefeat) -> ArenaBattleLost
+; Duel state 7: a win or a fled enemy advances +0x1E (all +0x16 duels done -> ArenaRoundsComplete, else state 2,
+; flagging +0x1F before duel 6 of the Rank CS final); a loss or retreat -> ArenaBattleLost [code]
 ArenaAfterBattle:
 	push	XHL
 	push	XDE
@@ -565,6 +577,7 @@ ArenaAfterBattle.skip:
 	calr	ArenaRoundsComplete
 	jr	ArenaAfterBattle.skip4
 ArenaAfterBattle.skip2:
+	; next is duel 6 of the Rank CS final
 	cp	A,5
 	jr	NZ,ArenaAfterBattle.skip3
 	ld	A,(XIZ+0x15)
@@ -587,12 +600,14 @@ ArenaAfterBattle.skip4:
 
 c_2149DC	section	code abs=0x2149DC
 
-; [code] ArenaAfterBattle when the opponent index task +0x1E reaches the count +0x16 (battle results 0 / 1 only): rank 8 at stage arena rank 7 -> "Arena " in box 3, DrawArenaParticipants, PlayMusic 0; else SetupArenaScreen; scene +0x12 = GetArenaRankFirstScene, state 9
+; All duels won: the Rank CS final (rank 8 at stage arena rank 7) shows the participants with SONG_EVENT, other ranks
+; the arena screen; queues the rank's first win scene, duel state 9 [code]
 ArenaRoundsComplete:
 	push	XHL
 	push	XDE
 	push	XBC
 	push	XWA
+	; the Rank CS final at stage arena rank 7
 	ld	A,(XIZ+0x15)
 	cp	A,8
 	jr	NZ,ArenaRoundsComplete.skip
@@ -630,13 +645,14 @@ ArenaRoundsComplete.skip2:
 
 c_214A33	section	code abs=0x214A33
 
-; [code] only from ArenaAfterBattle on battle result 2 (BattleRetreat "You gave up") or 3 (BattleDefeat): scene 0x42 for slot 5 of rank 8 at stage rank 7 (PlayMusic 0, TASK_ARG 3), else SetupArenaScreen, scene 4, state +0x2A = 9
-; [play] seen in play: losing the Rank CS final (Satana) gives scene 0x42 "It is finished..." and, through ArenaExitFade, GAME OVER; a loss in another rank gives scene 4 "Close, but no cigar" and back to the Street
+; A loss: duel 6 of the Rank CS final queues scene 0x42 ("It is finished...", leading to GAME OVER via ArenaExitFade);
+; other ranks scene 4 ("Close, but no cigar") on the arena screen, duel state 9 [code][play]
 ArenaBattleLost:
 	push	XHL
 	push	XDE
 	push	XBC
 	push	XWA
+	; lost duel 6 of the Rank CS final
 	ld	A,(XIZ+0x1E)
 	cp	A,5
 	jr	NZ,ArenaBattleLost.skip
@@ -674,7 +690,7 @@ ArenaBattleLost.skip2:
 
 c_214A84	section	code abs=0x214A84
 
-; [code] ArenaDuelDispatch state 9: TASK_ARG 3 (ArenaSceneRunner)
+; Duel state 9: back to ArenaTask state 3 to run the queued scene [code]
 ArenaDuelDone:
 	push	XHL
 	push	XDE
@@ -690,7 +706,7 @@ ArenaDuelDone:
 
 c_214A92	section	code abs=0x214A92
 
-; [code] arena state 9 handler (ArenaTask): switch on task +0x2A: 1 -> 3, 2 ArenaDuelTitleStart, 3 ArenaDuelTitleSlideIn, 4 ArenaDuelTitleHold, 5 ArenaStartBattle, 6 ArenaWaitBattleEnd, 7 ArenaAfterBattle, 9 ArenaDuelDone
+; ArenaTask state 9: runs duel state +0x2A (1 -> 3, 2..7, 9; others reset to 1) and counts +0x2D [code]
 ArenaDuelDispatch:
 	push	XHL
 	push	XDE
@@ -752,7 +768,7 @@ ArenaDuelDispatch.skip9:
 
 c_214AF6	section	code abs=0x214AF6
 
-; [code] wFadeLevel 0, +0x2A = 2, TASK_ARG 0xA (ArenaMineTrip)
+; Starts the crystal mine trip: ArenaTask state 0xA at sub-state 2 [code]
 ArenaGoToCrystalMine:
 	push	XHL
 	push	XDE
@@ -772,7 +788,7 @@ ArenaGoToCrystalMine:
 
 c_214B0F	section	code abs=0x214B0F
 
-; [code] FadeToBlackStep(4) until black, then window / fade reset, EraseBoxes123, ClearArenaPortraitArea, StartTask(CrystalMineTaskInit), +0x2A = 3
+; Mine trip state 2: fades out, clears the boxes and portrait, starts CrystalMineTaskInit; state 3 [code]
 ArenaStartCrystalMine:
 	push	XHL
 	push	XDE
@@ -800,13 +816,15 @@ ArenaStartCrystalMine.skip:
 
 c_214B43	section	code abs=0x214B43
 
-; [code] waits for wArenaNext != 0xFF (the mine's DungeonTask end writes it): not 0 -> TASK_ARG 0xC (the arena ends with it); 0 -> SetFadeBlack, SetupArenaScreen, scene 6, +0x2A = 4
+; Mine trip state 3: waits for the mine to write wArenaNext; nonzero ends ArenaTask (state 0xC), 0 redraws the arena with
+; scene 6 and goes to state 4 [code]
 ArenaWaitCrystalMine:
 	push	XHL
 	push	XDE
 	push	XBC
 	push	XWA
 	ld	A,(wArenaNext)
+	; 0xFF while the mine runs
 	cp	A,0xFF
 	jr	Z,ArenaWaitCrystalMine.skip2
 	cp	A,0
@@ -836,7 +854,7 @@ ArenaWaitCrystalMine.skip2:
 
 c_214B83	section	code abs=0x214B83
 
-; [code] FadeInFromBlackStep(4) until done, then TASK_ARG 3 (ArenaSceneRunner)
+; Mine trip state 4: fades in, then ArenaTask state 3 [code]
 ArenaMineTripFadeIn:
 	push	XHL
 	push	XDE
@@ -857,7 +875,7 @@ ArenaMineTripFadeIn.skip:
 
 c_214B9B	section	code abs=0x214B9B
 
-; [code] ArenaTask state 0xA, on +0x2A: 1 -> 2, 2 ArenaStartCrystalMine, 3 ArenaWaitCrystalMine, 4 ArenaMineTripFadeIn
+; ArenaTask state 0xA: runs mine trip state +0x2A (1 -> 2, 2..4; others reset to 1) [code]
 ArenaMineTrip:
 	push	XHL
 	push	XDE
@@ -896,8 +914,7 @@ ArenaMineTrip.skip5:
 
 c_214BD2	section	code abs=0x214BD2
 
-; [code] ArenaTask state 0xB: FadeToBlackStep(1) until black, EraseBox1, wArenaNext = 6, TASK_ARG 0xC (ArenaTask ends); reached only by ArenaSceneNext 0xF2, the next of scene 69 (end of the scene 0x42 chain: 0x42 -> pair 16 (67 / 68) -> 69); wStreetNext 6 then runs StreetGameOver
-; [play] seen in play: after losing the Rank CS final to Satana ("It is finished... Your spirit belongs to me now" ... "A new world awaits you... A new path..."), fades to black, then GAME OVER
+; ArenaTask state 0xB, after the scene 0x42 chain (ArenaSceneNext 0xF2): fades out, wArenaNext 6 (StreetGameOver), ends ArenaTask [code][play]
 ArenaExitFade:
 	ld	A,1
 	call	FadeToBlackStep

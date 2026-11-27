@@ -15,20 +15,26 @@ SetupWorksMenu:
 	ld	XHL,MenuResults_217C3C
 	ld	(wMenuValues),XHL
 	jp	MenuReset
+; [code] SetupStatsMenu choice strings (these tables live here but SetupStatsMenu is in stats.asm)
 CharaText:
 	text "Chara"
 	done
+; [code] SetupStatsMenu choice string
 UNITText:
 	text "UNIT"
 	done
+; [code] SetupStatsMenu choice string
 ExitText5:
 	db	0x25,0x18,0x09,0x14,0xFF	; "Exit"
+; [code] SetupStatsMenu lines: column, row, text
 MenuLines_217C7F:
 	menu_item	0,0,CharaText
 	menu_item	0,1,UNITText
 	menu_item	0,8,ExitText5
+; [code] SetupStatsMenu cursor cells
 MenuCursor_217C91:
 	db	0,0, 0,1, 0,8	; column, row
+; [code] SetupStatsMenu results: Chara 0, UNIT 1, Exit 0xFF
 MenuResults_217C97:
 	db	0x00,0x01,0xFF
 
@@ -79,20 +85,26 @@ SetupItemCategoryMenu:
 	ld	XHL,MenuResults_217DCE
 	ld	(wMenuValues),XHL
 	jp	MenuReset
+; [code] SetupDataMenu (data.asm) choice strings
 SaveText:
 	text "Save"
 	done
+; [code] SetupDataMenu choice string
 LoadText:
 	text "Load"
 	done
+; [code] SetupDataMenu choice string
 ExitText7:
 	db	0x25,0x18,0x09,0x14,0xFF	; "Exit"
+; [code] SetupDataMenu lines: column, row, text
 MenuLines_217E0D:
 	menu_item	0,0,SaveText
 	menu_item	0,1,LoadText
 	menu_item	0,8,ExitText7
+; [code] SetupDataMenu cursor cells
 MenuCursor_217E1F:
 	db	0,0, 0,1, 0,8	; column, row
+; [code] SetupDataMenu results: Save 0, Load 1, Exit 0xFF
 MenuResults_217E25:
 	db	0x00,0x01,0xFF
 
@@ -510,6 +522,7 @@ WorksMenuCursorMoved:
 	ld	XHL,WorksMenuCursorJumps
 	ld	XHL,(XHL+A)
 	jp	XHL
+; [code] description shown per Works menu cursor row 0-7
 WorksMenuCursorJumps:
 	dl	ShowSetupDescription,ShowDevelopDescription,ShowItemDescription,ShowStatsDescription
 	dl	ShowTradeDescription,ShowHelpDescription,ShowDataDescription,ShowExitDescription

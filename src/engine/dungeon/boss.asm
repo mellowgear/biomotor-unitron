@@ -240,7 +240,7 @@ InitBossEncounterState:
 	push	XBC
 	push	XWA
 	ld	A,1
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	pop	XWA
 	pop	XBC
 	pop	XDE
@@ -342,7 +342,7 @@ BossTalkStep.skip5:
 	mul	XWA,4
 	add	XHL,XWA
 	ld	XWA,0
-	ld	A,(XIZ+0x2A)
+	ld	A,(XIZ+DUNGEON_SUBSTATE)
 	sub	A,3
 	add	XHL,XWA
 	ld	XWA,XHL
@@ -386,7 +386,7 @@ BossBattleIntro:
 	push	XWA
 	call	StartBattleWipe
 	ld	A,8
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	ld	XWA,SONG_ENCOUNTER
 	call	PlayMusic
 	ld	WA,MUSIC_ENCOUNTER
@@ -403,12 +403,12 @@ c_212DBD	section	code abs=0x212DBD
 ; then fight, or on the last floor ask Try / Join? (7, cursor +0x20) and talk 4 (yes) / 5 (no: leave);
 ; 8 wipe and battle, 9 result, 0xA white fade back, 6 the win talk, 0xB done, 0xC the final boss shake [code+play]
 BossEncounter:
-	ld	A,(XIZ+0x2A)
+	ld	A,(XIZ+DUNGEON_SUBSTATE)
 	cp	A,1
 	jr	NZ,BossEncounter.skip
 	call	OpenDungeonBox6
 	ld	A,2
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip:
 	cp	A,2
@@ -416,7 +416,7 @@ BossEncounter.skip:
 	call	PlaceDungeonBox6
 	calr	ResetBossTalk
 	ld	A,3
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	call	GetBossIndex
 	cp	A,8
 	jrl	NZ,BossEncounter.skip37
@@ -459,7 +459,7 @@ BossEncounter.skip4:
 BossEncounter.skip5:
 	ld	(XIZ+0x20),A
 	ld	A,7
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip6:
 	cp	A,7
@@ -476,12 +476,12 @@ BossEncounter.skip6:
 	jr	NZ,BossEncounter.skip7
 	calr	ResetBossTalk
 	ld	A,4
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	BossEncounter.skip11
 BossEncounter.skip7:
 	calr	ResetBossTalk
 	ld	A,5
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	BossEncounter.skip11
 BossEncounter.skip8:
 	; pad: left picks the left choice (0), right the right one (1)
@@ -551,7 +551,7 @@ BossEncounter.skip15:
 	jr	Z,BossEncounter.skip16
 	call	StartDungeonExit
 	ld	A,0xB
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip16:
 	calr	BossBattleIntro
@@ -583,7 +583,7 @@ BossEncounter.skip19:
 	ldb	(wDungeonBattle),1
 	call	StartBattleTask
 	ld	A,9
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip20:
 	; state 9: lost -> leave the dungeon (TASK_ARG 5); won -> fade white
@@ -615,7 +615,7 @@ BossEncounter.skip21:
 BossEncounter.skip22:
 	call	DungeonSetFadeWhite
 	ld	A,0xA
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip23:
 	; state 0xA: once white, redraw the floor (or the final portrait) and fade back in
@@ -660,7 +660,7 @@ BossEncounter.skip26:
 BossEncounter.skip27:
 	calr	ResetBossTalk
 	ld	A,6
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	BossEncounter.skip37
 BossEncounter.skip28:
 	cp	A,6
@@ -694,7 +694,7 @@ BossEncounter.skip30:
 	call	LoadBossMapSprite
 BossEncounter.skip31:
 	ld	A,0xB
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	BossEncounter.skip37
 BossEncounter.skip32:
 	; the final boss (index 8): shake the screen 0x80 frames while fading to white, then leave
@@ -704,7 +704,7 @@ BossEncounter.skip32:
 	ld	WA,SFX_BOSS_SHAKE
 	call	SoundCommand
 	ld	A,0xC
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	BossEncounter.done
 BossEncounter.skip33:
 	cp	A,0xB
@@ -734,10 +734,10 @@ BossEncounter.skip35:
 	jr	BossEncounter.skip37
 BossEncounter.skip36:
 	ld	A,1
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 BossEncounter.skip37:
 	; the Yes / No cursor while asking
-	ld	A,(XIZ+0x2A)
+	ld	A,(XIZ+DUNGEON_SUBSTATE)
 	cp	A,7
 	jr	NZ,BossEncounter.done
 	ld	XWA,0

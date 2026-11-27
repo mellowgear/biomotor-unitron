@@ -623,7 +623,7 @@ CloseCampItemList:
 	ld	(XIZ+0x20),A
 	call	DrawDungeonBoxes
 	ld	A,4
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	ret
 
 c_212273	section	code abs=0x212273
@@ -659,7 +659,7 @@ CampItemMenuDispatch.skip5:
 	jr	CampItemMenuDispatch.done
 CampItemMenuDispatch.skip6:
 	ld	A,1
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 CampItemMenuDispatch.done:
 	ret
 
@@ -742,7 +742,7 @@ CampMenuInput.skip7:
 	ld	A,0
 	ld	(XIZ+0x20),A
 	ld	A,4
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampMenuInput.done
 CampMenuInput.skip8:
 	cp	A,1
@@ -758,7 +758,7 @@ CampMenuInput.skip8:
 	ld	XHL,CampWorksScreenTask
 	call	StartChildTask
 	ld	A,6
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampMenuInput.done
 CampMenuInput.skip9:
 	cp	A,2
@@ -782,7 +782,7 @@ CampMenuInput.skip9:
 	ld	A,1
 	ld	(XIZ+0x20),A
 	ld	A,5
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampMenuInput.done
 CampMenuInput.skip10:
 	calr	EraseTextBox3
@@ -877,7 +877,7 @@ CampLeavePrompt.skip9:
 	ld	A,(XIZ+0x1E)
 	ld	(XIZ+0x20),A
 	ld	A,3
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampLeavePrompt.done
 CampLeavePrompt.done:
 	ret
@@ -972,7 +972,7 @@ CampItemSubmenuInput.skip9:
 	jr	NZ,CampItemSubmenuInput.skip10
 	calr	ShowCampItemList
 	ld	A,8
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampItemSubmenuInput.done
 CampItemSubmenuInput.skip10:
 	cp	A,1
@@ -985,14 +985,14 @@ CampItemSubmenuInput.skip10:
 	ld	XHL,CampWorksScreenTask
 	call	StartChildTask
 	ld	A,7
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampItemSubmenuInput.done
 CampItemSubmenuInput.skip11:
 	calr	DrawCampMenu
 	ld	A,(XIZ+0x1E)
 	ld	(XIZ+0x20),A
 	ld	A,3
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 CampItemSubmenuInput.done:
 	ret
 
@@ -1001,7 +1001,7 @@ c_21255D	section	code abs=0x21255D
 ; [code] CampMenuDispatch state +0x2A = 1; DungeonCampInit
 StartCampMenu:
 	ld	A,1
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	ret
 
 c_212563	section	code abs=0x212563
@@ -1010,7 +1010,7 @@ c_212563	section	code abs=0x212563
 ; 4 CampItemSubmenuInput, 5 CampLeavePrompt, 6 / 7 wait for the Works child task to end and redraw,
 ; 8 CampItemMenuDispatch, 9 redraw under a black fade; anything else restarts at 1 [code]
 CampMenuDispatch:
-	ld	A,(XIZ+0x2A)
+	ld	A,(XIZ+DUNGEON_SUBSTATE)
 	cp	A,1
 	jr	NZ,CampMenuDispatch.skip
 	calr	OpenCampBox
@@ -1018,7 +1018,7 @@ CampMenuDispatch:
 	ld	A,0
 	ld	(XIZ+0x20),A
 	ld	A,2
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	CampMenuDispatch.done
 CampMenuDispatch.skip:
 	cp	A,2
@@ -1026,7 +1026,7 @@ CampMenuDispatch.skip:
 	calr	PlaceCampBox
 	call	DrawDungeonBoxes
 	ld	A,3
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	CampMenuDispatch.done
 CampMenuDispatch.skip2:
 	cp	A,3
@@ -1053,7 +1053,7 @@ CampMenuDispatch.skip5:
 	ld	A,0x7F
 	ld	(wFadeLevel),A
 	ld	A,9
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampMenuDispatch.done
 CampMenuDispatch.skip6:
 	; back from the item list: redraw the dungeon with the Item submenu
@@ -1068,7 +1068,7 @@ CampMenuDispatch.skip6:
 	calr	PlaceCampBox
 	call	DrawDungeonBoxes
 	ld	A,4
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampMenuDispatch.done
 CampMenuDispatch.skip7:
 	cp	A,8
@@ -1086,11 +1086,11 @@ CampMenuDispatch.skip8:
 	ld	A,0
 	ld	(wFadeLevel),A
 	ld	A,3
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	CampMenuDispatch.done
 CampMenuDispatch.skip9:
 	ld	A,1
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 CampMenuDispatch.done:
 	ret
 

@@ -264,7 +264,7 @@ DrawWorldMapMarker:
 	sub	DE,0xC
 	pop	A
 	; frame cycles every 8 frames, offset by marker so they don't animate in step
-	ld	W,(XIZ+0x2D)
+	ld	W,(XIZ+DUNGEON_ANIM_FRAME)
 	sra	3,W
 	add	A,W
 	and	A,3
@@ -370,7 +370,7 @@ WorldMapOpen:
 	ld	(XIZ+DUNGEON_FACING),A
 	calr	LoadWorldMapMarkerTiles
 	ld	A,0
-	ld	(XIZ+0x2D),A
+	ld	(XIZ+DUNGEON_ANIM_FRAME),A
 	ld	A,2
 	ld	(XIZ+DUNGEON_MODE),A
 	ld	XWA,SONG_MAIN_MENU
@@ -546,7 +546,7 @@ StartDungeonEntrance:
 	push	XBC
 	push	XWA
 	ld	A,1
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	call	SetupWindowIris
 	call	StartWindowIrisClose
 	ld	A,5
@@ -566,7 +566,7 @@ StartWorldMapExit:
 	push	XBC
 	push	XWA
 	ld	A,3
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	call	SetupWindowIris
 	call	StartWindowIrisClose
 	ld	A,5
@@ -584,7 +584,7 @@ WorldMapCloseStep:
 	call	UpdateWindowAnim
 	cp	A,1
 	jr	Z,WorldMapCloseStep.done
-	ld	A,(XIZ+0x12)
+	ld	A,(XIZ+DUNGEON_CHANGE)
 	cp	A,3
 	jr	Z,WorldMapCloseStep.skip
 	calr	ShowDungeonEntrance
@@ -1058,7 +1058,7 @@ CancelDungeonEntry:
 	push	XBC
 	push	XWA
 	ld	A,0
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	call	SetupWindowIris
 	call	StartWindowIrisClose
 	ld	A,0xB
@@ -1078,7 +1078,7 @@ ConfirmDungeonEntry:
 	push	XBC
 	push	XWA
 	ld	A,2
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	call	SetupWindowIris
 	call	StartWindowIrisClose
 	ld	A,0xB
@@ -1099,7 +1099,7 @@ CloseDungeonEntrance:
 	calr	EraseEnterPromptBox
 	calr	EraseWorldMapBox2
 	calr	EraseWorldMapNameBox
-	ld	A,(XIZ+0x12)
+	ld	A,(XIZ+DUNGEON_CHANGE)
 	cp	A,2
 	jr	Z,CloseDungeonEntrance.skip
 	calr	WorldMapOpen
@@ -1226,9 +1226,9 @@ WorldMapDispatch.skip16:
 	call	DrawMenuCursor
 	jr	WorldMapDispatch.skip17
 WorldMapDispatch.skip17:
-	ld	A,(XIZ+0x2D)
+	ld	A,(XIZ+DUNGEON_ANIM_FRAME)
 	inc	1,A
-	ld	(XIZ+0x2D),A
+	ld	(XIZ+DUNGEON_ANIM_FRAME),A
 WorldMapDispatch.done:
 	ret
 

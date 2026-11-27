@@ -192,7 +192,7 @@ BattleEnd:
 	ld	(wStatusParalyzed),A
 	ld	(wStatusEPLeak),A
 	ld	(wStatusConfused),A
-	ld	HL,(XIZ+0x2C)
+	ld	HL,(XIZ+BATTLE_HP_EP_TASK)
 	extz	XHL
 	set	TASK_END_BIT,(XHL+TASK_FLAGS)
 	call	ClearTilemaps

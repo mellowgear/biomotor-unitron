@@ -2,7 +2,7 @@
 
 c_208B74	section	code abs=0x208B74
 
-; [code] task: wFadeLevel = -(0x7F * n / TASK_ARG) for n = TASK_ARG down to 0, one step per frame (0x81 = black, FadeToBlackStep), then EndTask; BattleStart starts it with 0xF after the battle screen is drawn
+; Task: fades in from black over TASK_ARG frames (wFadeLevel -0x7F * n / TASK_ARG, n down to 0), then ends; BattleStart, 0xF frames [code]
 FadeInFromBlackTask:
 	ld	WA,(XIZ+TASK_ARG)
 	ld	(XIZ+0x10),WA
@@ -21,7 +21,7 @@ FadeInFromBlackTask.resume:
 
 c_208BA1	section	code abs=0x208BA1
 
-; [code] task: wFadeLevel = -(0x7F * n / TASK_ARG) for n = 0 up to TASK_ARG (0 -> 0x81 black), then EndTask; BattleStart starts it with 0xF before clearing the screen
+; Task: fades out to black over TASK_ARG frames, then ends; BattleStart, 0xF frames [code]
 FadeOutToBlackTask:
 	ldw	(XIZ+0x10),0
 	ldw	(XIZ+TASK_FUNC),FadeOutToBlackTask.resume & 0xFFFF
@@ -40,7 +40,7 @@ FadeOutToBlackTask.resume:
 
 c_208BCE	section	code abs=0x208BCE
 
-; [code] task: wFadeLevel = 0x7F * n / TASK_ARG for n = TASK_ARG down to 0 (0x7F = white, FadeToWhiteStep), then EndTask
+; Task: fades in from white over TASK_ARG frames, then ends [code]
 FadeInFromWhiteTask:
 	ld	WA,(XIZ+TASK_ARG)
 	ld	(XIZ+0x10),WA
@@ -58,7 +58,7 @@ FadeInFromWhiteTask.resume:
 
 c_208BF9	section	code abs=0x208BF9
 
-; [code] task: wFadeLevel = 0x7F * n / TASK_ARG for n = 0 up to TASK_ARG (0 -> 0x7F white), then EndTask
+; Task: fades out to white over TASK_ARG frames, then ends [code]
 FadeOutToWhiteTask:
 	ldw	(XIZ+0x10),0
 	ldw	(XIZ+TASK_FUNC),FadeOutToWhiteTask.resume & 0xFFFF
@@ -76,7 +76,7 @@ FadeOutToWhiteTask.resume:
 
 c_208C24	section	code abs=0x208C24
 
-; [code] task: wShakeFlags = 2 (VBlank UpdateScrollRegisters adds wShakeX/Y to the SCR1 scroll only), amplitude +0x10 = 4, then ScreenShakeTask; EnemyHitResult2-4 and ConfusedPlayerHitResult start it (ShakeScr1Amp8Task on a critical: wEnemyCritHit, wCritHit) when the unit is hit; also CheckEncounter on a step while wStatusRust
+; Task: shakes SCR1 (the unit) at amplitude 4 for TASK_ARG frames: the unit is hit, or a rust step [code]
 ShakeScr1Amp4Task:
 	ldb	(wShakeFlags),2
 	ldw	(XIZ+0x10),4
@@ -86,7 +86,7 @@ ShakeScr1Amp4Task:
 
 c_208C38	section	code abs=0x208C38
 
-; [code] ShakeScr1Amp4Task with amplitude 8: EnemyHitResult2-4 on wEnemyCritHit, ConfusedPlayerHitResult on wCritHit, BattleDefeat
+; ShakeScr1Amp4Task at amplitude 8: critical hits on the unit, BattleDefeat [code]
 ShakeScr1Amp8Task:
 	ldb	(wShakeFlags),2
 	ldw	(XIZ+0x10),8
@@ -96,7 +96,7 @@ ShakeScr1Amp8Task:
 
 c_208C4C	section	code abs=0x208C4C
 
-; [code] task: wShakeFlags = 4 (UpdateScrollRegisters adds wShakeX/Y to the SCR2 scroll only), amplitude 4, then ScreenShakeTask; PlayerHitResult1-3 and ConfusedEnemyHitResult start it (ShakeScr2Amp8Task on a critical: wCritHit, wEnemyCritHit) when the enemy is hit; also BossEncounter and places.asm
+; Task: shakes SCR2 (the enemy) at amplitude 4 for TASK_ARG frames: the enemy is hit, BossEncounter, places.asm [code]
 ShakeScr2Amp4Task:
 	ldb	(wShakeFlags),4
 	ldw	(XIZ+0x10),4
@@ -106,7 +106,7 @@ ShakeScr2Amp4Task:
 
 c_208C60	section	code abs=0x208C60
 
-; [code] ShakeScr2Amp4Task with amplitude 8: PlayerHitResult1-3 on wCritHit, ConfusedEnemyHitResult on wEnemyCritHit, BattleVictory
+; ShakeScr2Amp4Task at amplitude 8: critical hits on the enemy, BattleVictory [code]
 ShakeScr2Amp8Task:
 	ldb	(wShakeFlags),4
 	ldw	(XIZ+0x10),8
@@ -116,7 +116,7 @@ ShakeScr2Amp8Task:
 
 c_208C74	section	code abs=0x208C74
 
-; [code] TASK_ARG frames of random offsets +-(amp-1) in 0x5A80/0x5A81, then cleared
+; Shake body: wShakeX / wShakeY = RandomRange(2 * amp - 1) - amp (amp +0x10) for TASK_ARG frames, then clears the shake and ends [code]
 ScreenShakeTask:
 	ld	WA,(XIZ+0x10)
 	sll	1,WA
@@ -140,11 +140,13 @@ ScreenShakeTask:
 
 c_208CB6	section	code abs=0x208CB6
 
-; [code] task started by BattleStart: each frame, when the value changed since the last frame (+0x10-0x16), redraws in text box 1 wUnitHP / wUnitEP (number col 0xB, bar col 0xF via DrawBarTiles, max wUnitMaxHP/EP) and wEnemyHP / wEnemyEP (bar col 0 via DrawBarTilesReversed, number col 6, the string QuestionMarkText instead of the number when >= 1000)
+; Task for the whole battle (BattleStart keeps its slot in BATTLE_HP_EP_TASK): redraws in box 1 each of unit HP / EP and
+; enemy HP / EP that changed since the last frame (+0x10..+0x16), as a bar and a number; enemy values of 1000 or more show " ? " [code]
 BattleHPEPDisplayTask:
 	ld	A,1
 	call	GetTextBox
 	ld	(XIZ+TASK_ARG),WA
+	; impossible values force the first redraw
 	ld	WA,0x8000
 	ld	(XIZ+0x10),WA
 	ld	(XIZ+0x12),WA
@@ -155,6 +157,7 @@ BattleHPEPDisplayTask:
 BattleHPEPDisplayTask.resume:
 	ld	XWA,0
 	ld	WA,(XIZ+TASK_ARG)
+	; box 1 not open yet: start over
 	or	WA,WA
 	jp	Z,BattleHPEPDisplayTask
 	ld	BC,(XIZ+0x10)
@@ -210,6 +213,7 @@ BattleHPEPDisplayTask.skip2:
 	ld	C,6
 	ld	E,0
 	call	SetTextBoxCursorXWA
+	; blank or " ? " first, the number on top under 1000
 	ld	XHL,QuestionMarkText
 	call	DrawString
 	cpw	(wEnemyHP),0x3E8
@@ -248,13 +252,14 @@ BattleHPEPDisplayTask.skip3:
 	call	RenderNumberTiles
 BattleHPEPDisplayTask.done:
 	ret
+; Shown for enemy HP / EP of 1000 or more [code]
 QuestionMarkText:
 	text " ? "
 	done
 
 c_208E0F	section	code abs=0x208E0F
 
-; [code] task: TASK_ARG = amount (clamped to wUnitMaxHP - wUnitHP, 0 -> EndTask), wUnitHP = start + amount * frame / +0x10 each frame, EndTask after +0x10 frames (the gain counterpart of UnitHPLossTask)
+; Task: raises wUnitHP by TASK_ARG (capped at wUnitMaxHP) linearly over +0x10 frames, then ends [code]
 UnitHPGainTask:
 	ld	WA,(wUnitHP)
 	add	WA,(XIZ+TASK_ARG)
@@ -285,7 +290,7 @@ UnitHPGainTask.skip2:
 
 c_208E5D	section	code abs=0x208E5D
 
-; [code] task: TASK_ARG = amount (clamped to wUnitHP), resumes at UnitHPLossTask.resume each frame: wUnitHP = start HP - amount*frame/+0x10, EndTask after +0x10 frames; started with +0xE = the damage (wPlayerDamage in ConfusedPlayerHitResult, wEnemyDamage in EnemyHitResult2-4), +0x10 = 0xF, and from status.asm
+; Task: lowers wUnitHP by TASK_ARG (capped at the HP left) over +0x10 frames, then ends; hit damage and status.asm [code]
 UnitHPLossTask:
 	ld	WA,(wUnitHP)
 	cp	WA,(XIZ+TASK_ARG)
@@ -312,7 +317,7 @@ UnitHPLossTask.resume:
 
 c_208E9F	section	code abs=0x208E9F
 
-; [code] the UnitHPGainTask shape on wUnitEP / wUnitMaxEP; BattleRecharge starts it with the GetRechargeAmount gain and 0xF frames
+; UnitHPGainTask on wUnitEP; BattleRecharge with the GetRechargeAmount gain over 0xF frames [code]
 UnitEPGainTask:
 	ld	WA,(wUnitEP)
 	add	WA,(XIZ+TASK_ARG)
@@ -343,7 +348,7 @@ UnitEPGainTask.skip2:
 
 c_208EED	section	code abs=0x208EED
 
-; [code] the UnitHPLossTask shape on wUnitEP (amount clamped to the current EP)
+; UnitHPLossTask on wUnitEP [code]
 UnitEPLossTask:
 	ld	WA,(wUnitEP)
 	cp	WA,(XIZ+TASK_ARG)
@@ -370,7 +375,7 @@ UnitEPLossTask.resume:
 
 c_208F2F	section	code abs=0x208F2F
 
-; [code] the UnitHPGainTask shape on wEnemyHP / wEnemyMaxHP
+; UnitHPGainTask on wEnemyHP [code]
 EnemyHPGainTask:
 	ld	WA,(wEnemyHP)
 	add	WA,(XIZ+TASK_ARG)
@@ -401,7 +406,7 @@ EnemyHPGainTask.skip2:
 
 c_208F7D	section	code abs=0x208F7D
 
-; [code] the UnitHPLossTask shape on wEnemyHP
+; UnitHPLossTask on wEnemyHP [code]
 EnemyHPLossTask:
 	ld	WA,(wEnemyHP)
 	cp	WA,(XIZ+TASK_ARG)
@@ -428,7 +433,7 @@ EnemyHPLossTask.resume:
 
 c_208FBF	section	code abs=0x208FBF
 
-; [code] the UnitHPGainTask shape on wEnemyEP / wEnemyMaxEP
+; UnitHPGainTask on wEnemyEP [code]
 EnemyEPGainTask:
 	ld	WA,(wEnemyEP)
 	add	WA,(XIZ+TASK_ARG)
@@ -459,7 +464,7 @@ EnemyEPGainTask.skip2:
 
 c_20900D	section	code abs=0x20900D
 
-; [code] the UnitHPLossTask shape on wEnemyEP
+; UnitHPLossTask on wEnemyEP [code]
 EnemyEPLossTask:
 	ld	WA,(wEnemyEP)
 	cp	WA,(XIZ+TASK_ARG)
@@ -486,8 +491,8 @@ EnemyEPLossTask.resume:
 
 c_20904F	section	code abs=0x20904F
 
-; [code] task: wScr1ScrollX 0x60 -> 0xC0 (0xC0 - 0x60 * n / TASK_ARG, n = TASK_ARG .. 0); PlayerTurn as the second turn of the round; Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X rising 0x60 -> 0xC0: the unit enters from the right (0x60 = off screen, where UnitSlideInTask starts) and stops 64 px right of its home (X 0); PlayerHitResult1 runs it after UnitSlideOutLeftTask with the enemy shown (SCR2 X 0); the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_20904F) [play] I38: 16 frames, 6.4 px a frame, the unit stops just right of the enemy; PlayerTurn also runs it when the player moves second (SCR2 0x60, the unit slides in alone).
+; Task: the unit (SCR1, X 0x60 -> 0xC0) enters from the right and stops 64 px right of home, next to the enemy, over TASK_ARG
+; frames (at once with animation off); PlayerHitResult1 after UnitSlideOutLeftTask, PlayerTurn when moving second [code][play]
 UnitSlideInShiftedTask:
 	ldb	(wScr1ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -510,8 +515,7 @@ UnitSlideInShiftedTask.skip:
 
 c_209089	section	code abs=0x209089
 
-; [code] task: wScr1ScrollX 0x60 -> 0 (-(0xA0 * n / TASK_ARG), n = TASK_ARG .. 0, i.e. 0x60 up through 0xF8 to 0); Y scroll 0; at once when wOptionAnimation = 0; DrawBattleScreen (TASK_ARG 0x14)
-; [play] seen in play: SCR1 holds the unit; at battle start it steps 8 px per frame for 20 frames and the unit slides in from the right before "What do you do?" (was swp_209089)
+; Task: the unit slides in from the right to home (SCR1 X 0x60 -> 0) over TASK_ARG frames; DrawBattleScreen, 0x14 frames [code][play]
 UnitSlideInTask:
 	ldb	(wScr1ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -533,8 +537,7 @@ UnitSlideInTask.skip:
 
 c_2090C0	section	code abs=0x2090C0
 
-; [code] task: wScr1ScrollX 0xC0 -> 0x60 upwards (0xC0 + 0xA0 * n / TASK_ARG, n = 0 .. TASK_ARG); Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X rising 0xC0 -> 0x160 (= 0x60): the unit moves 160 px left, from 64 px right of home off the screen; PlayerHitResult1 before UnitSlideInShiftedTask; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2090C0) [play] I38: 16 frames, about 10.7 px a frame; PlayerHitResult1 then sets SCR2 X = 0, the enemy at home.
+; Task: the unit leaves to the left from 64 px right of home (SCR1 X 0xC0 -> 0x60) over TASK_ARG frames; PlayerHitResult1 [code][play]
 UnitSlideOutLeftTask:
 	ldb	(wScr1ScrollY),0
 	ldb	(XIZ+0x10),0
@@ -558,8 +561,7 @@ UnitSlideOutLeftTask.skip:
 
 c_2090FE	section	code abs=0x2090FE
 
-; [code] task: wScr1ScrollX 0xC0 -> 0x60 downwards (0x60 + 0x60 * n / TASK_ARG, n = TASK_ARG .. 0); BattleRetreat; Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X falling 0xC0 -> 0x60: the unit moves 96 px right, off the screen; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2090FE) [play] I38: on a successful flee (BattleRetreat), 16 frames at 6.4 px a frame, after "You fled!!".
+; Task: the unit leaves to the right from 64 px right of home (SCR1 X 0xC0 -> 0x60) over TASK_ARG frames; BattleRetreat [code][play]
 UnitSlideOutRightTask:
 	ldb	(wScr1ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -581,8 +583,7 @@ UnitSlideOutRightTask.skip:
 
 c_209136	section	code abs=0x209136
 
-; [code] task: wScr1ScrollX 0 -> 0xC0 (0xC0 + 0x40 * n / TASK_ARG, n = TASK_ARG .. 0); PlayerTurn as the first turn of the round; Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR1 X falling 0x100 (= 0) -> 0xC0: the unit moves from its home 64 px right; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_209136) [play] I38: 16 frames, SCR1 X 0 -> 0xC0 at about 4.3 px a frame (Animation On).
+; Task: the unit moves 64 px right of home (SCR1 X 0 -> 0xC0) over TASK_ARG frames; PlayerTurn when moving first [code][play]
 UnitShiftRightTask:
 	ldb	(wScr1ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -604,8 +605,7 @@ UnitShiftRightTask.skip:
 
 c_20916E	section	code abs=0x20916E
 
-; [code] task: wScr2ScrollX 0x60 -> 0 (0x60 * n / TASK_ARG, n = TASK_ARG .. 0); BattleEncounterMessage, EnemyTurn, EnemyHitResult2; Y scroll 0; at once when wOptionAnimation = 0
-; [play] seen in play: SCR2 holds the enemy; at battle start the enemy picture slides in from the left before "You encountered ...!!" (random and boss battles) (was swp_20916E) [play] I38: SCR2 X 0x60 -> 0 in 16 frames (6.4 px a frame), also at each EnemyTurn and after EnemySlideOutRightTask.
+; Task: the enemy (SCR2, X 0x60 -> 0) slides in from the left over TASK_ARG frames; the encounter, EnemyTurn, EnemyHitResult2 [code][play]
 EnemySlideInTask:
 	ldb	(wScr2ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -626,8 +626,7 @@ EnemySlideInTask.skip:
 
 c_2091A3	section	code abs=0x2091A3
 
-; [code] task: wScr2ScrollX 0 -> 0x60 (0x60 - 0x60 * n / TASK_ARG, n = TASK_ARG .. 0); BattleEncounterMessage, EnemyFleeSucceeded; Y scroll 0; at once when wOptionAnimation = 0
-; [play] seen in play: after "You encountered ...!!" the enemy picture (SCR2) leaves to the left; SCR2 stays at X 0x60 (off screen) on the command menu (was swp_2091A3)
+; Task: the enemy leaves to the left (SCR2 X 0 -> 0x60) over TASK_ARG frames; after the encounter text, EnemyFleeSucceeded [code][play]
 EnemySlideOutTask:
 	ldb	(wScr2ScrollY),0
 	ld	A,(XIZ+TASK_ARG)
@@ -650,8 +649,7 @@ EnemySlideOutTask.skip:
 
 c_2091DD	section	code abs=0x2091DD
 
-; [code] task: wScr2ScrollX 0 -> 0x60 downwards, wrapping (-(0xA0 * n / TASK_ARG), n = 0 .. TASK_ARG); Y scroll 0; at once when wOptionAnimation = 0
-; [code+play] SCR2 X falling 0 -> -0xA0 (= 0x60): the enemy moves 160 px right, off the screen (EnemySlideOutTask leaves to the left); EnemyHitResult2 before EnemySlideInTask; the direction from play: a rising scroll X moves the plane left (the battle-start slides EnemySlideInTask / UnitSlideInTask) (was swp_2091DD) [play] I38: 16 frames, about 10.7 px a frame; EnemyHitResult2 then sets SCR1 X = 0xC0 and EnemySlideInTask brings the enemy back from the left.
+; Task: the enemy leaves to the right (SCR2 X 0 -> 0x60 via -0xA0) over TASK_ARG frames; EnemyHitResult2 [code][play]
 EnemySlideOutRightTask:
 	ldb	(wScr2ScrollY),0
 	ldb	(XIZ+0x10),0
@@ -675,7 +673,7 @@ EnemySlideOutRightTask.skip:
 
 c_20921A	section	code abs=0x20921A
 
-; [code] task: TaskYield until text box 0 (ShowMessage's box) has no text pointer, A or B sets its speed +0x10 = 0 (rest at once); then EndTask (WaitBattleMessageEnd); started after each battle ShowMessage
+; Task after each battle ShowMessage: waits for box 0 to finish its text, A or B printing the rest at once, then ends [code]
 WaitBattleMessageTask:
 	ld	A,0
 	call	GetTextBox
@@ -698,14 +696,14 @@ WaitBattleMessageTask.skip:
 
 c_20924F	section	code abs=0x20924F
 
-; [code] WaitBattleMessageTask's last state (TASK_FUNC 0x924F): EndTask
+; WaitBattleMessageTask's last state: ends it [code]
 WaitBattleMessageEnd:
 	call	EndTask
 	ret
 
 c_209254	section	code abs=0x209254
 
-; [code] task: plays each effect id of the list at task +0x14 until FF
+; Task: plays each effect id of the parent's list (XIY+0x14, 0xFF-terminated) as child tasks, mirrored by TASK_ARG; none with animation off [code]
 PlayEffectList:
 	cpb	(wOptionAnimation),0
 	jr	Z,PlayEffectList.skip
@@ -718,6 +716,7 @@ PlayEffectList:
 	push	A
 	call	StartChildTask
 	pop	A
+	; child +0x20 = id, +0x1E = mirror flag (TASK_ARG)
 	ld	W,0
 	ld	(XHL+0x20),WA
 	ld	WA,(XIZ+TASK_ARG)
@@ -730,7 +729,7 @@ PlayEffectList.skip:
 
 c_209296	section	code abs=0x209296
 
-; [code] same body as PlayEffectList (0x209254) without the loop back: if wOptionAnimation, takes the next effect id from the parent task's list (XIY+0x14), starts BattleEffectDispatch (PlayBattleEffect) with +0x20 = id, then EndTask; started twice by PlayerHitResult2 / EnemyHitResult3
+; PlayEffectList for one effect: the next id of the parent's list, then ends; PlayerHitResult2 / EnemyHitResult3 [code]
 PlayNextEffect:
 	cpb	(wOptionAnimation),0
 	jr	Z,PlayNextEffect.skip
@@ -754,7 +753,7 @@ PlayNextEffect.skip:
 
 c_2092D4	section	code abs=0x2092D4
 
-; [code] task started by PlayEffectList / PlayNextEffect with +0x20 = effect id: TASK_ARG = 0x41; effect 0xCD -> BlackFlashEffectTask, 0xCE -> WhiteFlashEffectTask, else PlayBattleEffect
+; Child task for effect +0x20 (mirror flag +0x1E): 0xCD black flash, 0xCE white flash, else PlayBattleEffect; TASK_ARG 0x41 frames [code]
 BattleEffectDispatch:
 	ldw	(XIZ+TASK_ARG),0x41
 	cpw	(XIZ+0x20),0xCD
@@ -770,11 +769,12 @@ BattleEffectDispatch.skip:
 
 c_2092FB	section	code abs=0x2092FB
 
-; [code] battle effect 0xCE: for TASK_ARG (0x41) frames wFadeLevel = 0x7F (white) or 0, switching every 8 frames, then wFadeLevel = 0 and EndTask
+; Effect 0xCE: flashes white every 8 frames for TASK_ARG frames, then ends [code]
 WhiteFlashEffectTask:
 	decw	1,(XIZ+TASK_ARG)
 	jr	Z,WhiteFlashEffectTask.skip
 	ld	WA,(XIZ+TASK_ARG)
+	; bit 3 of the countdown: on 8 frames, off 8
 	rr	4,WA
 	sbc	A,A
 	and	A,0x7F
@@ -787,7 +787,7 @@ WhiteFlashEffectTask.skip:
 
 c_20931A	section	code abs=0x20931A
 
-; [code] battle effect 0xCD: as WhiteFlashEffectTask with wFadeLevel = 0x81 (black) or 0
+; Effect 0xCD: flashes black every 8 frames for TASK_ARG frames, then ends [code]
 BlackFlashEffectTask:
 	decw	1,(XIZ+TASK_ARG)
 	jr	Z,BlackFlashEffectTask.skip
@@ -805,19 +805,23 @@ BlackFlashEffectTask.skip:
 
 c_210213	section	code abs=0x210213
 
-; [code] ret; no callers (between BlackFlashEffectTask and PlayBattleEffect)
+; Lone ret, no caller [code]
 Unused_210213:
 	ret
 
 c_210214	section	code abs=0x210214
 
-; [code] effect id -> loads its tiles (0x180) and palette (14) from BattleEffects
+; Plays effect +0x20 from BattleEffects: loads its tiles and palette 0xE, then runs its frame list (each entry a sprite
+; map and offset around 0x50, 0x30, mirrored when +0x1E is set except effects 0x72 / 0x73 / 0xBE / 0xBF), playing the
+; sound list at its frame numbers; ends after the frame count +0x16 [code]
 PlayBattleEffect:
 	ldw	(XIZ+0x1A),0
+	; +0x22 = sound list, TASK_ARG = sprite map table
 	ld	HL,(XIZ+0x20)
 	extz	XHL
 	sll	2,XHL
 	add	XHL,BattleEffectSounds
+	; frame list: count byte, then 4-byte entries (hold, map, x, y)
 	ld	XHL,(XHL)
 	ld	(XIZ+0x22),XHL
 	ld	HL,(XIZ+0x20)
@@ -870,6 +874,7 @@ PlayBattleEffect.loop:
 	ld	A,(XIY+0)
 	cp	A,0
 	jr	Z,PlayBattleEffect.skip
+	; the first nonzero hold of the group sets the frames to show it
 	cpb	(XIZ+0x1C),0
 	jr	NZ,PlayBattleEffect.skip
 	extz	WA
@@ -886,6 +891,7 @@ PlayBattleEffect.skip2:
 	exts	DE
 	add	DE,0x30
 	ld	A,(XIY+1)
+	; 0xFF = no sprite this entry
 	cp	A,0xFF
 	jr	Z,PlayBattleEffect.skip5
 	extz	XWA
@@ -907,6 +913,7 @@ PlayBattleEffect.skip2:
 	call	DrawSpriteMap
 	jr	PlayBattleEffect.skip5
 PlayBattleEffect.skip3:
+	; these effects are never mirrored
 	cpw	(XIZ+0x20),0x72
 	jr	Z,PlayBattleEffect.skip4
 	cpw	(XIZ+0x20),0x73
@@ -921,8 +928,10 @@ PlayBattleEffect.skip4:
 	call	DrawSpriteMap
 PlayBattleEffect.skip5:
 	ld	A,(XIY+0)
+	; entries with hold 0 join the next one on the same frame
 	cp	A,0
 	jrl	Z,PlayBattleEffect.loop
+	; sound list: (frame, sound word) triples, 0xFF ends
 	ld	XHL,(XIZ+0x22)
 	ld	A,(XHL)
 	exts	WA

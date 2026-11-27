@@ -721,7 +721,7 @@ StartOpenChest:
 	push	XBC
 	push	XWA
 	ld	A,1
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	pop	XWA
 	pop	XBC
 	pop	XDE
@@ -738,21 +738,21 @@ OpenChest:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	A,(XIZ+0x2A)
+	ld	A,(XIZ+DUNGEON_SUBSTATE)
 	cp	A,1
 	jr	NZ,OpenChest.skip
 	calr	ShowOpenChestPrompt
 	ld	A,0
 	ld	(XIZ+0x20),A
 	ld	A,2
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	OpenChestEnd
 OpenChest.skip:
 	cp	A,2
 	jr	NZ,OpenChest.skip2
 	calr	PlaceChestBox
 	ld	A,3
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	OpenChestEnd
 OpenChest.skip2:
 	cp	A,3
@@ -761,7 +761,7 @@ OpenChest.skip2:
 	bit	BIT_A_BUTTON,A
 	jr	Z,OpenChest.skip3
 	ld	A,4
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	OpenChestEnd
 OpenChest.skip3:
 	; B = No
@@ -770,7 +770,7 @@ OpenChest.skip3:
 	ld	A,1
 	ld	(XIZ+0x20),A
 	ld	A,4
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jrl	OpenChestEnd
 OpenChest.skip4:
 	and	A,0xF
@@ -890,7 +890,7 @@ OpenChest.skip13:
 	call	SoundCommand
 OpenChest.skip14:
 	ld	A,5
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	OpenChestShowResult
 
 c_2127F3	section	code abs=0x2127F3
@@ -904,7 +904,7 @@ c_2127F5	section	code abs=0x2127F5
 ; [code] OpenChest state 4 with the prompt cursor +0x20 not 0: state 7 (close without opening)
 OpenChestDeclined:
 	ld	A,7
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	OpenChestEnd
 
 c_2127FC	section	code abs=0x2127FC
@@ -917,7 +917,7 @@ OpenChestShowResult:
 	ld	A,5
 	call	SetTextBoxWait
 	ld	A,6
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	OpenChestEnd
 OpenChestShowResult.skip:
 	cp	A,6
@@ -926,13 +926,13 @@ OpenChestShowResult.skip:
 	bit	BIT_A_BUTTON,A
 	jr	Z,OpenChestShowResult.skip2
 	ld	A,7
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	OpenChestEnd
 OpenChestShowResult.skip2:
 	bit	BIT_B_BUTTON,A
 	jr	Z,OpenChestShowResult.skip3
 	ld	A,7
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 	jr	OpenChestEnd
 OpenChestShowResult.skip3:
 	jr	OpenChestEnd
@@ -944,13 +944,13 @@ OpenChestShowResult.skip4:
 	jr	OpenChestEnd
 OpenChestShowResult.skip5:
 	ld	A,1
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+DUNGEON_SUBSTATE),A
 
 c_212844	section	code abs=0x212844
 
 ; [code] OpenChest's common exit: in state 3 DrawMenuCursor at x = 0x28 + 0x28 * cursor +0x20, y = 0x74; pops and returns
 OpenChestEnd:
-	ld	A,(XIZ+0x2A)
+	ld	A,(XIZ+DUNGEON_SUBSTATE)
 	cp	A,3
 	jr	NZ,OpenChestEnd.skip
 	ld	XWA,0

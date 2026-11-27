@@ -2,7 +2,9 @@
 
 c_213249	section	code abs=0x213249
 
-; [play] arena participant screens: portraits. [play] I41: cast 0xFE (HL 0xFFFE, the Rank CS talk) takes .skip2: the partner's portrait 0x0B + ((wPlayerRace - 1) xor 1) (Rod: 0x0C RenaB, Shera: 0x0F), 6 x 10 tiles from tile 0x46 at columns 1-6, rows 4-13 of SCR2, above the text box.
+; Arena talk portrait HL after clearing the area: 0 none; 0xFFFF / 0xFFFE the partner (race portrait 1 + ((wPlayerRace - 1) xor 1),
+; or the talk portrait 0xB + that at columns 1-6, rows 4-13 for the Rank CS talk); 0x38 / 0x3A a full picture over boxes 2 and 3;
+; else portrait HL on SCR2 [code][play]
 DrawArenaParticipants:
 	push	XHL
 	push	XDE
@@ -15,6 +17,7 @@ DrawArenaParticipants:
 	jr	Z,DrawArenaParticipants.skip
 	cp	HL,0xFFFE
 	jr	Z,DrawArenaParticipants.skip
+	; 0x38 / 0x3A: full-screen pictures
 	cp	HL,0x38
 	jr	Z,DrawArenaParticipants.skip3
 	cp	HL,0x3A
@@ -26,6 +29,7 @@ DrawArenaParticipants:
 	call	DrawPortraitAt
 	jr	DrawArenaParticipants.skip4
 DrawArenaParticipants.skip:
+	; the other race of the pair: the partner (?)
 	ld	A,(wPlayerRace)
 	dec	1,A
 	xor	A,1
@@ -65,7 +69,7 @@ DrawArenaParticipants.skip4:
 
 c_213B11	section	code abs=0x213B11
 
-; [code] OpenTextBox 4 (8 x 6, tile from GetArenaBox4Tile)
+; Opens box 4 (8 x 6 tiles), the off-screen buffer the bracket lines are pre-shifted in [code]
 OpenArenaBox4:
 	push	XHL
 	push	XDE
@@ -85,7 +89,7 @@ OpenArenaBox4:
 
 c_213B2A	section	code abs=0x213B2A
 
-; [code] +0x21 = 1 (ArenaPortraitAnimStep uncovers)
+; Portrait wipe mode +0x21 = 1 (uncover) [code]
 SetPortraitUncoverMode:
 	push	A
 	ld	A,1
@@ -95,7 +99,7 @@ SetPortraitUncoverMode:
 
 c_213B32	section	code abs=0x213B32
 
-; [code] +0x21 = 2 (ArenaPortraitAnimStep covers back)
+; Portrait wipe mode +0x21 = 2 (cover back) [code]
 SetPortraitRecoverMode:
 	push	A
 	ld	A,2
@@ -105,7 +109,7 @@ SetPortraitRecoverMode:
 
 c_213B3A	section	code abs=0x213B3A
 
-; [code] DrawUncoverTilemap of tile 0xC on SCR2 0x9800, +0x2B = 0, SetPortraitUncoverMode
+; Starts uncovering the SCR2 portrait from fully covered (+0x2B = 0) [code]
 StartPortraitUncover:
 	push	XHL
 	push	XDE
@@ -126,7 +130,7 @@ StartPortraitUncover:
 
 c_213B5B	section	code abs=0x213B5B
 
-; [code] DrawUncoverTilemap of tile 0xC on SCR2 0x9800, +0x2B = 0x10, ArenaUncoverStep, SetPortraitRecoverMode
+; Starts covering the SCR2 portrait back from fully open (+0x2B = 0x10) [code]
 StartPortraitRecover:
 	push	XHL
 	push	XDE
@@ -148,7 +152,8 @@ StartPortraitRecover:
 
 c_213B7F	section	code abs=0x213B7F
 
-; [code] +0x21 = 1: ArenaUncoverStep with +0x2B rising to 0x10, then +0x21 = 0; 2: ArenaUncoverStep with +0x2B falling to 0, then in +0x2A = 3 LoadArenaOpponent(+0x1E) and StartPortraitUncover, else +0x21 = 0
+; One frame of the portrait wipe +0x21: uncover steps +0x2B up to 0x10, cover steps it down to 0; a cover that ends in
+; the Fight / Quit state (+0x2A 3) loads opponent +0x1E and uncovers it; +0x21 = 0 when done [code]
 ArenaPortraitAnimStep:
 	push	XHL
 	push	XDE
@@ -182,6 +187,7 @@ ArenaPortraitAnimStep.skip3:
 	ld	(XIZ+0x2B),A
 	jr	ArenaPortraitAnimStep.skip6
 ArenaPortraitAnimStep.skip4:
+	; covered while cycling in Fight / Quit: swap in opponent +0x1E
 	ld	A,(XIZ+0x2A)
 	cp	A,3
 	jr	NZ,ArenaPortraitAnimStep.skip5
@@ -207,7 +213,8 @@ ArenaPortraitAnimStep.skip8:
 
 c_213BE1	section	code abs=0x213BE1
 
-; [code] ArenaSceneNext 0xF8: EraseBox2 / EraseBox3, Box2Tall opened and placed, box 1 = ArenaRankNames[cursor +0x10], RollArenaBracket, OpenArenaBox4, +0x2A = 2 (ArenaBracketDispatch: ArenaBracketReveal)
+; ArenaSceneNext 0xF8, after the rank is paid for: the rank name in box 1, rolls the line-up, opens box 4 and starts the
+; reveal (+0x2A = 2) [code][play]
 ShowArenaBracket:
 	push	XHL
 	push	XDE
@@ -224,6 +231,7 @@ ShowArenaBracket:
 	ld	A,1
 	call	SetTextBoxCursor
 	ld	XWA,0
+	; cursor row = rank row
 	ld	A,(XIZ+0x10)
 	sll	2,XWA
 	ld	XHL,ArenaRankNames
@@ -243,12 +251,15 @@ ShowArenaBracket:
 
 c_213C2E	section	code abs=0x213C2E
 
-; [code] +0x16 = ArenaBracketSizes[rank +0x15 - 2]; the 6 slots +0x18.. = ArenaBracketRows of the rank, each 0xFF replaced by a random pilot 0x62 + Random() % 15 not already in an earlier slot; below rank 8 each random pilot also gets 6 part ids in wArenaPilotParts + 6 * slot (ArenaPilotCores / BodyBase / Arms / Legs ...); ShowArenaBracket
+; Fills opponent slots +0x18..+0x1D from the rank's ArenaBracketRows (count +0x16 from ArenaBracketSizes), each 0xFF a random
+; pilot not yet drawn; below rank 8 each pilot gets 6 random parts in wArenaPilotParts + 6 * slot from its rank tier and pilot
+; group. Ends with ResetArenaBracketState [code]
 RollArenaBracket:
 	push	XHL
 	push	XDE
 	push	XBC
 	push	XWA
+	; +0x15 = rank row + 2
 	ld	A,(XIZ+0x15)
 	sub	A,2
 	extz	WA
@@ -272,15 +283,18 @@ RollArenaBracket:
 	ld	C,6
 RollArenaBracket.loop:
 	ld	A,(XDE)
+	; 0xFF = a random pilot
 	cp	A,0xFF
 	jr	NZ,RollArenaBracket.skip2
 	push	XDE
 RollArenaBracket.loop2:
 	call	Random
+	; pilot = ENEMY_ALEX + Random % 15
 	ld	W,0
 	div	WA,0xF
 	ld	A,W
 	add	A,ENEMY_ALEX
+	; re-roll if any earlier slot holds it
 	ld	B,6
 	sub	B,C
 	jr	Z,RollArenaBracket.skip
@@ -298,9 +312,11 @@ RollArenaBracket.skip2:
 	inc	1,XHL
 	inc	1,XDE
 	djnz	C,RollArenaBracket.loop
+	; ranks 8 and up keep the pilots' own parts
 	ld	W,(XIZ+0x15)
 	cp	W,8
 	jrl	NC,RollArenaBracket.skip5
+	; +0x1E = part tier (7 - rank), +0x1F = pilot, +0x20 = pilot group (pilot / 3)
 	ld	A,7
 	sub	A,W
 	ld	(XIZ+0x1E),A
@@ -319,6 +335,7 @@ RollArenaBracket.loop4:
 	ld	W,0
 	div	WA,3
 	ld	(XIZ+0x20),A
+	; core by tier, body base by tier + 3 * group
 	ld	XWA,0
 	ld	A,(XIZ+0x1E)
 	ld	XHL,ArenaPilotCores
@@ -339,6 +356,7 @@ RollArenaBracket.loop4:
 	inc	1,XDE
 	ld	XWA,0
 	ld	A,(XIZ+0x1E)
+	; two arms from the tier's 15-entry list
 	ld	XHL,ArenaPilotArmCounts
 	add	XHL,XWA
 	ld	B,(XHL)
@@ -383,6 +401,7 @@ RollArenaBracket.loop4:
 	inc	1,XDE
 	ld	XWA,0
 	ld	A,(XIZ+0x1E)
+	; legs and back from the 3-entry list of (tier, group)
 	ld	XHL,ArenaPilotLegCounts
 	add	XHL,XWA
 	ld	B,(XHL)
@@ -435,6 +454,7 @@ RollArenaBracket.loop4:
 	inc	1,XDE
 	jr	RollArenaBracket.skip4
 RollArenaBracket.skip3:
+	; fixed opponents keep their own parts
 	inc	6,XDE
 RollArenaBracket.skip4:
 	pop	XHL
@@ -451,7 +471,7 @@ RollArenaBracket.skip5:
 
 c_213E19	section	code abs=0x213E19
 
-; [code] +0x1E / +0x1F / +0x20 / +0x21 = 0
+; Clears the bracket counters +0x1E..+0x21 [code]
 ResetArenaBracketState:
 	push	XHL
 	push	XDE
@@ -472,7 +492,8 @@ ResetArenaBracketState:
 
 c_213E34	section	code abs=0x213E34
 
-; [code] XHL = string: ClearTextBox 4, DrawBoxString at row 3, then rows 2, 1, 0 = row 3 shifted 2, 4, 6 pixels left (copy the row below, rld every pixel line by one nibble = 2 pixels, colour 1 fed in at the right); the frames SlideBracketLineFromLeft copies
+; Draws string XHL on box 4 row 3 and fills rows 2, 1, 0 with it shifted 2, 4, 6 px left (colour 1 fed in): the frames
+; SlideBracketLineFromLeft copies [code]
 Box4PreshiftLeft:
 	push	XHL
 	push	XDE
@@ -492,6 +513,7 @@ Box4PreshiftLeft:
 	call	DrawBoxString
 	ld	C,3
 Box4PreshiftLeft.loop:
+	; copy row C to row C - 1, then shift that copy
 	push	C
 	ld	A,4
 	call	GetBoxTilesAddr
@@ -519,6 +541,7 @@ Box4PreshiftLeft.loop:
 	ld	C,8
 Box4PreshiftLeft.loop2:
 	push	XDE
+	; rld through a tile row: each nibble is 2 px, 0x55 feeds colour 1
 	ld	A,0x55
 	ld	B,6
 Box4PreshiftLeft.loop3:
@@ -540,7 +563,7 @@ Box4PreshiftLeft.loop3:
 
 c_213EC1	section	code abs=0x213EC1
 
-; [code] Box4PreshiftLeft shifting right (rrd, colour 1 fed in at the left): rows 2, 1, 0 = row 3 shifted 2, 4, 6 pixels right; the frames SlideBracketLineFromRight copies
+; Box4PreshiftLeft shifting right: the frames SlideBracketLineFromRight copies [code]
 Box4PreshiftRight:
 	push	XHL
 	push	XDE
@@ -560,6 +583,7 @@ Box4PreshiftRight:
 	call	DrawBoxString
 	ld	C,3
 Box4PreshiftRight.loop:
+	; copy row C to row C - 1, then shift that copy
 	push	C
 	ld	A,4
 	call	GetBoxTilesAddr
@@ -605,7 +629,7 @@ Box4PreshiftRight.loop3:
 
 c_213F46	section	code abs=0x213F46
 
-; [code] A = 0 -> Box4PreshiftLeft, else Box4PreshiftRight (registers saved); ArenaBracketReveal passes the bracket line's parity
+; Pre-shifts string XHL in box 4: A = 0 for a line entering from the left, else from the right [code]
 Box4Preshift:
 	push	XHL
 	push	XDE
@@ -626,12 +650,14 @@ Box4Preshift.skip2:
 
 c_213F5B	section	code abs=0x213F5B
 
-; [code] slide step +0x1F (0-0x17): the rightmost +0x1F / 4 + 1 tiles of box 4 row +0x1F & 3 (shifted 6, 4, 2, 0 px left) into the first tiles of box 2 line +0x1E; over 24 steps the line enters from the left 2 pixels at a time
+; Slide step +0x1F (0..0x17) of box 2 line +0x1E: copies the right end of the matching box 4 frame into its left tiles, so
+; the line enters from the left 2 px per step [code]
 SlideBracketLineFromLeft:
 	push	XHL
 	push	XDE
 	push	XBC
 	push	XWA
+	; source: frame +0x1F & 3, from tile 5 - +0x1F / 4
 	ld	XWA,0
 	ld	A,(XIZ+0x1F)
 	and	A,3
@@ -656,6 +682,7 @@ SlideBracketLineFromLeft:
 	mul	XWA,6
 	mul	XWA,0x10
 	add	XDE,XWA
+	; +0x1F / 4 + 1 tiles
 	ld	BC,0
 	ld	C,(XIZ+0x1F)
 	srl	2,BC
@@ -670,7 +697,7 @@ SlideBracketLineFromLeft:
 
 c_213FB5	section	code abs=0x213FB5
 
-; [code] mirror of SlideBracketLineFromLeft: the leftmost +0x1F / 4 + 1 tiles of box 4 row +0x1F & 3 (shifted right) into the last tiles of box 2 line +0x1E; the line enters from the right
+; Mirror of SlideBracketLineFromLeft: the line enters from the right [code]
 SlideBracketLineFromRight:
 	push	XHL
 	push	XDE
@@ -692,6 +719,7 @@ SlideBracketLineFromRight:
 	mul	XWA,6
 	mul	XWA,0x10
 	add	XDE,XWA
+	; destination ends at the line's last tile
 	ld	W,(XIZ+0x1F)
 	srl	2,W
 	ld	A,6
@@ -715,7 +743,8 @@ SlideBracketLineFromRight:
 
 c_214013	section	code abs=0x214013
 
-; [code] A = 0 -> SlideBracketLineFromLeft, else SlideBracketLineFromRight (registers saved); ArenaBracketReveal state 1 each frame with the line's parity (even lines from the left, odd lines from the right) [play] I40: 2 px a step, one step a frame, 24 steps = 48 px (the 6-tile line), cut at the box edge.
+; One slide step of bracket line +0x1E: A = 0 from the left (even lines, the rounds), else from the right (the names);
+; 24 steps of 2 px, one a frame [code][play]
 SlideBracketLineStep:
 	push	XHL
 	push	XDE
@@ -736,11 +765,13 @@ SlideBracketLineStep.skip2:
 
 c_214028	section	code abs=0x214028
 
-; [code] A = line -> XHL: odd lines GetEnemyName of slot +0x18 + A / 2, even lines Pointers_249CB8[A / 2] (entry 5 for the last pair, A / 2 = +0x16 - 1)
+; XHL = text of bracket line A: odd lines the name of opponent A / 2, even lines the round label Pointers_249CB8[A / 2]
+; (label 5 for the last round) [code]
 GetArenaBracketLine:
 	push	XDE
 	push	XBC
 	push	XWA
+	; carry = odd line
 	srl	1,A
 	jr	C,GetArenaBracketLine.skip2
 	ld	W,(XIZ+0x16)
@@ -773,7 +804,7 @@ GetArenaBracketLine.skip3:
 
 c_214068	section	code abs=0x214068
 
-; [code] ClearBox2Tall, then GetArenaBracketLine for lines 0 .. 2 * +0x16 - 1 in box 2
+; Box 2: all 2 * +0x16 bracket lines at once [code]
 DrawArenaBracketList:
 	push	XHL
 	push	XDE
@@ -805,7 +836,7 @@ DrawArenaBracketList.loop:
 
 c_21409B	section	code abs=0x21409B
 
-; [code] xors 0xAAAA into the tile words of the two box 2 lines of bracket slot +0x1E (2 x 6 tiles, GetBoxTilesAddr 2)
+; Highlights (xor 0xAAAA) the two box 2 lines of bracket slot +0x1E; a second call removes it [code]
 XorBracketSlotPixels:
 	push	XHL
 	push	XDE
@@ -821,6 +852,7 @@ XorBracketSlotPixels:
 	call	GetBoxTilesAddr
 	pop	XWA
 	add	XDE,XWA
+	; 2 lines x 6 tiles x 8 pixel rows
 	ld	BC,8
 	mul	BC,2
 	mul	BC,6
@@ -838,7 +870,7 @@ XorBracketSlotPixels.loop:
 
 c_2140D5	section	code abs=0x2140D5
 
-; [code] A = bracket slot: clears SCR1 map (ClearTilemap20x19 at 0x9000), A = participant id at task+0x18+slot, parts pointer 0x60CC + 6*slot for random pilots 0x62-0x70 (else 0), LoadEnemy, LoadEnemyImage; callers ArenaPortraitAnimStep / ArenaBracketReveal; [play] arena_rank*_participants_* screens
+; Loads opponent slot A (pilot parts if it is a pilot) and draws its picture on SCR1 [code][play]
 LoadArenaOpponent:
 	push	XHL
 	push	XDE
@@ -853,6 +885,7 @@ LoadArenaOpponent:
 	add	XHL,0x18
 	add	XHL,XDE
 	ld	A,(XHL)
+	; random pilots carry rolled parts
 	cp	A,ENEMY_ALEX
 	jr	C,LoadArenaOpponent.skip
 	cp	A,ENEMY_FENRIL
@@ -877,7 +910,9 @@ LoadArenaOpponent.skip2:
 
 c_214122	section	code abs=0x214122
 
-; [code] +0x2A = 2: steps through the bracket lines (+0x1E) with the box 4 animations (Box4Preshift / SlideBracketLineStep), loading each opponent (LoadArenaOpponent) behind the portrait cover; B -> ArenaBracketQuit; A: DrawArenaBracketList and StartPortraitRecover, then (also after the last line) box 1 FightQuitText, LoadArenaOpponent(0), XorBracketSlotPixels, cursor +0x10 = 0, +0x2A = 3 [play] I40: even lines (rounds) slide in from the left, odd lines (pilot names) from the right; 10-frame pause before an odd line, 30 before an even one.
+; Bracket state 2, per frame: for each line +0x1E, pre-shift, slide it in (+0x20 1), then pause 10 frames before a name, 30
+; before a round (+0x20 2 / 3), showing each opponent's picture; A skips to the full list, B quits; at the end Fight / Quit
+; in box 1 on slot 0, cursor 0, state 3 [code][play]
 ArenaBracketReveal:
 	push	XHL
 	push	XDE
@@ -893,6 +928,7 @@ ArenaBracketReveal.skip:
 	calr	ArenaBracketQuit
 	jrl	ArenaBracketReveal.skip14
 ArenaBracketReveal.skip2:
+	; +0x20: 0 next line, 1 sliding, 2 / 3 pause, 4 done
 	ld	A,(XIZ+0x20)
 	cp	A,1
 	jr	Z,ArenaBracketReveal.skip6
@@ -910,6 +946,7 @@ ArenaBracketReveal.skip4:
 	ld	(XIZ+0x1F),A
 	cp	A,W
 	jrl	C,ArenaBracketReveal.skip14
+	; all lines shown
 	ld	A,(XIZ+0x1E)
 	srl	1,A
 	ld	W,(XIZ+0x16)
@@ -954,6 +991,7 @@ ArenaBracketReveal.skip9:
 	calr	Box4Preshift
 	ld	A,(XIZ+0x1E)
 	and	A,1
+	; name lines show the opponent, round lines cover it
 	jr	Z,ArenaBracketReveal.skip10
 	ld	A,(XIZ+0x1E)
 	srl	1,A
@@ -969,6 +1007,7 @@ ArenaBracketReveal.skip11:
 	ld	(XIZ+0x1F),A
 	jr	ArenaBracketReveal.skip14
 ArenaBracketReveal.skip12:
+	; A: skip the animation
 	calr	DrawArenaBracketList
 	calr	StartPortraitRecover
 	ld	A,0
@@ -996,7 +1035,7 @@ ArenaBracketReveal.skip14:
 
 c_21421D	section	code abs=0x21421D
 
-; [code] ArenaBracketDispatch +0x2A = 3: A (sound 0x81) -> ArenaFightQuitChoose; then ArenaFightQuitInputB / ArenaFightQuitInputDPad / ArenaFightQuitCursor
+; Bracket state 3: A chooses; falls into the B, d-pad and cursor parts [code]
 ArenaFightQuitInput:
 	push	XHL
 	push	XDE
@@ -1014,13 +1053,13 @@ ArenaFightQuitInput:
 
 c_214239	section	code abs=0x214239
 
-; [code] jrl ArenaFightQuitCursor.skip (ArenaFightQuitCursor's register pops + ret), right after ArenaFightQuitInput's own jrl; no callers
+; Unreachable jump to the shared exit after ArenaFightQuitInput's own [code]
 ArenaFightQuitInputExit:
 	jrl	ArenaFightQuitCursor.skip
 
 c_21423C	section	code abs=0x21423C
 
-; [code] B (sound 0x82): cursor +0x10 = 1 (Quit), ArenaFightQuitChoose
+; B picks Quit and chooses [code]
 ArenaFightQuitInputB:
 	bit	5,A
 	jr	Z,ArenaFightQuitInputDPad
@@ -1035,16 +1074,18 @@ ArenaFightQuitInputB:
 
 c_214255	section	code abs=0x214255
 
-; [code] jrl ArenaFightQuitCursor.skip (ArenaFightQuitCursor's register pops + ret), right after ArenaFightQuitInputB's own jrl; no callers
+; Unreachable jump to the shared exit after ArenaFightQuitInputB's own [code]
 ArenaFightQuitInputBExit:
 	jrl	ArenaFightQuitCursor.skip
 
 c_214258	section	code abs=0x214258
 
-; [code] left / right move cursor +0x10 (0 Fight, 1 Quit); when the portrait is idle (+0x21 = 0), every 0x96 frames the next bracket slot +0x1E (wrapping at +0x16): DrawArenaBracketList, XorBracketSlotPixels, StartPortraitRecover mode
+; Left / right move the Fight (0) / Quit (1) cursor +0x10; while no wipe runs, every 0x96 frames +0x2C highlights and shows
+; the next opponent +0x1E (wrapping) [code]
 ArenaFightQuitInputDPad:
 	and	A,0xF
 	jr	Z,ArenaFightQuitInputDPad.skip4
+	; 4 = left, 8 = right
 	cp	A,4
 	jr	NZ,ArenaFightQuitInputDPad.skip2
 	ld	A,(XIZ+0x10)
@@ -1075,6 +1116,7 @@ ArenaFightQuitInputDPad.skip2:
 ArenaFightQuitInputDPad.skip3:
 	jr	ArenaFightQuitInputDPad.skip4
 ArenaFightQuitInputDPad.skip4:
+	; cycle through the opponents while idle
 	ld	A,(XIZ+0x21)
 	cp	A,0
 	jr	NZ,ArenaFightQuitCursor
@@ -1100,11 +1142,12 @@ ArenaFightQuitInputDPad.skip5:
 ArenaFightQuitInputDPad.skip6:
 	calr	DrawArenaBracketList
 	calr	XorBracketSlotPixels
+	; cover, then ArenaPortraitAnimStep loads +0x1E; falls into ArenaFightQuitCursor
 	calr	SetPortraitRecoverMode
 
 c_2142D5	section	code abs=0x2142D5
 
-; [code] DrawMenuCursor at x 0x18 + 0x40 * cursor +0x10, y 0x7C
+; Draws the Fight / Quit cursor, then the shared register pops and ret [code]
 ArenaFightQuitCursor:
 	ld	WA,0
 	ld	A,(XIZ+0x10)
@@ -1122,7 +1165,8 @@ ArenaFightQuitCursor.skip:
 
 c_2142EF	section	code abs=0x2142EF
 
-; [code] DrawArenaBracketList; Fight (cursor 0): ClearArenaPortraitArea2, Box2 / Box3 reopened, box 3 ArenaText2, picture 0x29, DrawArenaParticipants 0x15, wGP -= ArenaEntryCosts[rank +0x15 - 2] (BinToBCD, SubBCD), SetTalkedFlags, scene 0xB, TASK_ARG 3; Quit: ArenaBracketQuit
+; Fight: pays the rank's entry cost from wGP, sets the talked flags, shows the arena picture and queues scene 0xB;
+; Quit: ArenaBracketQuit. State TASK_ARG 3 [code]
 ArenaFightQuitChoose:
 	push	XHL
 	push	XDE
@@ -1149,6 +1193,7 @@ ArenaFightQuitChoose:
 	calr	ArenaShowPicture
 	ld	HL,0x15
 	calr	DrawArenaParticipants
+	; pay the entry cost
 	ld	A,(XIZ+0x15)
 	sub	A,2
 	extz	WA
@@ -1180,7 +1225,7 @@ ArenaFightQuitChoose.skip2:
 
 c_21437A	section	code abs=0x21437A
 
-; [code] the ArenaFightQuitChoose screen without paying: ClearArenaPortraitArea2, Box2 / Box3, ArenaText2, picture 0x29, DrawArenaParticipants 0x15, scene 0xC, TASK_ARG 3
+; Leaves the bracket without paying: the arena picture and scene 0xC via state TASK_ARG 3 [code]
 ArenaBracketQuit:
 	push	XHL
 	push	XDE
@@ -1215,7 +1260,7 @@ ArenaBracketQuit:
 
 c_2143C8	section	code abs=0x2143C8
 
-; [code] ArenaTask state 6, on +0x2A: 1 -> 2, 2 ArenaBracketReveal, 3 ArenaFightQuitInput; every frame ArenaPortraitAnimStep, +0x2D += 1
+; ArenaTask state 6: bracket state +0x2A (1 -> 2, 2 reveal, 3 Fight / Quit; others reset to 1), then the portrait wipe [code]
 ArenaBracketDispatch:
 	push	XHL
 	push	XDE

@@ -11,17 +11,17 @@ HelmutSkillOffer:
 	call	CheckSkillPair1
 	ld	W,A
 	call	CheckSkillPair2
-	and	A,W
+	and	A,W	; both pairs learned -> 0x14
 	cp	A,1
 	jr	Z,HelmutSkillOffer.skip
 	ld	A,(wPlayerLevel)
-	cp	A,0x14
+	cp	A,0x14	; first pair from level 20
 	jr	C,HelmutSkillOffer.skip4
 	call	CheckSkillPair1
 	cp	A,0
 	jr	Z,HelmutSkillOffer.skip3
 	ld	A,(wPlayerLevel)
-	cp	A,0x1E
+	cp	A,0x1E	; second pair from level 30
 	jr	C,HelmutSkillOffer.skip4
 	call	CheckSkillPair2
 	cp	A,0
@@ -30,6 +30,7 @@ HelmutSkillOffer.skip:
 	ld	A,0x14
 	jr	HelmutSkillOffer.skip5
 HelmutSkillOffer.skip2:
+; 4 skills per race pair: 4 * ((wPlayerRace - 1) / 2), +2 for the second pair
 	ld	A,(wPlayerRace)
 	dec	1,A
 	srl	1,A
@@ -45,7 +46,7 @@ HelmutSkillOffer.skip3:
 	mul	WA,4
 	jr	HelmutSkillOffer.skip5
 HelmutSkillOffer.skip4:
-	ld	A,0xFF
+	ld	A,0xFF	; FF: nothing to teach yet
 HelmutSkillOffer.skip5:
 	pop	W
 	pop	XBC
@@ -68,7 +69,7 @@ c_215F8F	section	code abs=0x215F8F
 ; [code] Helmut step 1: after 0x5A frames (+0x2D): talk row +0x12 = 7 (TalkSpring line 8 "Looks like you've been train...") when +0x29 (HelmutSkillOffer, set by TownNpcTalk) != 0xFF, else row 6 (line 7 "Humph. Looks like you need s..."); TASK_ARG 6, step 2
 HelmutEyesWait:
 	ld	A,(XIZ+0x2D)
-	cp	A,0x5A
+	cp	A,0x5A	; 0x5A frames = 1.5 s stare
 	jr	C,HelmutEyesWait.done
 	ld	A,(XIZ+0x29)
 	cp	A,0xFF
@@ -105,7 +106,7 @@ c_215FC5	section	code abs=0x215FC5
 GetHelmutSkillDesc:
 	push	XWA
 	add	A,8
-	ld	W,(XIZ+0x15)
+	ld	W,(XIZ+0x15)	; the descriptions start at talk row 8
 	calr	GetTalkRow
 	ld	XHL,(XHL+4)
 	pop	XWA
@@ -132,7 +133,7 @@ c_215FEA	section	code abs=0x215FEA
 ; [code] Helmut state 2: box 2 the skill names GetSkillNameText(+0x29) and (+0x29 + 1) on rows 0, 1; cursor 0, ClearTextBox1, DrawHelmutSkillDesc, state 3 (HelmutPickSkill)
 DrawHelmutSkillPair:
 	ld	A,(XIZ+0x29)
-	ld	C,2
+	ld	C,2	; two skills, rows 0 and 1
 	ld	E,0
 DrawHelmutSkillPair.loop:
 	push	C
@@ -175,15 +176,16 @@ HelmutPickSkill:
 	pop	WA
 	jr	HelmutPickSkill.skip8
 HelmutPickSkill.skip:
-	and	A,0xF
+	and	A,D_PAD
 	jr	Z,HelmutPickSkill.skip5
-	cp	A,1
+	cp	A,D_UP
 	jr	NZ,HelmutPickSkill.skip3
 	push	WA
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
+; up and down wrap between the two rows
 	cp	A,0
 	jr	Z,HelmutPickSkill.skip2
 	dec	1,A
@@ -194,7 +196,7 @@ HelmutPickSkill.skip2:
 	ld	(XIZ+0x10),A
 	jr	HelmutPickSkill.skip6
 HelmutPickSkill.skip3:
-	cp	A,2
+	cp	A,D_DOWN
 	jr	NZ,HelmutPickSkill.skip5
 	push	WA
 	ld	WA,SFX_CURSOR
@@ -215,7 +217,7 @@ HelmutPickSkill.skip5:
 HelmutPickSkill.skip6:
 	calr	ResetTextBox1
 	ld	A,(XIZ+0x10)
-	cp	A,8
+	cp	A,8	; never 8 here: the Quit row of the Cyrius copy is dead code
 	jr	Z,HelmutPickSkill.skip7
 	calr	DrawHelmutSkillDesc
 HelmutPickSkill.skip7:
@@ -233,7 +235,7 @@ HelmutPickSkill.skip8:
 	ld	A,(XIZ+0x10)
 	cp	A,8
 	jr	Z,HelmutPickSkill.skip9
-	ld	(XIZ+0x2A),A
+	ld	(XIZ+0x2A),A	; +0x2A = chosen skill of the pair (0 / 1)
 	ld	E,0
 	add	E,A
 	ld	C,0
@@ -256,6 +258,7 @@ HelmutPickSkill.skip9:
 	ld	XHL,QuitText4
 	ld	A,2
 	call	DrawBoxString
+; unreachable Quit branch (cursor is only 0 or 1)
 	ld	WA,0
 	ld	(XIZ+0x2A),WA
 	ld	A,0x20
@@ -301,19 +304,19 @@ HelmutSkillChoice:
 	pop	WA
 	jr	HelmutSkillChoice.skip7
 HelmutSkillChoice.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,HelmutSkillChoice.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
-	ld	A,1
+	ld	A,1	; B = No
 	ld	(XIZ+0x10),A
 	jr	HelmutSkillChoice.skip7
 HelmutSkillChoice.skip2:
-	and	A,0xF
+	and	A,D_PAD
 	jr	Z,HelmutSkillChoice.skip6
-	cp	A,4
+	cp	A,D_LEFT
 	jr	NZ,HelmutSkillChoice.skip4
 	ld	A,(XIZ+0x10)
 	cp	A,0
@@ -328,7 +331,7 @@ HelmutSkillChoice.skip2:
 HelmutSkillChoice.skip3:
 	jr	HelmutSkillChoice.skip6
 HelmutSkillChoice.skip4:
-	cp	A,8
+	cp	A,D_RIGHT
 	jr	NZ,HelmutSkillChoice.skip6
 	ld	A,(XIZ+0x10)
 	cp	A,1
@@ -356,12 +359,13 @@ HelmutSkillChoice.skip7:
 	ld	A,(XIZ+0x10)
 	cp	A,0
 	jr	Z,HelmutSkillChoice.skip8
-	ld	A,2
+	ld	A,2	; No: back to the pair (substate 2)
 	ld	(XIZ+0x27),A
 	call	ClearBox2
 	ld	A,0x1D
 	jr	HelmutSkillChoice.skip11
 HelmutSkillChoice.skip8:
+; Yes: skill id = +0x29 + +0x2A + 1 goes to wSkill1 if the first pair is still open, else wSkill2
 	ld	A,(XIZ+0x29)
 	ld	W,(XIZ+0x2A)
 	add	W,A
@@ -377,7 +381,7 @@ HelmutSkillChoice.skip9:
 	ld	A,EVENT_SKILL2_A
 HelmutSkillChoice.skip10:
 	ld	W,(XIZ+0x2A)
-	add	A,W
+	add	A,W	; flag EVENT_SKILL1_A/B or EVENT_SKILL2_A/B for the pick
 	ld	L,A
 	extz	HL
 	call	SetEventFlag

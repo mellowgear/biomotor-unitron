@@ -2,7 +2,8 @@
 
 c_206379	section	code abs=0x206379
 
-; [code] boot (Reset): wColorFlags = 0x10 on a colour unit (OS_VERSION >= 0x10, BIOS call 0xE), SCROLL_PRIORITY / BG / CONTROL_2D, timer 0, ClearTilemaps, ClearSprites, InitDisplayState, wFadeLevel = 0x81, zeroes palette RAM 0x8200-0x83FF, full window (WBA_H 0, WSI_H 0x98A0)
+; Boot (Reset): sets colour mode on a colour unit (wColorFlags 0x10), the K2GE control registers and timer 0,
+; clears tilemaps, sprites and palette RAM, InitDisplayState, wFadeLevel 0x81 (black), full-screen window [code]
 InitDisplay:
 	ldb	(wColorFlags),0
 	cpb	(OS_VERSION),0x10
@@ -27,7 +28,7 @@ InitDisplay.skip:
 	call	ClearSprites
 	call	InitDisplayState
 	ldb	(wFadeLevel),0x81
-	ld	XHL,SPRITE_PAL
+	ld	XHL,SPRITE_PAL	; 0x200 bytes of palette RAM (sprite, scr1, scr2, BG, window)
 	ld	BC,0x100
 InitDisplay.loop:
 	ldw	(XHL+),0
@@ -38,7 +39,8 @@ InitDisplay.loop:
 
 c_2063EE	section	code abs=0x2063EE
 
-; [code] once from InitDisplay at boot: zeroes wScrollSplitLine, the scroll positions wScr1ScrollX..wScr2SplitScrollY, wSpriteOffsetX/Y, wShakeFlags/X/Y, the sprite buffers (pointers reset), wFadeLevel = 0, wFadeLevelShown = 0xFF, and grey ramps 0xFFF..0 into wBgPalShadow and wWindowPalShadow, wBgShadow = 0x80
+; From InitDisplay: zeroes the scroll, split, sprite-offset and shake state and the sprite buffers, sets
+; wFadeLevel 0 / wFadeLevelShown 0xFF (forces a reload), grey ramps in wBgPalShadow / wWindowPalShadow [code]
 InitDisplayState:
 	ld	A,0
 	ld	(wScrollSplitLine),A

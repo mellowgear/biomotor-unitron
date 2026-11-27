@@ -2,7 +2,8 @@
 
 c_20E1D4	section	code abs=0x20E1D4
 
-; [code] child task: ends (EndTask) when its parent (+4) is gone or after TASK_ARG (+0xE, set by the starter) frames; used by IntroSequence, the story scenes and the credits as a timed wait
+; Child task, the scenes' timed wait: ends after TASK_ARG frames (set by the starter) or when its parent (+4)
+; is gone [code]
 WaitFramesTask:
 	cpw	(XIZ+4),0
 	jp	Z,EndTask
@@ -12,7 +13,8 @@ WaitFramesTask:
 
 c_20E22B	section	code abs=0x20E22B
 
-; [code] child task: over TASK_ARG (+0xE) frames sets wFadeLevel = +0x12 + (+0x14 - +0x12) * frame / TASK_ARG (the starter sets the from / to levels), then EndTask
+; Child task: steps wFadeLevel linearly from +0x12 to +0x14 over TASK_ARG frames (the starter sets all three),
+; then ends; levels 0 = normal, 0x7F = white, 0x81 = black [code]
 FadeLevelTask:
 	ldw	(XIZ+0x16),0
 	ld	A,(XIZ+0x14)
@@ -35,7 +37,7 @@ FadeLevelTask.resume:
 
 c_20E264	section	code abs=0x20E264
 
-; [code] IntroBackground's child: starts IntroSequence, then resumes at IntroSkipCheck (0x20E278)
+; IntroBackground's child: starts IntroSequence, then runs IntroSkipCheck each frame [code]
 RunIntroTask:
 	ld	XHL,IntroSequence
 	call	StartChildTask
@@ -45,7 +47,7 @@ RunIntroTask:
 
 c_20E278	section	code abs=0x20E278
 
-; [code] RunIntroTask's resume step: A -> IntroSkip; ends when IntroSequence is done (TASK_CHILDREN = 0)
+; Ends with the intro; A skips it (IntroSkip) [code]
 IntroSkipCheck:
 	ld	A,(wJoyPressed)
 	and	A,A_BUTTON
@@ -56,7 +58,7 @@ IntroSkipCheck:
 
 c_20E28C	section	code abs=0x20E28C
 
-; [code] EndChildTasks (stops IntroSequence and its scenes), EndTask once TASK_CHILDREN = 0
+; Stops IntroSequence and its scenes (EndChildTasks) and ends once they are gone [code]
 IntroSkip:
 	call	EndChildTasks
 	cpw	(XIZ+TASK_CHILDREN),0
@@ -65,7 +67,7 @@ IntroSkip:
 
 c_20E29B	section	code abs=0x20E29B
 
-; [code] TASK_ARG = 0x258 (TitleWaitA's countdown), parent +0xE = 0, then TitleTaskStart
+; Title child setup: TASK_ARG = 0x258 (the idle countdown before the intro replays), parent TASK_ARG = 0 [code]
 TitleTaskInit:
 	ldw	(XIZ+TASK_ARG),0x258
 	ldw	(XIY+0xE),0
@@ -75,7 +77,8 @@ TitleTaskInit:
 
 c_20E3AF	section	code abs=0x20E3AF
 
-; [play] all intro screens and the title
+; Boot task for the attract loop: intro (skippable with A), title reveal and flash, then the title menu
+; (TitleTaskInit); loops back to the intro when the title times out, else ends; scrolls zeroed both ways [play]
 IntroBackground:
 	ldb	(wUnk5CE2),0
 	ldb	(wScr1ScrollX),0
@@ -100,7 +103,7 @@ IntroBackground.skip:
 	ld	WA,0xE7
 	ld	BC,0
 	ld	DE,2
-	call	DrawTilemapScr2
+	call	DrawTilemapScr2	; a 5-frame flash frame before the title picture
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
 	ldw	(XHL+TASK_ARG),5
@@ -118,7 +121,7 @@ IntroBackground.skip2:
 	ld	XHL,TitleTaskInit
 	call	StartChildTask
 	task_wait
-	cpw	(XIZ+TASK_ARG),0
+	cpw	(XIZ+TASK_ARG),0	; the title timed out: replay the intro
 	jrl	Z,IntroBackground
 	ldb	(wUnk5CE2),1
 	ldb	(wScr1ScrollX),0
@@ -130,7 +133,8 @@ IntroBackground.skip2:
 
 c_20E496	section	code abs=0x20E496
 
-; [play] task: Yumekobo logo, planet, meteor, cockpit, BIO/MOTOR/UNITRON letters (intro_* screens)
+; The intro: Yumekobo logo, "199 years ago", planet and meteor impact, the BIO / MOTOR / UNITRON letter scenes
+; between head cuts, fade to white and the cockpit; each step a child task waited on [play]
 IntroSequence:
 	ld	XWA,SONG_INTRO
 	call	PlayMusic
@@ -224,7 +228,7 @@ IntroSequence:
 
 c_20E6E4	section	code abs=0x20E6E4
 
-; [play] intro_199_years_ago
+; Intro caption screen: draws the "199 years ago" map on scroll 1, then Intro199YearsAgoStep for 0x168 frames [play]
 Intro199YearsAgo:
 	ldb	(wFadeLevel),0x7F
 	ldb	(wScr1ScrollX),0
@@ -258,7 +262,7 @@ Intro199YearsAgo:
 
 c_20E753	section	code abs=0x20E753
 
-; [code] frame function of Intro199YearsAgo: PlanetElsceaCaptionMap (Planet "Elscea") at 0xB4, fade at 0
+; Adds the Planet "Elscea" caption 0xB4 frames in, then ends black (wFadeLevel 0x81) [code]
 Intro199YearsAgoStep:
 	decw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0xB4
@@ -283,7 +287,8 @@ Intro199YearsAgoStep.skip2:
 
 c_20E789	section	code abs=0x20E789
 
-; [code+play] IntroTitleScene, title banner tasks, TitleReveal, clear SCR2
+; Title reveal: IntroTitleScene, title music, the four banners slide in, the robot slides onto scroll 2,
+; then scroll 2 is cleared [code+play]
 TitleRevealSequence:
 	calr	IntroTitleScene
 	ld	WA,MUSIC_TITLE
@@ -308,7 +313,7 @@ TitleRevealSequence:
 
 c_20E7FF	section	code abs=0x20E7FF
 
-; [play] intro_title_reveal
+; Loads the title palettes and tiles (banners from tile 0xC, the title picture from 0xE7) and the copyright line [play]
 IntroTitleScene:
 	ldb	(wFadeLevel),0x7F
 	ldb	(wScr1ScrollX),0
@@ -357,7 +362,8 @@ IntroTitleScene:
 
 c_20E89B	section	code abs=0x20E89B
 
-; [code+play] TitleBannerTopMap (row 1) and TitleBannerBottomMap (row 13) slide in from opposite sides
+; Slides TitleBannerTopMap (row 1) in from the left and TitleBannerBottomMap (row 13) from the right, one
+; column a frame over 20 frames [code+play]
 SlideInTitleBanners:
 	ldb	(wFadeLevel),0
 	ldw	(XIZ+TASK_ARG),0xFFEC
@@ -383,7 +389,7 @@ SlideInTitleBanners.resume:
 
 c_20E8E8	section	code abs=0x20E8E8
 
-; [code] TitleRevealSequence: TitleBannerMiddle1Map (row 5) from column -20 and TitleBannerMiddle2Map (row 9) from column 20 slide to the centre on SCR1 (the middle two banners; SlideInTitleBanners does rows 1 and 13); [play] intro_title_reveal (four banners)
+; SlideInTitleBanners for the middle banners, rows 5 and 9 [code+play]
 SlideInMiddleTitleBanners:
 	ldw	(XIZ+TASK_ARG),0xFFEC
 	ldw	(XIZ+0x10),0x14
@@ -408,7 +414,7 @@ SlideInMiddleTitleBanners.resume:
 
 c_20E930	section	code abs=0x20E930
 
-; [play] intro_title_reveal
+; Slides TitleRobotMap (mono map on mono) in from column 20 to 0 on scroll 2, one column a frame [play]
 TitleReveal:
 	ldw	(XIZ+TASK_ARG),0x14
 	ldw	(XIZ+TASK_FUNC),TitleReveal.resume & 0xFFFF
@@ -431,7 +437,8 @@ TitleReveal.skip:
 
 c_20E96C	section	code abs=0x20E96C
 
-; [play] ran on yumekobo_logo, intro_199_years_ago
+; Yumekobo logo: fills the screen with tile 0xC, fades the logo in from white, sweeps YumekoboLogoStripeMap
+; across row 3, then fades to white [play]
 IntroLogoScene:
 	ldb	(wFadeLevel),0x7F
 	calr	ClearTilemapScr1
@@ -470,7 +477,7 @@ IntroLogoScene:
 	ld	BC,0
 	ld	DE,0
 	call	DrawTilemapScr2
-	ldw	(XIZ+TASK_ARG),0xFFE8
+	ldw	(XIZ+TASK_ARG),0xFFE8	; stripe from column -0x18 to 0x14
 	ldb	(wFadeLevel),0x7F
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
@@ -508,15 +515,13 @@ IntroLogoScene.resume:
 
 c_20EAA6	section	code abs=0x20EAA6
 
-; [code] the intro zoom, after IntroMeteorTask and sound 0xAF: 60 frames of IntroImpactFrames maps on SCR2 (reads past the table from frame 30);
-; from frame 7 a FadeLevelTask (0x20 frames, 0 -> 0x7F) fades to white
-; [play] seen in play: the meteor hits the planet: a red impact on the blue face grows into white shock rings while the
-; screen fades to white (the rings vanish at frame 34, see intro_frames.asm) (was swp_20EAA6)
+; The meteor impact: 60 frames of IntroImpactMaps on scroll 2 picked by IntroImpactFrames (word stride 4, so it
+; reads past the table from frame 30, docs/BUGS.md), fading to white from frame 7 [code+play]
 IntroImpactTask:
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
-	ldw	(XIZ+0x12),0x3C
-	ldw	(XIZ+0x18),0
+	ldw	(XIZ+0x12),0x3C	; frames left
+	ldw	(XIZ+0x18),0	; frame
 	ldw	(XIZ+TASK_FUNC),IntroImpactTask.resume & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),IntroImpactTask.resume >> 16
 IntroImpactTask.resume:
@@ -549,7 +554,7 @@ IntroImpactTask.skip:
 
 c_20EB17	section	code abs=0x20EB17
 
-; [code] Gfx_2DEB58 + IntroPlanetMap (the planet) on SCR1, after Intro199YearsAgo
+; Loads the planet palettes and tiles and draws IntroPlanetMap on scroll 1 [code]
 IntroPlanetGraphics:
 	ld	A,0
 	ld	C,3
@@ -588,7 +593,8 @@ IntroPlanetGraphics:
 
 c_20EB87	section	code abs=0x20EB87
 
-; [code] IntroSequence after IntroPlanetGraphics: 0x78 frames of a sprite map from IntroMeteorFrames (4 frames, every 2nd frame) at x 0xA0 (- 1 per frame), y 0x18 (+ 1 every 2nd frame), DrawSpriteMap; [play] intro_planet_meteor
+; The meteor: 0x78 frames of IntroMeteorFrames sprite maps (frame changes every 2), moving from x 0xA0, y 0x18
+; left 1 a frame and down 1 every 2 frames [code] [play: intro_planet_meteor]
 IntroMeteorTask:
 	ldw	(XIZ+TASK_ARG),0xA0
 	ldw	(XIZ+0x10),0x18
@@ -601,7 +607,7 @@ IntroMeteorTask:
 IntroMeteorTask.resume:
 	ld	WA,0xC
 	ld	HL,(XIZ+0x18)
-	srl	1,HL
+	srl	1,HL	; frame / 2 & 3
 	and	HL,3
 	sll	2,HL
 	extz	XHL
@@ -627,8 +633,8 @@ IntroMeteorTask.done:
 
 c_20EBF9	section	code abs=0x20EBF9
 
-; [code] 20 frames: IntroHeadMap on SCR2 at 0, 0 (tiles from 0x17C; the letters stay on SCR1); IntroSequence runs it after IntroBioLetters, IntroMotorScene, IntroUnitronScene and IntroMotorUnitronLetters
-; [play] seen in play: a full-screen cut, black but for a purple three-eyed mechanical head (IntroHeadMap) (was swp_20EBF9)
+; 20-frame cut to the three-eyed mechanical head (IntroHeadMap, scroll 2 from tile 0x17C); between the letter
+; scenes [code+play]
 IntroHeadCutTask:
 	ldw	(XIZ+TASK_ARG),0x14
 	ld	WA,0x17C
@@ -645,8 +651,7 @@ IntroHeadCutTask.resume:
 
 c_20EC21	section	code abs=0x20EC21
 
-; [code] the IntroHeadCutTask shape with IntroHeadMouthMap (the same head, 9 cells of rows 11-12 differ); IntroSequence runs it once before the fade to white and IntroCockpitScene
-; [play] seen in play: the head again with the mouth / jaw line changed (was swp_20EC21)
+; IntroHeadCutTask with IntroHeadMouthMap (the jaw line changed), once before the fade to white [code+play]
 IntroHeadMouthCutTask:
 	ldw	(XIZ+TASK_ARG),0x14
 	ld	WA,0x17C
@@ -663,7 +668,7 @@ IntroHeadMouthCutTask.resume:
 
 c_20EC49	section	code abs=0x20EC49
 
-; [code] FillScrRect fill 0x20 x 0x20 with 0 on SCR1
+; Clears the scroll 1 map (FillScrRect) [code]
 ClearTilemapScr1:
 	ld	WA,0
 	ld	C,0
@@ -675,7 +680,7 @@ ClearTilemapScr1:
 
 c_20EC58	section	code abs=0x20EC58
 
-; [code] same on SCR2
+; Clears the scroll 2 map (FillScrRect rows 0x20+) [code]
 ClearTilemapScr2:
 	ld	WA,0
 	ld	C,0
@@ -687,7 +692,7 @@ ClearTilemapScr2:
 
 c_20EC67	section	code abs=0x20EC67
 
-; [play] intro_cockpit
+; Draws the cockpit picture on scroll 1, then pans it (IntroCockpitPan) [play]
 IntroCockpitScene:
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
@@ -721,7 +726,7 @@ IntroCockpitScene.skip:
 
 c_20ECCB	section	code abs=0x20ECCB
 
-; [code] IntroCockpitScene's resume step (TASK_FUNC 0x20ECCB): wScr1ScrollX = TASK_ARG / 2, wScr1ScrollY = +0x10 (0), TASK_ARG + 1 each frame, EndTask at 0xC0 (the cockpit picture scrolls 0x5F px over 0xC0 frames); [play] runs during the intro's cockpit picture
+; Pans scroll 1 to x = TASK_ARG / 2 for 0xC0 frames (0x5F pixels) [code]
 IntroCockpitPan:
 	ld	WA,(XIZ+TASK_ARG)
 	srl	1,WA
@@ -734,7 +739,8 @@ IntroCockpitPan:
 
 c_20ECE8	section	code abs=0x20ECE8
 
-; [code] started by IntroSequence right after IntroCockpitScene: cycles 4 SCR1 tilemaps from table 0x226B2D (colour) / 0x226B3D (mono, wColorFlags bit 4) at column 0x17 row 7 over the cockpit picture, 4 frames each, then EndTask; ran on intro_cockpit_helmet
+; Plays the 4-frame IntroCockpitFrames (mono IntroCockpitFramesMono) at column 0x17, row 7 over the cockpit,
+; 4 frames each [code] [play: intro_cockpit_helmet]
 IntroCockpitAnim:
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0
@@ -769,7 +775,7 @@ IntroCockpitAnim.done:
 
 c_20ED46	section	code abs=0x20ED46
 
-; [code] Gfx_2DFF62 at tile 0x12C for the MOTOR/UNITRON letter maps
+; Loads the letter scenes' palettes, the letter tiles (from 0x12C) and the head tiles (from 0x17C) [code]
 IntroLettersGraphics:
 	ld	A,0
 	ld	C,7
@@ -806,7 +812,7 @@ IntroLettersGraphics:
 
 c_20EDB2	section	code abs=0x20EDB2
 
-; [play] intro_bio_letters
+; "BIO" on scroll 2 over IntroBioSceneMap on scroll 1, panned 0x3C pixels over 0x78 frames [play]
 IntroBioLetters:
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
@@ -833,7 +839,7 @@ IntroBioLetters.resume:
 	ld	(wScr1ScrollX),A
 	ldb	(wScr1ScrollY),(XIZ+0x10)
 	decw	1,(XIZ+TASK_ARG)
-	cpw	(XIZ+TASK_ARG),0xFF88
+	cpw	(XIZ+TASK_ARG),0xFF88	; -0x78
 	jr	Z,IntroBioLetters.skip
 	ret
 IntroBioLetters.skip:
@@ -843,7 +849,7 @@ IntroBioLetters.skip:
 
 c_20EE1A	section	code abs=0x20EE1A
 
-; [code] SCR2 IntroMotorLettersMap ("MOTOR"), SCR1 IntroMotorSceneMap scrolled; started by IntroSequence
+; "MOTOR" on scroll 2 over IntroMotorSceneMap, panned over 0x30 frames [code]
 IntroMotorScene:
 	calr	ClearTilemapScr2
 	calr	ClearTilemapScr1
@@ -880,7 +886,7 @@ IntroMotorScene.skip:
 
 c_20EE82	section	code abs=0x20EE82
 
-; [code] SCR2 IntroUnitronLettersMap ("UNITRON"), SCR1 IntroUnitronSceneMap scrolled the other way
+; "UNITRON" on scroll 2 over IntroUnitronSceneMap, panned the other way over 0x30 frames [code]
 IntroUnitronScene:
 	calr	ClearTilemapScr2
 	calr	ClearTilemapScr1
@@ -917,7 +923,8 @@ IntroUnitronScene.skip:
 
 c_20EEEA	section	code abs=0x20EEEA
 
-; [play] intro_motor_letters, intro_unitron_letters
+; The letters cycling (CycleIntroLetters) over IntroMotorUnitronSceneMap, which scrolls from y -0x5A over
+; 0xB4 frames [play]
 IntroMotorUnitronLetters:
 	calr	ClearTilemapScr2
 	calr	ClearTilemapScr1
@@ -935,7 +942,7 @@ IntroMotorUnitronLetters:
 	ld	DE,0
 	call	DrawTilemapScr1
 	ldw	(XIZ+TASK_ARG),0
-	ldw	(XIZ+0x10),0xFF4C
+	ldw	(XIZ+0x10),0xFF4C	; -0xB4, halved for the scroll
 	ld	XHL,CycleIntroLetters
 	call	StartChildTask
 	ldw	(XIZ+TASK_FUNC),IntroMotorUnitronLetters.resume & 0xFFFF
@@ -958,7 +965,8 @@ IntroMotorUnitronLetters.skip:
 
 c_20EF65	section	code abs=0x20EF65
 
-; [code] child of IntroMotorUnitronLetters: SCR2 tilemap cycles through table 0x226B4D = IntroBioLettersMap (BIO, IntroBioLetters), IntroMotorLettersMap (MOTOR), IntroUnitronLettersMap (UNITRON) at base 0x12C, interval 0x14 frames shrinking by 2 to 4; ends when its parent link (XIZ+4) is cleared
+; Child of IntroMotorUnitronLetters: cycles BIO, MOTOR, UNITRON (IntroLetterMaps) on scroll 2, every 20
+; frames at first, 2 fewer each time down to 4; ends with its parent [code]
 CycleIntroLetters:
 	ldw	(XIZ+0x14),0
 	ldw	(XIZ+0x16),0x14
@@ -998,7 +1006,7 @@ CycleIntroLetters.done:
 
 c_20EFD3	section	code abs=0x20EFD3
 
-; [code] started by NewGameSetup (task_wait, then StreetGoWorks): wFadeLevel 0x81, ClearTilemapScr1/2, PlayMusic 4, then TASK_FUNC = 0x20EFF4 = StorySceneUnitice (DrawPortrait 0x2E + CreditsTask with ItAllBeganWithText 0x225C49)
+; New game (NewGameSetup): black screen, story song, then StorySceneUnitice [code]
 StorySceneUniticeSetup:
 	ldb	(wFadeLevel),0x81
 	ldb	(wUnk5CE2),0
@@ -1012,7 +1020,8 @@ StorySceneUniticeSetup:
 
 c_20EFF4	section	code abs=0x20EFF4
 
-; [code] "It all began with..." / "These crystals called Uni-..."
+; Opening story: "It all began with..." over portrait 0x2E, then portrait 0x3C with "These crystals called
+; Uni-..." over a dimmed picture; ends black and sets EVENT_STAGE_TOWN [code]
 StorySceneUnitice:
 	ld	WA,MUSIC_STORY
 	call	SoundCommand
@@ -1061,7 +1070,7 @@ StorySceneUnitice:
 	call	StartChildTask
 	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0
-	ldb	(XHL+0x14),0xD8
+	ldb	(XHL+0x14),0xD8	; dim the picture for the text (0xB0 on mono)
 	ld	A,(wColorFlags)
 	and	A,0x10
 	jr	NZ,StorySceneUnitice.resume5
@@ -1071,7 +1080,7 @@ StorySceneUnitice.resume5:
 	ld	A,0x20
 	ld	C,1
 	ld	XHL,StoryTextPal
-	calr	WritePalettesDirect
+	calr	WritePalettesDirect	; text palette written past the fade, so it stays bright
 	ld	A,4
 	ld	C,1
 	ld	XHL,StoryTextMonoPal
@@ -1104,7 +1113,7 @@ StorySceneUnitice.skip:
 
 c_20F179	section	code abs=0x20F179
 
-; [code] street task (0x5FF8 = 4, StreetEndingScenes): wFadeLevel 0x81, ClearTilemapScr1/2, PlayMusic 0x12, sound 0x33, then TASK_FUNC = 0x20F1A4 = StorySceneDestruction (as StorySceneUniticeSetup)
+; Ending (StreetEndingScenes): black screen, destruction song, then StorySceneDestruction [code]
 StorySceneDestructionSetup:
 	ldb	(wFadeLevel),0x81
 	ldb	(wUnk5CE2),0
@@ -1120,7 +1129,7 @@ StorySceneDestructionSetup:
 
 c_20F1A4	section	code abs=0x20F1A4
 
-; [code] "With the destruction of..."
+; Ending: StoryDestructionMap, then "With the destruction of..." over it dimmed, then StorySceneSunBegan [code]
 StorySceneDestruction:
 	ld	A,0x10
 	ld	C,7
@@ -1190,7 +1199,7 @@ StorySceneDestruction.skip:
 
 c_20F2C1	section	code abs=0x20F2C1
 
-; [code] "The sun began to..."
+; Ending: StorySunBeganMap, then "The sun began to..." over it dimmed, then CreditsScreen [code]
 StorySceneSunBegan:
 	ld	A,0x10
 	ld	C,8
@@ -1263,7 +1272,8 @@ StorySceneSunBegan.skip2:
 
 c_20F3E6	section	code abs=0x20F3E6
 
-; [code] BIO MOTOR UNITRON / PLANNING ... / TO BE CONTINUED
+; Staff credits over portrait 0x2E, then TO BE CONTINUED; sets EVENT_STAGE_ENDING, clears the talk flags and,
+; after the Cyrius trade, the four beaten-boss flags; A or B fades out and ends [code]
 CreditsScreen:
 	ld	XWA,SONG_CREDITS
 	call	PlayMusic
@@ -1299,7 +1309,7 @@ CreditsScreen:
 	ld	HL,EVENT_STAGE_LILY
 	call	ClearEventFlag
 	call	ClearTalkedFlags
-	ld	HL,EVENT_CYRIUS_TRADED
+	ld	HL,EVENT_CYRIUS_TRADED	; the bosses come back for the next loop (?)
 	call	CheckEventFlag
 	jr	Z,CreditsScreen.skip
 	ld	HL,EVENT_BEAT_ENT
@@ -1335,7 +1345,7 @@ CreditsScreen.resume:
 
 c_20F4F6	section	code abs=0x20F4F6
 
-; [code] "It was the end..."
+; "It was the end..." over portrait 0x37 (after Yes to Uniti's offer); A or B ends [code]
 StorySceneTheEnd:
 	ldb	(wFadeLevel),0x81
 	ldb	(wUnk5CE2),0
@@ -1382,7 +1392,7 @@ StorySceneTheEnd.resume:
 
 c_20F599	section	code abs=0x20F599
 
-; [code] GAME OVER
+; GAME OVER typed out in text box 0, then GameOverWaitB [code]
 GameOverScreen:
 	ldb	(wFadeLevel),0
 	call	ClearTilemaps
@@ -1409,7 +1419,7 @@ GameOverScreen:
 	ldb	(XWA+7),8
 	ld	A,0
 	call	GetTextBox
-	ldb	(XWA+0x10),0x14
+	ldb	(XWA+0x10),0x14	; typing speed (?)
 	ld	XHL,GAMEOVERText
 	ld	(XWA+8),XHL
 	ldw	(XIZ+TASK_FUNC),GameOverScreen.resume & 0xFFFF
@@ -1424,14 +1434,14 @@ GameOverScreen.resume:
 
 c_20F611	section	code abs=0x20F611
 
-; [code] TASK_FUNC = GameOverWaitB, then falls into it; no callers (after a ret; GameOverScreen's resume step GameOverScreen.resume jumps to GameOverWaitB itself)
+; Sets TASK_FUNC = GameOverWaitB and falls into it; no callers [code]
 GameOverSetWaitB:
 	ldw	(XIZ+TASK_FUNC),GameOverWaitB & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),GameOverWaitB >> 16
 
 c_20F61B	section	code abs=0x20F61B
 
-; [code] GAME OVER screen, after its text: B -> EndTask
+; Ends the GAME OVER screen on B [code]
 GameOverWaitB:
 	ld	A,(wJoyPressed)
 	and	A,B_BUTTON
@@ -1440,7 +1450,8 @@ GameOverWaitB:
 
 c_20F628	section	code abs=0x20F628
 
-; [play] staff credits (credits_* screens)
+; Scrolling text task (credits and story captions), TASK_ARG = text: loads the name glyphs, clears the glyph
+; cache, runs CreditsLineTask and scrolls scroll 2 up a line every 5 frames; B or the text's end stops it [play]
 CreditsTask:
 	calr	ClearTilemapScr2
 	ldb	(wScr2ScrollY),0
@@ -1474,7 +1485,7 @@ CreditsTask.loop2:
 	inc	1,XDE
 	inc	2,WA
 	djnz	B,CreditsTask.loop2
-	ld	WA,0x186
+	ld	WA,0x186	; first tile for the text glyphs
 	ld	(XIZ+0x18),WA
 	ldb	(XIZ+0x12),0
 	ldw	(XIZ+0x14),5
@@ -1484,7 +1495,7 @@ CreditsTask.loop2:
 	call	StartChildTask
 	ldw	(XIZ+TASK_FUNC),CreditsTask.resume & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),CreditsTask.resume >> 16
-	ld	XDE,0x5DF8
+	ld	XDE,wCreditsGlyphCache	; 0xFFFF = glyph not loaded
 	ld	BC,0x100
 	extz	XBC
 CreditsTask.loop3:
@@ -1505,7 +1516,7 @@ CreditsTask.resume:
 
 c_20F6CA	section	code abs=0x20F6CA
 
-; [code] CreditsTask each frame without B: every +0x14 (5) frames wScr2ScrollY = +0x12, +0x12 + 1
+; Every +0x14 (5) frames: wScr2ScrollY = +0x12, then +0x12 + 1 [code]
 CreditsScrollStep:
 	decw	1,(XIZ+0x16)
 	ret	NZ
@@ -1518,11 +1529,12 @@ CreditsScrollStep:
 
 c_20F6E0	section	code abs=0x20F6E0
 
-; [code] child task of CreditsTask (parent XIY): on a frame the parent scrolled (+0x16 = +0x14) at a multiple of 8 lines, writes the next text line (parent +0xE) into the SCR2 row just below the screen ((+0x12 / 8 + 0x13) & 0x1F at 0x9800): 0xFF -> CreditsLineEnd, 0xFE blanks the rest of the 20 cells, 0xFC / 0xFB the player / partner name tiles (0x16C / 0x173), else CreditsLineChar
+; CreditsTask's child (parent XIY): on each 8-line scroll step writes the next text line into the scroll 2
+; row just below the screen; 0xFF ends, 0xFE blanks the rest, 0xFC / 0xFB the player / partner name [code]
 CreditsLineTask:
 	ld	WA,(XIY+0x14)
 	cp	(XIY+0x16),WA
-	ret	NZ
+	ret	NZ	; only on frames the parent scrolled
 	ldw	(XIZ+TASK_ARG),0
 	ld	A,(XIY+0x12)
 	and	A,7
@@ -1530,7 +1542,7 @@ CreditsLineTask:
 	ld	XWA,0
 	ld	A,(XIY+0x12)
 	srl	3,A
-	add	A,0x13
+	add	A,0x13	; the row just below the 19 visible
 	and	A,0x1F
 	sll	6,XWA
 	add	XWA,SCROLL2_VRAM
@@ -1550,7 +1562,7 @@ CreditsLineTask.loop:
 
 c_20F730	section	code abs=0x20F730
 
-; [code] CreditsLineTask code 0xFB: the partner name tiles from 0x173 (wPartnerName); else CreditsLineChar
+; Code 0xFB: the partner name tiles (wPartnerName); else a text char [code]
 CreditsLinePartnerName:
 	cp	C,0xFB
 	jr	NZ,CreditsLineChar
@@ -1559,7 +1571,7 @@ CreditsLinePartnerName:
 
 c_20F73D	section	code abs=0x20F73D
 
-; [code] tile DE, DE + 2, ... into the map row for each char of the name at XBC (to 0xFF), then the next code
+; Writes tile DE, DE + 2 ... for each char of the 0xFF-ended name at XBC into the row [code]
 CreditsLineNameTiles:
 	ld	(XWA+),DE
 	inc	2,DE
@@ -1571,7 +1583,7 @@ CreditsLineNameTiles:
 
 c_20F74D	section	code abs=0x20F74D
 
-; [code] CreditsLineTask, a text char: 0 (space) -> blank cell; else CreditsLineCachedGlyph
+; A text char: 0 = a blank cell, else its glyph tile (CreditsLineCachedGlyph) [code]
 CreditsLineChar:
 	ld	C,(XHL+)
 	cp	C,0
@@ -1582,13 +1594,13 @@ CreditsLineChar.skip:
 
 c_20F75B	section	code abs=0x20F75B
 
-; [code] the char's tile from the cache 0x5DF8 + 2 * char (0xFFFF = not loaded yet -> CreditsLineLoadGlyph)
+; The char's tile from wCreditsGlyphCache, loading it first if the slot is 0xFFFF [code]
 CreditsLineCachedGlyph:
 	exts	BC
 	ld	DE,BC
 	extz	XDE
 	sll	1,XDE
-	add	XDE,0x5DF8
+	add	XDE,wCreditsGlyphCache
 	push	XDE
 	ld	DE,(XDE)
 	cp	DE,0xFFFF
@@ -1599,7 +1611,8 @@ CreditsLineCachedGlyph:
 
 c_20F779	section	code abs=0x20F779
 
-; [code] char not in the cache: LoadGlyphTile into the parent's next free tile +0x18, cached at 0x5DF8 + 2 * char, +0x18 + 1; after 20 cells the line pointer (parent +0xE) moves past the line
+; Loads the char's glyph into the parent's next free tile (+0x18), caches it; after 20 cells the parent's text
+; pointer moves past the line [code]
 CreditsLineLoadGlyph:
 	pop	XDE
 	push	XHL
@@ -1626,7 +1639,7 @@ CreditsLineLoadGlyph.skip:
 
 c_20F7A8	section	code abs=0x20F7A8
 
-; [code] EndTask (code 0xFF: the end of the credits text)
+; Code 0xFF, the end of the text: EndTask [code]
 CreditsLineEnd:
 	call	EndTask
 	ret

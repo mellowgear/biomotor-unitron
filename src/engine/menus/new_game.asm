@@ -2,7 +2,7 @@
 
 c_20F7AD	section	code abs=0x20F7AD
 
-; [play] Select Player screen task (select_player_* screens only)
+; [code+play] new game entry: main menu music, OpenSelectPlayerBoxes, child SelectPlayerNames; its result +0x10 = 0 (B) clears both races and ends, else PlayerNameEntryTask; select_player_* screens
 SelectPlayerTask:
 	ld	WA,SONG_MAIN_MENU
 	call	PlayMusic
@@ -14,7 +14,7 @@ SelectPlayerTask:
 	ld	XHL,SelectPlayerNames
 	call	StartChildTask
 	task_wait
-	cpw	(XIZ+0x10),0
+	cpw	(XIZ+0x10),0	; +0x10 = child result: 1 OK, 0 back
 	jr	NZ,PlayerNameEntryTask
 	ldb	(wPlayerRace),0
 	ldb	(wPartnerRace),0
@@ -38,7 +38,7 @@ PlayerNameEntryTask:
 
 c_20F823	section	code abs=0x20F823
 
-; [code+play] runs NameEntryScreen (name_entry* / names_confirm)
+; [code+play] partner name entry (TASK_ARG 1), then ConfirmNames; a cancel in either goes back to PlayerNameEntryTask (name_entry* / names_confirm)
 NameEntryTask:
 	ldw	(XIZ+TASK_ARG),1
 	calr	NameEntryScreen
@@ -62,6 +62,7 @@ c_20F877	section	code abs=0x20F877
 
 ; [code+play] child task: draws the 6 entered chars and the blinking cursor
 DrawEnteredNameTask:
+; XIY = the parent NameEntry task, whose words +0x1A-+0x24 hold the six characters and +0x18 the count
 	ld	A,0
 	call	GetTextBox
 	ld	C,0xB
@@ -81,7 +82,7 @@ DrawEnteredNameTask:
 	call	DrawTextChar
 	incw	1,(XIZ+TASK_ARG)
 	ld	A,(XIZ+TASK_ARG)
-	and	A,0x10
+	and	A,0x10	; blink: cursor char shows 16 frames of 32
 	jr	Z,DrawEnteredNameTask.done
 	ld	A,0
 	call	GetTextBox
@@ -98,7 +99,7 @@ DrawEnteredNameTask.done:
 
 c_20F8DA	section	code abs=0x20F8DA
 
-; [play] name_entry, select_player_confirm
+; [code+play] child of the name entry tasks: DrawEnteredNameTask, cursor tiles and palette, input state cleared, the current name (player or partner by parent TASK_ARG) copied into +0x1A.. as words, then NameEntryInput; name_entry, select_player_confirm
 NameEntrySetup:
 	ld	XHL,DrawEnteredNameTask
 	call	StartChildTask
@@ -110,6 +111,7 @@ NameEntrySetup:
 	ld	XHL,NameEntryCursorPal
 	call	LoadPalettes
 	ldw	(XIZ+TASK_ARG),0
+; TASK_ARG column, +0x10 row, +0x12 always 0 here, +0x14 / +0x16 Cancel-End row and focus, +0x18 count, +0x26 repeat timer, +0x28 / +0x29 keys, +0x2A blink
 	ldw	(XIZ+0x10),0
 	ldw	(XIZ+0x12),0
 	ldw	(XIZ+0x14),1
@@ -126,7 +128,7 @@ NameEntrySetup:
 	ldw	(XIZ+0x2A),0
 	ld	XDE,wPlayerName
 	ld	A,(wPlayerRace)
-	cpw	(XIY+0xE),0
+	cpw	(XIY+TASK_ARG),0
 	jr	Z,NameEntrySetup.skip
 	ld	XDE,wPartnerName
 	ld	A,(wPartnerRace)
@@ -155,7 +157,7 @@ c_20F985	section	code abs=0x20F985
 ; [code] NameEntrySetup's resume step (TASK_FUNC 0x20F985 at NameEntryStartInput): d-pad key repeat (+0x26: 0x10 frames, then every 7), moves on the OK / character grid (+0x16 = 1: the bottom row +0x14; else column TASK_ARG 0-9, row +0x10), A adds NameEntryChars[row * 10 + column + 1] (up to 6 chars), B deletes, A on OK -> StoreEnteredName; [play] name_entry_typing
 NameEntryInput:
 	ld	A,(wJoyHeld)
-	cp	A,(XIZ+0x29)
+	cp	A,(XIZ+0x29)	; same keys held as last frame: count down the repeat
 	jr	NZ,NameEntryNewKeys
 	decw	1,(XIZ+0x26)
 	cpw	(XIZ+0x26),0
@@ -186,19 +188,19 @@ NameEntryNewKeys.skip:
 	cpw	(XIZ+0x16),1
 	jrl	NZ,NameEntryGridInput
 	ld	A,(XIZ+0x28)
-	and	A,4
+	and	A,D_LEFT	; left / right do nothing on this column but beep
 	jr	Z,NameEntryNewKeys.skip2
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
 NameEntryNewKeys.skip2:
 	ld	A,(XIZ+0x28)
-	and	A,8
+	and	A,D_RIGHT
 	jr	Z,NameEntryNewKeys.skip3
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
 NameEntryNewKeys.skip3:
 	ld	A,(XIZ+0x28)
-	and	A,1
+	and	A,D_UP
 	jr	Z,NameEntryCancelEndDown
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
@@ -214,7 +216,7 @@ c_20FA0C	section	code abs=0x20FA0C
 ; [code] Cancel / End column, down: +0x14 + 1 (0 Cancel, 1 End), down from End goes to grid row 0 (+0x16 = 0, +0x10 = 0)
 NameEntryCancelEndDown:
 	ld	A,(XIZ+0x28)
-	and	A,2
+	and	A,D_DOWN
 	jr	Z,NameEntryCancelEndA
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
@@ -240,7 +242,7 @@ NameEntryCancelEndA:
 NameEntryCancelEndA.skip:
 	ld	WA,SFX_CANCEL
 	call	SoundCommand
-	ldb	(XIY+0x10),0
+	ldb	(XIY+0x10),0	; parent result 0 = cancelled
 	call	EndChildTasks
 	call	EndTask
 	ret
@@ -258,7 +260,7 @@ NameEntryEnd:
 
 c_20FA69	section	code abs=0x20FA69
 
-; [code] A on End with chars: all six char words 0 (code 0 = space in the charmap) -> sound 0x83 and stay; else StoreEnteredName
+; [code] A on End with chars: all six char words 0 (code 0 = space in the charmap), so a name of only spaces is refused -> sound 0x83 and stay; else StoreEnteredName
 NameEntryEndCheckBlank:
 	ld	WA,(XIZ+0x1A)
 	add	WA,(XIZ+0x1C)
@@ -278,12 +280,12 @@ c_20FA88	section	code abs=0x20FA88
 StoreEnteredName:
 	ld	WA,SFX_CONFIRM
 	call	SoundCommand
-	ld	DE,0x5013
-	cpw	(XIY+0xE),0
+	ld	DE,wPlayerName
+	cpw	(XIY+TASK_ARG),0
 	jr	Z,StoreEnteredName.skip
-	ld	DE,0x502F
+	ld	DE,wPartnerName
 StoreEnteredName.skip:
-	ld	WA,SFX_CONFIRM
+	ld	WA,SFX_CONFIRM	; (?) the confirm sound plays twice
 	call	SoundCommand
 	extz	XDE
 	ld	HL,0x1A
@@ -292,7 +294,7 @@ StoreEnteredName.skip:
 StoreEnteredName.loop:
 	ld	WA,(XHL+)
 	ld	(XDE+),A
-	djnz	BC,StoreEnteredName.loop
+	djnz	BC,StoreEnteredName.loop	; BC = count from NameEntryEnd
 	ldb	(XDE),0xFF
 	call	EndChildTasks
 	call	EndTask
@@ -325,7 +327,7 @@ c_20FAF2	section	code abs=0x20FAF2
 ; [code] grid keys: left / right move the column TASK_ARG 0-9 (wrapping), down moves the row +0x10; down from row 8 goes to End (+0x16 = 1, +0x14 = 1); then NameEntryGridUp
 NameEntryGridInput:
 	ld	A,(XIZ+0x28)
-	and	A,4
+	and	A,D_LEFT
 	jr	Z,NameEntryGridInput.skip
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
@@ -335,7 +337,7 @@ NameEntryGridInput:
 	ldw	(XIZ+TASK_ARG),9
 NameEntryGridInput.skip:
 	ld	A,(XIZ+0x28)
-	and	A,8
+	and	A,D_RIGHT
 	jr	Z,NameEntryGridInput.skip2
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
@@ -345,7 +347,7 @@ NameEntryGridInput.skip:
 	ldw	(XIZ+TASK_ARG),0
 NameEntryGridInput.skip2:
 	ld	A,(XIZ+0x28)
-	and	A,2
+	and	A,D_DOWN
 	jr	Z,NameEntryGridUp
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
@@ -361,7 +363,7 @@ c_20FB52	section	code abs=0x20FB52
 ; [code] grid, up: row +0x10 - 1; up from row 0 goes to End (+0x16 = 1, +0x14 = 1); then NameEntryGridA
 NameEntryGridUp:
 	ld	A,(XIZ+0x28)
-	and	A,1
+	and	A,D_UP
 	jr	Z,NameEntryGridA
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
@@ -391,12 +393,13 @@ NameEntryGridA.skip:
 	ld	WA,SFX_BUZZER
 	call	SoundCommand
 NameEntryGridA.skip2:
+; character index = row * 10 + column + 1 (1-based into NameEntryChars)
 	ld	BC,(XIZ+0x10)
 	mul	XBC,0xA
 	ld	DE,(XIZ+TASK_ARG)
 	inc	1,DE
 	add	BC,DE
-	cpw	(XIZ+0x12),0
+	cpw	(XIZ+0x12),0	; +0x12 is 0 from NameEntrySetup, so this branch always runs
 	jr	Z,NameEntryAddChar
 	add	XBC,NameEntryChars
 	ld	A,(XBC)
@@ -417,7 +420,7 @@ NameEntryAddChar.skip2:
 	extz	WA
 	ld	(XHL),WA
 	incw	1,(XIZ+0x18)
-	cpw	(XIZ+0x18),7
+	cpw	(XIZ+0x18),7	; a 7th char overwrote word +0x26 (the repeat timer): count back to 6
 	jr	Z,NameEntryAddChar.skip
 	jr	NameEntryAddChar.skip5
 NameEntryAddChar.skip:
@@ -434,6 +437,7 @@ NameEntryAddChar.skip3:
 	add	HL,0x1A
 	add	XHL,XIZ
 	ldw	(XHL),0
+; B deletes: the char at the old count is cleared, then (second block) the one before it
 	decw	1,(XIZ+0x18)
 	cpw	(XIZ+0x18),0xFFFF
 	jr	NZ,NameEntryAddChar.skip4
@@ -482,7 +486,7 @@ DrawNameEntryChars:
 
 c_20FC87	section	code abs=0x20FC87
 
-; [code] Enter your name / partner name
+; [code] TASK_ARG 0 player / 1 partner: opens text boxes 0-3 with the prompt, the race portrait (race + 0xA), the character grid NameEntryChars and Cancel / End, and SelectPutBackText
 NameEntryScreen:
 	ld	A,0
 	ld	C,0x14
@@ -509,7 +513,7 @@ NameEntryScreen.skip:
 	extz	WA
 	ld	HL,WA
 NameEntryScreen.skip2:
-	add	HL,0xA
+	add	HL,0xA	; portraits 0xB-0x14 are the race portraits
 	ld	WA,0xDA
 	ld	BC,0xD
 	ld	DE,4
@@ -623,7 +627,7 @@ OpenSelectPlayerBoxes:
 
 c_20FDFA	section	code abs=0x20FDFA
 
-; [play] names_confirm
+; [code+play] child: both names and race portraits with "Ok? Yes No"; left / right pick (TASK_ARG 1 Yes, 0 No), A on Yes -> parent +0x10 = 1, No or B -> 0, EndTask; names_confirm
 ConfirmNames:
 	ld	XHL,OkYesNoText2
 	ld	A,2
@@ -733,7 +737,7 @@ ConfirmNames.skip:
 
 c_20FF36	section	code abs=0x20FF36
 
-; [code+play] Player / Partner names on Select Player
+; [code+play] child: labels, both names cleared to 0xFF, then each frame left / right cycle the race TASK_ARG 1-10 with blinking arrows; the partner race +0x16 is the other race of the pair; falls into SelectPlayerScreen
 SelectPlayerNames:
 	ld	A,3
 	call	GetTextBox
@@ -749,7 +753,7 @@ SelectPlayerNames:
 	call	SetTextBoxCursorXWA
 	ld	XHL,PartnerText
 	call	DrawString
-	ld	WA,0xFFFF
+	ld	WA,0xFFFF	; wipe both 14-byte name buffers
 	ld	XHL,wPlayerName
 	ld	(XHL+),WA
 	ld	(XHL+),WA
@@ -768,7 +772,7 @@ SelectPlayerNames:
 	ld	(XHL+),WA
 	ldw	(XIZ+TASK_ARG),1
 	ldw	(XIZ+0x12),1
-	ldw	(XIZ+0x14),0x84
+	ldw	(XIZ+0x14),0x84	; Yes / No cursor y
 	ldw	(XIZ+0x18),1
 	ldw	(XIZ+0x1A),0
 	ldw	(XIZ+TASK_FUNC),SelectPlayerNames.resume & 0xFFFF
@@ -807,6 +811,7 @@ SelectPlayerNames.skip2:
 	ldw	(XIZ+0x18),1
 	incw	1,(XIZ+TASK_ARG)
 SelectPlayerNames.skip3:
+; race wraps 1-10
 	cpw	(XIZ+TASK_ARG),0xB
 	jr	NZ,SelectPlayerNames.skip4
 	ldw	(XIZ+TASK_ARG),1
@@ -815,6 +820,7 @@ SelectPlayerNames.skip4:
 	jr	NZ,SelectPlayerNames.skip5
 	ldw	(XIZ+TASK_ARG),0xA
 SelectPlayerNames.skip5:
+; races pair up 1-2, 3-4 ...: the partner is the odd / even neighbour
 	ld	WA,(XIZ+TASK_ARG)
 	and	WA,1
 	jr	NZ,SelectPlayerScreen
@@ -824,7 +830,7 @@ SelectPlayerNames.skip5:
 
 c_210047	section	code abs=0x210047
 
-; [code+play] "Select Player" with portraits
+; [code+play] SelectPlayerNames frame, WA = partner race: redraws both race portraits when +0x18 is set, the prompt and RaceNameTexts[(race - 1) / 2]; B -> parent +0x10 = 0, EndTask, else SelectPlayerAskOk
 SelectPlayerScreen:
 	ld	WA,(XIZ+TASK_ARG)
 	inc	1,WA
@@ -973,7 +979,7 @@ SetPlayerRacesAndNames:
 	extz	WA
 	extz	XWA
 	sll	2,XWA
-	ld	XHL,DefaultNames
+	ld	XHL,DefaultNames	; DefaultNames[race] (entry 0 unused); the skipped first byte is the page code of the text
 	add	XHL,XWA
 	ld	XHL,(XHL)
 	inc	1,XHL

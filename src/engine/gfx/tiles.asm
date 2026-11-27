@@ -2,25 +2,26 @@
 
 c_20692B	section	code abs=0x20692B
 
-; XHL = u16 count + tiles, WA = first tile
+; Copies an uncompressed tile block (XHL = word tile count, then tiles) to CHAR RAM from tile WA [code]
 LoadRawTiles:
 	ld	BC,(XHL+)
 	sll	3,BC
 	ld	DE,WA
 	sll	4,DE
 	extz	XDE
-	add	XDE,0xA000
+	add	XDE,CHARACTER_RAM
 	ldirw	(XDE+),(XHL+)
 	ret
 
 c_206941	section	code abs=0x206941
 
-; [code] XDE = map (u8 w, h + one word per cell), XHL = tile sheet (u16 count skipped), WA = first CHAR RAM tile: copies tile (cell - 1) of the sheet for every cell into consecutive tiles, cell 0 = blank tile; LoadDungeonPalettes uses it for PlayerDungeonTiles
+; Copies sheet tile (cell - 1) of XHL (count word skipped) for every cell of map XDE (w, h, words) into
+; consecutive CHAR RAM tiles from WA, cell 0 = a blank tile [code]
 LoadMappedTiles:
 	ld	C,(XDE+)
 	mul	BC,(XDE+)
 	sll	4,WA
-	add	WA,0xA000
+	add	WA,CHARACTER_RAM
 	ld	QBC,WA
 	inc	2,XHL
 LoadMappedTiles.loop:
@@ -57,7 +58,7 @@ LoadMappedTiles.skip2:
 
 c_206993	section	code abs=0x206993
 
-; fill tiles with one shade
+; Fills BC tiles from tile WA with colour QA (0..3) [code]
 FillTiles:
 	ld	XDE,0
 	and	QA,3
@@ -74,7 +75,7 @@ FillTiles:
 FillTiles.skip:
 	sll	2,BC
 	sll	4,WA
-	add	WA,0xA000
+	add	WA,CHARACTER_RAM
 	extz	XWA
 FillTiles.loop:
 	ld	(XWA+),XDE
@@ -83,14 +84,14 @@ FillTiles.loop:
 
 c_207206	section	code abs=0x207206
 
-; format 02: w, h, LZSS tiles
+; Unpacks a format-2 image at XHL (byte 2, w, h in pixels, LZSS tiles) to tile WA. Out: B, D = w, h in tiles [code]
 LoadMonsterImage:
 	cpb	(XHL+),2
 	ret	NZ
 	ld	BC,(XHL+)
 	push	BC
 	mul	BC,B
-	srl	6,BC
+	srl	6,BC	; w * h / 64 tiles, 16 bytes each
 	sll	4,BC
 	calr	DecompressTiles
 	pop	B
@@ -101,7 +102,7 @@ LoadMonsterImage:
 
 c_207226	section	code abs=0x207226
 
-; XHL = u16 count + LZSS stream, WA = first tile
+; Unpacks an LZSS tile block (XHL = word tile count, then the stream) to CHAR RAM from tile WA [code]
 LoadCompressedTiles:
 	ld	BC,(XHL+)
 	push	BC
@@ -112,7 +113,8 @@ LoadCompressedTiles:
 
 c_207232	section	code abs=0x207232
 
-; LZSS (1 KiB ring at 0x4000) straight into CHAR RAM
+; LZSS-unpacks BC bytes from XHL straight into CHAR RAM at tile WA, using wTextBuffer as the 1 KiB ring
+; (zeroed, write start 0x3EE); a flag byte per 8 items, bit set = literal (DecompressTilesMatch otherwise) [code]
 DecompressTiles:
 	push	XIX
 	push	XIY
@@ -121,18 +123,18 @@ DecompressTiles:
 	ld	XHL,0
 	ld	HL,WA
 	sll	4,HL
-	add	HL,0xA000
+	add	HL,CHARACTER_RAM
 	ld	XDE,wTextBuffer
 	ld	XWA,0
 DecompressTiles.loop:
 	ld	(XDE+),XWA
-	cp	DE,0x43EE
+	cp	DE,wTextBuffer+0x3EE
 	jr	C,DecompressTiles.loop
 	ld	IY,BC
 	ld	IX,0
 	ld	QIX,0x3EE
 DecompressTiles.loop2:
-	srl	1,IX
+	srl	1,IX	; IXH 0xFF marker: reload a flag byte after 8 shifts
 	bit	0,IXH
 	jr	NZ,DecompressTiles.skip
 	ld	A,(XIZ+)
@@ -157,7 +159,7 @@ DecompressTiles.loop3:
 
 c_207293	section	code abs=0x207293
 
-; [code] DecompressTiles, flag bit 0 clear: a match word (offset = low byte | high nibble << 8, length = low nibble of the high byte + 3) copied from the 1 KiB ring to CHAR RAM and the ring
+; DecompressTiles match: word = offset (low byte | high nibble << 8), length = low nibble of the high byte + 3 [code]
 DecompressTilesMatch:
 	ld	WA,(XIZ+)
 	ld	QIY,WA
@@ -180,7 +182,8 @@ DecompressTilesMatch.loop:
 
 c_207C0F	section	code abs=0x207C0F
 
-; [code] DE = tile -> XDE = CHAR RAM 0xA000 + 16 * tile, then (entered here, or at DrawBarTilesAt with XDE set by BattleHPEPDisplayTask): QC copies of the empty bar tile RawTiles_2C83DD+2, then from the left one full tile (+0x82) per 8 of n = BC * 8 * QC / HL (rounded up) and the partial tile +2 + 16 * (n % 8); HL = max, BC = value
+; Draws an HP / EP bar QC tiles long into CHAR RAM tile DE: empty tiles, then from the left one full tile per
+; 8 pixels of BC * 8 * QC / HL (rounded up) and a partial tile; BC = value, HL = max; RawTiles_2C83DD [code]
 DrawBarTiles:
 	extz	XDE
 	sll	4,DE
@@ -217,7 +220,7 @@ DrawBarTiles.loop:
 	cp	BC,8
 	jr	C,DrawBarTiles.skip2
 	push	BC
-	ld	XHL,RawTiles_2C83DD+0x82
+	ld	XHL,RawTiles_2C83DD+0x82	; tiles +2: empty, 1..7 pixels, then full
 	ld	BC,8
 	ldirw	(XDE+),(XHL+)
 	pop	BC
@@ -235,7 +238,7 @@ DrawBarTiles.skip2:
 
 c_207C7B	section	code abs=0x207C7B
 
-; [code] the DrawBarTiles shape with RawTiles_2C846F, filled from the right end backwards (lddrw); entered at DrawBarTilesReversedAt by BattleHPEPDisplayTask for the enemy HP / EP
+; DrawBarTiles filled from the right end (the enemy bars), from RawTiles_2C846F [code]
 DrawBarTilesReversed:
 	extz	XDE
 	sll	4,DE
@@ -290,7 +293,7 @@ DrawBarTilesReversed.skip2:
 
 c_216C75	section	code abs=0x216C75
 
-; [code] WA = tile, C = step: the tile's 8 pixel rows (words) in CHAR RAM 0xA000 + 16 * tile = 0 (clear) for the last step / 2 rows, else 0xFFFF (colour 3); A = 1 until step / 2 = 8
+; Wipe step C of tile WA: the last C / 2 pixel rows cleared, the rest colour 3; A = 1 until C / 2 = 8 [code]
 UncoverTileStep:
 	push	XHL
 	push	XDE
@@ -326,7 +329,7 @@ UncoverTileStep.skip4:
 
 c_216D00	section	code abs=0x216D00
 
-; [code] the UncoverTileStep shape the other way: the last step / 2 rows = 0xFFFF, the rest 0; A = 1 until step / 2 = 0x10
+; UncoverTileStep the other way: the last C / 2 rows colour 3, the rest clear; A = 1 until C / 2 = 0x10 [code]
 CoverTileStep:
 	push	XHL
 	push	XDE
@@ -362,7 +365,8 @@ CoverTileStep.skip4:
 
 c_216DCD	section	code abs=0x216DCD
 
-; [code] WA = tile, C = step: rewrites the 16 bytes of the tile in CHAR RAM 0xA000 + 16 * tile: byte i = PixelFillBytes[clamp(step / 4 - (i / 2) - 4 * (i odd), 0, 4)] (filled from the top left); A = 1 until C = 0x14
+; Diagonal wipe step C of tile WA: byte i = PixelFillBytes[clamp(C / 4 - i / 2 - 4 * (i odd), 0, 4)], so it fills
+; from the top left; A = 1 until C = 0x14 [code]
 DrawWipeTileStep:
 	push	XHL
 	push	XDE

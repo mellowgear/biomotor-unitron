@@ -2,12 +2,13 @@
 
 c_21037F	section	code abs=0x21037F
 
-; [code] ret; no callers (before DrawPortraitAt)
+; Bare ret with no callers [code]
 Unused_21037F:
 	ret
 
 c_210380	section	code abs=0x210380
 
+; DrawPortrait HL at BC, DE (tile base WA), shifted by PortraitOffsets (x, y bytes) for portraits 0..0xA and 0x15..0x22 [code]
 DrawPortraitAt:
 	push	WA
 	push	HL
@@ -19,7 +20,7 @@ DrawPortraitAt:
 
 c_210390	section	code abs=0x210390
 
-; [code] DrawPortraitAt for HL >= 0x15: 0x15-0x22 -> DrawPortraitAtOffset, else DrawPortrait at BC / DE as given
+; DrawPortraitAt for HL >= 0x15: 0x15..0x22 take the offset, higher ones draw as given [code]
 DrawPortraitAtHigh:
 	cp	HL,0x22
 	jr	LE,DrawPortraitAtOffset
@@ -27,7 +28,7 @@ DrawPortraitAtHigh:
 
 c_210398	section	code abs=0x210398
 
-; [code] BC += PortraitOffsets[HL - 0xA] byte 0, DE += byte 1, then DrawPortrait (DrawPortraitAt for HL 0x15-0x22; HL <= 0xA joins after the subtraction, indexing by HL)
+; BC += PortraitOffsets[HL - 0xA].x, DE += .y, then DrawPortrait (the HL <= 0xA path joins after the subtraction) [code]
 DrawPortraitAtOffset:
 	sub	HL,0xA
 DrawPortraitAtOffset.skip:
@@ -48,7 +49,7 @@ DrawPortraitAtOffset.skip2:
 
 c_2103BA	section	code abs=0x2103BA
 
-; HL = portrait number; record table PortraitTable (data/graphics/portraits.asm)
+; Draws portrait HL (PortraitTable record) at BC (x), DE (y) with first tile WA: palettes, then colour or mono tiles and map [code]
 DrawPortrait:
 	push	WA
 	push	BC
@@ -96,7 +97,7 @@ DrawPortrait.skip2:
 
 c_210423	section	code abs=0x210423
 
-; [code] DrawPortrait with wColorFlags bit 4 set: LoadCompressedTiles of record +4 and DrawTilemap of record +8 (the colour tiles and map)
+; DrawPortrait on colour (wColorFlags bit 4): LoadCompressedTiles record +4, DrawTilemap record +8 [code]
 DrawPortraitColor:
 	ld	WA,(XSP+4)
 	push	XHL
@@ -116,7 +117,7 @@ DrawPortraitColor.skip:
 
 c_216845	section	code abs=0x216845
 
-; [code] WA = 0x94; every caller passes it as the first tile to DrawPortrait, LoadEnemyImage, DrawSpriteMap or LoadCompressedTiles
+; WA = 0x94, the first tile every caller gives DrawPortrait, LoadEnemyImage, DrawSpriteMap or LoadCompressedTiles [code]
 GetPictureFirstTile:
 	ld	WA,0x94
 	ret

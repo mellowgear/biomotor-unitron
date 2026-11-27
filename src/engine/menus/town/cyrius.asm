@@ -12,11 +12,11 @@ DrawCyriusTradeYesNo:
 	ld	XHL,YesNoText
 	call	DrawBoxString
 	ld	A,0
-	ld	(XIZ+0x10),A
+	ld	(XIZ+0x10),A	; cursor +0x10: 0 Yes, 1 No
 	ld	A,0
 	ld	(XIZ+0x2D),A
 	ld	A,1
-	ld	(XIZ+0x27),A
+	ld	(XIZ+0x27),A	; +0x27 = Cyrius substate (CyriusTalkDispatch)
 	ret
 
 c_215B16	section	code abs=0x215B16
@@ -32,19 +32,19 @@ CyriusTradeYesNo:
 	pop	WA
 	jr	CyriusTradeYesNo.skip7
 CyriusTradeYesNo.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CyriusTradeYesNo.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
-	ld	A,1
+	ld	A,1	; B = No
 	ld	(XIZ+0x10),A
 	jr	CyriusTradeYesNo.skip7
 CyriusTradeYesNo.skip2:
-	and	A,0xF
+	and	A,D_PAD
 	jr	Z,CyriusTradeYesNo.skip6
-	cp	A,4
+	cp	A,D_LEFT
 	jr	NZ,CyriusTradeYesNo.skip4
 	ld	A,(XIZ+0x10)
 	cp	A,0
@@ -59,7 +59,7 @@ CyriusTradeYesNo.skip2:
 CyriusTradeYesNo.skip3:
 	jr	CyriusTradeYesNo.skip6
 CyriusTradeYesNo.skip4:
-	cp	A,8
+	cp	A,D_RIGHT
 	jr	NZ,CyriusTradeYesNo.skip6
 	ld	A,(XIZ+0x10)
 	cp	A,1
@@ -76,12 +76,13 @@ CyriusTradeYesNo.skip5:
 CyriusTradeYesNo.skip6:
 	ld	WA,0
 	ld	A,(XIZ+0x10)
-	mul	WA,0x30
+	mul	WA,0x30	; Yes / No columns 0x20 and 0x50 pixels
 	add	WA,0x20
 	ld	BC,WA
 	ld	DE,0x84
 	call	DrawMenuCursor
 	jr	CyriusTradeYesNo.done
+; answered: +0x28 = 1 when EVENT_CYRIUS_TRADED (a return visit), which picks the second set of talk rows
 CyriusTradeYesNo.skip7:
 	call	ClearTextBox1
 	ld	A,(XIZ+0x10)
@@ -90,22 +91,22 @@ CyriusTradeYesNo.skip7:
 	ld	A,(XIZ+0x28)
 	cp	A,0
 	jr	Z,CyriusTradeYesNo.skip8
-	ld	A,0x1C
+	ld	A,0x1C	; No, return visit
 	jr	CyriusTradeYesNo.skip11
 CyriusTradeYesNo.skip8:
-	ld	A,0x14
+	ld	A,0x14	; No, first visit
 	jr	CyriusTradeYesNo.skip11
 CyriusTradeYesNo.skip9:
 	ld	A,(XIZ+0x28)
 	cp	A,0
 	jr	Z,CyriusTradeYesNo.skip10
-	ld	A,0x1D
+	ld	A,0x1D	; Yes, return visit
 	jr	CyriusTradeYesNo.skip11
 CyriusTradeYesNo.skip10:
-	ld	A,0x15
+	ld	A,0x15	; Yes, first visit
 	jr	CyriusTradeYesNo.skip11
 CyriusTradeYesNo.skip11:
-	ld	(XIZ+0x12),A
+	ld	(XIZ+0x12),A	; +0x12 = talk row, TASK_ARG 6 = TownTalkDispatch prints it
 	ld	A,6
 	ld	(XIZ+TASK_ARG),A
 	ld	A,2
@@ -124,6 +125,7 @@ DrawCyriusTradeDesc:
 	call	DrawBoxString
 	push	XHL
 	push	XWA
+; row of 6 words in CyriusTradeMenu per race pair: (wPlayerRace - 1) / 2
 	ld	A,(wPlayerRace)
 	dec	1,A
 	srl	1,A
@@ -163,7 +165,7 @@ DrawCyriusTradeMenu:
 	ld	XHL,CyriusTradeMenu
 	add	XHL,XWA
 	pop	XWA
-	ld	C,6
+	ld	C,6	; 6 offers, one per row
 	ld	E,0
 DrawCyriusTradeMenu.loop:
 	push	C
@@ -183,6 +185,7 @@ DrawCyriusTradeMenu.loop:
 	pop	C
 	inc	1,E
 	inc	2,XHL
+; row 8 = Quit
 	djnz	C,DrawCyriusTradeMenu.loop
 	ld	C,0
 	ld	E,8
@@ -214,25 +217,26 @@ CyriusTradeMenuInput:
 	pop	WA
 	jrl	CyriusTradeMenuInput.skip11
 CyriusTradeMenuInput.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CyriusTradeMenuInput.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
-	ld	A,8
+	ld	A,8	; B = Quit (row 8)
 	ld	(XIZ+0x10),A
 	jrl	CyriusTradeMenuInput.skip11
 CyriusTradeMenuInput.skip2:
-	and	A,0xF
+	and	A,D_PAD
 	jr	Z,CyriusTradeMenuInput.skip8
-	cp	A,1
+	cp	A,D_UP
 	jr	NZ,CyriusTradeMenuInput.skip5
 	push	WA
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
+; up: 0 wraps to Quit, Quit goes to 5
 	cp	A,0
 	jr	Z,CyriusTradeMenuInput.skip3
 	cp	A,8
@@ -249,12 +253,13 @@ CyriusTradeMenuInput.skip4:
 	ld	(XIZ+0x10),A
 	jr	CyriusTradeMenuInput.skip9
 CyriusTradeMenuInput.skip5:
-	cp	A,2
+	cp	A,D_DOWN
 	jr	NZ,CyriusTradeMenuInput.skip8
 	push	WA
 	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
+; down: 5 goes to Quit, Quit wraps to 0
 	ld	A,(XIZ+0x10)
 	cp	A,8
 	jr	Z,CyriusTradeMenuInput.skip6
@@ -283,11 +288,12 @@ CyriusTradeMenuInput.skip10:
 	ld	BC,0x60
 	ld	WA,0
 	ld	A,(XIZ+0x10)
-	mul	WA,8
+	mul	WA,8	; rows 8 pixels apart
 	add	WA,4
 	ld	DE,WA
 	call	DrawMenuCursor
 	jrl	CyriusTradeMenuInput.done
+; chosen: redraw only that name (or Quit) in box 2 and remember the offer word at +0x2A
 CyriusTradeMenuInput.skip11:
 	call	ClearBox2
 	calr	ResetTextBox1
@@ -318,7 +324,7 @@ CyriusTradeMenuInput.skip11:
 	add	XHL,XWA
 	ld	WA,(XHL)
 	pop	XHL
-	ld	(XIZ+0x2A),WA
+	ld	(XIZ+0x2A),WA	; +0x2A = chosen offer (item or part word)
 	call	GetItemOrPartName
 	ld	A,2
 	call	DrawBoxString
@@ -340,7 +346,7 @@ CyriusTradeMenuInput.skip13:
 	ld	A,2
 	call	DrawBoxString
 	ld	WA,0
-	ld	(XIZ+0x2A),WA
+	ld	(XIZ+0x2A),WA	; +0x2A = 0: nothing chosen
 	ld	A,(XIZ+0x28)
 	cp	A,0
 	jr	Z,CyriusTradeMenuInput.skip14
@@ -390,19 +396,19 @@ CyriusTrade:
 	pop	WA
 	jr	CyriusTrade.skip7
 CyriusTrade.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CyriusTrade.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
-	ld	A,1
+	ld	A,1	; B = No
 	ld	(XIZ+0x10),A
 	jr	CyriusTrade.skip7
 CyriusTrade.skip2:
-	and	A,0xF
+	and	A,D_PAD
 	jr	Z,CyriusTrade.skip6
-	cp	A,4
+	cp	A,D_LEFT
 	jr	NZ,CyriusTrade.skip4
 	ld	A,(XIZ+0x10)
 	cp	A,0
@@ -417,7 +423,7 @@ CyriusTrade.skip2:
 CyriusTrade.skip3:
 	jr	CyriusTrade.skip6
 CyriusTrade.skip4:
-	cp	A,8
+	cp	A,D_RIGHT
 	jr	NZ,CyriusTrade.skip6
 	ld	A,(XIZ+0x10)
 	cp	A,1
@@ -445,7 +451,7 @@ CyriusTrade.skip7:
 	ld	A,(XIZ+0x10)
 	cp	A,0
 	jr	Z,CyriusTrade.skip9
-	ld	A,2
+	ld	A,2	; No: back to the menu (substate 2)
 	ld	(XIZ+0x27),A
 	call	ClearBox2
 	ld	A,(XIZ+0x28)
@@ -456,6 +462,7 @@ CyriusTrade.skip7:
 CyriusTrade.skip8:
 	ld	A,0x19
 	jr	CyriusTrade.skip13
+; Yes: give the offer; carry from AddItem = not given (talk row 0x48, no room?)
 CyriusTrade.skip9:
 	ld	WA,(XIZ+0x2A)
 	call	AddItem
@@ -465,9 +472,9 @@ CyriusTrade.skip9:
 	ld	A,0x48
 	jr	CyriusTrade.skip13
 CyriusTrade.skip10:
-	call	ClearEmblemFlags
+	call	ClearEmblemFlags	; the 4 emblems are the price
 	call	GetStoryStage
-	cp	A,0xA
+	cp	A,0xA	; (?) stage 0xA+: the beaten-dungeon flags reset too so the bosses return
 	jr	C,CyriusTrade.skip11
 	call	ClearBeatenDungeonFlags
 CyriusTrade.skip11:

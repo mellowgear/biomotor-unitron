@@ -114,6 +114,7 @@ MainMenuConfirm:
 	ld	XHL,(XHL)
 	ld	(XIZ+TASK_FUNC),XHL
 	ret
+; [code] next task per wMainMenuCursor: New Game, Load, Config
 MainMenuJumps:
 	dl	MainMenuNewGame,MainMenuLoadTask,ConfigMenu
 
@@ -131,9 +132,11 @@ MainMenuCancel:
 	set_scroll_priority	0x80
 	call	EndTask
 	ret
+; [code] main menu title box text
 MainMenuTitleText:
 	page "Main Menu"
 	done
+; [code] main menu choices, one per two rows (wMainMenuCursor 0-2)
 MainMenuChoicesText:
 	page " New Game"
 	line ""
@@ -375,6 +378,7 @@ DeleteDataMenu.skip4:
 	ret	Z
 	ldb	(XIZ+TASK_ARG),0
 	ret
+; [code] DeleteDataMenu prompt: All (TASK_ARG 0) or Select (1)
 DeleteDataMenuText:
 	page "Delete Data"
 	line "Which?"

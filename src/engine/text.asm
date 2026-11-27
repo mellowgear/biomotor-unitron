@@ -100,6 +100,7 @@ UpdateTextBoxes.skip2:
 	ld	WA,0xB
 	call	LoadRawTiles
 	ret
+; [code] per-box handler by state: 0 TextStep, 1 TextDelayTick, 2 TextWaitButton
 TextBoxStateJumps:
 	dl	TextStep,TextDelayTick,TextWaitButton
 
@@ -137,6 +138,7 @@ TextControlCode:
 	and	L,0x7F
 	ret	NZ
 	jr	TextStep
+; [code] TextStep handlers for codes 0xFF down to 0xFA (entry = ~code)
 TextControlJumps:
 	dl	TextCmd_End,TextCmd_Newline,TextCmd_Page,TextCmd_PlayerName
 	dl	TextCmd_Name2,TextCmd_Wait
@@ -414,6 +416,7 @@ DrawTextCharInBox:
 
 c_207699	section	code abs=0x207699
 
+; [code] XWA = box, L = character: < 0xF0 copies its glyph to the cursor tile and advances (NC); a control code runs DrawTextCharJumps[~L] (C)
 DrawTextChar:
 	cp	L,0xF0
 	jr	NC,DrawTextChar.skip
@@ -434,6 +437,7 @@ DrawTextChar.skip:
 	call	XHL
 	scf
 	ret
+; [code] DrawTextChar handlers for codes 0xFF down to 0xFA: newline, page and the two names act at once, end and wait do nothing
 DrawTextCharJumps:
 	dl	TextCmd_Nop,TextCmd_Newline,TextCmd_Page,DrawPlayerName
 	dl	DrawPartnerName,TextCmd_Nop

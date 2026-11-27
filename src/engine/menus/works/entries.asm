@@ -82,6 +82,7 @@ c_217427	section	code abs=0x217427
 GetDashesText:
 	ld	XHL,DashText13
 	ret
+; [code] "------" placeholder name for an empty entry
 DashText13:
 	db	0x59,0x59,0x59,0x59,0x59,0x59,0xFF	; "------"
 
@@ -146,6 +147,7 @@ DrawAffinityIcons.skip:
 	jr	DrawAffinityIcons.loop
 DrawAffinityIcons.done:
 	ret
+; [code] affinity glyph codes for DrawAffinityIcons; same bytes as AffinityIconChars in tables.asm
 AffinityIconChars2:
 	db	0x6C,0x6E,0x6D,0x70,0x6F,0x6A,0x6B,0x73
 

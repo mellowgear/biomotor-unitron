@@ -15,7 +15,7 @@ StartDungeonFloor:
 	call	SetMapScrollToPlayer
 	call	OpenDungeonBoxes
 	ld	A,0
-	ld	(XIZ+0x2D),A
+	ld	(XIZ+DUNGEON_ANIM_FRAME),A
 	ld	A,1
 	ld	(XIZ+DUNGEON_FACING),A
 	ld	A,0
@@ -40,7 +40,7 @@ WaitDungeonFloorOpen:
 	cp	A,1
 	jr	Z,WaitDungeonFloorOpen.done
 	xor	A,A
-	ld	(XIZ+0x2C),A
+	ld	(XIZ+DUNGEON_STEP_FRAMES),A
 	ld	A,3
 	ld	(XIZ+DUNGEON_MODE),A
 	call	ShowAreaNameAndWait
@@ -77,7 +77,7 @@ StartDungeonExit:
 	push	XBC
 	push	XWA
 	ld	A,3
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	call	SetupWindowIris
 	call	StartWindowIrisClose
 	ld	A,4
@@ -98,7 +98,7 @@ DungeonFloorChangeStep:
 	cp	A,1
 	jr	Z,DungeonFloorChangeStep.done
 	call	HideDungeonBoxes
-	ld	A,(XIZ+0x12)
+	ld	A,(XIZ+DUNGEON_CHANGE)
 	cp	A,3
 	jr	NZ,DungeonFloorChangeStep.skip
 	ld	A,0
@@ -124,7 +124,7 @@ DungeonFloorChangeStep.skip2:
 	jr	DungeonFloorChangeStep.skip4
 DungeonFloorChangeStep.skip3:
 	ld	A,0
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 DungeonFloorChangeStep.skip4:
 	; floor 0 = out of the dungeon
 	ld	A,(XIZ+DUNGEON_FLOOR)

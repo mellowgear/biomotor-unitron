@@ -2,7 +2,8 @@
 
 c_2070C7	section	code abs=0x2070C7
 
-; format 04: w, h, LZSS 4-bit pixels (4 = transparent)
+; Plots a format-4 image at XHL (byte 4, w, h, LZSS stream of 4-bit pixels, 4+ = transparent) into a tile canvas
+; QB tiles wide from tile WA, at pixel BC, DE; wTextBuffer is the 1 KiB LZSS ring as in DecompressTiles [code]
 DrawPartImage:
 	cpb	(XHL+),4
 	ret	NZ
@@ -20,7 +21,7 @@ DrawPartImage:
 	ld	XWA,0
 DrawPartImage.loop:
 	ld	(XDE+),XWA
-	cp	DE,0x43EE
+	cp	DE,wTextBuffer+0x3EE
 	jr	C,DrawPartImage.loop
 	ld	XIZ,XHL
 	ld	A,(XSP+8)
@@ -45,7 +46,7 @@ DrawPartImage.skip:
 	ld	(XDE+QIX),A
 	minc1	0x400,QIX
 	ld	QB,A
-	srl	4,A
+	srl	4,A	; two pixels per byte, high nibble first
 	cp	A,4
 	call	C,PlotPixel
 	incw	1,(XSP+0xA)
@@ -89,9 +90,11 @@ DrawPartImage.skip3:
 
 c_2071AF	section	code abs=0x2071AF
 
+; DrawPartImage's pixel plot: pixel n of the image (frame word +0xE) at x = n % w, y = n / w plus the origin,
+; colour A (0..3) into the 2bpp canvas tile (y / 8) * QB + x / 8 + WA [code]
 PlotPixel:
 	ld	DE,(XSP+0xE)
-	div	DE,(XSP+0xC)
+	div	DE,(XSP+0xC)	; E = row, D = column
 	ld	C,D
 	ld	B,0
 	ld	D,0
@@ -112,10 +115,10 @@ PlotPixel:
 	sll	1,A
 	ld	W,0
 	add	HL,WA
-	add	HL,0xA000
+	add	HL,CHARACTER_RAM
 	ld	A,C
 	sll	1,A
-	ld	BC,0x3FFF
+	ld	BC,0x3FFF	; pixel mask and colour rotated to bits 15-14 >> 2x
 	rrc	A,BC
 	pop	E
 	and	DE,3
@@ -128,15 +131,15 @@ PlotPixel:
 
 c_207CE7	section	code abs=0x207CE7
 
-; [code] XDE = tile index -> XDE = 0xA000 + 16 * index (character RAM address), falls into RenderNumberTiles; no callers (was swp_207CE7)
+; RenderNumberTiles to CHAR RAM tile XDE; no callers [code]
 RenderNumberTilesAtTile:
 	extz	XDE
 	sll	4,DE
-	add	DE,0xA000
+	add	DE,CHARACTER_RAM
 
 c_207CF0	section	code abs=0x207CF0
 
-; [code] BC = value (clamped to 0-999), XDE = 3 tiles: fills them with the font glyph of code 0 (space, byte NumberTileChars), then writes the decimal digits right-aligned (glyph 0x41 '0' + digit, GetFontGlyph), last digit first; callers ScreenShakeTask, DrawBattleScreen, DrawBattleItemPage, DrawSaveSlotList
+; Writes BC (clamped 0..999) right-aligned in three font-glyph tiles at CHAR RAM XDE [code]
 RenderNumberTiles:
 	or	BC,BC
 	jr	PL,RenderNumberTiles.skip
@@ -172,12 +175,14 @@ RenderNumberTiles.loop:
 	or	BC,BC
 	jr	NZ,RenderNumberTiles.loop
 	ret
+; RenderNumberTiles' glyph codes: blank, then the first digit
 NumberTileChars:
 	db	0x00,0x41
 
 c_207D40	section	code abs=0x207D40
 
-; clear the canvas, draw back, right arm (behind the body), body, legs, left arm
+; Draws the robot of wDrawBody..wDrawBack into the 12 x 11 tile canvas at tile HL: clears it, then back, right
+; arm (behind the body), body, legs and left arm. Out: QB, QD = 0xC, 0xB [code]
 DrawRobot:
 	push	XHL
 	ld	WA,HL
@@ -211,7 +216,7 @@ DrawRobot:
 
 c_207D9D	section	code abs=0x207D9D
 
-; [code] wDrawBody image (ImageTable group 0) at PartOffsetsBody[wDrawBody]
+; Draws body image B (ImageTable group 0) at PartOffsetsBody entry B, centred if C >= 0x10; B 0 = none [code]
 DrawBodyPart:
 	or	B,B
 	ret	Z
@@ -237,7 +242,7 @@ DrawBodyPart.skip:
 
 c_207DC9	section	code abs=0x207DC9
 
-; [code+play] wDrawRightArm image from group 15 (gfx/parts/arm_r), drawn behind the body
+; Draws right-arm image B (RightArmImages) placed for body C by PartOffsetsRightArm; B 0 = none [code+play]
 DrawRightArmPart:
 	or	B,B
 	ret	Z
@@ -252,7 +257,7 @@ DrawRightArmPart:
 
 c_207DDF	section	code abs=0x207DDF
 
-; [code+play] wDrawLeftArm image from group 95 (gfx/parts/arm_l), drawn last
+; Draws left-arm image B (LeftArmImages) placed for body C by PartOffsetsLeftArm; B 0 = none [code+play]
 DrawLeftArmPart:
 	or	B,B
 	ret	Z
@@ -267,7 +272,7 @@ DrawLeftArmPart:
 
 c_207DF5	section	code abs=0x207DF5
 
-; [code] wDrawLegs image (ImageTable group 175) at PartOffsetsLegs[image][wDrawBody]
+; Draws legs image B (LegImages) placed for body C by PartOffsetsLegs; B 0 = none [code]
 DrawLegsPart:
 	or	B,B
 	ret	Z
@@ -282,7 +287,7 @@ DrawLegsPart:
 
 c_207E0B	section	code abs=0x207E0B
 
-; [code] wDrawBack image (ImageTable group 225) at PartOffsetsBack[image][wDrawBody]
+; Draws back image B (BackImages) placed for body C by PartOffsetsBack; B 0 = none [code]
 DrawBackPart:
 	or	B,B
 	ret	Z
@@ -297,7 +302,8 @@ DrawBackPart:
 
 c_207E21	section	code abs=0x207E21
 
-; one part image from its slot group of ImageTable
+; Draws image B of image list XIX into the canvas at tile HL, at offset table XIY[B - 1][body C] (x, y bytes;
+; body 0 counts as 1), or centred in the 0x60 x 0x58 canvas for C >= 0x10 [code]
 DrawRobotPart:
 	push	XWA
 	ld	WA,HL
@@ -314,7 +320,7 @@ DrawRobotPart:
 	ld	C,1
 DrawRobotPart.skip:
 	sll	4,C
-	srl	3,BC
+	srl	3,BC	; (B - 1) * 32 + C * 2
 	extz	XBC
 	add	XBC,XIY
 	ld	E,(XBC+1)
@@ -340,7 +346,7 @@ DrawRobotPart.skip3:
 
 c_207E77	section	code abs=0x207E77
 
-; [code] SetRobotDrawParts(wEquipCore), DrawRobot, colours from GetAffinityPalette(wUnitAffinity)
+; Draws the equipped robot (wEquipCore parts) at tile WA, shown at BC, DE in wUnitAffinity colours [code]
 DrawEquippedRobot:
 	push	DE
 	push	BC
@@ -360,7 +366,7 @@ DrawEquippedRobot:
 
 c_207F30	section	code abs=0x207F30
 
-; [code] XHL palette into SCR2 palette 0 (DE >= 0x20) or SCR1 palette 0, + mono palettes
+; Loads colour palette XHL plus the image and text-box mono palettes into scroll 2 (DE >= 0x20) or scroll 1 [code]
 LoadImagePalette:
 	cp	DE,0x20
 	jr	C,LoadImagePalette.skip
@@ -392,7 +398,7 @@ LoadImagePalette.skip:
 
 c_208475	section	code abs=0x208475
 
-; [code] SetRobotDrawParts with XHL = wEquipCore (the equipped parts); caller DrawEquippedRobot
+; SetRobotDrawParts for the equipped parts (wEquipCore) [code]
 SetEquippedDrawParts:
 	ld	XHL,wEquipCore
 	call	SetRobotDrawParts
@@ -400,7 +406,7 @@ SetEquippedDrawParts:
 
 c_208489	section	code abs=0x208489
 
-; XHL = 6 part ids -> wDrawBody..wDrawBack image indexes
+; Sets wDrawBody..wDrawBack to the PART_IMAGE of the 6 part ids at XHL (+1 body .. +5 back; 0 = none) [code]
 SetRobotDrawParts:
 	push	XHL
 	ld	XDE,XHL

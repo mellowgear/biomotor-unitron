@@ -12,6 +12,7 @@ GetAffinityIcon:
 	extz	HL
 	pop	WA
 	ret
+; [code] glyph code per affinity index (AffinityIndex order)
 AffinityIconChars:
 	db	0x6C,0x6E,0x6D,0x70,0x6F,0x6A,0x6B,0x73
 
@@ -128,6 +129,7 @@ GetBodyName:
 
 c_208316	section	code abs=0x208316
 
+; [code] L = core id within its category -> XHL = its PartNames entry
 GetCoreName:
 	ld	H,0
 	dec	1,HL
@@ -136,6 +138,7 @@ GetCoreName:
 
 c_208323	section	code abs=0x208323
 
+; [code] L = legs id within its category -> XHL = its PartNames entry
 GetLegsName:
 	ld	H,0
 	dec	1,HL
@@ -144,6 +147,7 @@ GetLegsName:
 
 c_208330	section	code abs=0x208330
 
+; [code] L = back id within its category -> XHL = its PartNames entry
 GetBackName:
 	ld	H,0
 	dec	1,HL
@@ -152,6 +156,7 @@ GetBackName:
 
 c_20833D	section	code abs=0x20833D
 
+; [code] L = arm id within its category -> XHL = its PartNames entry
 GetArmName:
 	ld	H,0
 	dec	1,HL
@@ -196,6 +201,7 @@ GetBodyRecord:
 
 c_20837C	section	code abs=0x20837C
 
+; [code] L = core id within its category -> XHL = its PartStats record
 GetCoreRecord:
 	ld	H,0
 	dec	1,HL
@@ -204,6 +210,7 @@ GetCoreRecord:
 
 c_208389	section	code abs=0x208389
 
+; [code] L = legs id within its category -> XHL = its PartStats record
 GetLegsRecord:
 	ld	H,0
 	dec	1,HL
@@ -212,6 +219,7 @@ GetLegsRecord:
 
 c_208396	section	code abs=0x208396
 
+; [code] L = back id within its category -> XHL = its PartStats record
 GetBackRecord:
 	ld	H,0
 	dec	1,HL
@@ -220,6 +228,7 @@ GetBackRecord:
 
 c_2083A3	section	code abs=0x2083A3
 
+; [code] L = arm id within its category -> XHL = its PartStats record
 GetArmRecord:
 	ld	H,0
 	dec	1,HL
@@ -689,22 +698,29 @@ GetTradeConfirmText:
 	ld	XHL,AreYouSureText
 	ld	XDE,AreYouSureText
 	ret
+; [code] StartTradeStatus row titles
 SelfText:
 	text "Self"
 	done
+; [code] StartTradeStatus row title
 OtherText:
 	text "Other"
 	done
+; [code] DrawTradeStatus mark when that side has no offer bit
 DashText15:
 	db	0x59,0x59,0xFF	; "--"
+; [code] DrawTradeStatus mark: offer bit set, refuse bit clear
 OKText:
 	text "OK"
 	done
+; [code] DrawTradeStatus mark: refuse bit set
 NOText:
 	text "NO"
 	done
+; [code] 6 blanks: DrawTradeStatus erases a name with it
 BlankText5:
 	db	0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "      "
+; [code] 8 blanks: the off phase of the TradeWaitBlink message
 BlankText6:
 	db	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "        "
 

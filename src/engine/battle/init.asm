@@ -665,7 +665,7 @@ BattleStart:
 	call	AddLevelGapChances
 	ld	XHL,BattleHPEPDisplayTask
 	call	StartTask
-	ld	(XIZ+0x2C),HL	; kept for BattleEnd to end it
+	ld	(XIZ+BATTLE_HP_EP_TASK),HL	; kept for BattleEnd to end it
 ; [code] the battle song by wEnemyId: < 0x59 song 0xA, 0x59-0x60 0xC, 0x61 0xD, 0x62-0x75 0xB, >= 0x76 0xC; SoundCommand 0x20 + song
 ; [play] seen in play: song 0xA (SoundCommand 0x2A) in a random battle (Spidey), song 0xC (0x2C) in the Ent and Kraken boss battles
 	ld	E,(wEnemyId)

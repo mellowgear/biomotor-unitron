@@ -252,8 +252,10 @@ AskYesNo.skip6:
 	ld	A,(wYesNoAnswer)
 	ld	XHL,(wMenuWaitReturn)
 	jp	XHL
+; [code] AskYesNo choice line "Yes   No"
 YesNoText2:
 	db	0x39,0x05,0x13,0x00,0x00,0x00,0x2E,0x0F,0xFF	; "Yes   No"
+; [code] AskYesNo cursor columns for Yes (4) and No (10)
 AskYesNoCursorColumns:
 	db	0x04,0x0A
 
@@ -453,6 +455,7 @@ Box2Task:
 	sll	2,A
 	ld	XHL,(XHL+A)
 	jp	XHL
+; [code] Box2Task handlers indexed by wBox2Command 0-5
 Box2CommandJumps:
 	dl	Box2Task.idle,Box2CmdOpen,Box2CmdNop,Box2CmdClearPlace
 	dl	Box2CmdSetFlag,Box2CmdClearFlag
@@ -703,6 +706,7 @@ MenuBoxDispatch:
 	sll	2,A
 	ld	XHL,(XHL+A)
 	jp	XHL
+; [code] MenuBoxDispatch handlers indexed by wMenuCommand 0-7
 MenuCommandJumps:
 	dl	MenuBoxDispatch.idle,MenuCmdReset,MenuCmdEnd,MenuCmdDrawBox
 	dl	MenuCmdShowCursor.loop,MenuCmdShowCursor,MenuCmdHideCursor,MenuBoxDispatch.idle
@@ -1098,6 +1102,7 @@ ClearListLine:
 	pop	DE
 	pop	BC
 	ret
+; [code] 10 blanks: ClearListLine erases a list row with it
 BlankText3:
 	db	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "          "
 
@@ -1118,6 +1123,7 @@ PrintStringPadded8:
 	pop	WA
 	call	PrintStringAt
 	ret
+; [code] 8 blanks: PrintStringPadded8 prints its tail after the string
 BlankText4:
 	db	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "        "
 

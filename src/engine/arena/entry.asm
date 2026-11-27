@@ -2,7 +2,8 @@
 
 c_213817	section	code abs=0x213817
 
-; [code] cursor task+0x10 toggles 0/1 on U/D (sound 0x80), A (0x81) or B (0x82, forces 1) calls ArenaEntryMenuChoose which draws string pointer 0x249BC9[cursor] = "Entry" (0x249BBC) / "Quit" (0x249BC3, decoded with charmap) and sets scene 7 / 8; DrawMenuCursor at y = 8*cursor+4; state TASK_ARG 4 of ArenaTask (set by ArenaSceneEnd command 0xFC); [play] arena_entry_quit_menu
+; ArenaTask state 4 (set by ArenaSceneEnd command 0xFC), each frame: up/down wrap cursor +0x10 over Entry (0) / Quit (1),
+; A chooses, B forces Quit; redraws the cursor and counts +0x2D [code][play]
 ArenaEntryMenuInput:
 	push	XHL
 	push	XDE
@@ -18,6 +19,7 @@ ArenaEntryMenuInput:
 	calr	ArenaEntryMenuChoose
 	jr	ArenaEntryMenuInput.skip7
 ArenaEntryMenuInput.skip:
+	; B button
 	bit	5,A
 	jr	Z,ArenaEntryMenuInput.skip2
 	push	WA
@@ -29,6 +31,7 @@ ArenaEntryMenuInput.skip:
 	calr	ArenaEntryMenuChoose
 	jr	ArenaEntryMenuInput.skip7
 ArenaEntryMenuInput.skip2:
+	; d-pad: 1 = up, 2 = down; both ends wrap
 	and	A,0xF
 	jr	Z,ArenaEntryMenuInput.skip7
 	cp	A,1
@@ -67,6 +70,7 @@ ArenaEntryMenuInput.skip5:
 ArenaEntryMenuInput.skip6:
 	jr	ArenaEntryMenuInput.skip7
 ArenaEntryMenuInput.skip7:
+	; cursor x 0x60, y 8 * row + 4
 	ld	BC,0x60
 	ld	XWA,0
 	ld	A,(XIZ+0x10)
@@ -85,7 +89,7 @@ ArenaEntryMenuInput.skip7:
 
 c_2138B7	section	code abs=0x2138B7
 
-; [code] ArenaEntryMenuInput on A / B: box 2 = only the chosen line (ArenaEntryMenuTexts[cursor]), Entry -> scene 7, Quit -> scene 8, TASK_ARG 3
+; Leaves only the chosen line in box 2 and queues scene +0x12 = 7 (Entry) or 8 (Quit) through state TASK_ARG 3 [code]
 ArenaEntryMenuChoose:
 	push	XHL
 	push	XDE
@@ -105,6 +109,7 @@ ArenaEntryMenuChoose:
 	ld	A,2
 	call	DrawBoxString
 	ld	A,(XIZ+0x10)
+	; next scene for state 3
 	cp	A,0
 	jr	NZ,ArenaEntryMenuChoose.skip
 	ld	A,7
@@ -126,7 +131,8 @@ ArenaEntryMenuChoose.skip2:
 
 c_213903	section	code abs=0x213903
 
-; [code] box 2: ArenaRankNames up to the GetStageArenaRank entry (+0x14 = the last row), QuitText3 at row 8; cursor +0x10 = +0x14 (kept for command 0xF3); box 1 DrawArenaEntryCost, DrawGPBox3; [play] arena_rank*_rank_list_cost
+; Box 2: the ranks open at GetStageArenaRank (last row in +0x14) then Quit at row 8; box 1 the cost of row +0x10
+; (reset to the last rank unless command +0x17 is 0xF3) and the GP box [code][play]
 ShowArenaRankList:
 	push	XHL
 	push	XDE
@@ -134,6 +140,7 @@ ShowArenaRankList:
 	push	XWA
 	call	ClearBox2Tall
 	call	GetStageArenaRank
+	; last row = rank - 1, rank 9 keeps 7 (the cp 1 test branches nowhere)
 	cp	A,1
 	jr	NC,ShowArenaRankList.skip
 ShowArenaRankList.skip:
@@ -143,6 +150,7 @@ ShowArenaRankList.skip:
 ShowArenaRankList.skip2:
 	sub	A,2
 	ld	(XIZ+0x14),A
+	; one line per open rank
 	ld	XDE,ArenaRankNames
 	ld	C,A
 	inc	1,C
@@ -163,6 +171,7 @@ ShowArenaRankList.loop:
 	ld	A,2
 	ld	XHL,QuitText3
 	call	DrawBoxString
+	; command 0xF3 returns to the list keeping the old cursor
 	ld	A,(XIZ+0x17)
 	cp	A,0xF3
 	jr	Z,ShowArenaRankList.skip3
@@ -181,7 +190,7 @@ ShowArenaRankList.skip3:
 
 c_213972	section	code abs=0x213972
 
-; [code] box 1: CostText + ArenaEntryCostTexts[A]
+; Box 1: the entry cost line of rank row A [code]
 DrawArenaEntryCost:
 	push	XHL
 	push	XDE
@@ -208,7 +217,8 @@ DrawArenaEntryCost:
 
 c_21399E	section	code abs=0x21399E
 
-; [code] ArenaTask state 5: up / down move cursor +0x10 over rows 0..+0x14 and Quit (8), redrawing DrawArenaEntryCost; A -> ArenaRankListChoose, B -> Quit; DrawMenuCursor at x 0x68, y 8 * cursor + 4
+; ArenaTask state 5, each frame: up/down move cursor +0x10 over rows 0..+0x14 and Quit (8), redrawing the cost;
+; A chooses, B picks Quit [code]
 ArenaRankListInput:
 	push	XHL
 	push	XDE
@@ -235,6 +245,7 @@ ArenaRankListInput.skip:
 	calr	ArenaRankListChoose
 	jr	ArenaRankListInput.skip10
 ArenaRankListInput.skip2:
+	; up from 0 goes to Quit, up from Quit to the last rank, down mirrors
 	and	A,0xF
 	jr	Z,ArenaRankListInput.skip10
 	cp	A,1
@@ -285,6 +296,7 @@ ArenaRankListInput.skip7:
 ArenaRankListInput.skip8:
 	jr	ArenaRankListInput.skip10
 ArenaRankListInput.skip9:
+	; no cost line on Quit
 	call	ClearTextBox1
 	ld	A,(XIZ+0x10)
 	cp	A,8
@@ -309,7 +321,8 @@ ArenaRankListInput.skip10:
 
 c_213A68	section	code abs=0x213A68
 
-; [code] box 2 = only the chosen line; Quit -> scene 8; a rank whose ArenaEntryCosts (BinToBCD) is more than wGP (SubBCD carry) -> scene 0x41; else box 3 ArenaText2, +0x15 = rank + 2, scene 9; TASK_ARG 3
+; Leaves the chosen line in box 2 and queues a scene via state TASK_ARG 3: Quit -> 8, cost above wGP -> 0x41,
+; else ArenaText2 in box 3, +0x15 = row + 2 (the match rank (?)) and scene 9 [code]
 ArenaRankListChoose:
 	push	XHL
 	push	XDE
@@ -322,6 +335,7 @@ ArenaRankListChoose:
 	call	SetTextBoxCursor
 	ld	XWA,0
 	ld	A,(XIZ+0x10)
+	; row 8 is Quit
 	cp	A,8
 	jr	Z,ArenaRankListChoose.skip
 	sll	2,XWA
@@ -340,6 +354,7 @@ ArenaRankListChoose.skip2:
 	ld	A,(XIZ+0x10)
 	extz	WA
 	extz	XWA
+	; cost (word, binary) to BCD to compare with wGP
 	sll	1,A
 	ld	XHL,ArenaEntryCosts
 	add	XHL,XWA
@@ -349,6 +364,7 @@ ArenaRankListChoose.skip2:
 	ld	XBC,XWA
 	ld	XWA,(wGP)
 	call	SubBCD
+	; not enough GP
 	jr	NC,ArenaRankListChoose.skip3
 	ld	A,0x41
 	ld	(XIZ+0x12),A

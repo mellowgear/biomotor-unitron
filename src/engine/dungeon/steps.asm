@@ -257,7 +257,7 @@ RustStepDamage.skip:
 	ld	A,(XIZ+DUNGEON_FACING)
 	sla	4,A
 	; facing * 16 restarts the sprite frame counter (?)
-	ld	(XIZ+0x2D),A
+	ld	(XIZ+DUNGEON_ANIM_FRAME),A
 	ld	A,0xF
 	ld	(XIZ+DUNGEON_MODE),A
 RustStepDamage.skip2:
@@ -274,19 +274,19 @@ c_211202	section	code abs=0x211202
 ; starts a step to XIZ+0x1E/1F (or bumps). Changes DUNGEON_X/Y/FACING/STEPS/MODE, wMapScrollStepX/Y [code]
 CheckEncounter:
 	; XIZ+0x2C = frames left of the 16-frame step; 0 = standing
-	ld	A,(XIZ+0x2C)
+	ld	A,(XIZ+DUNGEON_STEP_FRAMES)
 	and	A,A
 	jrl	Z,CheckEncounter.skip5
 	dec	1,A
-	ld	(XIZ+0x2C),A
+	ld	(XIZ+DUNGEON_STEP_FRAMES),A
 	; step done: commit the target cell (XIZ+0x1E/1F) and stop scrolling
 	jrl	NZ,CheckEncounter.done
 	xor	WA,WA
 	ld	(wMapScrollStepX),WA
 	ld	(wMapScrollStepY),WA
-	ld	A,(XIZ+0x1E)
+	ld	A,(XIZ+DUNGEON_STEP_X)
 	ld	(XIZ+DUNGEON_X),A
-	ld	A,(XIZ+0x1F)
+	ld	A,(XIZ+DUNGEON_STEP_Y)
 	ld	(XIZ+DUNGEON_Y),A
 	ld	A,0xFF
 	calr	CheckDirectionPassable
@@ -295,7 +295,7 @@ CheckEncounter:
 	and	HL,0x100
 	jr	Z,CheckEncounter.skip
 	ld	A,2
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	calr	StartFloorChange
 	jrl	CheckEncounter.done
 CheckEncounter.skip:
@@ -303,7 +303,7 @@ CheckEncounter.skip:
 	and	HL,0x200
 	jr	Z,CheckEncounter.skip2
 	ld	A,1
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	calr	StartFloorChange
 	jrl	CheckEncounter.done
 CheckEncounter.skip2:
@@ -512,8 +512,8 @@ CheckEncounter.skip29:
 CheckEncounter.skip30:
 	; start a 16-frame step to C/E; scroll step = target - current
 	ld	(XIZ+DUNGEON_FACING),A
-	ld	(XIZ+0x1E),C
-	ld	(XIZ+0x1F),E
+	ld	(XIZ+DUNGEON_STEP_X),C
+	ld	(XIZ+DUNGEON_STEP_Y),E
 	xor	WA,WA
 	ld	A,(XIZ+DUNGEON_X)
 	sub	WA,BC
@@ -525,7 +525,7 @@ CheckEncounter.skip30:
 	neg	WA
 	ld	(wMapScrollStepY),WA
 	ld	A,0x10
-	ld	(XIZ+0x2C),A
+	ld	(XIZ+DUNGEON_STEP_FRAMES),A
 CheckEncounter.done:
 	ret
 
@@ -646,7 +646,7 @@ DungeonStep.skip17:
 	jr	Z,DungeonStep.done
 	cp	A,0xD
 	jr	NZ,DungeonStep.skip18
-	ld	W,(XIZ+0x2A)
+	ld	W,(XIZ+DUNGEON_SUBSTATE)
 	cp	W,9
 	jr	Z,DungeonStep.skip22
 	call	GetBossIndex
@@ -656,7 +656,7 @@ DungeonStep.skip17:
 DungeonStep.skip18:
 	cp	A,0xA
 	jr	NZ,DungeonStep.skip19
-	ld	W,(XIZ+0x2A)
+	ld	W,(XIZ+DUNGEON_SUBSTATE)
 	cp	W,6
 	jr	Z,DungeonStep.skip22
 	cp	W,7
@@ -677,8 +677,8 @@ DungeonStep.skip21:
 	call	DungeonBoxesStep
 DungeonStep.skip22:
 	; XIZ+0x2D: animation frame counter
-	ld	A,(XIZ+0x2D)
+	ld	A,(XIZ+DUNGEON_ANIM_FRAME)
 	inc	1,A
-	ld	(XIZ+0x2D),A
+	ld	(XIZ+DUNGEON_ANIM_FRAME),A
 DungeonStep.done:
 	ret

@@ -43,6 +43,12 @@ DUNGEON_FACING	equ	0x15
 DUNGEON_FLOOR_COUNT	equ	0x16
 DUNGEON_FLOOR_MAPS	equ	0x17
 DUNGEON_STEPS	equ	0x2B
+DUNGEON_CHANGE	equ	0x12	; pending screen change after the iris closes: floors 1 up, 2 down, 3 out (FindFloorStartCell picks the stairs by it); world map 0 cancel, 1 entrance, 2 enter, 3 leave [code]
+DUNGEON_STEP_X	equ	0x1E	; target cell of the step in progress, committed to DUNGEON_X / Y when it ends (CheckEncounter) [code]
+DUNGEON_STEP_Y	equ	0x1F
+DUNGEON_STEP_FRAMES	equ	0x2C	; frames left of the 16-frame step, 0 = standing (CheckEncounter; encounter.asm reuses the byte for the flash, FindFloorStartCell as scratch) [code]
+DUNGEON_ANIM_FRAME	equ	0x2D	; frame counter (DungeonStep, WorldMapDispatch) driving the walk, palette and marker animations [code]
+DUNGEON_SUBSTATE	equ	0x2A	; state of the camp menu, chest or boss sequence (DungeonStep skips the map redraw in some) [code]
 
 ; wChestTable: per floor 6 chests x 5 bytes (content, x, y, attr u16)
 CHESTS_PER_FLOOR	equ	6

@@ -36,11 +36,11 @@ c_2174E9	section	code abs=0x2174E9
 
 ; [code] W < 6: part record +0x14 (GetPartStatsBy), else GetItemPriceBy(W - 5); carry when valid
 GetEntryPrice:
-	cp	W,6
+	cp	W,6	; groups 1-5 are parts, 6+ item groups
 	jr	NC,GetEntryPrice.skip
 	call	GetPartStatsBy
 	ret	NC
-	ld	XWA,(XHL+0x14)
+	ld	XWA,(XHL+0x14)	; part price, packed BCD
 	scf
 	ret
 GetEntryPrice.skip:
@@ -76,7 +76,7 @@ HalveBCD:
 	call	AddBCD32
 	call	AddBCD32
 	call	AddBCD32
-	srl	4,XWA
+	srl	4,XWA	; x5 then drop a digit = /2, the odd half digit lost
 	ret
 
 c_217558	section	code abs=0x217558
@@ -92,6 +92,7 @@ IsShopItemStocked.done:
 	ld	XHL,ShopTierByRank
 	cp	(XHL+W),A
 	ret
+; [code] tier threshold per wArenaRankCopy, falling 4 -> 0 as the rank index grows (IsShopItemStocked)
 ShopTierByRank:
 	db	0x04,0x03,0x03,0x02,0x02,0x01,0x01,0x00,0x00,0x00
 
@@ -124,7 +125,7 @@ AddGPBCD.loop:
 	inc	1,XDE
 	djnz	B,AddGPBCD.loop
 	ld	XHL,(wGP)
-	cp	XHL,0x999999
+	cp	XHL,0x999999	; cap at 999999 GP (6 shown digits)
 	jr	C,AddGPBCD.skip
 	ld	XHL,0x999999
 	ld	(wGP),XHL
@@ -238,6 +239,7 @@ ShopTalk:
 	ld	WA,MUSIC_SHOP
 	call	CallSoundCommand
 	call	DrawShopPicture
+; one special greeting per story stage, once: EVENT_TALKED_SHOP blocks the rest until it is cleared again
 	ld	A,EVENT_STAGE_WON_RANK_D
 	call	CheckEventFlagA
 	jr	NC,ShopTalk.skip
@@ -337,6 +339,7 @@ ShopTalk.skip4:
 	ld	A,EVENT_TALKED_SHOP
 	call	SetEventFlagA
 	jp	ShopTalk.skip6
+; no special greeting: the random clerk of PickShopClerk
 ShopTalk.skip5:
 	call	DrawShopClerkPortrait
 ShopTalk.skip6:
@@ -363,6 +366,7 @@ ShopMainMenu:
 	call	ShowMenuCursor
 	call	RunMenuInput
 	call	HideMenuCursor
+; the four buy/sell loops below are the same shape: category menu, list, AskYesNo, then the checks
 	ld	A,(wMenuChoice)
 	or	A,A
 	jp	MI,ShopMainMenu.skip13
@@ -424,7 +428,7 @@ ShopMainMenu.loop3:
 	ld	WA,(wListChoice)
 	or	WA,WA
 	jp	MI,ShopMainMenu.loop2
-	ld	W,(wShopCategory)
+	ld	W,(wShopCategory)	; wShopEntry = group << 8 | 1-based index
 	inc	1,W
 	inc	1,A
 	ld	(wShopEntry),WA
@@ -436,12 +440,12 @@ ShopMainMenu.loop3:
 	jr	NZ,ShopMainMenu.loop3
 	ld	WA,(wShopEntry)
 	call	GetEntryCountBy
-	and	A,0x7F
+	and	A,0x7F	; bit 7 of the count is a flag (?): 9 or more held = no room
 	cp	A,9
 	jr	NC,ShopMainMenu.skip2
 	ld	WA,(wShopEntry)
 	call	GetEntryPrice
-	cp	(wGP),XWA
+	cp	(wGP),XWA	; carry: not enough GP
 	jr	C,ShopMainMenu.skip3
 	call	SubtractGPBCD
 	call	DrawGP
@@ -515,7 +519,7 @@ ShopMainMenu.loop5:
 	jr	NZ,ShopMainMenu.loop5
 	ld	WA,(wShopEntry)
 	call	GetItemCountBy
-	and	A,0x7F
+	and	A,0x7F	; same 9-item limit for items
 	cp	A,9
 	jr	NC,ShopMainMenu.skip5
 	ld	WA,(wShopEntry)
@@ -615,7 +619,7 @@ ShopMainMenu.loop8:
 	jr	NZ,ShopMainMenu.loop8
 	ld	WA,(wShopEntry)
 	call	GetEntryCountBy
-	and	A,0x7F
+	and	A,0x7F	; selling needs at least one held
 	jr	Z,ShopMainMenu.skip9
 	ld	WA,(wShopEntry)
 	call	GetEntrySellPrice
@@ -713,20 +717,26 @@ ShopMainMenu.skip13:
 	call	ShowShopClerkText
 	call	Wait30Frames
 	jp	EndMenuTask
+; [code] SetupBuySellMenu choice strings
 BuyText:
 	text "Buy"
 	done
+; [code] SetupBuySellMenu choice string
 SellText:
 	text "Sell"
 	done
+; [code] SetupBuySellMenu choice string
 ExitText8:
 	db	0x25,0x18,0x09,0x14,0xFF	; "Exit"
+; [code] SetupBuySellMenu lines: column, row, text
 MenuLines_21B34E:
 	menu_item	0,0,BuyText
 	menu_item	0,1,SellText
 	menu_item	0,8,ExitText8
+; [code] SetupBuySellMenu cursor cells
 MenuCursor_21B360:
 	db	0,0, 0,1, 0,8	; column, row
+; [code] SetupBuySellMenu results: Buy 0, Sell 1, Exit 0xFF
 MenuResults_21B366:
 	db	0x00,0x01,0xFF
 

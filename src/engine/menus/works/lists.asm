@@ -456,6 +456,7 @@ GetListEntryGroup:
 	ld	W,(XHL+W)
 	pop	XHL
 	ret
+; [code] entry group per wListEntryKind 0-7
 ListEntryKindGroups:
 	db	0x01,0x02,0x03,0x04,0x05,0x05,0x09,0x08
 
@@ -543,6 +544,7 @@ StoreSelectedInWorksSlot.skip3:
 	ld	WA,BC
 	call	CallXHL
 	ret
+; [code] Works slot setter per wSetupSlot 0-7 (order of EquipListRowGetters)
 WorksEquipSetters:
 	dl	SetWorksEquipBody,SetWorksEquipRightArm,SetWorksEquipLeftArm,SetWorksEquipCore
 	dl	SetWorksEquipLegs,SetWorksEquipBack,SetWorksEquipAcc1,SetWorksEquipAcc2
@@ -597,6 +599,7 @@ DrawPartEpCostAndAffinity:
 	call	DrawAffinityIcons
 DrawPartEpCostAndAffinity.done:
 	ret
+; [code] "%" suffix string
 PercentText:
 	text "%"
 	done

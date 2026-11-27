@@ -47,7 +47,7 @@ LoadBossMapSprite.skip:
 	jr	NZ,LoadBossMapSprite.skip3
 	; ping-pong walk frame 0, 1, 2, 1
 	ld	XWA,0
-	ld	A,(XIZ+0x2D)
+	ld	A,(XIZ+DUNGEON_ANIM_FRAME)
 	sra	3,A
 	and	A,3
 	cp	A,3
@@ -82,7 +82,7 @@ LoadBossMapSprite.skip3:
 	mul	XWA,3
 	ld	XDE,XWA
 	ld	XWA,0
-	ld	A,(XIZ+0x2D)
+	ld	A,(XIZ+DUNGEON_ANIM_FRAME)
 	sra	3,A
 	and	A,3
 	cp	A,3
@@ -241,7 +241,7 @@ LoadDungeonPalettes.skip2:
 	mul	WA,0x1E
 	add	XHL,XWA
 	ld	XWA,0
-	ld	A,(XIZ+0x2D)
+	ld	A,(XIZ+DUNGEON_ANIM_FRAME)
 	sra	3,A
 	and	A,3
 	cp	A,3
@@ -291,7 +291,7 @@ LoadPlayerDungeonSprite:
 	mul	WA,0x78
 	add	XHL,XWA
 	ld	XWA,0
-	ld	A,(XIZ+0x2D)
+	ld	A,(XIZ+DUNGEON_ANIM_FRAME)
 	sra	4,A
 	and	A,3
 	cp	A,1

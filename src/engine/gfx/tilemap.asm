@@ -2,32 +2,33 @@
 
 c_206768	section	code abs=0x206768
 
-; [code] FillTilemapRect with rows 0-0x1F on SCR1 (0x9000), rows 0x20+ on SCR2 (0x9800, row - 0x20); EraseTextBox and TextWaitButton use it
+; FillTilemapRect on scroll 1 for rows E < 0x20, else on scroll 2 at row E - 0x20 [code]
 FillScrRect:
 	cp	E,0x20
-	ld	XHL,0x9000
+	ld	XHL,SCROLL1_VRAM
 	jr	C,FillTilemapRect
 	sub	E,0x20
-	ld	HL,0x9800
+	ld	HL,SCROLL2_VRAM
 	jr	FillTilemapRect
 
 c_20677A	section	code abs=0x20677A
 
-; [code] FillTilemapRect on the SCR1 map 0x9000
+; FillTilemapRect on scroll 1 [code]
 FillScr1Rect:
-	ld	XHL,0x9000
+	ld	XHL,SCROLL1_VRAM
 	jr	FillTilemapRect
 
 c_206781	section	code abs=0x206781
 
-; [code] FillTilemapRect on the SCR2 map 0x9800
+; FillTilemapRect on scroll 2 [code]
 FillScr2Rect:
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	jr	FillTilemapRect
 
 c_206788	section	code abs=0x206788
 
-; [code] XHL = tile map, WA = tile word, C/E = column/row, B/D = width/height: writes WA to every cell of the rectangle, clipped to the 32x32 map
+; Fills a B x D rectangle at column C, row E of the 32 x 32 map XHL with tile word WA, clipped to the map
+; (C, E signed) [code]
 FillTilemapRect:
 	ld	QB,B
 	ld	QD,D
@@ -54,7 +55,7 @@ FillTilemapRect.loop:
 	jr	NC,FillTilemapRect.skip
 	ld	QW,0
 	sll	11,WA
-	sll	6,XWA
+	sll	6,XWA	; QWA = (row * 32 + column) * 2
 	ld	WA,(XSP+4)
 	ld	(XHL+QWA),WA
 FillTilemapRect.skip:
@@ -71,15 +72,15 @@ FillTilemapRect.skip2:
 
 c_2067E1	section	code abs=0x2067E1
 
-; [code] zeroes tile 0 (CHAR RAM 0xA000, 16 bytes) and both maps 0x9000-0x9FFF (SCR1 + SCR2)
+; Zeroes tile 0 and both scroll maps [code]
 ClearTilemaps:
 	ld	XWA,0
-	ld	XHL,0xA000
+	ld	XHL,CHARACTER_RAM
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
-	ld	XHL,0x9000
+	ld	XHL,SCROLL1_VRAM
 	ld	BC,0x400
 ClearTilemaps.loop:
 	ld	(XHL+),XWA
@@ -88,15 +89,15 @@ ClearTilemaps.loop:
 
 c_206803	section	code abs=0x206803
 
-; [code] zeroes tile 0 (0xA000) and the SCR1 map 0x9000-0x97FF
+; Zeroes tile 0 and the scroll 1 map [code]
 ClearScr1Tilemap:
 	ld	XWA,0
-	ld	XHL,0xA000
+	ld	XHL,CHARACTER_RAM
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
-	ld	XHL,0x9000
+	ld	XHL,SCROLL1_VRAM
 	ld	BC,0x200
 ClearScr1Tilemap.loop:
 	ld	(XHL+),XWA
@@ -105,15 +106,15 @@ ClearScr1Tilemap.loop:
 
 c_206825	section	code abs=0x206825
 
-; [code] zeroes tile 0 (0xA000) and the SCR2 map 0x9800-0x9FFF
+; Zeroes tile 0 and the scroll 2 map [code]
 ClearScr2Tilemap:
 	ld	XWA,0
-	ld	XHL,0xA000
+	ld	XHL,CHARACTER_RAM
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
 	ld	(XHL+),XWA
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	ld	BC,0x200
 ClearScr2Tilemap.loop:
 	ld	(XHL+),XWA
@@ -122,41 +123,45 @@ ClearScr2Tilemap.loop:
 
 c_206B37	section	code abs=0x206B37
 
-; WA = tile base, BC = column, DE = row (>=0x20: SCR2)
+; Draws map XHL (w, h, a word per cell) at column BC, row DE (0x20+ = scroll 2) with tile base WA: cells with
+; tile 0 stay 0, others get WA - 1 added; WA bits 15 / 14 mirror the placement (DrawTilemapAt) [code]
 DrawTilemap:
 	dec	1,WA
 	push	WA
 	push	DE
 	push	BC
 	cp	DE,0x20
-	ld	XDE,0x9000
+	ld	XDE,SCROLL1_VRAM
 	jr	C,DrawTilemapAt
 	subw	(XSP+2),0x20
-	ld	DE,0x9800
+	ld	DE,SCROLL2_VRAM
 	jr	DrawTilemapAt
 
 c_206B51	section	code abs=0x206B51
 
+; DrawTilemap on scroll 1 [code]
 DrawTilemapScr1:
 	dec	1,WA
 	push	WA
 	push	DE
 	push	BC
-	ld	XDE,0x9000
+	ld	XDE,SCROLL1_VRAM
 	jr	DrawTilemapAt
 
 c_206B5D	section	code abs=0x206B5D
 
+; DrawTilemap on scroll 2 [code]
 DrawTilemapScr2:
 	dec	1,WA
 	push	WA
 	push	DE
 	push	BC
-	ld	XDE,0x9800
+	ld	XDE,SCROLL2_VRAM
 	jr	DrawTilemapAt
 
 c_206B69	section	code abs=0x206B69
 
+; DrawTilemap's body on the map XDE, with base, row and column on the stack; clipped to 32 x 32 [code]
 DrawTilemapAt:
 	cpw	(XSP+2),0x20
 	jrl	GE,DrawTilemapAt.skip7
@@ -167,7 +172,7 @@ DrawTilemapAt:
 	ld	W,0
 	add	WA,(XSP)
 	jr	MI,DrawTilemapAt.skip7
-	bit	7,(XSP+5)
+	bit	7,(XSP+5)	; H flip: start from the right edge
 	jr	Z,DrawTilemapAt.skip
 	ld	(XSP),WA
 DrawTilemapAt.skip:
@@ -209,7 +214,7 @@ DrawTilemapAt.skip4:
 	ld	WA,(XHL)
 	and	WA,0x1FF
 	ld	WA,(XHL)
-	jr	Z,DrawTilemapAt.skip5
+	jr	Z,DrawTilemapAt.skip5	; tile 0 = empty, left unbased
 	add	WA,(XSP+4)
 DrawTilemapAt.skip5:
 	ld	(XDE+QWA),WA
@@ -228,32 +233,33 @@ DrawTilemapAt.skip7:
 
 c_206C7B	section	code abs=0x206C7B
 
-; [code] DrawTileBlock on SCR1 (0x9000) for row DE < 0x20, else SCR2 (0x9800, row - 0x20); callers DrawEquippedRobot, LoadEnemyImage, BattleStart
+; DrawTileBlock on scroll 1 for rows DE < 0x20, else on scroll 2 at row DE - 0x20 [code]
 DrawTileBlockScr:
 	cp	DE,0x20
-	ld	XHL,0x9000
+	ld	XHL,SCROLL1_VRAM
 	jr	C,DrawTileBlock
 	sub	DE,0x20
-	ld	HL,0x9800
+	ld	HL,SCROLL2_VRAM
 	jr	DrawTileBlock
 
 c_206C8F	section	code abs=0x206C8F
 
-; [code] DrawTileBlock on the SCR1 map 0x9000; caller DrawDevelopedArm
+; DrawTileBlock on scroll 1 [code]
 DrawTileBlockScr1:
-	ld	XHL,0x9000
+	ld	XHL,SCROLL1_VRAM
 	jr	DrawTileBlock
 
 c_206C96	section	code abs=0x206C96
 
-; [code] DrawTileBlock on the SCR2 map 0x9800
+; DrawTileBlock on scroll 2 [code]
 DrawTileBlockScr2:
-	ld	XHL,0x9800
+	ld	XHL,SCROLL2_VRAM
 	jr	DrawTileBlock
 
 c_206C9D	section	code abs=0x206C9D
 
-; [code] XHL = map, WA = first tile word, BC / DE = column / row, QB / QD = width / height: writes WA, WA + 1 ... row by row into the 32x32 map, clipped; tile word bit 15 mirrors the columns and bit 14 the rows (the K2GE H / V flip bits)
+; Writes WA, WA + 1 ... row by row into a QB x QD block at column BC, row DE of map XHL, clipped; WA bits 15
+; / 14 (the K2GE H / V flips) mirror the columns / rows so a flipped picture stays whole [code]
 DrawTileBlock:
 	cp	DE,0x20
 	ret	GE
@@ -325,12 +331,12 @@ DrawTileBlock.skip6:
 
 c_206F69	section	code abs=0x206F69
 
-; [code] BC / DE = cell -> its GetMetatileTiles 2 x 2 tiles into SCR1 0x9000 + (y & 15) * 0x80 + (x & 15) * 4 (XBC) and +0x40 (XDE)
+; Draws dungeon cell BC, DE (GetMapCell, GetMetatileTiles) as 2 x 2 tiles in the 16 x 16-cell scroll 1 ring [code]
 DrawMapCell:
 	ld	XWA,0
 	ld	A,C
 	ld	W,E
-	and	WA,0xF0F
+	and	WA,0xF0F	; cell (x & 15, y & 15): 4 bytes across, 0x80 down
 	sll	3,A
 	srl	1,WA
 	add	WA,SCROLL1_VRAM
@@ -344,7 +350,7 @@ DrawMapCell:
 
 c_213201	section	code abs=0x213201
 
-; [code] ClearPictureMap on SCR2 0x9800 (zeroes its top-left 12 x 14 entries); byte-identical copy of ClearArenaPortraitArea, ClearTalkPortraitArea (the ROM has each)
+; ClearPictureMap on scroll 2; a byte-identical copy of ClearArenaPortraitArea [code]
 ClearArenaPortraitArea2:
 	push	XHL
 	ld	XHL,SCROLL2_VRAM
@@ -354,7 +360,7 @@ ClearArenaPortraitArea2:
 
 c_21323D	section	code abs=0x21323D
 
-; [code] ClearPictureMap on SCR2 0x9800 (zeroes its top-left 12 x 14 entries); DrawArenaParticipants does it before each portrait; byte-identical copy of ClearArenaPortraitArea2, ClearTalkPortraitArea (the ROM has each)
+; ClearPictureMap on scroll 2, before each arena portrait (DrawArenaParticipants) [code]
 ClearArenaPortraitArea:
 	push	XHL
 	ld	XHL,SCROLL2_VRAM
@@ -364,7 +370,7 @@ ClearArenaPortraitArea:
 
 c_21516D	section	code abs=0x21516D
 
-; [code] ClearPictureMap on SCR2 0x9800 (zeroes its top-left 12 x 14 entries), the area the talk speaker portrait is drawn in; byte-identical copy of ClearArenaPortraitArea2, ClearArenaPortraitArea (the ROM has each)
+; ClearPictureMap on scroll 2, where the talk speaker portrait goes; a byte-identical copy [code]
 ClearTalkPortraitArea:
 	push	XHL
 	ld	XHL,SCROLL2_VRAM
@@ -374,7 +380,8 @@ ClearTalkPortraitArea:
 
 c_21ABDA	section	code abs=0x21ABDA
 
-; [code] same 12x14 clear + FillTiles 0x7E x 0x1C2 as ClearPicture, then zeroes all of 0x9000-0x97FF and 0x9800-0x9FFF (SCR1 and SCR2 maps); callers ClearPictureHideCursor, HideMenuClearPicture, WorksScreenTask, ReopenWorksBoxes
+; Clears the 12 x 14 picture area of both maps, blanks tiles 0x7E..0x23F (FillTiles), then zeroes both maps
+; whole [code]
 ClearPictureAndTilemaps:
 	ld	WA,0
 	ld	C,0
@@ -388,7 +395,7 @@ ClearPictureAndTilemaps:
 	ld	B,0xC
 	ld	D,0xE
 	call	FillScr2Rect
-	ld	WA,0x7E
+	ld	WA,0x7E	; the picture tiles
 	ld	QA,0
 	ld	BC,0x1C2
 	call	FillTiles
@@ -408,13 +415,14 @@ ClearPictureAndTilemaps:
 
 c_214675	section	code abs=0x214675
 
-; [code] the 18 x 5 map DuelTitleSwordMap (mono DuelTitleSwordMonoMap) drawn one column at a time into SCR1 row 7 at column (0x98 - +0x2C) / 8 - 1 (columns 1-0x12), tiles + GetPictureFirstTile - 1; wScr1ScrollX = 0x98 - +0x2C
+; Duel title: draws the next 5-high column of DuelTitleSwordMap (mono map on mono) at scroll 1 row 7 as task
+; +0x2C counts, and scrolls scroll 1 to 0x98 - +0x2C so the sword slides in [code]
 DrawDuelSwordColumn:
 	push	XHL
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	A,0x98
+	ld	A,0x98	; +0x2C counts the slide; column = (0x98 - it) / 8 - 1
 	ld	W,(XIZ+0x2C)
 	sub	A,W
 	srl	3,A
@@ -458,7 +466,7 @@ DrawDuelSwordColumn.loop:
 DrawDuelSwordColumn.skip3:
 	ld	(XDE),BC
 	pop	C
-	add	XHL,0x24
+	add	XHL,0x24	; next map row (18 words)
 	add	XDE,0x40
 	djnz	C,DrawDuelSwordColumn.loop
 DrawDuelSwordColumn.skip4:
@@ -474,7 +482,8 @@ DrawDuelSwordColumn.skip4:
 
 c_214700	section	code abs=0x214700
 
-; [code] the 10 x 3 map DuelTitleWordMap (mono DuelTitleWordMonoMap) one column at a time into SCR2 row 8 at column +0x2C / 8 + 1 (columns 5-0xE); SCR2 scroll the other way
+; Duel title: the 3-high column of DuelTitleWordMap at scroll 2 row 8 for +0x2C, scroll 2 sliding the other
+; way [code]
 DrawDuelLetterColumn:
 	push	XHL
 	push	XDE
@@ -539,7 +548,7 @@ DrawDuelLetterColumn.skip4:
 
 c_21478C	section	code abs=0x21478C
 
-; [code] ArenaStartBattle: zeroes the 5 SCR1 entries of column (0x98 - +0x2C) / 8 - 2 from row 7; wScr1ScrollX = 0x98 - +0x2C
+; Duel title exit (ArenaStartBattle): clears the sword column trailing +0x2C, scroll 1 as in DrawDuelSwordColumn [code]
 EraseDuelSwordColumn:
 	push	XHL
 	push	XDE
@@ -581,7 +590,7 @@ EraseDuelSwordColumn.skip:
 
 c_2147DA	section	code abs=0x2147DA
 
-; [code] ArenaStartBattle: zeroes the 3 SCR2 entries of column +0x2C / 8 + 2 from row 8; wScr2ScrollX = -(0x98 - +0x2C)
+; Duel title exit (ArenaStartBattle): clears the letter column trailing +0x2C, scroll 2 as in DrawDuelLetterColumn [code]
 EraseDuelLetterColumn:
 	push	XHL
 	push	XDE
@@ -622,7 +631,8 @@ EraseDuelLetterColumn.skip:
 
 c_216C1F	section	code abs=0x216C1F
 
-; [code] XHL = tilemap, WA = tile: UncoverTileStep step 0, then 12 x 14 entries (row stride 0x20) of the tile with palette 15 (0x3E00), flip bit 14 on odd rows
+; Fills the 12 x 14 picture area of map XHL with tile WA (palette 15), V flip on odd rows, after resetting the
+; tile to UncoverTileStep 0 [code]
 DrawUncoverTilemap:
 	push	XHL
 	push	XDE
@@ -649,7 +659,7 @@ DrawUncoverTilemap.skip:
 DrawUncoverTilemap.skip2:
 	pop	WA
 	or	DE,WA
-	or	DE,0x3E00
+	or	DE,0x3E00	; colour palette 15
 	ld	(XHL),DE
 	inc	2,XHL
 	inc	1,C
@@ -670,7 +680,7 @@ DrawUncoverTilemap.skip2:
 
 c_216CAA	section	code abs=0x216CAA
 
-; [code] the DrawUncoverTilemap shape with CoverTileStep step 0 and flip bit 14 on even rows
+; DrawUncoverTilemap with CoverTileStep, V flip on even rows [code]
 DrawCoverTilemap:
 	push	XHL
 	push	XDE
@@ -718,7 +728,7 @@ DrawCoverTilemap.skip2:
 
 c_216D35	section	code abs=0x216D35
 
-; [code] zeroes 20 x 19 entries (row stride 0x20) of the tilemap at XHL
+; Zeroes the 20 x 19 screen area of map XHL [code]
 ClearTilemap20x19:
 	push	XHL
 	push	XDE
@@ -749,7 +759,8 @@ ClearTilemap20x19.loop2:
 
 c_216D66	section	code abs=0x216D66
 
-; [code] XHL = tilemap, WA = tile: DrawWipeTileStep step 0, then 20 x 19 entries (row stride 0x20) of the tile with palette 15 (0x3E00), flip bit 15 on even columns and flip bit 14 on odd rows (four mirrored copies of one tile)
+; Fills the 20 x 19 screen area of map XHL with tile WA (palette 15) after DrawWipeTileStep 0, H flip on even
+; columns and V flip on odd rows, so each 2 x 2 is four mirrored copies [code]
 DrawWipeTilemap:
 	push	XHL
 	push	XDE
@@ -805,7 +816,7 @@ DrawWipeTilemap.skip4:
 
 c_216BEE	section	code abs=0x216BEE
 
-; [code] XHL = tilemap address: zeroes the top-left 12 x 14 entries (rows 0x20 words apart), registers saved; callers ClearArenaPortraitArea / ClearArenaPortraitArea2 (SCR2 0x9800) and the town talk code
+; Zeroes the 12 x 14 picture area at the top left of map XHL, registers kept [code]
 ClearPictureMap:
 	push	XHL
 	push	XDE

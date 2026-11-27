@@ -611,6 +611,7 @@ LinkTaskYield:
 	pop	XWA
 	ld	(XIZ+TASK_FUNC),XWA
 	ret
+; [code] 0x5455 (bytes "UT" in ASCII): the first word of every link packet
 LinkSyncWord:
 	dw	0x5455
 

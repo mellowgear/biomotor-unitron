@@ -223,6 +223,7 @@ PrintStringPadded:
 	pop	WA
 	call	PrintStringAt
 	ret
+; [code] blank padding tail printed after a string (two bytes skipped per character)
 BlankText2:
 	db	0x00,0x00,0x00,0x00,0x00,0x00,0xFF	; "      "
 
@@ -251,5 +252,6 @@ PrintShownGP:
 	ld	WA,0x604
 	call	PrintHexBlanks
 	ret
+; [code] "EP" label for DrawPartEpCostAndAffinity
 EPText3:
 	db	0x25,0x30,0xFF	; "EP"

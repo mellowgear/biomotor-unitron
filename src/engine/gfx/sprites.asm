@@ -2,12 +2,14 @@
 
 c_20659B	section	code abs=0x20659B
 
-; [code] main loop after the VBlank wait: copies the sprite buffer 0x5A86..(wSpriteBufferPtr) to sprite VRAM below 0x8900 and zeroes the rest; on colour the sprite palette bytes 0x5B86..(wSpritePalBufferPtr) below 0x8C40; FadePalettes (colour) / FadeMonoPalettes when wFadeLevel differs from 0x585C; then resets both buffer pointers
+; Main loop after the VBlank wait: copies wSpriteBuffer to sprite VRAM and (colour) wSpritePalBuffer to the
+; sprite palette table, both written backwards, zeroes unused slots, reapplies wFadeLevel if it changed
+; (FadePalettes / FadeMonoPalettes), resets both buffer pointers [U2] [code]
 UpdateSpritesAndFade:
 	push	XIX
 	push	XIY
 	ld	XHL,wSpriteBuffer
-	ld	XDE,0x8900
+	ld	XDE,SPRITE_VRAM+0x100
 	ld	BC,(wSpriteBufferPtr)
 	sub	BC,HL
 	jr	Z,UpdateSpritesAndFade.skip
@@ -29,7 +31,7 @@ UpdateSpritesAndFade.skip2:
 	cpb	(wColorFlags),0x10
 	jr	C,UpdateSpritesAndFade.skip4
 	ld	XHL,wSpritePalBuffer
-	ld	XDE,0x8C40
+	ld	XDE,0x8C40	; end of the sprite palette-number table (0x8C00)
 	ld	BC,(wSpritePalBufferPtr)
 	sub	BC,HL
 	jr	Z,UpdateSpritesAndFade.skip3
@@ -58,10 +60,10 @@ UpdateSpritesAndFade.skip5:
 
 c_206847	section	code abs=0x206847
 
-; [code] zeroes sprite VRAM 0x8800-0x88FF (64 sprites) and resets the sprite buffer pointers 0x5A82 = 0x5A86, 0x5A84 = 0x5B86
+; Zeroes all 64 sprites in sprite VRAM and resets wSpriteBufferPtr / wSpritePalBufferPtr [code]
 ClearSprites:
 	ld	XWA,0
-	ld	XHL,0x8800
+	ld	XHL,SPRITE_VRAM
 	ld	C,0x40
 ClearSprites.loop:
 	ld	(XHL+),XWA
@@ -72,14 +74,15 @@ ClearSprites.loop:
 
 c_2069C8	section	code abs=0x2069C8
 
-; [code] like DrawSpriteGrid but from a map at XHL (u8 w, h + one word per cell, DrawTilemap format; empty cells skipped), base WA, at pixel BC, DE
+; Buffers the sprites of a DrawTilemap-format map at XHL (w, h, a word per cell, empty cells skipped) at
+; pixel BC (x), DE (y), tile base WA; off-screen cells skipped, stops when the buffer is full [code]
 DrawSpriteMap:
-	cp	DE,0x98
+	cp	DE,SCREEN_HEIGHT
 	ret	GE
-	cp	BC,0xA0
+	cp	BC,SCREEN_WIDTH
 	ret	GE
-	dec	1,WA
-	or	W,0x18
+	dec	1,WA	; map cells count from 1 (0 = empty)
+	or	W,0x18	; priority 3 (in front of both planes)
 	push	WA
 	push	DE
 	push	BC
@@ -107,7 +110,7 @@ DrawSpriteMap.loop:
 	ld	W,0
 	sll	3,WA
 	add	WA,(XSP+2)
-	cp	WA,0xFFF8
+	cp	WA,0xFFF8	; on screen: -7..0x9F (y), -7..0xA7 (x)
 	jr	LE,DrawSpriteMap.skip
 	cp	WA,0xA0
 	jr	GE,DrawSpriteMap.skip2
@@ -122,13 +125,13 @@ DrawSpriteMap.loop:
 	jr	GE,DrawSpriteMap.skip
 	ld	QA,A
 	ld	WA,(XHL)
-	and	W,0xE1
+	and	W,0xE1	; keep flips, mono palette and tile bit 8; QW/QA = y/x
 	add	WA,(XSP+4)
 	ld	DE,(wSpriteBufferPtr)
 	ld	(XDE+),XWA
 	ld	(wSpriteBufferPtr),DE
 	ld	WA,(XHL)
-	srl	1,W
+	srl	1,W	; cell bits 9-12 = colour palette number
 	and	W,0xF
 	ld	DE,(wSpritePalBufferPtr)
 	ld	(XDE+),W
@@ -148,15 +151,15 @@ DrawSpriteMap.skip2:
 
 c_206A7B	section	code abs=0x206A7B
 
-; [code] DrawSpriteMap mirrored: columns placed right to left from pixel BC and attribute bit 15 (H flip) toggled (xor W,0x80); one caller in engine/battle/ next to DrawSpriteMap
+; DrawSpriteMap mirrored: columns placed right to left from x BC, H flip toggled on every cell [code]
 DrawSpriteMapFlipped:
-	cp	DE,0x98
+	cp	DE,SCREEN_HEIGHT
 	ret	GE
-	cp	BC,0xA0
+	cp	BC,SCREEN_WIDTH
 	ret	GE
 	dec	1,WA
 	or	W,0x18
-	xor	W,0x80
+	xor	W,0x80	; attribute bit 15 = H flip
 	push	WA
 	push	DE
 	push	BC
@@ -228,7 +231,8 @@ DrawSpriteMapFlipped.skip2:
 
 c_206BFF	section	code abs=0x206BFF
 
-; [code] adds a QB x QD grid of 8x8 sprites at pixel BC (x), DE (y) to the sprite buffer (0x5A82 / palette byte 0x5A84), tile word WA incremented per cell, cells off screen skipped; stops when the buffer is full (0x5B86)
+; Buffers a QB x QD grid of 8x8 sprites at pixel BC (x), DE (y), tile word WA counting up per cell; off-screen
+; cells skipped, stops when wSpriteBuffer is full [code]
 DrawSpriteGrid:
 	push	WA
 	push	DE
@@ -282,7 +286,7 @@ DrawSpriteGrid.skip2:
 
 c_211DBD	section	code abs=0x211DBD
 
-; [code] 1x2 sprite of tile 0x3E04 at BC/DE, skipped while bit 4 of +0x2D is set (blink)
+; Draws the 1x2 menu cursor sprite (tile 0x3E04) at BC, DE, hidden while bit 4 of task +0x2D is set (blink) [code]
 DrawMenuCursor:
 	push	XHL
 	push	XDE

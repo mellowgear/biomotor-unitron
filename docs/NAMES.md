@@ -14,6 +14,7 @@ Evidence tags:
 | 0x5076 | wUnk5076 | save-data word LoadGameSlot zeroes after loading; no reader found (?) | generic |
 | 0x5CDD | wJoyHistory+0xFF | "last frame" slot of the joypad ring, set to SYS_LEVER by InitJoypad | [U2] |
 | 0x5CE2 | wUnk5CE2 | set 0 / 1 by the intro and story scene setups; no reader found (?) | generic |
+| 0x5DF8 | wCreditsGlyphCache | 0x100 words: the tile holding each text char's glyph in the scrolling credits / story text, 0xFFFF until loaded | [code] CreditsTask fills it with 0xFFFF; CreditsLineCachedGlyph / CreditsLineLoadGlyph read and set 0x5DF8 + 2 * char |
 | 0x6106 | wUnk6106 | column of the arm image DrawDevelopedArm draws; never written (?) | generic |
 | 0x6107 | wUnk6107 | row of the arm image DrawDevelopedArm draws; never written (?) | generic |
 | 0x6116 | wUnk6116 | zeroed by StartMessageTask; no reader found (?) | generic |

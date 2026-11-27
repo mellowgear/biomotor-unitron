@@ -2,12 +2,13 @@
 
 c_206179	section	code abs=0x206179
 
-; [code] HL = bit L of the u16 array at XDE: 0 or 0xFFFF (word L >> 4, bit L & 15; the CheckEventFlag layout)
+; HL = bit L of the u16 array at XDE as 0 / 0xFFFF (Z when clear), the event-flag layout; reads a slot's flags [code]
 CheckBitArray:
 	push	A
 	push	BC
 	ld	H,0
 	ld	A,L
+	; word offset (L >> 4) * 2, mask 1 << (L & 15)
 	srl	4,HL
 	sll	1,HL
 	ld	BC,1
@@ -21,7 +22,7 @@ CheckBitArray:
 
 c_20776F	section	code abs=0x20776F
 
-; [code] BIOS vector 8 (VECT_FLASHERS, the SNK BIOS system call vectors) through SWI 1: RA3 = flash select (1 when the HeaderCartId word is 0xFFFE), RB3 = block B; callers retry until RA3 = 0 (SaveGameSlot, SaveOptions, ClearSaveSlot, EraseSaveBlock)
+; BIOS flash erase (vector 8, SWI 1) of block B on the cart's chip; RA3 = result, callers retry until 0 [code]
 FlashEraseBlock:
 	cpw	(HeaderCartId),0xFFFE
 	scc	Z,RA3
@@ -34,7 +35,7 @@ FlashEraseBlock:
 
 c_207788	section	code abs=0x207788
 
-; [code] BIOS vector 6 (VECT_FLASHWRITE, the SNK BIOS system call vectors) through SWI 1: RA3 = flash select, RBC3 = BC, XHL3 = source XHL, XDE3 = XDE; callers write wTextBuffer back to 0xFA000 after FlashEraseBlock
+; BIOS flash write (vector 6, SWI 1) of BC pages from XHL to flash offset XDE; RA3 = result [code]
 FlashWrite:
 	cpw	(HeaderCartId),0xFFFE
 	scc	Z,RA3
@@ -49,7 +50,7 @@ FlashWrite:
 
 c_2077A6	section	code abs=0x2077A6
 
-; [code] copies BC blocks of 0x80 words from GetCartBase + XHL to XDE (ldirw); callers the save code (e.g. ClearSaveSlot reads flash 0xFA000 into wTextBuffer)
+; Copies BC 256-byte pages from cart offset XHL to XDE; RA3 = A = 0 [code]
 ReadCartBlocks:
 	push	XHL
 	calr	GetCartBase
@@ -66,7 +67,7 @@ ReadCartBlocks.loop:
 
 c_2077BE	section	code abs=0x2077BE
 
-; [code] XHL = 0x200000, or 0x800000 when the word at HeaderCartId is 0xFFFE
+; XHL = the cart base, 0x200000 (0x800000 when HeaderCartId is 0xFFFE (?)) [code]
 GetCartBase:
 	cpw	(HeaderCartId),0xFFFE
 	ld	XHL,0x200000
@@ -76,7 +77,7 @@ GetCartBase:
 
 c_20DAB9	section	code abs=0x20DAB9
 
-; [code] A = slot -> XHL = GetCartBase + 0xFA000 + GetSaveSlotOffset
+; XHL = the cart address of save slot A [code]
 GetSaveSlotAddr:
 	call	GetSaveSlotOffset
 	add	XHL,0xFA000
@@ -87,7 +88,7 @@ GetSaveSlotAddr:
 
 c_20DACC	section	code abs=0x20DACC
 
-; [code] A = slot -> XHL = 0 for slot 0, else 0x30 + 0x290 * (slot - 1) (flash layout, cart offset 0xFA000: slot 0 = 0x30 bytes system data, slots 1-3 0x290 each)
+; XHL = slot A's offset in the save block at flash 0xFA000: slot 0 (options) at 0, files 1-3 at 0x30 + 0x290 * (A - 1) [code]
 GetSaveSlotOffset:
 	ld	XHL,0
 	or	A,A
@@ -100,7 +101,7 @@ GetSaveSlotOffset:
 
 c_20DAE1	section	code abs=0x20DAE1
 
-; [code] BIOS 0x16, FlashEraseBlock 0x11 until RA3 = 0, BIOS 0x15 (no write back); the Delete Data "All" path (comment at 0x20D462)
+; Erases the whole save block (flash block 0x11) inside BIOS calls 0x16 / 0x15; Delete Data "All" [code]
 EraseSaveBlock:
 	ld	RW3,0x16
 	call	BiosCall
@@ -115,18 +116,19 @@ EraseSaveBlock.loop:
 
 c_20DAFD	section	code abs=0x20DAFD
 
-; [code] A = slot: reads the 0xFA000 block into wTextBuffer, fills the slot's 0x27D bytes with 0xFF, FlashEraseBlock 0x11 + FlashWrite; caller DeleteDataSelect after Yes
+; Empties save slot A (0xFF over its 0x27D bytes) by rewriting the save block through wTextBuffer; DeleteDataSelect [code]
 ClearSaveSlot:
 	push	A
 	ld	RW3,0x16
 	call	BiosCall
+	; the 0x800-byte save block into RAM, edit, erase and write back
 	ld	BC,8
 	ld	XDE,wTextBuffer
 	ld	XHL,0xFA000
 	call	ReadCartBlocks
 	pop	A
 	call	GetSaveSlotOffset
-	add	XHL,0x4000
+	add	XHL,wTextBuffer
 	ld	BC,0x27D
 	ld	A,0xFF
 ClearSaveSlot.loop:
@@ -149,7 +151,7 @@ ClearSaveSlot.loop2:
 
 c_20DB57	section	code abs=0x20DB57
 
-; [code] A = slot: Z when the bytes at GetSaveSlotAddr match the cart header from HeaderCartId up to 0x200030 (a written slot); DrawSaveSlotList shows the empty text when NZ, ShowSaveConfirmBox asks "Over Ok?" when Z
+; Z when save slot A starts with the cart header id (HeaderCartId .. Header+0x30), i.e. holds a save [code]
 IsSaveSlotUsed:
 	call	GetSaveSlotAddr
 	ld	XDE,HeaderCartId
@@ -163,7 +165,7 @@ IsSaveSlotUsed.loop:
 
 c_20DB72	section	code abs=0x20DB72
 
-; [code] A = slot: header copy + 0x26D bytes from wPlayerName into the 0xFA000 flash block (erase + write)
+; Saves to slot A (0 -> SaveOptions): the header id then 0x26D bytes from wPlayerName, via wTextBuffer [code]
 SaveGameSlot:
 	or	A,A
 	jp	Z,SaveOptions
@@ -176,7 +178,7 @@ SaveGameSlot:
 	call	ReadCartBlocks
 	pop	A
 	call	GetSaveSlotOffset
-	add	XHL,0x4000
+	add	XHL,wTextBuffer
 	ld	XDE,XHL
 	ld	XHL,HeaderCartId
 	ld	BC,0x10
@@ -185,6 +187,7 @@ SaveGameSlot:
 	ld	BC,0x26D
 	ldir	(XDE+),(XHL+)
 SaveGameSlot.loop:
+	; retry the erase and write until both succeed
 	ld	B,0x11
 	call	FlashEraseBlock
 	cp	RA3,0
@@ -201,7 +204,7 @@ SaveGameSlot.loop:
 
 c_20DBDE	section	code abs=0x20DBDE
 
-; [code] SaveGameSlot with A = 0: reads the 0xFA000 block into wTextBuffer, puts the cart header (HeaderCartId, 16 bytes) and the 2 bytes from wOptionMessageSpeed (message speed, animation) at slot 0, FlashEraseBlock 0x11 + FlashWrite; also called by ConfigMenu
+; Saves slot 0: the header id and the 2 option bytes at wOptionMessageSpeed (speed, animation); also ConfigMenu [code]
 SaveOptions:
 	ld	RW3,0x16
 	call	BiosCall
@@ -211,7 +214,7 @@ SaveOptions:
 	call	ReadCartBlocks
 	ld	A,0
 	call	GetSaveSlotOffset
-	add	XHL,0x4000
+	add	XHL,wTextBuffer
 	ld	XDE,XHL
 	ld	XHL,HeaderCartId
 	ld	BC,0x10
@@ -236,7 +239,7 @@ SaveOptions.loop:
 
 c_20DC43	section	code abs=0x20DC43
 
-; [code] A = slot: 0 -> LoadOptions, else 0x26D bytes from GetSaveSlotAddr + 0x10 to wPlayerName (the counterpart of SaveGameSlot), (wUnk5076) = 0; callers MainMenuLoadTask, WorksLoadTask
+; Loads slot A (0 -> LoadOptions) into wPlayerName (0x26D bytes), clears wUnk5076; MainMenuLoadTask, WorksLoadTask [code]
 LoadGameSlot:
 	or	A,A
 	jp	Z,LoadOptions
@@ -250,7 +253,7 @@ LoadGameSlot:
 
 c_20DC65	section	code abs=0x20DC65
 
-; [code] slot 0 + 0x10 (GetSaveSlotAddr) -> 2 bytes at wOptionMessageSpeed (message speed, animation); LoadGameSlot with A = 0, BootLoadOptions when slot 0 is used
+; Loads the 2 option bytes of slot 0 into wOptionMessageSpeed [code]
 LoadOptions:
 	ld	A,0
 	call	GetSaveSlotAddr
@@ -262,7 +265,7 @@ LoadOptions:
 
 c_20DC7C	section	code abs=0x20DC7C
 
-; [code] wSaveMenuMode = 0 (Load), wSaveSlot = 1, ClearScr2Tilemap, DrawSaveSlotList
+; Starts the Load slot list on slot 1 [code]
 InitLoadSlotList:
 	ldb	(wSaveMenuMode),SAVE_MENU_LOAD
 	ldb	(wSaveSlot),1
@@ -272,7 +275,7 @@ InitLoadSlotList:
 
 c_20DC8E	section	code abs=0x20DC8E
 
-; [code] wSaveMenuMode = 2 (Clear), wSaveSlot = 1, ClearScr2Tilemap, DrawSaveSlotList
+; Starts the Clear slot list on slot 1 [code]
 InitClearSlotList:
 	ldb	(wSaveMenuMode),SAVE_MENU_CLEAR
 	ldb	(wSaveSlot),1
@@ -282,7 +285,8 @@ InitClearSlotList:
 
 c_20DDBC	section	code abs=0x20DDBC
 
-; [code] header "Load"/"Save"/"Clear" by 0x5DF5 (SaveMenuLoadText ..), then slots 1-3: SaveSlotEmptyText if IsSaveSlotUsed NZ, else name (+0), partner name (+0x1C), levels (+0xF, +0x2B), emblem flags 0x10-0x13, GetRankTitle (+0x32) (rank_titles.asm header); [play] works_data_save_load_menu
+; Opens the slot boxes (box +0x10, tiles from TASK_ARG): the Load / Save / Clear title, then per slot 1-3 the empty text, or
+; names, levels, the four emblems (flags 0x10-0x13) and the rank title of the saved file [code][play]
 DrawSaveSlotList:
 	pushw	(XIZ+TASK_ARG)
 	ld	A,(XIZ+0x10)
@@ -290,6 +294,7 @@ DrawSaveSlotList:
 	ld	E,3
 	ld	HL,(XIZ+TASK_ARG)
 	call	OpenTextBox
+	; title by mode: below Save = Load, Save, above = Clear
 	cpb	(wSaveMenuMode),SAVE_MENU_SAVE
 	ld	XHL,SaveMenuLoadText
 	jr	C,DrawSaveSlotList.skip
@@ -302,6 +307,7 @@ DrawSaveSlotList.skip:
 	ld	E,0x20
 	ld	A,(XIZ+0x10)
 	call	PlaceTextBox
+	; each slot box takes 0x30 tiles after the title's 8
 	addw	(XIZ+TASK_ARG),8
 	ld	A,1
 DrawSaveSlotList.loop:
@@ -329,6 +335,7 @@ DrawSaveSlotList.skip2:
 	call	SetTextBoxCursor
 	call	GetTextCursorTile
 	ld	XHL,(XSP)
+	; levels at file +0xF (player) and +0x2B (partner)
 	ld	C,(XHL+0xF:16)
 	ld	B,0
 	call	RenderNumberTiles
@@ -362,6 +369,7 @@ DrawSaveSlotList.skip2:
 	ld	XHL,(XSP)
 	add	XHL,0x1C
 	call	DrawString
+	; the file's event flags at +0x4D: emblems 0x10-0x13
 	ld	XDE,(XSP)
 	add	XDE,0x4D
 	ld	L,0x10
@@ -413,6 +421,7 @@ DrawSaveSlotList.skip6:
 	call	SetTextBoxCursorXWA
 	pop	XHL
 	push	XWA
+	; rank at file +0x32
 	ld	A,(XHL+0x32:16)
 	call	GetRankTitle
 	pop	XWA
@@ -434,7 +443,7 @@ DrawSaveSlotList.skip7:
 
 c_20DF80	section	code abs=0x20DF80
 
-; [code] OpenTextBox (task +0x10 box, 0x12 x 3, tile TASK_ARG + 0x98) with "Load Ok?  Yes No" (wSaveMenuMode 0), "Clear Ok? Yes No" (2), "Over Ok?  Yes No" (1 and IsSaveSlotUsed wSaveSlot), else "Save Ok?  Yes No", placed at column 1 row 0x28; [play] data_save_ok_prompt
+; Opens the "... Ok? Yes No" box for wSaveMenuMode: Load, Clear, Over (saving on a used slot) or Save [code][play]
 ShowSaveConfirmBox:
 	ld	A,(XIZ+0x10)
 	ld	C,0x12
@@ -463,7 +472,7 @@ ShowSaveConfirmBox.skip:
 
 c_20E012	section	code abs=0x20E012
 
-; [code] same box with " Load Complete " (wSaveMenuMode 0), " Clear Complete" (2), else " Save Complete "; [play] data_load_ok_yes
+; Opens the "... Complete" box for wSaveMenuMode [code][play]
 ShowSaveDoneBox:
 	ld	A,(XIZ+0x10)
 	ld	C,0x12
@@ -488,7 +497,8 @@ ShowSaveDoneBox.skip:
 
 c_20E084	section	code abs=0x20E084
 
-; [code] task (started by WorksLoadTask, WorksSaveTask, title.asm): cursor sprite at slot 0x5DF6, U/D wrap 1-3, A accepts (empty slots, IsSaveSlotUsed NZ, only when 0x5DF5 = 1 Save, else sound 0x83), B sets 0x5DF6 = 0; EndTask
+; Task: cursor over slots 1-3 in wSaveSlot (up / down wrap); A ends it, but buzzes on an empty slot unless saving;
+; B ends with wSaveSlot 0; WorksLoadTask, WorksSaveTask, the title [code]
 SaveSlotSelectTask:
 	ldw	(XIZ+TASK_FUNC),SaveSlotSelectTask.skip & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),SaveSlotSelectTask.skip >> 16
@@ -531,6 +541,7 @@ SaveSlotSelectTask.skip3:
 	ldb	(wSaveSlot),1
 	ret
 SaveSlotSelectTask.skip4:
+	; Load and Clear need a used slot
 	cpb	(wSaveMenuMode),SAVE_MENU_SAVE
 	jr	Z,SaveSlotSelectTask.skip5
 	ld	A,(wSaveSlot)
@@ -553,7 +564,7 @@ SaveSlotSelectTask.skip6:
 
 c_20E131	section	code abs=0x20E131
 
-; [code] task entry: wYesNoChoice = 2 (No), resume at YesNoPromptInput; started after ShowSaveConfirmBox
+; Task: Yes / No prompt starting on No (wYesNoChoice 2) [code]
 YesNoPromptTask:
 	ldb	(wYesNoChoice),2
 	ldw	(XIZ+TASK_FUNC),YesNoPromptInput & 0xFFFF
@@ -562,7 +573,7 @@ YesNoPromptTask:
 
 c_20E141	section	code abs=0x20E141
 
-; [code+play] frame set by YesNoPromptTask (0x5DF7 = 2): cursor at x 0x58 + 0x20*(0x5DF7-1), D_LEFT 0x5DF7 = 1, D_RIGHT = 2 (sound 0x80), A -> sound 0x81 + EndTask, B -> 0x5DF7 = 0 + EndTask; callers MainMenuLoadTask and works.asm 463/631/665 all test 0x5DF7 == 1 after "Load/Save/Over/Clear Ok? Yes No" (ShowSaveConfirmBox / ShowSaveDoneBox texts LoadOkYesNoText .. SaveCompleteText)
+; Yes / No each frame: left / right set wYesNoChoice 1 / 2, A ends it, B ends with 0; callers test for 1 [code][play]
 YesNoPromptInput:
 	ld	C,(wYesNoChoice)
 	dec	1,C
@@ -611,7 +622,7 @@ YesNoPromptInput.skip4:
 
 c_20E1BC	section	code abs=0x20E1BC
 
-; [code] task: counter +0x12 = 0x1E, EndTask when it reaches 0 (one decrement per frame); started after ShowSaveDoneBox
+; Task: ends after 0x1E frames (+0x12); after ShowSaveDoneBox [code]
 Wait30FramesTask:
 	ldw	(XIZ+0x12),0x1E
 	ldw	(XIZ+TASK_FUNC),Wait30FramesTask.resume & 0xFFFF
@@ -623,7 +634,7 @@ Wait30FramesTask.resume:
 
 c_21D5C5	section	code abs=0x21D5C5
 
-; [code] boot task step (system.asm): wOptionMessageSpeed = 3, wOptionAnimation = 0xFF, LoadOptions when IsSaveSlotUsed 0 (Z), InitTextBoxes, then resume at 0x21D5E9
+; Boot step: default options (speed 3, animation on), the saved ones if slot 0 holds a save, then the intro [code]
 BootLoadOptions:
 	ldb	(wOptionMessageSpeed),3
 	ldb	(wOptionAnimation),0xFF

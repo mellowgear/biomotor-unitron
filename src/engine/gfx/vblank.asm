@@ -2,7 +2,9 @@
 
 c_2064C6	section	code abs=0x2064C6
 
-; [code] from VBlankHandler: S1SO_H/V = wScr1ScrollX/Y, S2SO_H/V = wScr2ScrollX/Y, PO_H/V = -(wSpriteOffsetX / Y), each plus wShakeX/Y when its wShakeFlags bit (1, 2, 0) is set; when wScrollSplitLine is 1..0x97 it also sets DMA0/DMA1 to copy the 4 bytes wSplitScrollBuffer (wScr1SplitScrollX/Y, wScr2SplitScrollX/Y, shake bits 3, 4) to S1SO_H.. mid-frame
+; VBlank: writes the scroll and sprite-offset registers, adding wShakeX/Y to each plane whose wShakeFlags
+; bit is set (0 sprites, 1 scr1, 2 scr2, 3/4 split scr1/scr2); for a wScrollSplitLine of 1..0x97 it arms
+; micro-DMA to copy wSplitScrollBuffer to S1SO_H.. mid-frame [U2] [code]
 UpdateScrollRegisters:
 	ld	W,(wShakeFlags)
 	ld	A,(wScrollSplitLine)
@@ -71,6 +73,6 @@ UpdateScrollRegisters.skip5:
 UpdateScrollRegisters.skip6:
 	neg	C
 	neg	E
-	ld	(PO_H),C
+	ld	(PO_H),C	; PO (sprite offset) moves sprites the other way
 	ld	(PO_V),E
 	ret

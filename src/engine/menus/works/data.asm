@@ -2,7 +2,7 @@
 
 c_20DCA0	section	code abs=0x20DCA0
 
-; [code+play] Works > Data > Load: slot list, confirm, LoadGameSlot copies the slot into wPlayerName..
+; Task, Works > Data > Load: pick a used slot (B ends with wSaveSlot 0), confirm, LoadGameSlot and "Load Complete"; No returns to the list [code][play]
 WorksLoadTask:
 	calr	InitLoadSlotList
 	ldw	(XIZ+TASK_FUNC),WorksLoadTask.resume & 0xFFFF
@@ -35,7 +35,7 @@ WorksLoadTask.skip:
 
 c_20DD24	section	code abs=0x20DD24
 
-; [code] child of RunWorksSaveTask: wSaveMenuMode = 1, wSaveSlot = 1, DrawSaveSlotList, SaveSlotSelectTask; slot 0 -> EndTask; ShowSaveConfirmBox + YesNoPromptTask, Yes -> SaveGameSlot, ShowSaveDoneBox, Wait30FramesTask; [play] works_data_save* screens
+; Task, Works > Data > Save: pick a slot, confirm ("Over" on a used one), SaveGameSlot and "Save Complete", then the list again until B [code][play]
 WorksSaveTask:
 	ldb	(wSaveMenuMode),SAVE_MENU_SAVE
 	ldb	(wSaveSlot),1
@@ -72,7 +72,7 @@ WorksSaveTask.skip:
 
 c_217E28	section	code abs=0x217E28
 
-; [code] menu box table: "Save" (0), "Load" (1), "Exit" (0xFF) at MenuLines_217E0D; caller WorksDataMenu
+; Menu tables for Save (0) / Load (1) / Exit (0xFF) [code]
 SetupDataMenu:
 	ld	A,3
 	ld	(wMenuCount),A
@@ -88,7 +88,8 @@ SetupDataMenu:
 
 c_219E5F	section	code abs=0x219E5F
 
-; [code] Works menu value 2 "Data": YouWantToEditText, SetupDataMenu: Save -> RunWorksSaveTask, Load -> RunWorksLoadTask (back to WorksMainMenu when wSaveSlot != 0); [play] its first instruction ran on works_data_save_* screens
+; Works menu value 2 "Data": runs Save or Load as a child and redraws the Works screen; a finished load goes back to
+; WorksMainMenu, Exit says "Finished" [code][play]
 WorksDataMenu:
 	ld	XHL,YouWantToEditText
 	ld	XDE,YouWantToEditText
@@ -147,7 +148,7 @@ WorksDataMenu.skip3:
 
 c_219F1D	section	code abs=0x219F1D
 
-; [code] child WorksSaveTask (0x5DF5 = 1 Save, slot list, SaveGameSlot) with args 0x7E/8, task_wait, then wWorksDataDone = 1 (polled by WorksDataMenu, Data menu choice 0), EndTask
+; Task: runs WorksSaveTask (box 8, tiles 0x7E), then sets wWorksDataDone for WorksDataMenu [code]
 RunWorksSaveTask:
 	ld	XHL,WorksSaveTask
 	call	StartChildTask
@@ -160,7 +161,7 @@ RunWorksSaveTask:
 
 c_219F48	section	code abs=0x219F48
 
-; [code] child WorksLoadTask (slot list, LoadGameSlot) with args 0x7E / 8, task_wait, then wWorksDataDone = 1 (polled by WorksDataMenu), EndTask: the Load counterpart of RunWorksSaveTask; [play] runs after Works > Data > Load Ok
+; Task: runs WorksLoadTask (box 8, tiles 0x7E), then sets wWorksDataDone for WorksDataMenu [code]
 RunWorksLoadTask:
 	ld	XHL,WorksLoadTask
 	call	StartChildTask
@@ -173,7 +174,7 @@ RunWorksLoadTask:
 
 c_219F73	section	code abs=0x219F73
 
-; [code] ClearPictureAndTilemaps + HideCursor, nothing else; callers the Data menu's Save and Load paths (WorksDataMenu) before RunWorksSaveTask / RunWorksLoadTask (was misnamed WorksHelpMenu: the Help entry is the routine after it)
+; Clears the picture and tilemaps and hides the cursor before the save or load list [code]
 ClearPictureHideCursor:
 	call	ClearPictureAndTilemaps
 	call	HideCursor

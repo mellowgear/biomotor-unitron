@@ -10,7 +10,7 @@ DrawShopBuyItemPage:
 	ld	(wListCount),A
 	ld	A,(wListCount)
 	extz	WA
-	add	WA,9
+	add	WA,9	; pages = ceil(count / 10)
 	div	WA,0xA
 	ld	(wListPages),A
 	ld	A,(wListGroup)
@@ -33,6 +33,7 @@ DrawShopBuyItemPage:
 	ld	B,1
 	ld	XHL,ItemListPageSlash
 	call	PrintStringTable
+; BC = entry word for the first row: B = group (1-based), C = 1-based index on this page
 	ld	A,(wListGroup)
 	inc	1,A
 	ld	B,A
@@ -48,7 +49,7 @@ DrawShopBuyItemPage.loop:
 	push	DE
 	ld	A,C
 	dec	1,A
-	cp	A,(wListCount)
+	cp	A,(wListCount)	; rows past the group's end are blanked
 	jr	C,DrawShopBuyItemPage.skip
 	call	ClearListLine
 	jp	DrawShopBuyItemPage.skip4
@@ -83,7 +84,7 @@ DrawShopBuyItemPage.skip2:
 	call	PrintStringAt
 	jr	DrawShopBuyItemPage.skip4
 DrawShopBuyItemPage.skip3:
-	and	A,0xF
+	and	A,0xF	; only the low digit is shown: counts stay under 10 (?)
 	push	WA
 	ld	B,8
 	ld	C,E
@@ -128,7 +129,7 @@ ShopBuyItemMoveHook:
 	call	GetItemPriceBy
 	ld	BC,0xC02
 	ld	XDE,XWA
-	ld	WA,0x601
+	ld	WA,0x601	; 6 BCD digits
 	call	PrintHexBlanks
 ShopBuyItemMoveHook.done:
 	ret
@@ -227,6 +228,7 @@ SetupShopSellItemList:
 	ld	XHL,ListCursor_2181D8
 	ld	(wListCells),XHL
 	jp	ListReset
+; [code] 3 blanks that erase a shop list cell
 BlankText7:
 	db	0x00,0x00,0x00,0xFF	; "   "
 
@@ -234,7 +236,7 @@ c_21B5A2	section	code abs=0x21B5A2
 
 ; [code] list page callback of SetupShopBuyPartList (the part counterpart of DrawShopBuyItemPage); [play] shop_buy_arms_* screens
 DrawShopBuyPartPage:
-	ld	W,(wListEntryKind)
+	ld	W,(wListEntryKind)	; wListEntryKind holds the part group here
 	inc	1,W
 	call	GetPartGroupSize
 	ld	(wListCount),A
@@ -263,6 +265,7 @@ DrawShopBuyPartPage:
 	ld	B,1
 	ld	XHL,PartListPageSlash
 	call	PrintStringTable
+; BC = entry word: B = part group, C = 1-based index on this page
 	ld	A,(wListEntryKind)
 	inc	1,A
 	ld	B,A
@@ -313,7 +316,7 @@ DrawShopBuyPartPage.skip2:
 	call	PrintStringAt
 	jr	DrawShopBuyPartPage.skip4
 DrawShopBuyPartPage.skip3:
-	and	A,0xF
+	and	A,0xF	; only the low digit is shown
 	push	WA
 	ld	B,8
 	ld	C,E

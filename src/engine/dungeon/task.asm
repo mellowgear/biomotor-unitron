@@ -132,7 +132,7 @@ EnterDungeon.skip:
 EnterDungeon.skip2:
 	ld	(XIZ+DUNGEON_FLOOR),A
 	ld	A,1
-	ld	(XIZ+0x12),A
+	ld	(XIZ+DUNGEON_CHANGE),A
 	call	PlayDungeonMusic
 	calr	StartDungeonFloor
 	ret
@@ -181,7 +181,7 @@ DungeonReturnStep.skip:
 	cp	A,1
 	jr	Z,DungeonReturnStep.done
 	ld	A,0
-	ld	(XIZ+0x2C),A
+	ld	(XIZ+DUNGEON_STEP_FRAMES),A
 	ld	A,3
 	ld	(XIZ+DUNGEON_MODE),A
 DungeonReturnStep.done:
@@ -241,7 +241,7 @@ c_210FB5	section	code abs=0x210FB5
 ; [code] DungeonStep mode 0xB: +0x2C = 0, mode 3 (CheckEncounter)
 DungeonCampDone:
 	xor	A,A
-	ld	(XIZ+0x2C),A
+	ld	(XIZ+DUNGEON_STEP_FRAMES),A
 	ld	A,3
 	ld	(XIZ+DUNGEON_MODE),A
 	ret
@@ -280,7 +280,7 @@ EndDungeonChest:
 	push	XBC
 	push	XWA
 	xor	A,A
-	ld	(XIZ+0x2C),A
+	ld	(XIZ+DUNGEON_STEP_FRAMES),A
 	ld	A,3
 	ld	(XIZ+DUNGEON_MODE),A
 	pop	XWA
@@ -323,7 +323,7 @@ EndBossEncounter:
 	push	XBC
 	push	XWA
 	xor	A,A
-	ld	(XIZ+0x2C),A
+	ld	(XIZ+DUNGEON_STEP_FRAMES),A
 	ld	A,3
 	ld	(XIZ+DUNGEON_MODE),A
 	pop	XWA

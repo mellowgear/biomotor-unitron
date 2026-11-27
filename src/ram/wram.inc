@@ -225,6 +225,8 @@ wStreetMenuChoice	equ	0x5DF4
 wSaveMenuMode	equ	0x5DF5
 wSaveSlot	equ	0x5DF6
 wYesNoChoice	equ	0x5DF7
+; [code] CreditsTask: 0x100 words, the tile of each text char's loaded glyph (0xFFFF = not loaded yet)
+wCreditsGlyphCache	equ	0x5DF8
 
 ; street / arena next scene, chests, arena pilots
 ; [code] what the street does after an arena / world map child task (StreetGoArena: 1 StreetGoWorks, 2 StreetAfterDungeonDefeat, 4 StreetEndingScenes, 5 StreetTheEnd, 6 StreetGameOver, else StreetTask; StreetGoWorldMap: only 2, 4, 5); 0xFF at ArenaTaskInit / WorldMapTaskInit, set at the end of ArenaTask (from wArenaNext) and DungeonTask (its DUNGEON_MODE)

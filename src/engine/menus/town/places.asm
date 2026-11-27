@@ -2,7 +2,7 @@
 
 c_214BEC	section	code abs=0x214BEC
 
-; [code] town place task for the Square (StreetGoSquare): ClearScr1Tilemap, wFadeLevel = 0, TASK_ARG 1 (OpenSquareMenu), +0x23 = 0xFF, place +0x15 = 0 (Square), TASK_FUNC = TownPlaceTask
+; Task entry from StreetGoSquare: place +0x15 = 0 (the Square), state 1 (the Square menu), then TownPlaceTask [code]
 TownPlaceTaskSquare:
 	call	ClearScr1Tilemap
 	ld	A,0
@@ -19,8 +19,10 @@ TownPlaceTaskSquare:
 
 c_214C0E	section	code abs=0x214C0E
 
-; [code] town place task for the Works (StreetGoWorks): +0x15 = 7 at story stage 0 and 8 at stage 0xA while EVENT_TALKED_WORKS is clear (both clear SCR1 and SCR2), else 5 (Works, wFadeLevel = 0); then TASK_ARG 5, +0x23 = 0xFF, TASK_FUNC = TownPlaceTask
+; Task entry from StreetGoWorks: the first visit at story stage 0 is place 7 (the opening talk), stage 0xA place 8 (see
+; TownPlaceTaskWorksEnding), else place 5 (the Works); state 5 (enter), then TownPlaceTask [code]
 TownPlaceTaskWorks:
+	; first visit: the opening talk in place 7
 	call	GetStoryStage
 	cp	A,0
 	jr	NZ,TownPlaceTaskWorksEnding
@@ -36,7 +38,7 @@ TownPlaceTaskWorks:
 
 c_214C30	section	code abs=0x214C30
 
-; [code] TownPlaceTaskWorks, story stage not 0: at stage 0xA while EVENT_TALKED_WORKS is clear, ClearScr1Tilemap + ClearScr2Tilemap and place +0x15 = 8 (TalkPlace8 "One year later... At the capital of Rhafiace"), else TownPlaceTaskWorksPlace5
+; Stage 0xA before EVENT_TALKED_WORKS: place 8 ("One year later... At the capital of Rhafiace"), else the plain Works [code]
 TownPlaceTaskWorksEnding:
 	call	GetStoryStage
 	cp	A,0xA
@@ -53,7 +55,7 @@ TownPlaceTaskWorksEnding:
 
 c_214C53	section	code abs=0x214C53
 
-; [code] TownPlaceTaskWorks tail: ClearScr1Tilemap, wFadeLevel = 0, place +0x15 = 5 (Works); the place-7 / place-8 paths join after the place store: TASK_ARG 5 (TownPlaceEnter), +0x23 = 0xFF, TASK_FUNC = TownPlaceTask
+; Place 5 (the Works) with the fade reset; the place 7 / 8 paths join at .skip to set state 5 and TownPlaceTask [code]
 TownPlaceTaskWorksPlace5:
 	call	ClearScr1Tilemap
 	ld	A,0
@@ -71,7 +73,7 @@ TownPlaceTaskWorksPlace5.skip:
 
 c_214C75	section	code abs=0x214C75
 
-; [code] town place task for the Shop (StreetGoShop): ClearScr1Tilemap, wFadeLevel = 0, TASK_ARG 5, +0x23 = 0xFF, place +0x15 = 6 (Shop), TASK_FUNC = TownPlaceTask
+; Task entry from StreetGoShop: place 6, state 5 (enter), then TownPlaceTask [code]
 TownPlaceTaskShop:
 	call	ClearScr1Tilemap
 	ld	A,0
@@ -88,7 +90,8 @@ TownPlaceTaskShop:
 
 c_214C97	section	code abs=0x214C97
 
-; [code] the town place task, by TASK_ARG: 1 -> 2, 2 OpenSquareMenu, 3 SquareMenuInput, 4 TalkMenuInput, 5 TownPlaceEnter, 6 TownTalkDispatch, 7 CyriusTalkDispatch, 8 HelmutTalkDispatch, 9 WorksProtectorScene, 0xA CollaTalkDispatch, 0xB TetisGift, 0xC or other TownPlaceTaskEnd
+; The town place task, by state TASK_ARG: 1 -> 2, 2 open the Square menu, 3 its input, 4 the talk menu, 5 enter a place,
+; 6..0xB the talks and scenes (case chain below), 0xC or other: end [code]
 TownPlaceTask:
 	ld	A,(XIZ+TASK_ARG)
 	cp	A,0xC
@@ -105,7 +108,7 @@ TownPlaceTask.skip:
 
 c_214CB2	section	code abs=0x214CB2
 
-; [code] TownPlaceTask case chain: TASK_ARG 3 -> SquareMenuInput, else the next test
+; Case chain: state 3, the Square menu input [code]
 TownPlaceTaskState3:
 	cp	A,3
 	jr	NZ,TownPlaceTaskState4
@@ -114,7 +117,7 @@ TownPlaceTaskState3:
 
 c_214CBC	section	code abs=0x214CBC
 
-; [code] TownPlaceTask case chain: TASK_ARG 4 -> TalkMenuInput, else the next test
+; Case chain: state 4, the talk menu input [code]
 TownPlaceTaskState4:
 	cp	A,4
 	jr	NZ,TownPlaceTaskState5
@@ -123,7 +126,7 @@ TownPlaceTaskState4:
 
 c_214CC6	section	code abs=0x214CC6
 
-; [code] TownPlaceTask case chain: TASK_ARG 5 -> TownPlaceEnter, else the next test
+; Case chain: state 5, TownPlaceEnter [code]
 TownPlaceTaskState5:
 	cp	A,5
 	jr	NZ,TownPlaceTaskState6
@@ -132,7 +135,7 @@ TownPlaceTaskState5:
 
 c_214CD0	section	code abs=0x214CD0
 
-; [code] TownPlaceTask case chain: TASK_ARG 6 TownTalkDispatch, 7 CyriusTalkDispatch, 8 HelmutTalkDispatch, 9 WorksProtectorScene, 0xA CollaTalkDispatch, 0xB TetisGift, else TownPlaceTaskEnd
+; Case chain: 6 town talk, 7 Cyrius, 8 Helmut, 9 the Works Protector scene, 0xA Colla, 0xB Tetis' gift, else the end [code]
 TownPlaceTaskState6:
 	cp	A,6
 	jr	NZ,TownPlaceTaskState6.skip
@@ -166,7 +169,7 @@ TownPlaceTaskState6.skip5:
 
 c_214D10	section	code abs=0x214D10
 
-; [code] exit case of the town place task TownPlaceTask (TASK_ARG 0xC or out of range): TASK_ARG = 1, wTownPlaceResult = task +0x11, EndTask
+; Ends the place task: wTownPlaceResult = +0x11 for the street, state reset to 1 [code]
 TownPlaceTaskEnd:
 	ld	A,1
 	ld	(XIZ+TASK_ARG),A
@@ -177,13 +180,13 @@ TownPlaceTaskEnd:
 
 c_214D22	section	code abs=0x214D22
 
-; [code] the ret every TownPlaceTask case jumps to
+; The ret every TownPlaceTask case jumps to [code]
 TownPlaceTaskReturn:
 	ret
 
 c_214D23	section	code abs=0x214D23
 
-; [code] place task +0x15: PlacePortraits picture (DrawPortrait) and its name from the pointers at 0x249EAB (DrawBoxString)
+; Draws place +0x15's picture (PlacePortraits) on SCR1 and its name in box 3 [code]
 DrawTownPlace:
 	push	XHL
 	push	XDE
@@ -196,6 +199,7 @@ DrawTownPlace:
 	call	ClearScr1Tilemap
 	pop	XWA
 	push	XWA
+	; one picture id byte per place
 	ld	XHL,PlacePortraits
 	add	XHL,XWA
 	ld	L,(XHL)
@@ -219,7 +223,7 @@ DrawTownPlace:
 
 c_214D64	section	code abs=0x214D64
 
-; [code] ReturnText at 0,8 in box 2 (registers saved); callers SquarePlaceMenu, ShowTalkMenu; [play] square_menu, dtown_cyrius_trade_done_* (the Return line)
+; Box 2 row 8: the Return line of the Square and talk menus [code]
 DrawReturnOption:
 	push	XHL
 	push	XDE
@@ -240,7 +244,7 @@ DrawReturnOption:
 
 c_214D82	section	code abs=0x214D82
 
-; [code] ResetTextBox 1 + ClearTextBox 1 (registers saved); callers CyriusTradeMenuInput, HelmutPickSkill, SquareMenuSelect, TalkMenuSelect
+; Resets and clears box 1 [code]
 ResetTextBox1:
 	push	XHL
 	push	XDE
@@ -258,7 +262,8 @@ ResetTextBox1:
 
 c_214DCA	section	code abs=0x214DCA
 
-; [code+play] D-town / Forest / Spring
+; Box 2: the Square menu (Pub, D-town, Forest, Spring, Return) with the Square picture and "Where do you go?"; clears the
+; greeted flags; state 3 [code][play]
 SquarePlaceMenu:
 	push	XHL
 	push	XDE
@@ -282,6 +287,7 @@ SquarePlaceMenu:
 	call	ClearGreetedFlags
 	ld	A,1
 	call	ClearTextBox
+	; queued in box 1, printed by the text engine
 	ld	XHL,WhereDoYouGoText2
 	ld	A,1
 	call	GetTextBox
@@ -301,7 +307,7 @@ SquarePlaceMenu:
 
 c_214E33	section	code abs=0x214E33
 
-; [code] town place task state 2 (TownPlaceTask): OpenBoxes123, SquarePlaceMenu (D-town / Forest / Spring), +0x10 = 0, transition SetupWindowIris.., PlayMusic 1, SoundCommand 0x21
+; Place task state 2: opens the boxes and the Square menu (cursor 0) behind the iris, SONG_TOWN [code]
 OpenSquareMenu:
 	call	OpenBoxes123
 	calr	SquarePlaceMenu
@@ -319,7 +325,7 @@ OpenSquareMenu:
 
 c_214E5D	section	code abs=0x214E5D
 
-; [code] town place task state 3 (each frame, the Square menu Pub / D-town / Forest / Spring / Return): A -> sound 0x81, SquareMenuSelect; B (joypad bit 5) -> sound 0x82, cursor +0x10 = 8 (Return), SquareMenuSelect; up / down move +0x10 over 0-3 and 8 with wrap, sound 0x80; DrawMenuCursor at x 0x60, y +0x10 * 8 + 4; +0x2D += 1
+; Place task state 3, each frame: up / down over rows 0-3 and Return (8), wrapping; A chooses, B picks Return [code]
 SquareMenuInput:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -342,6 +348,7 @@ SquareMenuInput.skip:
 	calr	SquareMenuSelect
 	jrl	SquareMenuInput.done
 SquareMenuInput.skip2:
+	; up from 0 goes to Return, from Return to Spring; down mirrors
 	and	A,0xF
 	jr	Z,SquareMenuInput.skip9
 	cp	A,1
@@ -392,6 +399,7 @@ SquareMenuInput.skip7:
 SquareMenuInput.skip8:
 	jr	SquareMenuInput.skip9
 SquareMenuInput.skip9:
+	; cursor x 0x60, y 8 * row + 4
 	ld	BC,0x60
 	ld	XWA,0
 	ld	A,(XIZ+0x10)
@@ -407,7 +415,7 @@ SquareMenuInput.done:
 
 c_214F0F	section	code abs=0x214F0F
 
-; [code] Square menu choice +0x10: 8 (Return) -> ResetTextBox1, +0x11 = 0, TASK_ARG 0xC (TownPlaceTaskEnd, back to the street); else place +0x15 = choice + 1 (1 Pub, 2 D-town, 3 Forest, 4 Spring), ResetTextBox1, OpenPlaceTalkMenu
+; Return ends the place task (+0x11 = 0, state 0xC); a place row opens place row + 1 (1 Pub .. 4 Spring) and its talk menu [code]
 SquareMenuSelect:
 	push	XHL
 	push	XDE
@@ -437,7 +445,7 @@ SquareMenuSelect.skip2:
 
 c_214F3D	section	code abs=0x214F3D
 
-; [code] copies the talk rows listed for the place (task +0x15) and GetStoryStage (talk_slots_*.asm) to task +0x1E.., count to +0x1A
+; Up to 4 talk rows of place +0x15 at the current story stage (TalkSlotLists) into +0x1E.., count in +0x1A [code]
 LoadTalkSlots:
 	push	XHL
 	push	XDE
@@ -446,6 +454,7 @@ LoadTalkSlots:
 	ld	XHL,XIZ
 	add	XHL,0x1E
 	ld	XDE,XHL
+	; 0xFF = empty slot
 	ld	A,0xFF
 	ld	C,4
 LoadTalkSlots.loop:
@@ -458,6 +467,7 @@ LoadTalkSlots.loop:
 	sub	A,1
 	extz	WA
 	extz	XWA
+	; list of the place: per stage, TalkSlotCounts[place] bytes, 0xFF ends early
 	ld	XHL,TalkSlotCounts
 	add	XHL,XWA
 	ld	C,(XHL)
@@ -491,7 +501,7 @@ LoadTalkSlots.skip:
 
 c_214FA4	section	code abs=0x214FA4
 
-; [code] LoadTalkSlots, then per slot GetTalkRow and the speaker name 0x249F66[row speaker - 0x15] + newline 0x249FA1 in box 2; box 1 TalkWithWhoText; +0xF = 2, TASK_ARG 4; [play] *_talk_menu, square_menu
+; Box 2: the speaker of each talk slot then Return; box 1 "Talk with who?"; state 4 [code][play]
 ShowTalkMenu:
 	push	XHL
 	push	XDE
@@ -513,6 +523,7 @@ ShowTalkMenu.loop:
 	ld	A,(XDE)
 	calr	GetTalkRow
 	ld	A,(XHL+0)
+	; the row's speaker, NpcNames from speaker 0x15
 	sub	A,0x15
 	extz	WA
 	extz	XWA
@@ -555,7 +566,7 @@ ShowTalkMenu.skip:
 
 c_215031	section	code abs=0x215031
 
-; [code] ShowTalkMenu (the place's talk slots, TASK_ARG 4), DrawTownPlace, cursor +0x10 = 0 (or 8, Return, when the place has no talk slot +0x1A), StartWindowAnimToA; caller SquareMenuSelect
+; Talk menu and picture of the chosen place, cursor on the first slot (Return when none) [code]
 OpenPlaceTalkMenu:
 	push	XHL
 	push	XDE
@@ -581,7 +592,7 @@ OpenPlaceTalkMenu.skip2:
 
 c_215054	section	code abs=0x215054
 
-; [code] town place task state 4 (each frame, the talk menu of ShowTalkMenu): A -> sound 0x81, TalkMenuSelect; B -> sound 0x82, cursor +0x10 = 8 (Return), TalkMenuSelect; with slots (+0x1A != 0) up / down move +0x10 over 0..+0x1A - 1 and 8 with wrap, sound 0x80; DrawMenuCursor at x 0x60, y +0x10 * 8 + 4; +0x2D += 1
+; Place task state 4, each frame: up / down over the +0x1A slots and Return (8), wrapping; A chooses, B picks Return [code]
 TalkMenuInput:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -604,6 +615,7 @@ TalkMenuInput.skip:
 	calr	TalkMenuSelect
 	jrl	TalkMenuInput.done
 TalkMenuInput.skip2:
+	; no slots: only Return
 	ld	W,(XIZ+0x1A)
 	cp	W,0
 	jr	Z,TalkMenuInput.skip8
@@ -675,7 +687,7 @@ TalkMenuInput.done:
 
 c_215115	section	code abs=0x215115
 
-; [code] talk menu choice +0x10: 8 (Return) -> ResetTextBox1, Square cursor +0x10 = place - 1, place +0x15 = 0, SquarePlaceMenu again; else ResetTextBox1, ClearBox2, StartTownTalk, +0x1B = choice, talk row +0x12 = the chosen slot's row (task +0x1E + choice)
+; Return goes back to the Square menu on that place; a slot starts its talk: +0x1B = slot, talk row +0x12 = +0x1E[slot] [code]
 TalkMenuSelect:
 	push	XHL
 	push	XDE
@@ -685,6 +697,7 @@ TalkMenuSelect:
 	cp	A,8
 	jr	NZ,TalkMenuSelect.skip
 	calr	ResetTextBox1
+	; Square cursor back on this place
 	ld	A,(XIZ+0x15)
 	sub	A,1
 	ld	(XIZ+0x10),A
@@ -715,7 +728,7 @@ TalkMenuSelect.skip2:
 
 c_21624A	section	code abs=0x21624A
 
-; [code] WorksProtectorScene step 0: child ShakeScr2Amp4Task for 0x78 frames, sound 0x84, +0x2C = 0, step 1 (was sub_21624A)
+; Protector scene step 0: starts a 0x78-frame shake with its sound; step 1 [code]
 WorksProtectorShakeStart:
 	ld	XHL,ShakeScr2Amp4Task
 	call	StartChildTask
@@ -730,9 +743,10 @@ WorksProtectorShakeStart:
 
 c_21626A	section	code abs=0x21626A
 
-; [code] WorksProtectorScene step 1: wShakeFlags 6, +0x2C counts frames; from 0x39 wFadeLevel += 2 (to 0x7F, white); when the shake task has ended: ClearScr1Tilemap, EraseBox2 / EraseBox3, ClearTextBox1, DrawPortrait 0x36 at GetPictureFirstTile, PlayMusic 0, sound 0x20, step 2
-; [play] seen in play: after Lily's "But...I...!!??" the Works shakes and fades to white; picture 0x36 (a ruined city of broken white columns under a blue sky) is drawn behind the white (was sub_21626A)
+; Protector scene step 1: keeps both planes shaking, fades to white from frame 0x39; when the shake ends draws picture
+; 0x36 (a ruined city of white columns) behind the white with SONG_EVENT; step 2 [code][play]
 WorksProtectorShakeToWhite:
+	; shake SCR1 and SCR2
 	ld	A,6
 	ld	(wShakeFlags),A
 	ld	A,(XIZ+0x2C)
@@ -748,6 +762,7 @@ WorksProtectorShakeToWhite:
 WorksProtectorShakeToWhite.skip:
 	ld	(wFadeLevel),A
 WorksProtectorShakeToWhite.skip2:
+	; the shake child has ended
 	ld	WA,(XIZ+TASK_CHILDREN)
 	cp	WA,0
 	jr	NZ,WorksProtectorShakeToWhite.done
@@ -774,8 +789,7 @@ WorksProtectorShakeToWhite.done:
 
 c_2162D0	section	code abs=0x2162D0
 
-; [code] WorksProtectorScene step 2: FadeInFromWhiteStep(2); when done: talk line 16 (+0x12 = 0xF, TalkWorks "The time has come! The power is mine!...", next 0xEC), step 4, TASK_ARG 6 (the talk)
-; [play] seen in play: picture 0x36 fades in from white and the Protector's voice speaks over it (was sub_2162D0)
+; Protector scene step 2: fades in from white, then the Protector's line (talk row 0xF) and step 4 [code][play]
 WorksProtectorFadeIn:
 	ld	A,2
 	call	FadeInFromWhiteStep
@@ -792,7 +806,7 @@ WorksProtectorFadeIn.done:
 
 c_2162EA	section	code abs=0x2162EA
 
-; [code] WorksProtectorScene step 3: A or B -> step 4 (no writer of step 3 found; never executed in play)
+; Protector scene step 3: A or B -> step 4; no writer of step 3 [code]
 WorksProtectorWaitButton:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
@@ -814,8 +828,7 @@ WorksProtectorWaitButton.done:
 
 c_216306	section	code abs=0x216306
 
-; [code] WorksProtectorScene step 4 (talk next 0xEC): FadeToWhiteStep(2); when white: ClearScr1Tilemap, PlaceBox2 / PlaceBox3, ClearTextBox1, DrawTownPlace, PlayMusic 2, sound 0x22, step 5, SetFadeNormal, talk line 10 (+0x12 = 9), TASK_ARG 6
-; [play] seen in play: fades to white and the Works comes back; the talk goes on with "What's that" and Lily's "That's the Protector..." (was sub_216306)
+; Protector scene step 4 (talk next 0xEC): fades to white and back to the Works with SONG_WORKS, then talk row 9, step 5 [code][play]
 WorksProtectorFadeOut:
 	ld	A,2
 	call	FadeToWhiteStep
@@ -842,7 +855,7 @@ WorksProtectorFadeOut.done:
 
 c_216344	section	code abs=0x216344
 
-; [code] WorksProtectorScene step 5: talk line 10 (+0x12 = 9), TASK_ARG 6 (the same as the end of WorksProtectorFadeOut, which sets step 5; never executed in play)
+; Protector scene step 5: talk row 9 again (as WorksProtectorFadeOut); never reached in play [code]
 WorksProtectorResumeTalk:
 	ld	A,9
 	ld	(XIZ+0x12),A
@@ -852,8 +865,8 @@ WorksProtectorResumeTalk:
 
 c_21634F	section	code abs=0x21634F
 
-; [code] town place task state 9, by step +0x27: 0 WorksProtectorShakeStart, 1 WorksProtectorShakeToWhite, 2 WorksProtectorFadeIn, 3 WorksProtectorWaitButton, 4 WorksProtectorFadeOut, 5 WorksProtectorResumeTalk; +0x2D += 1; entered only from the talk nexts 0xED (step 0) and 0xEC (step kept), used only by TalkWorks line 9 (Lily "But...I...!!??") and line 16 (picture 0x36)
-; [play] seen in play: the story stage 8 Works talk (after Rank CS is won): screen shake, fade to white, picture 0x36 with the Protector's voice, fade in, fade out back to the Works; line 14 then sets event flag 9 (was sub_21634F)
+; Place task state 9, the stage 8 Works talk (after Rank CS): runs step +0x27 (shake, white, picture 0x36, back to the Works),
+; entered from talk nexts 0xED (step 0) and 0xEC [code][play]
 WorksProtectorScene:
 	ld	A,(XIZ+0x27)
 	cp	A,0
@@ -893,7 +906,7 @@ WorksProtectorScene.skip6:
 
 c_2169E5	section	code abs=0x2169E5
 
-; [code] ClearEventFlag 0x51-0x5E (every EVENT_GREETED_* flag but Jon's 0x50, EVENT_JON_NOT_READY_SEEN); SquarePlaceMenu calls it each time the Square menu is drawn
+; Clears every EVENT_GREETED_* flag but Jon's, each time the Square menu is drawn, so the greetings play again [code]
 ClearGreetedFlags:
 	push	XHL
 	push	BC

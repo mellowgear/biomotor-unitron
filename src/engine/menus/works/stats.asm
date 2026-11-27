@@ -33,19 +33,25 @@ SetupStatsMenu:
 	ld	XHL,MenuResults_217C97
 	ld	(wMenuValues),XHL
 	jp	MenuReset
+; [code] SetupItemPartsMenu (main.asm) choice strings
 ItemText8:
 	db	0x29,0x14,0x05,0x0D,0xFF	; "Item"
+; [code] SetupItemPartsMenu choice string
 PartsText:
 	text "Parts"
 	done
+; [code] SetupItemPartsMenu choice string
 ExitText6:
 	db	0x25,0x18,0x09,0x14,0xFF	; "Exit"
+; [code] SetupItemPartsMenu lines: column, row, text
 MenuLines_217CD5:
 	menu_item	0,0,ItemText8
 	menu_item	0,1,PartsText
 	menu_item	0,8,ExitText6
+; [code] SetupItemPartsMenu cursor cells
 MenuCursor_217CE7:
 	db	0,0, 0,1, 0,8	; column, row
+; [code] SetupItemPartsMenu results: Item 1, Parts 0, Exit 0xFF
 MenuResults_217CED:
 	db	0x01,0x00,0xFF
 
@@ -706,17 +712,23 @@ DrawCharaStatsPage.skip3:
 	ld	WA,0x302
 	call	DrawAffinityIcons
 	ret
+; [code] "------" for an empty DrawDevelopChoices slot
 DashText14:
 	db	0x59,0x59,0x59,0x59,0x59,0x59,0xFF	; "------"
+; [code] "(none)" for a negative tool slot in DrawDevelopChoices
 NoneText:
 	text "{61}none{63}"
 	done
+; [code] DrawDevelopChoices slot labels
 ArmText3:
 	db	0x21,0x12,0x0D,0xFF	; "Arm"
+; [code] DrawDevelopChoices slot label
 MateText3:
 	db	0x2D,0x01,0x14,0x05,0x5A,0xFF	; "Mate."
+; [code] DrawDevelopChoices slot label
 ToolText3:
 	db	0x34,0x0F,0x0F,0x0C,0xFF	; "Tool"
+; [code] DrawDevelopChoices labels at rows 0, 3, 6
 MenuLines_219108:
 	menu_item	0,0,ArmText3
 	menu_item	0,3,MateText3

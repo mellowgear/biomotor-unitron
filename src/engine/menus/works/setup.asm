@@ -97,6 +97,7 @@ GetEquipListRowEntry:
 	call	CallXHL
 	call	CheckEntryGroupIndex
 	ret
+; [code] Works slot getter per Setup list row 0-7
 EquipListRowGetters:
 	dl	GetWorksEquipBody,GetWorksEquipRightArm,GetWorksEquipLeftArm,GetWorksEquipCore
 	dl	GetWorksEquipLegs,GetWorksEquipBack,GetWorksEquipAcc1,GetWorksEquipAcc2
@@ -139,6 +140,7 @@ SetupEquipSlotList:
 SetupEquipSlotList.skip:
 	ld	A,0
 	jp	SetupSlotAccList
+; [code] list kind per Setup slot: 0 body, 4 arm, 1 core, 2 legs, 3 back, 5 accessory
 SetupSlotKinds:
 	db	0x00,0x04,0x04,0x01,0x02,0x03,0x05,0x05
 

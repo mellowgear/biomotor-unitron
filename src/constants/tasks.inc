@@ -9,5 +9,6 @@ TASK_FUNC	equ	0x8	; long: called by RunTasks each frame with XIZ = the slot (tas
 TASK_FUNC_HI	equ	0xA	; its high word [code]
 TASK_CHILDREN	equ	0xC	; word: live children (task_wait returns while nonzero) [code]
 TASK_ARG	equ	0xE	; the task's first argument word [code]
+BATTLE_HP_EP_TASK	equ	0x2C	; battle task (BattleStart ... BattleEnd): word, the BattleHPEPDisplayTask slot BattleEnd ends [code]
 TASK_END_BIT	equ	7	; EndTask: RunTasks unlinks the slot and wakes the parent [code]
 TASK_END_CHILDREN_BIT	equ	6	; EndChildTasks: the children end (RunTasks sets both bits on them) [code]

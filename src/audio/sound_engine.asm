@@ -2,9 +2,9 @@
 
 c_200040	section	code abs=0x200040
 
-; hold Z80 in reset, upload driver, release it
+; Boot: stops the Z80 (0xB8 = 0xAAAA), uploads the driver, restarts it (0x5555) and starts timer 3 at rate 2000 [U2]
 InitSound:
-	ldw	(0xB8),0xAAAA
+	ldw	(0xB8),0xAAAA	; 0xB8: AAAA = Z80 stopped, 5555 = running (docs/Z80_DRIVER.md)
 	nop
 	call	UploadZ80Driver
 	ldw	(0xB8),0x5555
@@ -15,6 +15,7 @@ InitSound:
 
 c_200055	section	code abs=0x200055
 
+; Empties wSoundQueue, clears wSoundBlockMask and takes the current port 0xBC as wSoundAckExpected [U2]
 ResetSoundState:
 	sub	A,A
 	ld	(wSoundQueueRead:24),A
@@ -26,7 +27,8 @@ ResetSoundState:
 
 c_20006F	section	code abs=0x20006F
 
-; [code] A = command: 0x80-0x85 set/clear wSoundBlockMask bits, 0xFF reset, else queued in the 16-entry ring wSoundQueue
+; Queues sound id WA as a driver command (SoundIdToCommand) in the 16-entry ring wSoundQueue; 0x80..0x85
+; set / clear wSoundBlockMask bits instead, 0xFF also resets the queue; a full queue drops its oldest entry. C = taken [U2]
 QueueSoundCommand:
 	push	WA
 	push	XIX
@@ -41,7 +43,7 @@ QueueSoundCommand.skip:
 	jr	NC,QueueSoundCommand.skip3
 	ld	W,A
 	and	W,7
-	cp	A,0x83
+	cp	A,0x83	; 0x80..0x82 block channel 1..3 (?), 0x83..0x85 unblock
 	jr	NC,QueueSoundCommand.skip2
 	inc	1,W
 	or	(wSoundBlockMask:24),W
@@ -88,7 +90,8 @@ QueueSoundCommand.skip7:
 
 c_2000E8	section	code abs=0x2000E8
 
-; [code] each main-loop frame (Reset): while wSoundQueue is not empty and port 0xBC = wSoundAckExpected, dequeue a command, drop it if CheckSoundCommandBlocked, else write it to 0xBC, wSoundAckExpected = its complement, 0xBA = 1; C if the queue was emptied or one was sent
+; Each main-loop frame: once the Z80 has acknowledged (0xBC = wSoundAckExpected), sends the next unblocked
+; command: 0xBC = command, wSoundAckExpected = its complement, 0xBA = 1 (Z80 NMI). C = sent or queue empty [U2]
 SendQueuedSoundCommand:
 	push	WA
 	push	XIX
@@ -122,7 +125,8 @@ SendQueuedSoundCommand.skip3:
 
 c_200122	section	code abs=0x200122
 
-; XWA = song number; table at SongTable
+; Loads song XWA (SongTable) into the Z80: driver restart (re-upload if no answer in 100 reads), header, voices
+; (SoundInit records), then each track block, recording ids in wMusicTrackIds / wSfxTrackIds. C = no song / error [U2]
 PlaySong:
 	push	XBC
 	push	XDE
@@ -180,7 +184,7 @@ PlaySong.loop2:
 	djnz	C,PlaySong.loop2
 	ld	DE,(XHL+2)
 	extz	XDE
-	add	XDE,0x7000
+	add	XDE,Z80_RAM
 	ld	(wZ80SongWrite:24),XDE
 	ld	XDE,(wZ80SongHeader:24)
 	calr	SetZ80Pointer
@@ -207,7 +211,7 @@ PlaySong.loop3:
 	ld	XIY,wMusicTrackCount
 PlaySong.loop4:
 	ld	E,(XIY)
-	cp	E,0x20
+	cp	E,0x20	; at most 32 tracks per table
 	jp	NC,PlaySong.skip3
 	ld	XDE,(XHL+)
 	or	XDE,XDE
@@ -228,7 +232,7 @@ PlaySong.skip2:
 	ld	E,(XHL+)
 	extz	DE
 	ld	BC,(XHL)
-	and	BC,0x3FFF
+	and	BC,0x3FFF	; block length (top two bits = channel count - 1)
 	sub	BC,DE
 	sub	BC,WA
 	ld	(wSongBlockLength:24),DE
@@ -260,7 +264,7 @@ PlaySong.skip3:
 
 c_200289	section	code abs=0x200289
 
-; [code] -> A = next byte of wSoundQueue at wSoundQueueRead (index advanced, mod 16), C; NC if the ring is empty
+; A = the oldest queued command and C; NC if wSoundQueue is empty [U2]
 DequeueSoundCommand:
 	ld	W,(wSoundQueueRead:24)
 	cp	(wSoundQueueWrite:24),W
@@ -277,7 +281,8 @@ DequeueSoundCommand:
 
 c_2002B1	section	code abs=0x2002B1
 
-; [code] A = command: bit 7 set -> NC; else C, NZ if wSoundBlockMask has bit 0 (command bit 0 set) or bit 1 (bit 0 clear)
+; Command A: 0x80 up are never blocked (NC); else C, and NZ when its channel (bit 0 set: mask bit 0,
+; else bit 1) is blocked in wSoundBlockMask [U2]
 CheckSoundCommandBlocked:
 	bit	7,A
 	jr	Z,CheckSoundCommandBlocked.skip
@@ -295,7 +300,8 @@ CheckSoundCommandBlocked.skip2:
 
 c_2002C8	section	code abs=0x2002C8
 
-; [code] WA = sound id -> A = Z80 command, C: W bit 7 set -> A as is; 0x7F -> 1; < 0x20 -> A*2 | 0xC0; else its index (WA & 0x1FF searched) in a 32-word id list that PlaySong fills -> index*4 | E: ids below 0x80 list wMusicTrackIds, E = 3; 0x80-0x27F list wSfxTrackIds, E = 2; 0x280 and up list wSfxTrackIds, E = 0; NC if not found
+; Sound id WA to driver command A: W bit 7 = A as is, 0x7F = 1 (stop music), below 0x20 = 0xC0 + 2n, else the
+; loaded track index * 4 + 3 (music, wMusicTrackIds) / + 2 or + 0 (SFX, wSfxTrackIds). NC = not loaded [U2]
 SoundIdToCommand:
 	bit	7,W
 	scf
@@ -346,20 +352,21 @@ SoundIdToCommand.skip4:
 
 c_200322	section	code abs=0x200322
 
-; LDIR XHL -> Z80 RAM at the running pointer
+; Copies BC bytes from XHL to Z80 RAM at wZ80CopyPointer and advances it (falls into SetZ80Pointer). Out: XDE [U2]
 CopyToZ80:
 	ld	XDE,(wZ80CopyPointer:24)
 	ldir	(XDE+),(XHL+)
 
 c_200329	section	code abs=0x200329
 
+; wZ80CopyPointer = XDE [U2]
 SetZ80Pointer:
 	ld	(wZ80CopyPointer:24),XDE
 	ret
 
 c_20032F	section	code abs=0x20032F
 
-; [code] WA = rate (InitSound passes 0x7D0): stops timer 3, sets T23MOD / TFFCR, TREG3 = WA*1000/0x5000 (rounded), restarts timer 3 (TRUN bits 3 and 7)
+; Starts timer 3 (TREG3 = WA * 1000 / 0x5000, rounded) with flip-flop output on TFFCR, the Z80 tempo clock (?) [U2]
 SetupTimer3:
 	push	XWA
 	andb	(TRUN),0xF7
@@ -380,16 +387,17 @@ SetupTimer3.skip:
 
 c_20035E	section	code abs=0x20035E
 
-; copies Z80Driver to 0x7000
+; Copies Z80Driver to Z80_RAM (length = its word at +0x8F), then Z80CmdTable after the 6-byte song header slot;
+; sets wZ80SongHeader and wZ80Voices (where PlaySong puts the voices) [U2]
 UploadZ80Driver:
-	ld	XDE,0x7000
+	ld	XDE,Z80_RAM
 	calr	SetZ80Pointer
 	ld	XHL,Z80Driver
 	ld	XDE,XHL
 	ld	BC,(XDE+0x8F)
 	ld	DE,BC
 	extz	XDE
-	lda	XDE,XDE+0x7000
+	lda	XDE,XDE+Z80_RAM
 	ld	(wZ80SongHeader:24),XDE
 	calr	CopyToZ80
 	add	XDE,6

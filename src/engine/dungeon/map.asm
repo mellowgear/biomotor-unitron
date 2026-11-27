@@ -249,7 +249,7 @@ FindFloorStartCell:
 	push	XDE
 	push	BC
 	push	XWA
-	ld	A,(XIZ+0x12)
+	ld	A,(XIZ+DUNGEON_CHANGE)
 	; arriving by stairs: look for the matching stairs (0x200 after floor - 1, 0x100 after floor + 1); XIZ+0x2C is scratch
 	cp	A,2
 	jr	Z,FindFloorStartCell.skip

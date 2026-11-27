@@ -8,7 +8,7 @@ RollCollaOffer:
 	push	C
 	push	XWA
 	call	GetStageArenaRank
-	cp	A,3
+	cp	A,3	; clamp the arena rank to 3-8: odds column 0-5
 	jr	NC,RollCollaOffer.skip
 	ld	A,3
 	jr	RollCollaOffer.skip2
@@ -26,10 +26,11 @@ RollCollaOffer.skip2:
 	push	W
 	call	Random
 	ld	W,0
-	div	WA,0x64
+	div	WA,0x64	; remainder of Random / 100 lands in W
 	ld	A,W
 	pop	W
 	ld	C,0
+; walk the column (rows 6 bytes apart) until the roll goes negative: C = offer line
 RollCollaOffer.loop:
 	ld	W,(XHL)
 	sub	A,W
@@ -47,6 +48,7 @@ RollCollaOffer.skip3:
 	ld	A,W
 	pop	W
 	ld	C,0
+; same walk over the price odds, one byte per price column
 RollCollaOffer.loop2:
 	ld	W,(XHL)
 	sub	A,W
@@ -72,7 +74,7 @@ ShowCollaOffer:
 	ld	A,2
 	call	DrawBoxString
 	push	XHL
-	ld	A,(XIZ+0x28)
+	ld	A,(XIZ+0x28)	; CollaItems: one item byte per offer line
 	extz	WA
 	extz	XWA
 	ld	XHL,CollaItems
@@ -94,7 +96,7 @@ ShowCollaOffer:
 	ld	A,(XIZ+0x28)
 	extz	WA
 	extz	XWA
-	mul	XWA,5
+	mul	XWA,5	; CollaPrices: 5 price columns of 4-byte BCD per offer line
 	ld	XHL,XWA
 	ld	A,(XIZ+0x29)
 	extz	WA
@@ -124,7 +126,7 @@ CollaOfferWait:
 	jr	Z,CollaOfferWait.skip
 	jr	CollaOfferWait.skip3
 CollaOfferWait.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CollaOfferWait.skip2
 	jr	CollaOfferWait.skip3
 CollaOfferWait.skip2:
@@ -180,7 +182,7 @@ CollaBuy:
 	pop	WA
 	jr	CollaBuy.skip7
 CollaBuy.skip:
-	bit	5,A
+	bit	BIT_B_BUTTON,A
 	jr	Z,CollaBuy.skip2
 	push	WA
 	ld	WA,SFX_CANCEL
@@ -190,9 +192,9 @@ CollaBuy.skip:
 	ld	(XIZ+0x10),A
 	jr	CollaBuy.skip7
 CollaBuy.skip2:
-	and	A,0xF
+	and	A,D_PAD
 	jr	Z,CollaBuy.skip6
-	cp	A,4
+	cp	A,D_LEFT
 	jr	NZ,CollaBuy.skip4
 	ld	A,(XIZ+0x10)
 	cp	A,0
@@ -207,7 +209,7 @@ CollaBuy.skip2:
 CollaBuy.skip3:
 	jr	CollaBuy.skip6
 CollaBuy.skip4:
-	cp	A,8
+	cp	A,D_RIGHT
 	jr	NZ,CollaBuy.skip6
 	ld	A,(XIZ+0x10)
 	cp	A,1
@@ -235,9 +237,10 @@ CollaBuy.skip7:
 	ld	A,(XIZ+0x10)
 	cp	A,0
 	jr	Z,CollaBuy.skip8
-	ld	A,0x21
+	ld	A,0x21	; No: talk row 0x21
 	jrl	CollaBuy.skip11
 CollaBuy.skip8:
+; Yes: price check first; SubBCD carry = not enough GP (row 0x22)
 	push	XWA
 	ld	A,(XIZ+0x28)
 	extz	WA
@@ -270,9 +273,10 @@ CollaBuy.skip9:
 	extz	WA
 	pop	XHL
 	call	AddItem
-	jr	NC,CollaBuy.skip10
+	jr	NC,CollaBuy.skip10	; carry = not given (row 0x23, no room?)
 	ld	A,0x23
 	jr	CollaBuy.skip11
+; paid only after the item went in: the price is looked up again and taken from wGP
 CollaBuy.skip10:
 	push	XWA
 	ld	A,(XIZ+0x28)
@@ -294,7 +298,7 @@ CollaBuy.skip10:
 	call	SubBCD
 	ld	(wGP),XWA
 	call	DrawGPBox3
-	ld	A,0x20
+	ld	A,0x20	; row 0x20: bought
 	jr	CollaBuy.skip11
 CollaBuy.skip11:
 	ld	(XIZ+0x12),A
@@ -338,11 +342,11 @@ c_216649	section	code abs=0x216649
 ; [code+play] post-game thank-you: gift from TetisGifts by autograph count and gender, then removes the autographs
 TetisGift:
 	push	W
-	ld	WA,0xFF
+	ld	WA,0xFF	; item 0xFF = the autograph (?): A = how many the player holds
 	call	GetInventoryByte
 	pop	W
 	dec	1,A
-	sll	1,A
+	sll	1,A	; two gifts per count: male, then female
 	ld	W,A
 	call	IsPlayerMale
 	xor	A,1
@@ -353,7 +357,7 @@ TetisGift:
 	add	XHL,XWA
 	ld	A,(XHL)
 	push	A
-	add	A,0x54
+	add	A,0x54	; thank-you talk rows start at 0x54
 	ld	(XIZ+0x12),A
 	ld	A,6
 	ld	(XIZ+TASK_ARG),A
@@ -365,7 +369,7 @@ TetisGift:
 	ld	XHL,TetisGifts
 	add	XHL,XWA
 	ld	WA,(XHL)
-	call	AddItem
+	call	AddItem	; carry: no gift and the autographs stay, but the thank-you row is already set
 	jr	C,TetisGift.done
 	push	W
 	ld	WA,0xFF
@@ -373,7 +377,7 @@ TetisGift:
 	pop	W
 	ld	C,A
 TetisGift.loop:
-	ld	WA,0xFF
+	ld	WA,0xFF	; remove every autograph
 	push	C
 	call	RemoveItem
 	pop	C
@@ -403,8 +407,9 @@ DrawBcdDigits:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	E,C
+	ld	E,C	; E = digit count kept for the second pass
 	ld	B,A
+; shift the low nibble of XHL into A per digit and stack it, least significant first
 DrawBcdDigits.loop:
 	srl	1,XHL
 	rr	1,A
@@ -417,16 +422,16 @@ DrawBcdDigits.loop:
 	srl	4,A
 	push	A
 	djnz	C,DrawBcdDigits.loop
-	ld	W,0xA
+	ld	W,0xA	; W = 0xA: blank glyph offset while the digits are leading zeros
 	ld	C,E
 DrawBcdDigits.loop2:
 	pop	A
 	cp	A,0
 	jr	NZ,DrawBcdDigits.skip
-	cp	C,1
+	cp	C,1	; the last digit always shows, even 0
 	jr	NZ,DrawBcdDigits.skip2
 DrawBcdDigits.skip:
-	ld	W,0
+	ld	W,0	; first nonzero digit ends the blanking
 DrawBcdDigits.skip2:
 	add	A,W
 	push	BC
