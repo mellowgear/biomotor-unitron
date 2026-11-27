@@ -782,7 +782,7 @@ GetItemGroupIds:
 c_21B911	section	code abs=0x21B911
 
 ; [code] WA = ItemValues_25B379[WA] (no other reader of that column); no callers
-swp_21B911:
+Unused_21B911:
 	push	XHL
 	add	WA,WA
 	ld	XHL,ItemValues_25B379

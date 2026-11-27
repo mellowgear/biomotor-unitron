@@ -51,7 +51,7 @@ ClearTalkedFlags:
 	call	ClearEventFlag
 	ld	HL,EVENT_TALKED_SHOP
 	call	ClearEventFlag
-	ld	HL,0x44
+	ld	HL,EVENT_TALKED_LANA
 	call	ClearEventFlag
 	ld	HL,EVENT_TALKED_WYSE
 	call	ClearEventFlag
@@ -71,7 +71,7 @@ ClearTalkedFlags:
 	call	ClearEventFlag
 	ld	HL,EVENT_TALKED_TETIS
 	call	ClearEventFlag
-	ld	HL,EVENT_TALKED_RENAB
+	ld	HL,EVENT_TALKED_WORKS
 	call	ClearEventFlag
 	pop	A
 	pop	BC
@@ -97,7 +97,7 @@ c_216AA2	section	code abs=0x216AA2
 GetStoryStage:
 	push	XHL
 	push	BC
-	ld	HL,0xB
+	ld	HL,EVENT_STAGE_WON_RANK_X
 GetStoryStage.loop:
 	push	HL
 	call	CheckEventFlag

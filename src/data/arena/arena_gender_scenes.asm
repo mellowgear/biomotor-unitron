@@ -1,5 +1,5 @@
 ; ArenaGenderScenes (arena_gender_scenes): 16 records of 2 bytes, one line per id; keep the order and count.
-; sub_2132FC: a scene number 0x50 + 2 * (line - 1) stands for the pair: the female or male
+; GetArenaGenderScene: a scene number 0x50 + 2 * (line - 1) stands for the pair: the female or male
 ; scene (tables/arena_scenes/ line - 1) by IsPlayerMale.
 ; id: female, male
 	db	17,18	; 1

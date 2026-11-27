@@ -19,12 +19,12 @@ TownPlaceTaskSquare:
 
 c_214C0E	section	code abs=0x214C0E
 
-; [code] town place task for the Works (StreetGoWorks): +0x15 = 7 at story stage 0 and 8 at stage 0xA while EVENT_TALKED_RENAB is clear (both clear SCR1 and SCR2), else 5 (Works, wFadeLevel = 0); then TASK_ARG 5, +0x23 = 0xFF, TASK_FUNC = TownPlaceTask
+; [code] town place task for the Works (StreetGoWorks): +0x15 = 7 at story stage 0 and 8 at stage 0xA while EVENT_TALKED_WORKS is clear (both clear SCR1 and SCR2), else 5 (Works, wFadeLevel = 0); then TASK_ARG 5, +0x23 = 0xFF, TASK_FUNC = TownPlaceTask
 TownPlaceTaskWorks:
 	call	GetStoryStage
 	cp	A,0
 	jr	NZ,TownPlaceTaskWorksEnding
-	ld	HL,EVENT_TALKED_RENAB
+	ld	HL,EVENT_TALKED_WORKS
 	call	CheckEventFlag
 	cp	L,1
 	jr	Z,TownPlaceTaskWorksEnding
@@ -36,12 +36,12 @@ TownPlaceTaskWorks:
 
 c_214C30	section	code abs=0x214C30
 
-; [code] TownPlaceTaskWorks, story stage not 0: at stage 0xA while EVENT_TALKED_RENAB is clear, ClearScr1Tilemap + ClearScr2Tilemap and place +0x15 = 8 (TalkPlace8 "One year later... At the capital of Rhafiace"), else TownPlaceTaskWorksPlace5
+; [code] TownPlaceTaskWorks, story stage not 0: at stage 0xA while EVENT_TALKED_WORKS is clear, ClearScr1Tilemap + ClearScr2Tilemap and place +0x15 = 8 (TalkPlace8 "One year later... At the capital of Rhafiace"), else TownPlaceTaskWorksPlace5
 TownPlaceTaskWorksEnding:
 	call	GetStoryStage
 	cp	A,0xA
 	jr	NZ,TownPlaceTaskWorksPlace5
-	ld	HL,EVENT_TALKED_RENAB
+	ld	HL,EVENT_TALKED_WORKS
 	call	CheckEventFlag
 	cp	L,1
 	jr	Z,TownPlaceTaskWorksPlace5
@@ -893,7 +893,7 @@ WorksProtectorScene.skip6:
 
 c_2169E5	section	code abs=0x2169E5
 
-; [code] ClearEventFlag 0x51-0x5E (the EVENT_GREETED_* flags and 0x53, 0x54, 0x5E); SquarePlaceMenu calls it each time the Square menu is drawn
+; [code] ClearEventFlag 0x51-0x5E (every EVENT_GREETED_* flag but Jon's 0x50, EVENT_JON_NOT_READY_SEEN); SquarePlaceMenu calls it each time the Square menu is drawn
 ClearGreetedFlags:
 	push	XHL
 	push	BC
@@ -902,9 +902,9 @@ ClearGreetedFlags:
 	call	ClearEventFlag
 	ld	HL,EVENT_GREETED_CYRIUS
 	call	ClearEventFlag
-	ld	HL,0x53
+	ld	HL,EVENT_GREETED_GALB
 	call	ClearEventFlag
-	ld	HL,0x54
+	ld	HL,EVENT_GREETED_LANA
 	call	ClearEventFlag
 	ld	HL,EVENT_GREETED_WYSE
 	call	ClearEventFlag
@@ -924,7 +924,7 @@ ClearGreetedFlags:
 	call	ClearEventFlag
 	ld	HL,EVENT_GREETED_TETIS
 	call	ClearEventFlag
-	ld	HL,0x5E
+	ld	HL,EVENT_GREETED_WORKS
 	call	ClearEventFlag
 	pop	A
 	pop	BC

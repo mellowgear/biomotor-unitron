@@ -806,7 +806,7 @@ BlackFlashEffectTask.skip:
 c_210213	section	code abs=0x210213
 
 ; [code] ret; no callers (between BlackFlashEffectTask and PlayBattleEffect)
-swp_210213:
+Unused_210213:
 	ret
 
 c_210214	section	code abs=0x210214

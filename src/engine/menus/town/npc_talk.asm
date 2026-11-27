@@ -104,7 +104,7 @@ TownNpcTalk:
 	ld	A,(XHL+0)
 	sub	A,0x15
 	ld	E,A
-	ld	HL,0x40
+	ld	HL,EVENT_TALKED_BASE
 	ld	A,E
 	extz	WA
 	add	HL,WA
@@ -201,7 +201,7 @@ TownNpcTalk.skip9:
 	jr	TownNpcTalk.skip10
 TownNpcTalk.skip10:
 	ld	D,0
-	ld	HL,0x50
+	ld	HL,EVENT_GREETED_BASE
 	ld	A,E
 	extz	WA
 	add	HL,WA
@@ -285,7 +285,7 @@ GetPlaceEntryTalkRow:
 
 c_215379	section	code abs=0x215379
 
-; [code] GetPlaceEntryTalkRow for the Works (place 5), by GetStoryStage: 0 WorksEntryTalkRowStage0; 8 row 3 while EVENT_TALKED_RENAB is clear, row 5 once the 13 EVENT_TALKED flags Renab, Jon, Cyrius, Shop, Wyse, Ziggy, Ceus, Helmut, Alda, Camil, Meese, Colla, Tetis are all set, else row 4; 0xA row 0xE while EVENT_TALKED_RENAB is clear, else 0xFF; other stages 0xFF
+; [code] GetPlaceEntryTalkRow for the Works (place 5), by GetStoryStage: 0 WorksEntryTalkRowStage0; 8 row 3 while EVENT_TALKED_WORKS is clear, row 5 once the 13 EVENT_TALKED flags Works, Jon, Cyrius, Shop, Wyse, Ziggy, Ceus, Helmut, Alda, Camil, Meese, Colla, Tetis are all set, else row 4; 0xA row 0xE while EVENT_TALKED_WORKS is clear, else 0xFF; other stages 0xFF
 WorksEntryTalkRow:
 	call	GetStoryStage
 	cp	A,0xA
@@ -299,9 +299,9 @@ WorksEntryTalkRow:
 
 c_215391	section	code abs=0x215391
 
-; [code] WorksEntryTalkRow at story stage 0: row 0 while EVENT_TALKED_RENAB is clear; row 2 when EVENT_TALKED Jon, Lily, Shop, Wyse, Ceus, Helmut, Camil and Meese are all set; else WorksEntryTalkRow1
+; [code] WorksEntryTalkRow at story stage 0: row 0 while EVENT_TALKED_WORKS is clear; row 2 when EVENT_TALKED Jon, Lily, Shop, Wyse, Ceus, Helmut, Camil and Meese are all set; else WorksEntryTalkRow1
 WorksEntryTalkRowStage0:
-	ld	HL,EVENT_TALKED_RENAB
+	ld	HL,EVENT_TALKED_WORKS
 	call	CheckEventFlag
 	cp	L,0
 	jr	Z,WorksEntryTalkRow0
@@ -349,16 +349,16 @@ WorksEntryTalkRow1:
 
 c_2153FE	section	code abs=0x2153FE
 
-; [code] WorksEntryTalkRowStage0 with EVENT_TALKED_RENAB clear: W = 0 (was loc_2153FE)
+; [code] WorksEntryTalkRowStage0 with EVENT_TALKED_WORKS clear: W = 0 (was loc_2153FE)
 WorksEntryTalkRow0:
 	ld	W,0
 	jrl	GetPlaceEntryTalkRowDone
 
 c_215403	section	code abs=0x215403
 
-; [code] WorksEntryTalkRow at story stage 8: row 3 while EVENT_TALKED_RENAB is clear, 5 when the 13 EVENT_TALKED flags (Renab ... Tetis) are all set, else 4 (was loc_215403)
+; [code] WorksEntryTalkRow at story stage 8: row 3 while EVENT_TALKED_WORKS is clear, 5 when the 13 EVENT_TALKED flags (Works ... Tetis) are all set, else 4 (was loc_215403)
 WorksEntryTalkRowStage8:
-	ld	HL,EVENT_TALKED_RENAB
+	ld	HL,EVENT_TALKED_WORKS
 	call	CheckEventFlag
 	cp	L,0
 	jrl	Z,WorksEntryTalkRowStage8.skip2
@@ -421,9 +421,9 @@ WorksEntryTalkRowStage8.skip2:
 
 c_21549F	section	code abs=0x21549F
 
-; [code] WorksEntryTalkRow at story stage 0xA: row 0xE while EVENT_TALKED_RENAB is clear, else 0xFF (was loc_21549F)
+; [code] WorksEntryTalkRow at story stage 0xA: row 0xE while EVENT_TALKED_WORKS is clear, else 0xFF (was loc_21549F)
 WorksEntryTalkRowStageA:
-	ld	HL,EVENT_TALKED_RENAB
+	ld	HL,EVENT_TALKED_WORKS
 	call	CheckEventFlag
 	cp	L,0
 	jr	Z,WorksEntryTalkRowStageA.skip
@@ -509,13 +509,13 @@ NpcTalkRowAction:
 	push	A
 	call	SetEventFlag
 	pop	A
-	cp	A,1
+	cp	A,EVENT_STAGE_ARENA_OPEN
 	jr	Z,NpcTalkRowAction.skip
-	cp	A,9
+	cp	A,EVENT_STAGE_LILY
 	jr	Z,NpcTalkRowAction.skip2
-	cp	A,0x4D
+	cp	A,EVENT_TALKED_TETIS
 	jr	Z,NpcTalkRowAction.skip3
-	cp	A,0x4A
+	cp	A,EVENT_TALKED_CAMIL
 	jrl	Z,NpcTalkRowAction.skip4
 	jrl	NpcTalkRowNext
 NpcTalkRowAction.skip:
@@ -1301,7 +1301,7 @@ CountEmblemFlags:
 	push	XHL
 	push	BC
 	push	W
-	ld	HL,0x10
+	ld	HL,EVENT_EMBLEM_GREEN
 	ld	A,0
 	ld	W,4
 CountEmblemFlags.loop:

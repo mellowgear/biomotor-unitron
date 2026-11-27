@@ -19,7 +19,7 @@ GetFloorBossBeaten.skip:
 	cp	A,8
 	jr	Z,GetFloorBossBeaten.skip2
 	extz	WA
-	ld	HL,0x60
+	ld	HL,EVENT_BEAT_ENT
 	add	HL,WA
 	call	CheckEventFlag
 	ld	A,L
@@ -613,7 +613,7 @@ BossEncounter.skip23:
 	cp	A,4
 	jr	C,BossEncounter.skip25
 	extz	WA
-	ld	HL,0x60
+	ld	HL,EVENT_BEAT_ENT
 	add	HL,WA
 	call	SetEventFlag
 	call	LoadBossMapSprite
@@ -657,7 +657,7 @@ BossEncounter.skip29:
 	jr	NC,BossEncounter.skip31
 	calr	EraseDungeonBox6
 	extz	WA
-	ld	HL,0x60
+	ld	HL,EVENT_BEAT_ENT
 	add	HL,WA
 	call	SetEventFlag
 	ld	A,(XIZ+DUNGEON_ID)
@@ -665,7 +665,7 @@ BossEncounter.skip29:
 	jr	Z,BossEncounter.skip30
 	sub	A,1
 	extz	WA
-	ld	HL,0x10
+	ld	HL,EVENT_EMBLEM_GREEN
 	add	HL,WA
 	call	SetEventFlag
 	jr	BossEncounter.skip30

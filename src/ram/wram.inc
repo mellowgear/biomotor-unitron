@@ -58,6 +58,7 @@ wOptionMessageSpeed	equ	0x5280
 wOptionAnimation	equ	0x5281
 
 ; game mode, dungeon position and floor state
+; [code] MAX_TASKS (0x20) task slots of TASK_SLOT_SIZE (0x2E) bytes, ending at wTaskList (InitTaskList, FindFreeTaskSlot)
 wTasks	equ	0x5282
 wGameMode	equ	0x52BF
 wDungeonId	equ	0x52C0

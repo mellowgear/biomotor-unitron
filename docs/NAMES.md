@@ -32,3 +32,18 @@ Evidence tags:
 | 0x6DA0 | wBios6DA0 | BIOS byte zeroed on a mono NGP (InitConsoleType) | [U2] |
 | 0x6E97 | wBiosCs1Input | last CS1 card joypad byte (MergeCs1CardInput) | [U2] |
 | 0x6F83 | wBios6F83 | BIOS byte, bit 3 cleared on a mono NGP (InitConsoleType) | [U2] |
+| 0x210213 | Unused_210213 | ret; no callers (between BlackFlashEffectTask and PlayBattleEffect) | generic |
+| 0x21037F | Unused_21037F | ret; no callers (before DrawPortraitAt) | generic |
+| 0x210442 | Unused_210442 | ret; no callers (before WorldMapTaskInit) | generic |
+| 0x212619 | Unused_212619 | pushes and pops XHL/XDE/XBC/XWA, ret: does nothing; no callers | generic |
+| 0x2175FA | Unused_2175FA | sets TASK_FUNC to its own ret (idle task step); no callers | generic |
+| 0x21783D | Unused_21783D | same as Unused_2175FA; no callers | generic |
+| 0x21B911 | Unused_21B911 | WA = ItemValues_25B379[WA], the only reader of that column; no callers | generic |
+| 0x21D224 | Unused_21D224 | carry when wLinkRecvPacket+2 and +4 are both non-zero; no callers | generic |
+| flag 0x40 | EVENT_TALKED_BASE | first talked-this-stage flag; NPC n = talk speaker - 0x15 uses 0x40 + n (TownNpcTalk) | [code] |
+| flag 0x44 | EVENT_TALKED_LANA | Lana's talked slot; only cleared (ClearTalkedFlags), her rows set 0x43 | [code] |
+| flag 0x4E | EVENT_TALKED_WORKS | the player's Works arrival talk seen this stage (Works rows 0, 3, 14); was EVENT_TALKED_RENAB, no such NPC | [code] |
+| flag 0x50 | EVENT_GREETED_BASE | first greeted flag; NPC n uses 0x50 + n (TownNpcTalk); 0x50 itself is EVENT_JON_NOT_READY_SEEN | [code] |
+| flag 0x53 | EVENT_GREETED_GALB | Galb's greeted slot; only cleared (ClearGreetedFlags) | [code] |
+| flag 0x54 | EVENT_GREETED_LANA | Lana's greeted slot; only cleared | [code] |
+| flag 0x5E | EVENT_GREETED_WORKS | greeted slot 14; only cleared | [code] |

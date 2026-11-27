@@ -671,7 +671,7 @@ CheckLinkStatus:
 c_21D224	section	code abs=0x21D224
 
 ; [code] C when received packet words +2 (wLinkRecvPacket+2) and +4 (wLinkRecvPacket+4) are both non-zero; no caller found
-swp_21D224:
+Unused_21D224:
 	ld	BC,(wLinkRecvPacket+2)
 	or	BC,BC
 	ret	Z

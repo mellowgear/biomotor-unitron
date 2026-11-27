@@ -292,7 +292,7 @@ DrawBeatenDungeonMarkers:
 	push	XDE
 	push	XBC
 	push	XWA
-	ld	HL,0x60
+	ld	HL,EVENT_BEAT_ENT
 	ld	C,4
 DrawBeatenDungeonMarkers.loop:
 	push	C
@@ -302,7 +302,7 @@ DrawBeatenDungeonMarkers.loop:
 	jr	Z,DrawBeatenDungeonMarkers.skip
 	pop	HL
 	push	HL
-	sub	HL,0x60
+	sub	HL,EVENT_BEAT_ENT
 	ld	A,L
 	calr	DrawWorldMapMarker
 DrawBeatenDungeonMarkers.skip:

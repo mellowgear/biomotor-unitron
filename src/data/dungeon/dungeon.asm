@@ -1,5 +1,5 @@
 ; data/dungeon/dungeon.asm: the dungeon data set. Edited by hand.
-; Read by sub_211B35 through DungeonData; maps indexed by DungeonMaps (map id).
+; Read by LoadDungeonFloor through DungeonData; maps indexed by DungeonMaps (map id).
 
 d_228741	section	romdata abs=0x228741
 DungeonMetatiles:          ; 441 x 2x2 tile map entries

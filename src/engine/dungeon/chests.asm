@@ -115,7 +115,7 @@ SetMineChests.loop2:
 	ld	HL,(XDE+4)
 	extz	HL
 	add	HL,WA
-	add	HL,0x70
+	add	HL,EVENT_MINE_CHESTS
 	push	BC
 	call	CheckEventFlag
 	pop	BC
@@ -550,7 +550,7 @@ MarkChestOpened:
 	ld	HL,(XHL+3)
 	extz	HL
 	add	HL,WA
-	add	HL,0x70
+	add	HL,EVENT_MINE_CHESTS
 	call	SetEventFlag
 MarkChestOpened.skip:
 	calr	LoadFloorChestSprites

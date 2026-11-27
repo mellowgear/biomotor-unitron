@@ -388,7 +388,7 @@ Each PlayMusic loads a song (a bank of tracks); then SoundCommand starts the mus
 |---|---|
 | 0 | Reset (PlaySong direct, no start); arena ArenaPreDuelGateOpen (then 0x84 SFX), ArenaRoundsComplete, ArenaBattleLost; ArenaDuel6Scene; WorksProtectorShakeToWhite (all + 0x20) |
 | 1 | StreetMenuTask, OpenSquareMenu (+0x21) |
-| 2 | StartPlaceEntryTalkWorks; TownTalkWindowOpen (x2), WorksProtectorFadeOut (+0x22); TalkGoToWorksRow0, loc_215A64 (no start nearby); PlayMusic2 -> CallPlayMusic |
+| 2 | StartPlaceEntryTalkWorks; TownTalkWindowOpen (x2), WorksProtectorFadeOut (+0x22); TalkGoToWorksRow0, TalkGoToWorksRowE (no start nearby); PlayMusic2 -> CallPlayMusic |
 | 3 | StartPlaceEntryTalk (+0x23); PlayMusic3 -> CallPlayMusic |
 | 4 | ArenaSceneCmdGenderScene, SetupArenaScreen; StartRhafiacePictureTalk; StorySceneUniticeSetup (+0x24); ArenaPreDuelGate, ArenaPreDuelEnd (no start nearby) |
 | 5 + (DUNGEON_ID-1) | PlayDungeonMusic, then SoundCommand 0x25 + (DUNGEON_ID-1). Songs 5-9 share one SFX set (0x85, 0x86, 0x92-0x98: CheckEncounter 0x92/0x94, OpenChest 0x93, CampUseHealItem 0x97/0x98, StartFloorChange 0x85) |

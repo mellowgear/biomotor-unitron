@@ -533,7 +533,7 @@ ClearEmblemFlags:
 	push	XHL
 	push	BC
 	push	A
-	ld	HL,0x10
+	ld	HL,EVENT_EMBLEM_GREEN
 	ld	A,4
 ClearEmblemFlags.loop:
 	push	HL
@@ -555,7 +555,7 @@ ClearBeatenDungeonFlags:
 	push	XHL
 	push	BC
 	push	A
-	ld	HL,0x60
+	ld	HL,EVENT_BEAT_ENT
 	ld	A,4
 ClearBeatenDungeonFlags.loop:
 	push	HL

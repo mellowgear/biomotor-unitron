@@ -77,10 +77,11 @@ CursorTask.resume2:
 
 c_2175FA	section	code abs=0x2175FA
 
-swp_2175FA:
-	ld	XWA,swp_2175FA.done
+; [code] sets the current task's TASK_FUNC to the ret below (an idle task step); no callers
+Unused_2175FA:
+	ld	XWA,Unused_2175FA.done
 	ld	(XIZ+TASK_FUNC),XWA
-swp_2175FA.done:
+Unused_2175FA.done:
 	ret
 
 c_217603	section	code abs=0x217603
@@ -360,10 +361,11 @@ MessageTask.skip5:
 
 c_21783D	section	code abs=0x21783D
 
-swp_21783D:
-	ld	XWA,swp_21783D.done
+; [code] sets the current task's TASK_FUNC to the ret below (an idle task step); no callers
+Unused_21783D:
+	ld	XWA,Unused_21783D.done
 	ld	(XIZ+TASK_FUNC),XWA
-swp_21783D.done:
+Unused_21783D.done:
 	ret
 
 c_217846	section	code abs=0x217846

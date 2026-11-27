@@ -175,7 +175,7 @@ step, `tools/biogfx.cpp` the game's own formats.
 - Unnamed RAM: none left in `ram/gfx.inc`'s range that the graphics code uses as a bare number;
   the palette shadow slots are written as offsets (`wPalShadow+0x80` = SCR1, `+0x100` = SCR2).
 - `DecompressTiles` uses `0x4000` (also `wTextBuffer`) as its 1 KiB ring.
-- Routines not understood yet: `swp_21037F` (portraits.asm) and `PlotPixel`
+- `Unused_21037F` (portraits.asm) is a lone `ret` with no callers. Routines not understood yet: `PlotPixel`
   (robot.asm), `DrawTilemapAt` (no comment yet); `GetBoxCursorTile` and `SetWindowStepsForB` have
   no callers.
 - Inline video writes left in game code, with hardware names: `CreditsLineTask` (engine/scenes.asm)

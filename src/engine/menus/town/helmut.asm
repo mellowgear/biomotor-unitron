@@ -370,11 +370,11 @@ HelmutSkillChoice.skip8:
 	cp	A,1
 	jr	Z,HelmutSkillChoice.skip9
 	ld	(wSkill1),W
-	ld	A,0x30
+	ld	A,EVENT_SKILL1_A
 	jr	HelmutSkillChoice.skip10
 HelmutSkillChoice.skip9:
 	ld	(wSkill2),W
-	ld	A,0x32
+	ld	A,EVENT_SKILL2_A
 HelmutSkillChoice.skip10:
 	ld	W,(XIZ+0x2A)
 	add	A,W

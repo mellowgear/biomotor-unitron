@@ -1,7 +1,7 @@
 ; data/arena/pointers: pointer tables read by the code, one section each
 
 d_249B8C	section	romdata abs=0x249B8C
-; [code] stage 0-11 -> its list in StageRequiredTalkLists (sub_213326)
+; [code] stage 0-11 -> its list in StageRequiredTalkLists (GetArenaTalkRow)
 StageRequiredTalks:
 	dl	StageRequiredTalkLists,StageRequiredTalkLists+0x1,StageRequiredTalkLists+0x2,StageRequiredTalkLists+0x5
 	dl	StageRequiredTalkLists+0x7,StageRequiredTalkLists+0x8,StageRequiredTalkLists+0x9,StageRequiredTalkLists+0xB

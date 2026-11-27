@@ -1,5 +1,5 @@
 ; DungeonSelectMoves (dungeon_select_moves): 5 records of 8 bytes, one line per id; keep the order and count.
-; WorldMapInput / sub_2107F9: on the dungeon choice screen the d-pad moves the selection
+; WorldMapInput / DungeonSelectMove: on the dungeon choice screen the d-pad moves the selection
 ; (DUNGEON_ID, line = id + 1) to the value in the column for that direction; 255 = no move.
 ; A on id 0 goes back (StartWorldMapExit), on another id enters (StartDungeonEntrance).
 ; id: up, down, left, right, up_right, down_right, down_left, up_left

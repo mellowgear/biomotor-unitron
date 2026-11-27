@@ -1069,7 +1069,7 @@ CampMenuDispatch.done:
 c_212619	section	code abs=0x212619
 
 ; [code] pushes and pops XHL / XDE / XBC / XWA, ret: does nothing; no callers
-swp_212619:
+Unused_212619:
 	push	XHL
 	push	XDE
 	push	XBC

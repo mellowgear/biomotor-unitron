@@ -2,7 +2,8 @@
 
 c_21037F	section	code abs=0x21037F
 
-swp_21037F:
+; [code] ret; no callers (before DrawPortraitAt)
+Unused_21037F:
 	ret
 
 c_210380	section	code abs=0x210380

@@ -3,13 +3,13 @@
 ; updates wArenaRank from tables/stage_arena_rank.asm. AdvanceStoryStage 0x216AFA: A = stage + 1
 ; while the stage is below 9.
 ; id: flag
-	db	 0	; 1
-	db	 1	; 2
-	db	 2	; 3
-	db	 3	; 4
-	db	 4	; 5
-	db	 5	; 6
-	db	 6	; 7
-	db	 7	; 8
-	db	 8	; 9
-	db	11	; 10
+	db	EVENT_STAGE_TOWN	; 1
+	db	EVENT_STAGE_ARENA_OPEN	; 2
+	db	EVENT_STAGE_WON_RANK_E	; 3
+	db	EVENT_STAGE_WON_RANK_D	; 4
+	db	EVENT_STAGE_WON_RANK_C	; 5
+	db	EVENT_STAGE_WON_RANK_B	; 6
+	db	EVENT_STAGE_WON_RANK_A	; 7
+	db	EVENT_STAGE_WON_RANK_S	; 8
+	db	EVENT_STAGE_WON_RANK_CS	; 9
+	db	EVENT_STAGE_WON_RANK_X	; 10

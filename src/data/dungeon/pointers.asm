@@ -14,7 +14,7 @@ DungeonDescriptions:
 	dl	DungeonMadeOfTreesText,CaveOnSeaFloorText,FloatingRuinsWindAffinityText,BuriedDeepInTheText
 
 d_2493F8	section	romdata abs=0x2493F8
-; [code] sub_211B35: colour palettes per dungeon 1-5
+; [code] LoadDungeonFloor: colour palettes per dungeon 1-5
 DungeonPalettes:
 	dl	Dungeon12Pal,Dungeon12Pal,Dungeon345Pal,Dungeon345Pal
 	dl	Dungeon345Pal

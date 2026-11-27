@@ -25,7 +25,7 @@ anything.
 | Command byte | Write the command to 0xBC, then write 1 to 0xBA (library.c l.878-879, 886-887, 893-894; sound_engine.asm l.103-106, 137-138) | The NMI handler at 0x0066 reads Z80 0x8000, stores the value in a 16-entry ring at 0x00C0, writes it back XOR 0xFF to 0x8000, and ends with `RETN` |
 | So 0xBC is shared | The main CPU then reads 0xBC and expects the complement (sound_engine.asm l.94-97, 23-24) | Z80 0x8000 is the same byte as main 0xBC |
 | So 0xBA raises the NMI | Every command write is followed by a write to 0xBA | The handler at 0x0066 is the only consumer of 0x8000 |
-| Tick timer | Timer 3 at fT1, TREG3 = 0x62, TFFCR \|= 0xB0 (TFF3 cleared, inverted by timer 3), TRUN = 0x88 (library.c l.831-837; decomp sub_20032F computes the same 0x62 from 2000) | `IM 1` at 0x01E6, so each Z80 interrupt runs 0x0038 |
+| Tick timer | Timer 3 at fT1, TREG3 = 0x62, TFFCR \|= 0xB0 (TFF3 cleared, inverted by timer 3), TRUN = 0x88 (library.c l.831-837; decomp SetupTimer3 computes the same 0x62 from 2000) | `IM 1` at 0x01E6, so each Z80 interrupt runs 0x0038 |
 | Interrupt at 0x0038 | | `EX AF,AF'; INC A; OUT (0xFF),A`: it counts ticks in A' and writes the count to port 0xFF |
 | Other write | | `LD (0xC000),A` once during init (0x0205); purpose unknown |
 | Sound chip | | Writes go to memory addresses 0x4000 and 0x4001, in the SN76489-style latch format (`1 cc t dddd`). Tone and volume bytes go to both addresses with different volumes, and noise goes to 0x4000 only. This looks like a two-output (stereo) chip |

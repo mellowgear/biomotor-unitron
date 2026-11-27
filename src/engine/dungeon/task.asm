@@ -3,7 +3,7 @@
 c_210442	section	code abs=0x210442
 
 ; [code] ret; no callers
-swp_210442:
+Unused_210442:
 	ret
 
 c_210443	section	code abs=0x210443
