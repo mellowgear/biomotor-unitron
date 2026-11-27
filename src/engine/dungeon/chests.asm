@@ -164,7 +164,7 @@ RollFloorChests:
 	push	XWA
 	ld	(XIZ+0x22),A
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	NZ,RollFloorChests.skip
 	calr	SetMineChests
 	jrl	RollFloorChests.skip4
@@ -541,7 +541,7 @@ MarkChestOpened:
 	ld	A,0xFD
 	ld	(XHL+0),A
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	NZ,MarkChestOpened.skip
 	ld	A,(XIZ+DUNGEON_FLOOR)
 	dec	1,A
@@ -569,7 +569,7 @@ RollFloorMaps:
 	push	XBC
 	push	XWA
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,RollFloorMaps.skip2
 	ld	A,7
 	ld	(XIZ+DUNGEON_FLOOR_COUNT),A
@@ -760,7 +760,7 @@ OpenChest.skip4:
 	cp	A,0
 	jr	Z,OpenChest.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	dec	1,A
@@ -775,7 +775,7 @@ OpenChest.skip6:
 	cp	A,1
 	jr	Z,OpenChest.skip7
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	inc	1,A
@@ -862,7 +862,7 @@ OpenChest.skip12:
 OpenChest.skip13:
 	ld	A,(XIZ+0x21)
 	call	MarkChestOpened
-	ld	WA,0x93
+	ld	WA,SFX_CHEST_OPEN
 	call	SoundCommand
 OpenChest.skip14:
 	ld	A,5

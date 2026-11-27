@@ -13,7 +13,7 @@ c_205FAB	section	code abs=0x205FAB
 Reset:
 	di
 	ldf	1
-	ld	XSP,0x6C00
+	ld	XSP,wStackTop
 	ld	RW3,1
 	ld	RBC3,0
 	call	BiosCall
@@ -31,7 +31,7 @@ Reset.loop:
 	call	BiosCall
 	call	InitSound
 	call	ResetSoundState
-	ld	XWA,0
+	ld	XWA,SONG_EVENT
 	call	PlaySong
 	ldb	(wVBlankWait),0
 	ld	XHL,VBlankHandler
@@ -234,13 +234,13 @@ c_206250	section	code abs=0x206250
 InitTaskList:
 	ld	XWA,0
 	ld	XHL,wTasks
-	ld	BC,0x20
+	ld	BC,MAX_TASKS
 InitTaskList.loop:
-	ld	(XHL+0),WA
+	ld	(XHL+TASK_PREV),WA
 	ld	(XHL+6),WA
-	ld	(XHL+0xC),WA
-	ld	(XHL+8),XWA
-	add	HL,0x2E
+	ld	(XHL+TASK_CHILDREN),WA
+	ld	(XHL+TASK_FUNC),XWA
+	add	HL,TASK_SLOT_SIZE
 	djnz	BC,InitTaskList.loop
 	ldw	(wTaskList+2),wTaskList+4
 	ldw	(wTaskList),wTaskList+4
@@ -257,12 +257,12 @@ RunTasks:
 RunTasks.loop:
 	cp	IZ,wTaskList+4
 	jr	Z,RunTasks.done
-	bit	7,(XIZ+7)
+	bit	TASK_END_BIT,(XIZ+TASK_FLAGS)
 	jr	NZ,RunTasks.skip3
-	res	6,(XIZ+7)
+	res	TASK_END_CHILDREN_BIT,(XIZ+TASK_FLAGS)
 	ld	XHL,(XIZ+TASK_FUNC)
 	ld	XIY,0
-	ld	IY,(XIZ+4)
+	ld	IY,(XIZ+TASK_PARENT)
 	push	IY
 	push	IZ
 	call	XHL
@@ -272,29 +272,29 @@ RunTasks.loop:
 	pop	IY
 	or	IY,IY
 	jr	Z,RunTasks.skip2
-	bit	7,(XIY+7)
+	bit	TASK_END_BIT,(XIY+TASK_FLAGS)
 	jr	Z,RunTasks.skip
-	ldw	(XIZ+4),0
+	ldw	(XIZ+TASK_PARENT),0
 RunTasks.skip:
-	bit	6,(XIY+7)
+	bit	TASK_END_CHILDREN_BIT,(XIY+TASK_FLAGS)
 	jr	Z,RunTasks.skip2
-	orb	(XIZ+7),0xC0
+	orb	(XIZ+TASK_FLAGS),0xC0
 RunTasks.skip2:
-	ld	IZ,(XIZ+2)
+	ld	IZ,(XIZ+TASK_NEXT)
 	jr	RunTasks.loop
 RunTasks.skip3:
 	ld	XDE,0
-	ld	DE,(XIZ+4)
+	ld	DE,(XIZ+TASK_PARENT)
 	or	DE,DE
 	jr	Z,RunTasks.skip4
-	decw	1,(XDE+0xC)
+	decw	1,(XDE+TASK_CHILDREN)
 RunTasks.skip4:
-	ld	DE,(XIZ+0)
+	ld	DE,(XIZ+TASK_PREV)
 	ld	XHL,0
-	ld	HL,(XIZ+2)
-	ld	(XDE+2),HL
-	ld	(XHL+0),DE
-	ldw	(XIZ+0),0
+	ld	HL,(XIZ+TASK_NEXT)
+	ld	(XDE+TASK_NEXT),HL
+	ld	(XHL+TASK_PREV),DE
+	ldw	(XIZ+TASK_PREV),0
 	ldw	(XIZ+6),0
 	ld	IZ,HL
 	decb	1,(wTaskCount)
@@ -312,13 +312,13 @@ StartTask:
 	ret	C
 	ld	XWA,0
 	ld	WA,(wTaskList+4)
-	ld	(XWA+2),HL
+	ld	(XWA+TASK_NEXT),HL
 	ld	(wTaskList+4),HL
-	ld	(XHL+0),WA
-	ldw	(XHL+2),wTaskList+4
-	ld	(XHL+8),XDE
-	ldw	(XHL+4),0
-	ldw	(XHL+0xC),0
+	ld	(XHL+TASK_PREV),WA
+	ldw	(XHL+TASK_NEXT),wTaskList+4
+	ld	(XHL+TASK_FUNC),XDE
+	ldw	(XHL+TASK_PARENT),0
+	ldw	(XHL+TASK_CHILDREN),0
 	ret
 
 c_206324	section	code abs=0x206324
@@ -330,14 +330,14 @@ StartChildTask:
 	call	FindFreeTaskSlot
 	ret	C
 	ld	XWA,0
-	ld	WA,(XIZ+2)
-	ld	(XWA+0),HL
-	ld	(XIZ+2),HL
-	ld	(XHL+0),IZ
-	ld	(XHL+2),WA
-	ld	(XHL+8),XDE
-	ld	(XHL+4),IZ
-	ldw	(XHL+0xC),0
+	ld	WA,(XIZ+TASK_NEXT)
+	ld	(XWA+TASK_PREV),HL
+	ld	(XIZ+TASK_NEXT),HL
+	ld	(XHL+TASK_PREV),IZ
+	ld	(XHL+TASK_NEXT),WA
+	ld	(XHL+TASK_FUNC),XDE
+	ld	(XHL+TASK_PARENT),IZ
+	ldw	(XHL+TASK_CHILDREN),0
 	incw	1,(XIZ+TASK_CHILDREN)
 	ret
 
@@ -347,9 +347,9 @@ c_206350	section	code abs=0x206350
 FindFreeTaskSlot:
 	ld	XHL,wTasks
 FindFreeTaskSlot.loop:
-	cpb	(XHL+0),0
+	cpb	(XHL+TASK_PREV),0
 	ret	Z
-	add	HL,0x2E
+	add	HL,TASK_SLOT_SIZE
 	cp	HL,wTaskList
 	jr	C,FindFreeTaskSlot.loop
 	ld	XHL,0
@@ -360,14 +360,14 @@ c_206369	section	code abs=0x206369
 
 ; [code] marks the current task finished (bit 7 of +7); RunTasks unlinks it and wakes the parent
 EndTask:
-	set	7,(XIZ+7)
+	set	TASK_END_BIT,(XIZ+TASK_FLAGS)
 	ret
 
 c_20636D	section	code abs=0x20636D
 
 ; [code] sets bit 6 of the current task's +7; RunTasks gives a task whose parent (+4) has bit 6 set +7 |= 0xC0 (ended, and passes it on to its own children); RunTasks clears bit 6 before each call
 EndChildTasks:
-	set	6,(XIZ+7)
+	set	TASK_END_CHILDREN_BIT,(XIZ+TASK_FLAGS)
 	ret
 
 c_206FC1	section	code abs=0x206FC1
@@ -390,7 +390,7 @@ RedrawMapAtScroll:
 
 c_206FEA	section	code abs=0x206FEA
 
-; [code] zeroes wJoyHistoryIndex, wJoyHeld, wJoyPressed, wJoyReleased, wJoyResetCombo and the 256-byte wJoyHistory (0x40 longwords), 0x5CDD = SYS_LEVER; only caller Reset
+; [code] zeroes wJoyHistoryIndex, wJoyHeld, wJoyPressed, wJoyReleased, wJoyResetCombo and the 256-byte wJoyHistory (0x40 longwords), wJoyHistory+0xFF = SYS_LEVER (the "last frame" slot); only caller Reset
 InitJoypad:
 	ld	XWA,0
 	ld	(wJoyHistoryIndex),A
@@ -403,7 +403,7 @@ InitJoypad:
 InitJoypad.loop:
 	ld	(XHL+),XWA
 	djnz	C,InitJoypad.loop
-	ldb	(0x5CDD),(SYS_LEVER)
+	ldb	(wJoyHistory+0xFF),(SYS_LEVER)
 	ret
 
 c_207014	section	code abs=0x207014
@@ -585,26 +585,27 @@ WaitForButton.skip2:
 
 c_21D9B9	section	code abs=0x21D9B9
 
-; [code] VBlankHandler, every frame: only with OS_VERSION 0x10, byte 0x6C59 != 0 and byte 0x6C5B != 1: A = port 0xB0 | ~byte 0x9FFFFE is stored at 0x6E97 and the value stored there the frame before is ORed into SYS_LEVER (old & new | released bits = the old value); 0x6C59 is the BIOS's flash type byte for a card on CS1 (0x800000, the development board's slot; 0x6C58 is the cartridge's) and 0x9FFFFE the top of that window: a joypad input hook for a CS1 (development) card (was MergeCs1CardInput)
-; [play] seen in play: 0x6C59 and 0x6C5B stay 0 on a retail cartridge (nothing writes them), so the hook exits at the 0x6C59 test every frame
+; [U2] VBlankHandler, every frame: on a colour BIOS with a CS1 (development) card present
+; (wBiosFlashSize2 != 0, wBiosFlashType2 != 1), ORs the card's joypad byte (port 0xB0 | ~0x9FFFFE)
+; into SYS_LEVER, keeping the last one in wBiosCs1Input; a retail cartridge exits at once [play]
 MergeCs1CardInput:
 	cpb	(OS_VERSION),0x10
 	jr	NZ,MergeCs1CardInput.done
-	cpb	(0x6C59),0
+	cpb	(wBiosFlashSize2),0
 	jr	Z,MergeCs1CardInput.done
-	cpb	(0x6C5B),1
+	cpb	(wBiosFlashType2),1
 	jr	Z,MergeCs1CardInput.done
 	push	WA
 	ld	A,(0xB0)
 	ld	W,(0x9FFFFE)
 	cpl	W
 	or	A,W
-	ex	(0x6E97),A
+	ex	(wBiosCs1Input),A
 	ld	W,A
-	xor	A,(0x6E97)
+	xor	A,(wBiosCs1Input)
 	and	W,A
 	cpl	A
-	and	A,(0x6E97)
+	and	A,(wBiosCs1Input)
 	or	A,W
 	or	(SYS_LEVER),A
 	pop	WA
@@ -633,7 +634,7 @@ c_21DA0C	section	code abs=0x21DA0C
 InitConsoleType:
 	cpb	(OS_VERSION),0
 	jr	NZ,InitConsoleType.done
-	res	3,(0x6F83)
-	ldb	(0x6DA0),0
+	res	3,(wBios6F83)
+	ldb	(wBios6DA0),0
 InitConsoleType.done:
 	ret

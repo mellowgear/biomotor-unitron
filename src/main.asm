@@ -6,6 +6,7 @@ $charmap "src/text/charmap.txt"	; text, line, page, done: the game's character c
 
 #include "constants/hardware.inc"
 #include "constants/gfx.inc"
+#include "constants/tasks.inc"
 #include "ram/wram.inc"
 #include "ram/gfx.inc"
 
@@ -16,6 +17,11 @@ $charmap "src/text/charmap.txt"	; text, line, page, done: the game's character c
 #include "constants/joypad.inc"
 #include "constants/event_flags.inc"
 #include "constants/items.inc"
+#include "constants/enemy_ids.inc"
+#include "constants/music.inc"
+#include "constants/battle.inc"
+#include "constants/dungeon.inc"
+#include "constants/town.inc"
 
 #include "audio/sound.asm"
 #include "audio/sound_engine.asm"

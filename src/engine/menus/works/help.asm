@@ -31,7 +31,7 @@ c_219FCD	section	code abs=0x219FCD
 RunHelpViewerTask:
 	ld	XHL,HelpViewerTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x7E
+	ldw	(XHL+TASK_ARG),0x7E
 	ldw	(XHL+0x10),8
 	task_wait
 	ldb	(wHelpDone),1

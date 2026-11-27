@@ -37,7 +37,7 @@ c_20DD24	section	code abs=0x20DD24
 
 ; [code] child of RunWorksSaveTask: wSaveMenuMode = 1, wSaveSlot = 1, DrawSaveSlotList, SaveSlotSelectTask; slot 0 -> EndTask; ShowSaveConfirmBox + YesNoPromptTask, Yes -> SaveGameSlot, ShowSaveDoneBox, Wait30FramesTask; [play] works_data_save* screens
 WorksSaveTask:
-	ldb	(wSaveMenuMode),1
+	ldb	(wSaveMenuMode),SAVE_MENU_SAVE
 	ldb	(wSaveSlot),1
 	call	ClearScr2Tilemap
 	calr	DrawSaveSlotList
@@ -151,7 +151,7 @@ c_219F1D	section	code abs=0x219F1D
 RunWorksSaveTask:
 	ld	XHL,WorksSaveTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x7E
+	ldw	(XHL+TASK_ARG),0x7E
 	ldw	(XHL+0x10),8
 	task_wait
 	ldb	(wWorksDataDone),1
@@ -164,7 +164,7 @@ c_219F48	section	code abs=0x219F48
 RunWorksLoadTask:
 	ld	XHL,WorksLoadTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x7E
+	ldw	(XHL+TASK_ARG),0x7E
 	ldw	(XHL+0x10),8
 	task_wait
 	ldb	(wWorksDataDone),1

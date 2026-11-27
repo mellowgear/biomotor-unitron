@@ -326,7 +326,7 @@ c_219911	section	code abs=0x219911
 
 ; [code] PlayMusic 2 (CallPlayMusic); caller WorksScreenModes
 PlayMusic2:
-	ld	XWA,2
+	ld	XWA,SONG_WORKS
 	jp	CallPlayMusic
 
 c_219917	section	code abs=0x219917
@@ -334,7 +334,7 @@ c_219917	section	code abs=0x219917
 ; [code] the wWorksScreenEntry entry of RunWorksScreen: mode 6 -> SetupTradeItemList list, result list row wListChoice + 1 to wWorksScreenValue, EndMenuTask; other modes -> WorksScreenModes
 WorksScreenEntry:
 	ldw	(wWorksScreenValue),0
-	cpb	(wWorksScreenMode),6
+	cpb	(wWorksScreenMode),WORKS_MODE_LIST_PICK
 	jp	NZ,WorksScreenModes
 	ld	A,1
 	call	SetupTradeItemList
@@ -350,9 +350,9 @@ c_219947	section	code abs=0x219947
 
 ; [code] partner's greeting by time of day / story
 WorksGreeting:
-	cpb	(wWorksScreenMode),4
+	cpb	(wWorksScreenMode),WORKS_MODE_CAMP_STATS
 	jr	Z,WorksGreeting.skip
-	cpb	(wWorksScreenMode),5
+	cpb	(wWorksScreenMode),WORKS_MODE_CAMP_ITEMS
 	jr	Z,WorksGreeting.skip
 	call	DrawWorksPortraits
 	jr	WorksGreeting.done
@@ -367,14 +367,14 @@ c_219960	section	code abs=0x219960
 WorksScreenModes:
 	call	WorksGreeting
 	call	DrawGP
-	cpb	(wWorksScreenMode),4
+	cpb	(wWorksScreenMode),WORKS_MODE_CAMP_STATS
 	jp	Z,WorksStatsMenu
-	cpb	(wWorksScreenMode),5
+	cpb	(wWorksScreenMode),WORKS_MODE_CAMP_ITEMS
 	jp	Z,WorksItemMenu
 	call	PlayMusic2
-	ld	WA,0x22
+	ld	WA,MUSIC_WORKS
 	call	CallSoundCommand
-	cpb	(wWorksScreenMode),3
+	cpb	(wWorksScreenMode),WORKS_MODE_AFTER_DEFEAT
 	jp	Z,WorksAfterDefeatGreeting
 	cpb	(wWorksEngineerLevel),0xA
 	jr	C,WorksScreenModes.skip
@@ -413,7 +413,7 @@ WorksScreenModes.skip2:
 	call	Wait30Frames
 	jp	WorksScreenModes.skip5
 WorksScreenModes.skip3:
-	cpb	(wWorksScreenMode),2
+	cpb	(wWorksScreenMode),WORKS_MODE_LOADED_GAME
 	jr	NZ,WorksScreenModes.skip4
 	ld	XHL,GoodMorningHowDoText
 	ld	XDE,GoodMorningPlayerIText

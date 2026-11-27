@@ -4,9 +4,9 @@ c_20F7AD	section	code abs=0x20F7AD
 
 ; [play] Select Player screen task (select_player_* screens only)
 SelectPlayerTask:
-	ld	WA,0x14
+	ld	WA,SONG_MAIN_MENU
 	call	PlayMusic
-	ld	WA,0x35
+	ld	WA,MUSIC_MAIN_MENU
 	call	SoundCommand
 	call	ClearTilemapScr1
 	call	ClearTilemapScr2
@@ -188,19 +188,19 @@ NameEntryNewKeys.skip:
 	ld	A,(XIZ+0x28)
 	and	A,4
 	jr	Z,NameEntryNewKeys.skip2
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 NameEntryNewKeys.skip2:
 	ld	A,(XIZ+0x28)
 	and	A,8
 	jr	Z,NameEntryNewKeys.skip3
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 NameEntryNewKeys.skip3:
 	ld	A,(XIZ+0x28)
 	and	A,1
 	jr	Z,NameEntryCancelEndDown
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	decw	1,(XIZ+0x14)
 	cpw	(XIZ+0x14),0xFFFF
@@ -216,7 +216,7 @@ NameEntryCancelEndDown:
 	ld	A,(XIZ+0x28)
 	and	A,2
 	jr	Z,NameEntryCancelEndA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	incw	1,(XIZ+0x14)
 	cpw	(XIZ+0x14),2
@@ -238,7 +238,7 @@ NameEntryCancelEndA:
 	cp	WA,1
 	jr	Z,NameEntryEnd
 NameEntryCancelEndA.skip:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ldb	(XIY+0x10),0
 	call	EndChildTasks
@@ -252,7 +252,7 @@ NameEntryEnd:
 	ld	BC,(XIZ+0x18)
 	cp	BC,0
 	jr	NZ,NameEntryEndCheckBlank
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 	jr	NameEntryCancelEndCursor
 
@@ -268,7 +268,7 @@ NameEntryEndCheckBlank:
 	add	WA,(XIZ+0x24)
 	cp	WA,0
 	jr	NZ,StoreEnteredName
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 	jr	NameEntryCancelEndCursor
 
@@ -276,14 +276,14 @@ c_20FA88	section	code abs=0x20FA88
 
 ; [code] entered chars -> wPlayerName (0x5013) or wPartnerName (0x502F), 0xFF-terminated
 StoreEnteredName:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ld	DE,0x5013
 	cpw	(XIY+0xE),0
 	jr	Z,StoreEnteredName.skip
 	ld	DE,0x502F
 StoreEnteredName.skip:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	extz	XDE
 	ld	HL,0x1A
@@ -327,7 +327,7 @@ NameEntryGridInput:
 	ld	A,(XIZ+0x28)
 	and	A,4
 	jr	Z,NameEntryGridInput.skip
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	decw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0xFFFF
@@ -337,7 +337,7 @@ NameEntryGridInput.skip:
 	ld	A,(XIZ+0x28)
 	and	A,8
 	jr	Z,NameEntryGridInput.skip2
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	incw	1,(XIZ+TASK_ARG)
 	cpw	(XIZ+TASK_ARG),0xA
@@ -347,7 +347,7 @@ NameEntryGridInput.skip2:
 	ld	A,(XIZ+0x28)
 	and	A,2
 	jr	Z,NameEntryGridUp
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	incw	1,(XIZ+0x10)
 	cpw	(XIZ+0x10),9
@@ -363,7 +363,7 @@ NameEntryGridUp:
 	ld	A,(XIZ+0x28)
 	and	A,1
 	jr	Z,NameEntryGridA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	decw	1,(XIZ+0x10)
 	cpw	(XIZ+0x10),0xFFFF
@@ -382,13 +382,13 @@ NameEntryGridA:
 	ld	WA,(XIZ+0x18)
 	cp	WA,6
 	jr	GE,NameEntryGridA.skip
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	jr	NameEntryGridA.skip2
 NameEntryGridA.skip:
 	ldw	(XIZ+0x14),1
 	ldw	(XIZ+0x16),1
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 NameEntryGridA.skip2:
 	ld	BC,(XIZ+0x10)
@@ -426,7 +426,7 @@ NameEntryAddChar.skip3:
 	ld	A,(wJoyPressed)
 	and	A,B_BUTTON
 	jr	Z,NameEntryAddChar.skip5
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ld	HL,(XIZ+0x18)
 	extz	XHL
@@ -437,11 +437,11 @@ NameEntryAddChar.skip3:
 	decw	1,(XIZ+0x18)
 	cpw	(XIZ+0x18),0xFFFF
 	jr	NZ,NameEntryAddChar.skip4
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 	ldw	(XIZ+0x18),0
 NameEntryAddChar.skip4:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ld	HL,(XIZ+0x18)
 	extz	XHL
@@ -683,7 +683,7 @@ ConfirmNames.resume:
 	jr	Z,ConfirmNames.skip2
 	cpw	(XIZ+TASK_ARG),1
 	jr	Z,ConfirmNames.skip2
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldw	(XIZ+TASK_ARG),1
 ConfirmNames.skip2:
@@ -707,7 +707,7 @@ ConfirmNames.skip4:
 	jr	Z,ConfirmNames.skip5
 	cpw	(XIZ+TASK_ARG),0
 	jr	Z,ConfirmNames.skip5
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldw	(XIZ+TASK_ARG),0
 ConfirmNames.skip5:
@@ -720,12 +720,12 @@ ConfirmNames.skip5:
 	cpw	(XIZ+TASK_ARG),0
 	jr	Z,ConfirmNames.skip
 	ldw	(XIY+0x10),1
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	call	EndTask
 	ret
 ConfirmNames.skip:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ldw	(XIY+0x10),0
 	call	EndTask
@@ -794,7 +794,7 @@ SelectPlayerNames.skip:
 	ld	A,(wJoyPressed)
 	and	A,D_LEFT
 	jr	Z,SelectPlayerNames.skip2
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldw	(XIZ+0x18),1
 	decw	1,(XIZ+TASK_ARG)
@@ -802,7 +802,7 @@ SelectPlayerNames.skip2:
 	ld	A,(wJoyPressed)
 	and	A,D_RIGHT
 	jr	Z,SelectPlayerNames.skip3
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldw	(XIZ+0x18),1
 	incw	1,(XIZ+TASK_ARG)
@@ -869,7 +869,7 @@ SelectPlayerScreen.skip2:
 	ld	A,(wJoyPressed)
 	and	A,B_BUTTON
 	jr	Z,SelectPlayerAskOk
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ldb	(XIY+0x10),0
 	call	EndTask
@@ -882,7 +882,7 @@ SelectPlayerAskOk:
 	ld	A,(wJoyPressed)
 	and	A,A_BUTTON
 	ret	Z
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ld	A,2
 	call	GetTextBox
@@ -904,7 +904,7 @@ SelectPlayerConfirm:
 	jr	Z,SelectPlayerConfirmRight
 	cpw	(XIZ+0x12),1
 	jr	Z,SelectPlayerConfirmRight.skip
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldw	(XIZ+0x12),1
 	jr	SelectPlayerConfirmRight.skip
@@ -918,7 +918,7 @@ SelectPlayerConfirmRight:
 	jr	Z,SelectPlayerConfirmRight.skip
 	cpw	(XIZ+0x12),0
 	jr	Z,SelectPlayerConfirmRight.skip
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldw	(XIZ+0x12),0
 SelectPlayerConfirmRight.skip:
@@ -954,7 +954,7 @@ SelectPlayerConfirmB:
 	and	A,B_BUTTON
 	ret	Z
 SelectPlayerConfirmB.skip:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	jr	SelectPlayerConfirmBack
 
@@ -962,7 +962,7 @@ c_210195	section	code abs=0x210195
 
 ; [code+play] wPlayerRace/wPartnerRace, default names from DefaultNames into wPlayerName/wPartnerName
 SetPlayerRacesAndNames:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ldw	(XIY+0x10),1
 	ld	WA,(XIZ+TASK_ARG)

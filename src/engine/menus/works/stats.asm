@@ -785,7 +785,7 @@ WorksStatsMenu.skip3:
 	ld	XDE,FinishedText
 	call	ShowPartnerGenderText
 	call	Wait30Frames
-	cpb	(wWorksScreenMode),4
+	cpb	(wWorksScreenMode),WORKS_MODE_CAMP_STATS
 	jp	Z,WorksExit
 	jp	WorksMenuReturn
 

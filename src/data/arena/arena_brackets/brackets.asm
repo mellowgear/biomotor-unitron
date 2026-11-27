@@ -6,11 +6,11 @@
 ; (Play: fixed opponents and lists seen as here for Human, Mariner, Birdian, Forester; the
 ; random slots differ between runs. Mariner Rank A was noted with 4 opponents, the table has 5.)
 ; id: o1, o2, o3, o4, o5, o6
-	db	255,255,255,  0,  0,  0	; 1 Rank E: random, random, random
-	db	255,255,255,113,  0,  0	; 2 Rank D: random, random, random, Fenril
-	db	255,255,255,114,  0,  0	; 3 Rank C: random, random, random, Domino
-	db	255,255,255,255,115,  0	; 4 Rank B: random, random, random, random, Neptun
-	db	255,255,255,255,116,  0	; 5 Rank A: random, random, random, random, Oberon
-	db	255,255,255,255,255,117	; 6 Rank S: random, random, random, random, random, Balrok
-	db	113,114,115,116,117,118	; 7 Rank CS: Fenril, Domino, Neptun, Oberon, Balrok, Satana
-	db	 93, 96, 94, 95,118, 97	; 8 Rank X: Trifid, Catble, Squidl, Simrug, Satana, Uniti
+	db	255,255,255,0,0,0	; 1 Rank E: random, random, random
+	db	255,255,255,ENEMY_FENRIL,0,0	; 2 Rank D: random, random, random, Fenril
+	db	255,255,255,ENEMY_DOMINO,0,0	; 3 Rank C: random, random, random, Domino
+	db	255,255,255,255,ENEMY_NEPTUN,0	; 4 Rank B: random, random, random, random, Neptun
+	db	255,255,255,255,ENEMY_OBERON,0	; 5 Rank A: random, random, random, random, Oberon
+	db	255,255,255,255,255,ENEMY_BALROK	; 6 Rank S: random, random, random, random, random, Balrok
+	db	ENEMY_FENRIL,ENEMY_DOMINO,ENEMY_NEPTUN,ENEMY_OBERON,ENEMY_BALROK,ENEMY_SATANA	; 7 Rank CS: Fenril, Domino, Neptun, Oberon, Balrok, Satana
+	db	ENEMY_TRIFID,ENEMY_CATBLE,ENEMY_SQUIDL,ENEMY_SIMRUG,ENEMY_SATANA,ENEMY_UNITI	; 8 Rank X: Trifid, Catble, Squidl, Simrug, Satana, Uniti

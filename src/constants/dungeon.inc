@@ -1,0 +1,7 @@
+; constants/dungeon.inc: dungeon ids (DUNGEON_ID; the world map's name table 0x2274D7 starts with "Town") [code]
+DUNGEON_TOWN	equ	0	; the world map cursor on the town (WorldMapInput) [code]
+DUNGEON_FOREST_OF_VERDURE	equ	1	; wood affinity [code]
+DUNGEON_CORRIDOR_OF_BLUE	equ	2	; water affinity [code]
+DUNGEON_RUINS_OF_WIND	equ	3	; wind affinity [code]
+DUNGEON_MAZE_OF_STONE	equ	4	; earth affinity [code]
+DUNGEON_CRYSTAL_MINE	equ	5	; from the arena (ArenaStartCrystalMine); its own chests and bosses per floor [code]

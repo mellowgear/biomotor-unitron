@@ -873,9 +873,9 @@ StartPlaceEntryTalk:
 	jr	Z,StartPlaceEntryTalkWorks
 	cp	A,6
 	jr	NZ,StartPlaceEntryTalkDone
-	ld	XWA,3
+	ld	XWA,SONG_SHOP
 	call	PlayMusic
-	ld	WA,0x23
+	ld	WA,MUSIC_SHOP
 	call	SoundCommand
 	jr	StartPlaceEntryTalkDone
 
@@ -883,9 +883,9 @@ c_2157D2	section	code abs=0x2157D2
 
 ; [code] StartPlaceEntryTalk for the Works: PlayMusic 2, sound 0x22
 StartPlaceEntryTalkWorks:
-	ld	XWA,2
+	ld	XWA,SONG_WORKS
 	call	PlayMusic
-	ld	WA,0x22
+	ld	WA,MUSIC_WORKS
 	call	SoundCommand
 	jr	StartPlaceEntryTalkDone
 
@@ -912,9 +912,9 @@ StartRhafiacePictureTalk:
 	call	PlaceBox1
 	ld	A,0
 	ld	(XIZ+0x13),A
-	ld	XWA,4
+	ld	XWA,SONG_STORY
 	call	PlayMusic
-	ld	WA,0x24
+	ld	WA,MUSIC_STORY
 	call	SoundCommand
 	call	SetFadeBlack
 	ld	A,7
@@ -1216,7 +1216,7 @@ TalkGoToWorksRow0:
 	call	ApplyWindowB
 	call	StartWindowAnimToA
 	call	SetFadeNormal
-	ld	XWA,2
+	ld	XWA,SONG_WORKS
 	call	PlayMusic
 	ld	A,9
 	ld	(XIZ+0xF),A
@@ -1240,7 +1240,7 @@ TalkGoToWorksRowE:
 	call	ApplyWindowB
 	call	StartWindowAnimToA
 	call	SetFadeNormal
-	ld	XWA,2
+	ld	XWA,SONG_WORKS
 	call	PlayMusic
 	ld	A,0xA
 	ld	(XIZ+0xF),A
@@ -1255,9 +1255,9 @@ TownTalkWindowOpen:
 	call	UpdateWindowAnim
 	cp	A,1
 	jr	Z,TownTalkWindowOpen.skip3
-	ld	XWA,2
+	ld	XWA,SONG_WORKS
 	call	PlayMusic
-	ld	WA,0x22
+	ld	WA,MUSIC_WORKS
 	call	SoundCommand
 	ld	A,3
 	ld	(XIZ+0xF),A
@@ -1268,9 +1268,9 @@ TownTalkWindowOpen.skip:
 	call	UpdateWindowAnim
 	cp	A,1
 	jr	Z,TownTalkWindowOpen.skip3
-	ld	XWA,2
+	ld	XWA,SONG_WORKS
 	call	PlayMusic
-	ld	WA,0x22
+	ld	WA,MUSIC_WORKS
 	call	SoundCommand
 	ld	A,3
 	ld	(XIZ+0xF),A

@@ -6,12 +6,12 @@ c_20CAE0	section	code abs=0x20CAE0
 BattleVictory:
 	ld	XHL,ShakeScr2Amp8Task
 	call	StartTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	ld	XHL,BattleEndEffects
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	WA,0
 	ld	C,0
@@ -19,9 +19,9 @@ BattleVictory:
 	ld	B,0xC
 	ld	D,0xC
 	call	FillScr2Rect
-	ld	WA,0xF
+	ld	WA,SONG_VICTORY
 	call	PlayMusic
-	ld	WA,0x2F
+	ld	WA,MUSIC_VICTORY
 	call	SoundCommand
 	ld	XHL,YouWinText
 	call	ShowMessage
@@ -104,7 +104,7 @@ BattleVictory.skip6:
 BattleVictory.loop:
 	call	TryLevelUp
 	jr	NC,BattleVictory.skip7
-	ld	WA,0xAC
+	ld	WA,SFX_LEVEL_UP
 	call	SoundCommand
 	ld	XHL,YouGainedALevelText
 	call	ShowMessage
@@ -113,7 +113,7 @@ BattleVictory.loop:
 	task_wait
 	jr	BattleVictory.loop
 BattleVictory.skip7:
-	ldw	(XIZ+TASK_ARG),0
+	ldw	(XIZ+TASK_ARG),BATTLE_RESULT_WON
 	ldw	(XIZ+TASK_FUNC),BattleEnd & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),BattleEnd >> 16
 	ret
@@ -124,12 +124,12 @@ c_20CC9C	section	code abs=0x20CC9C
 BattleDefeat:
 	ld	XHL,ShakeScr1Amp8Task
 	call	StartTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	ld	XHL,BattleEndEffects
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	ld	WA,0
 	ld	C,0
@@ -137,9 +137,9 @@ BattleDefeat:
 	ld	B,0xC
 	ld	D,0xB
 	call	FillScr1Rect
-	ld	WA,0x10
+	ld	WA,SONG_DEFEAT
 	call	PlayMusic
-	ld	WA,0x30
+	ld	WA,MUSIC_DEFEAT
 	call	SoundCommand
 	cpb	(wDungeonBattle),0
 	ld	XHL,YouLostText
@@ -152,7 +152,7 @@ BattleDefeat.skip:
 	task_wait
 	ldw	(wUnitHP),(wUnitMaxHP)
 	ldw	(wUnitEP),(wUnitMaxEP)
-	ldw	(XIZ+TASK_ARG),3
+	ldw	(XIZ+TASK_ARG),BATTLE_RESULT_LOST
 	ldw	(XIZ+TASK_FUNC),BattleEnd & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),BattleEnd >> 16
 	ret
@@ -163,7 +163,7 @@ c_20CD32	section	code abs=0x20CD32
 BattleRetreat:
 	ld	XHL,UnitSlideOutRightTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wDungeonBattle),0
 	ld	XHL,YouGaveUpText
@@ -174,7 +174,7 @@ BattleRetreat.skip:
 	ld	XHL,WaitBattleMessageTask
 	call	StartChildTask
 	task_wait
-	ldw	(XIZ+TASK_ARG),2
+	ldw	(XIZ+TASK_ARG),BATTLE_RESULT_RETREAT
 	ldw	(XIZ+TASK_FUNC),BattleEnd & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),BattleEnd >> 16
 	ret
@@ -203,9 +203,9 @@ BattleEnd:
 	ld	(wScr2ScrollY),A
 	ld	(wScr2SplitScrollX),A
 	ld	(wScr2SplitScrollY),A
-	ld	WA,0x7F
+	ld	WA,MUSIC_STOP
 	call	SoundCommand
-	ld	WA,0x8086
+	ld	WA,SOUND_CMD_86
 	call	SoundCommand
 	ld	A,(XIZ+TASK_ARG)
 	ld	(wBattleResult),A

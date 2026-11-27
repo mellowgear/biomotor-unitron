@@ -27,7 +27,7 @@ CyriusTradeYesNo:
 	bit	BIT_A_BUTTON,A
 	jr	Z,CyriusTradeYesNo.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jr	CyriusTradeYesNo.skip7
@@ -35,7 +35,7 @@ CyriusTradeYesNo.skip:
 	bit	5,A
 	jr	Z,CyriusTradeYesNo.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -50,7 +50,7 @@ CyriusTradeYesNo.skip2:
 	cp	A,0
 	jr	Z,CyriusTradeYesNo.skip3
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	dec	1,A
@@ -65,7 +65,7 @@ CyriusTradeYesNo.skip4:
 	cp	A,1
 	jr	Z,CyriusTradeYesNo.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	inc	1,A
@@ -209,7 +209,7 @@ CyriusTradeMenuInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,CyriusTradeMenuInput.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jrl	CyriusTradeMenuInput.skip11
@@ -217,7 +217,7 @@ CyriusTradeMenuInput.skip:
 	bit	5,A
 	jr	Z,CyriusTradeMenuInput.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,8
@@ -229,7 +229,7 @@ CyriusTradeMenuInput.skip2:
 	cp	A,1
 	jr	NZ,CyriusTradeMenuInput.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -252,7 +252,7 @@ CyriusTradeMenuInput.skip5:
 	cp	A,2
 	jr	NZ,CyriusTradeMenuInput.skip8
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -385,7 +385,7 @@ CyriusTrade:
 	bit	BIT_A_BUTTON,A
 	jr	Z,CyriusTrade.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jr	CyriusTrade.skip7
@@ -393,7 +393,7 @@ CyriusTrade.skip:
 	bit	5,A
 	jr	Z,CyriusTrade.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -408,7 +408,7 @@ CyriusTrade.skip2:
 	cp	A,0
 	jr	Z,CyriusTrade.skip3
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	dec	1,A
@@ -423,7 +423,7 @@ CyriusTrade.skip4:
 	cp	A,1
 	jr	Z,CyriusTrade.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	inc	1,A

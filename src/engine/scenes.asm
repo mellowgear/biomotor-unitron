@@ -77,7 +77,7 @@ c_20E3AF	section	code abs=0x20E3AF
 
 ; [play] all intro screens and the title
 IntroBackground:
-	ldb	(0x5CE2),0
+	ldb	(wUnk5CE2),0
 	ldb	(wScr1ScrollX),0
 	ldb	(wScr1ScrollY),0
 	ldb	(wScr2ScrollX),0
@@ -103,7 +103,7 @@ IntroBackground.skip:
 	call	DrawTilemapScr2
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),5
+	ldw	(XHL+TASK_ARG),5
 	task_wait
 	ld	XHL,TitleScreenMap
 	ld	A,(wColorFlags)
@@ -120,7 +120,7 @@ IntroBackground.skip2:
 	task_wait
 	cpw	(XIZ+TASK_ARG),0
 	jrl	Z,IntroBackground
-	ldb	(0x5CE2),1
+	ldb	(wUnk5CE2),1
 	ldb	(wScr1ScrollX),0
 	ldb	(wScr1ScrollY),0
 	ldb	(wScr2ScrollX),0
@@ -132,7 +132,7 @@ c_20E496	section	code abs=0x20E496
 
 ; [play] task: Yumekobo logo, planet, meteor, cockpit, BIO/MOTOR/UNITRON letters (intro_* screens)
 IntroSequence:
-	ld	XWA,0x11
+	ld	XWA,SONG_INTRO
 	call	PlayMusic
 	ld	XHL,IntroLogoScene
 	call	StartChildTask
@@ -143,10 +143,10 @@ IntroSequence:
 	ldb	(wScr1ScrollY),0
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x14
+	ldw	(XHL+TASK_ARG),0x14
 	task_wait
 	ldb	(wFadeLevel),0
-	ld	WA,0x31
+	ld	WA,MUSIC_INTRO
 	call	SoundCommand
 	ld	XHL,Intro199YearsAgo
 	call	StartChildTask
@@ -154,19 +154,19 @@ IntroSequence:
 	calr	IntroPlanetGraphics
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x12C
+	ldw	(XHL+TASK_ARG),0x12C
 	task_wait
 	ld	XHL,IntroMeteorTask
 	call	StartChildTask
 	task_wait
-	ld	WA,0xAF
+	ld	WA,SFX_INTRO_IMPACT
 	call	SoundCommand
 	ld	XHL,IntroImpactTask
 	call	StartChildTask
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x5A
+	ldw	(XHL+TASK_ARG),0x5A
 	task_wait
 	calr	IntroLettersGraphics
 	ld	XHL,IntroBioLetters
@@ -195,14 +195,14 @@ IntroSequence:
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x14
+	ldw	(XHL+TASK_ARG),0x14
 	task_wait
 	ld	XHL,IntroHeadMouthCutTask
 	call	StartChildTask
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0x7F
 	task_wait
@@ -211,13 +211,13 @@ IntroSequence:
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x14
+	ldw	(XHL+TASK_ARG),0x14
 	ld	XHL,IntroCockpitAnim
 	call	StartChildTask
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x1E
+	ldw	(XHL+TASK_ARG),0x1E
 	task_wait
 	call	EndTask
 	ret
@@ -286,7 +286,7 @@ c_20E789	section	code abs=0x20E789
 ; [code+play] IntroTitleScene, title banner tasks, TitleReveal, clear SCR2
 TitleRevealSequence:
 	calr	IntroTitleScene
-	ld	WA,0x32
+	ld	WA,MUSIC_TITLE
 	call	SoundCommand
 	ld	XHL,SlideInTitleBanners
 	call	StartChildTask
@@ -300,7 +300,7 @@ TitleRevealSequence:
 	calr	ClearTilemapScr2
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x14
+	ldw	(XHL+TASK_ARG),0x14
 	task_wait
 	calr	ClearTilemapScr2
 	call	EndTask
@@ -438,7 +438,7 @@ IntroLogoScene:
 	calr	ClearTilemapScr2
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x14
+	ldw	(XHL+TASK_ARG),0x14
 	task_wait
 	ld	WA,0xC
 	ld	C,0
@@ -474,13 +474,13 @@ IntroLogoScene:
 	ldb	(wFadeLevel),0x7F
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0x7F
 	ldb	(XHL+0x14),0
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x28
+	ldw	(XHL+TASK_ARG),0x28
 	task_wait
 	ldw	(XIZ+TASK_FUNC),IntroLogoScene.resume & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),IntroLogoScene.resume >> 16
@@ -495,11 +495,11 @@ IntroLogoScene.resume:
 	ret	NZ
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x14
+	ldw	(XHL+TASK_ARG),0x14
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0x7F
 	task_wait
@@ -525,7 +525,7 @@ IntroImpactTask.resume:
 	jr	NZ,IntroImpactTask.skip
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0x7F
 IntroImpactTask.skip:
@@ -1001,10 +1001,10 @@ c_20EFD3	section	code abs=0x20EFD3
 ; [code] started by NewGameSetup (task_wait, then StreetGoWorks): wFadeLevel 0x81, ClearTilemapScr1/2, PlayMusic 4, then TASK_FUNC = 0x20EFF4 = StorySceneUnitice (DrawPortrait 0x2E + CreditsTask with ItAllBeganWithText 0x225C49)
 StorySceneUniticeSetup:
 	ldb	(wFadeLevel),0x81
-	ldb	(0x5CE2),0
+	ldb	(wUnk5CE2),0
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ld	XWA,4
+	ld	XWA,SONG_STORY
 	call	PlayMusic
 	ldw	(XIZ+TASK_FUNC),StorySceneUnitice & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),StorySceneUnitice >> 16
@@ -1014,7 +1014,7 @@ c_20EFF4	section	code abs=0x20EFF4
 
 ; [code] "It all began with..." / "These crystals called Uni-..."
 StorySceneUnitice:
-	ld	WA,0x24
+	ld	WA,MUSIC_STORY
 	call	SoundCommand
 	ld	WA,0xC
 	ld	HL,0x2E
@@ -1033,11 +1033,11 @@ StorySceneUnitice:
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,ItAllBeganWithText
-	ld	(XHL+0xE),XDE
+	ld	(XHL+TASK_ARG),XDE
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0x81
 	task_wait
@@ -1049,17 +1049,17 @@ StorySceneUnitice:
 	call	DrawPortrait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0x81
 	ldb	(XHL+0x14),0
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x28
+	ldw	(XHL+TASK_ARG),0x28
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0xD8
 	ld	A,(wColorFlags)
@@ -1079,11 +1079,11 @@ StorySceneUnitice.resume5:
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,TheseCrystalsCalledUniText
-	ld	(XHL+0xE),XDE
+	ld	(XHL+TASK_ARG),XDE
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0xD8
 	ld	A,(wColorFlags)
 	and	A,0x10
@@ -1092,7 +1092,7 @@ StorySceneUnitice.resume5:
 StorySceneUnitice.skip:
 	ldb	(XHL+0x14),0x81
 	task_wait
-	ldb	(0x5CE2),1
+	ldb	(wUnk5CE2),1
 	ldb	(wScr1ScrollX),0
 	ldb	(wScr1ScrollY),0
 	ldb	(wScr2ScrollX),0
@@ -1107,12 +1107,12 @@ c_20F179	section	code abs=0x20F179
 ; [code] street task (0x5FF8 = 4, StreetEndingScenes): wFadeLevel 0x81, ClearTilemapScr1/2, PlayMusic 0x12, sound 0x33, then TASK_FUNC = 0x20F1A4 = StorySceneDestruction (as StorySceneUniticeSetup)
 StorySceneDestructionSetup:
 	ldb	(wFadeLevel),0x81
-	ldb	(0x5CE2),0
+	ldb	(wUnk5CE2),0
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ld	XWA,0x12
+	ld	XWA,SONG_DESTRUCTION
 	call	PlayMusic
-	ld	WA,0x33
+	ld	WA,MUSIC_DESTRUCTION
 	call	SoundCommand
 	ldw	(XIZ+TASK_FUNC),StorySceneDestruction & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),StorySceneDestruction >> 16
@@ -1140,17 +1140,17 @@ StorySceneDestruction:
 	call	DrawTilemapScr1
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0x81
 	ldb	(XHL+0x14),0
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x5A
+	ldw	(XHL+TASK_ARG),0x5A
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0xD8
 	ld	A,(wColorFlags)
@@ -1170,11 +1170,11 @@ StorySceneDestruction.resume3:
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,WithTheDestructionOfText
-	ld	(XHL+0xE),XDE
+	ld	(XHL+TASK_ARG),XDE
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0xD8
 	ld	A,(wColorFlags)
 	and	A,0x10
@@ -1215,11 +1215,11 @@ StorySceneSunBegan.skip:
 	call	DrawTilemapScr1
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x3C
+	ldw	(XHL+TASK_ARG),0x3C
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0x81
 	ldb	(XHL+0x14),0xD8
 	ld	A,(wColorFlags)
@@ -1239,11 +1239,11 @@ StorySceneSunBegan.resume2:
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,TheSunBeganToText
-	ld	(XHL+0xE),XDE
+	ld	(XHL+TASK_ARG),XDE
 	task_wait
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x20
+	ldw	(XHL+TASK_ARG),0x20
 	ldb	(XHL+0x12),0xD8
 	ld	A,(wColorFlags)
 	and	A,0x10
@@ -1254,7 +1254,7 @@ StorySceneSunBegan.skip2:
 	task_wait
 	ld	XHL,WaitFramesTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x3C
+	ldw	(XHL+TASK_ARG),0x3C
 	task_wait
 	ldb	(wFadeLevel),0x81
 	ldw	(XIZ+TASK_FUNC),CreditsScreen & 0xFFFF
@@ -1265,9 +1265,9 @@ c_20F3E6	section	code abs=0x20F3E6
 
 ; [code] BIO MOTOR UNITRON / PLANNING ... / TO BE CONTINUED
 CreditsScreen:
-	ld	XWA,0x13
+	ld	XWA,SONG_CREDITS
 	call	PlayMusic
-	ld	WA,0x34
+	ld	WA,MUSIC_CREDITS
 	call	SoundCommand
 	calr	ClearTilemapScr1
 	ld	WA,0xC
@@ -1287,12 +1287,12 @@ CreditsScreen:
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,BIOMOTORUNITRONPLANNINGText
-	ld	(XHL+0xE),XDE
+	ld	(XHL+TASK_ARG),XDE
 	task_wait
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,TOBECONTINUEDText
-	ld	(XHL+0xE),XDE
+	ld	(XHL+TASK_ARG),XDE
 	task_wait
 	ld	HL,EVENT_STAGE_ENDING
 	call	SetEventFlag
@@ -1317,10 +1317,10 @@ CreditsScreen.resume:
 	ld	A,(wJoyPressed)
 	and	A,A_BUTTON|B_BUTTON
 	ret	Z
-	ldb	(0x5CE2),1
+	ldb	(wUnk5CE2),1
 	ld	XHL,FadeLevelTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x3C
+	ldw	(XHL+TASK_ARG),0x3C
 	ldb	(XHL+0x12),0
 	ldb	(XHL+0x14),0x81
 	task_wait
@@ -1338,12 +1338,12 @@ c_20F4F6	section	code abs=0x20F4F6
 ; [code] "It was the end..."
 StorySceneTheEnd:
 	ldb	(wFadeLevel),0x81
-	ldb	(0x5CE2),0
+	ldb	(wUnk5CE2),0
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
-	ld	XWA,0x10
+	ld	XWA,SONG_DEFEAT
 	call	PlayMusic
-	ld	WA,0x30
+	ld	WA,MUSIC_DEFEAT
 	call	SoundCommand
 	ld	WA,0xC
 	ld	HL,0x37
@@ -1362,7 +1362,7 @@ StorySceneTheEnd:
 	ld	XHL,CreditsTask
 	call	StartChildTask
 	ld	XDE,ItWasTheEndText
-	ld	(XHL+0xE),XDE
+	ld	(XHL+TASK_ARG),XDE
 	task_wait
 	ldw	(XIZ+TASK_FUNC),StorySceneTheEnd.resume & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),StorySceneTheEnd.resume >> 16
@@ -1370,7 +1370,7 @@ StorySceneTheEnd.resume:
 	ld	A,(wJoyPressed)
 	and	A,A_BUTTON|B_BUTTON
 	ret	Z
-	ldb	(0x5CE2),1
+	ldb	(wUnk5CE2),1
 	calr	ClearTilemapScr1
 	calr	ClearTilemapScr2
 	ldb	(wScr1ScrollX),0

@@ -22,7 +22,7 @@ StartDungeonFloor:
 	call	StartWindowAnimToA
 	call	ApplyWindowB
 	call	ShowAreaName
-	ld	WA,0x85
+	ld	WA,SFX_FLOOR_CHANGE
 	call	SoundCommand
 	pop	XWA
 	pop	XBC
@@ -55,7 +55,7 @@ StartFloorChange:
 	push	XWA
 	call	SetupWindowIris
 	call	StartWindowIrisClose
-	ld	WA,0x85
+	ld	WA,SFX_FLOOR_CHANGE
 	call	SoundCommand
 	ld	A,4
 	ld	(XIZ+DUNGEON_MODE),A
@@ -128,7 +128,7 @@ DungeonFloorChangeStep.skip4:
 	ld	(wScr1ScrollX),A
 	ld	(wScr1ScrollY),A
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,DungeonFloorChangeStep.skip5
 	ld	A,1
 	ld	(XIZ+TASK_ARG),A
@@ -178,12 +178,12 @@ PlayDungeonMusic:
 	dec	1,A
 	extz	WA
 	extz	XWA
-	add	XWA,5
+	add	XWA,SONG_FOREST_OF_VERDURE
 	call	PlayMusic
 	ld	A,(XIZ+DUNGEON_ID)
 	dec	1,A
 	extz	WA
-	add	WA,0x25
+	add	WA,MUSIC_FOREST_OF_VERDURE
 	call	SoundCommand
 	pop	XWA
 	pop	XBC

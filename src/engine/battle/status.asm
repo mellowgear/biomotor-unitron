@@ -74,7 +74,7 @@ PlayerTurnEnd.skip11:
 	ld	XHL,UnitEPLossTask
 	call	StartChildTask
 	ld	WA,(wAttackEPCost)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpw	(wEnemyHP),0
@@ -183,7 +183,7 @@ EnemyTurnEnd.skip13:
 	ld	XHL,EnemyEPLossTask
 	call	StartChildTask
 	ld	WA,(wEnemyAttackEPCost)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpw	(wUnitHP),0
@@ -236,7 +236,7 @@ BattleStatusEffects:
 	ld	XHL,UnitHPLossTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 BattleStatusEffects.skip:
@@ -276,7 +276,7 @@ BattleStatusEffects.skip4:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	HL,(XIZ+0x10)
 	calr	ShowHPGain
@@ -287,7 +287,7 @@ BattleStatusEffects.skip4:
 	ld	XHL,UnitHPGainTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	jrl	BattleStatusEffects.skip11
@@ -322,7 +322,7 @@ BattleStatusEffects.skip6:
 	ld	XHL,UnitEPLossTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 BattleStatusEffects.skip7:
@@ -342,7 +342,7 @@ BattleStatusEffects.skip8:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,YourEPAreFullyText
 	call	ShowMessage
@@ -351,7 +351,7 @@ BattleStatusEffects.skip8:
 	task_wait
 	ld	XHL,UnitEPGainTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x270F
+	ldw	(XHL+TASK_ARG),0x270F
 	ldw	(XHL+0x10),0xF
 	task_wait
 BattleStatusEffects.skip9:
@@ -403,7 +403,7 @@ BattleStatusEffects.skip11:
 	ld	XHL,EnemyHPLossTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 BattleStatusEffects.skip12:
@@ -439,7 +439,7 @@ BattleStatusEffects.skip13:
 	ld	XHL,EnemyEPLossTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 BattleStatusEffects.skip14:

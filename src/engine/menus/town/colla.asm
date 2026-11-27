@@ -175,7 +175,7 @@ CollaBuy:
 	bit	BIT_A_BUTTON,A
 	jr	Z,CollaBuy.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jr	CollaBuy.skip7
@@ -183,7 +183,7 @@ CollaBuy.skip:
 	bit	5,A
 	jr	Z,CollaBuy.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -198,7 +198,7 @@ CollaBuy.skip2:
 	cp	A,0
 	jr	Z,CollaBuy.skip3
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	dec	1,A
@@ -213,7 +213,7 @@ CollaBuy.skip4:
 	cp	A,1
 	jr	Z,CollaBuy.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	inc	1,A

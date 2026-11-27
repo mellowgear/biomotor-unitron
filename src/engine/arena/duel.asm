@@ -17,7 +17,7 @@ ArenaPreDuelGate:
 	jr	ArenaPreDuelGate.skip2
 ArenaPreDuelGate.skip:
 	calr	ArenaClearScreen
-	ld	XWA,4
+	ld	XWA,SONG_STORY
 	call	PlayMusic
 	ld	WA,0x10
 	ld	BC,0
@@ -85,9 +85,9 @@ ArenaPreDuelGateOpen.skip3:
 	jr	NZ,ArenaPreDuelGateOpen.skip4
 	ld	A,1
 	ld	(XIZ+0x1E),A
-	ld	XWA,0
+	ld	XWA,SONG_EVENT
 	call	PlayMusic
-	ld	WA,0x84
+	ld	WA,SFX_SHAKE
 	call	SoundCommand
 	jr	ArenaPreDuelGateOpen.skip6
 ArenaPreDuelGateOpen.skip4:
@@ -140,7 +140,7 @@ ArenaPreDuelEnd:
 	ld	A,0
 	ld	(wScr1ScrollX),A
 	ld	(wScr2ScrollX),A
-	ld	XWA,4
+	ld	XWA,SONG_STORY
 	call	PlayMusic
 	ld	A,9
 	ld	(XIZ+TASK_ARG),A
@@ -165,9 +165,9 @@ ArenaDuel6Scene:
 	calr	GetArenaGenderScene
 	ld	(XIZ+0x12),A
 	push	XWA
-	ld	XWA,0
+	ld	XWA,SONG_EVENT
 	call	PlayMusic
-	ld	WA,0x20
+	ld	WA,MUSIC_EVENT
 	call	SoundCommand
 	pop	XWA
 	ld	A,3
@@ -416,9 +416,9 @@ ArenaDuelTitleSlideIn.skip:
 	ld	(XIZ+0x2C),A
 	cp	A,0x98
 	jr	C,ArenaDuelTitleSlideIn.skip2
-	ld	XWA,0xB
+	ld	XWA,SONG_PILOT_BATTLE
 	call	PlayMusic
-	ld	WA,0xA0
+	ld	WA,SFX_BATTLE_A0
 	call	SoundCommand
 	ld	A,0
 	ld	(XIZ+0x2C),A
@@ -493,9 +493,9 @@ ArenaStartBattle:
 	add	XHL,0x18
 	add	XHL,XDE
 	ld	A,(XHL)
-	cp	A,0x62
+	cp	A,ENEMY_ALEX
 	jr	C,ArenaStartBattle.skip
-	cp	A,0x71
+	cp	A,ENEMY_FENRIL
 	jr	NC,ArenaStartBattle.skip
 	ld	XHL,wArenaPilotParts
 	mul	XDE,6
@@ -529,7 +529,7 @@ ArenaWaitBattleEnd:
 	push	XBC
 	push	XWA
 	ld	A,(wBattleResult)
-	cp	A,0xFF
+	cp	A,BATTLE_RESULT_NONE
 	jr	Z,ArenaWaitBattleEnd.skip
 	ld	A,7
 	ld	(XIZ+0x2A),A
@@ -549,9 +549,9 @@ ArenaAfterBattle:
 	push	XBC
 	push	XWA
 	ld	A,(wBattleResult)
-	cp	A,0
+	cp	A,BATTLE_RESULT_WON
 	jr	Z,ArenaAfterBattle.skip
-	cp	A,1
+	cp	A,BATTLE_RESULT_ENEMY_FLED
 	jr	Z,ArenaAfterBattle.skip
 	calr	ArenaBattleLost
 	jr	ArenaAfterBattle.skip4
@@ -609,9 +609,9 @@ ArenaRoundsComplete:
 	ld	A,0
 	ld	(XIZ+0x13),A
 	push	XWA
-	ld	XWA,0
+	ld	XWA,SONG_EVENT
 	call	PlayMusic
-	ld	WA,0x20
+	ld	WA,MUSIC_EVENT
 	call	SoundCommand
 	pop	XWA
 	jr	ArenaRoundsComplete.skip2
@@ -651,9 +651,9 @@ ArenaBattleLost:
 	ld	A,0x42
 	ld	(XIZ+0x12),A
 	push	XWA
-	ld	XWA,0
+	ld	XWA,SONG_EVENT
 	call	PlayMusic
-	ld	WA,0x20
+	ld	WA,MUSIC_EVENT
 	call	SoundCommand
 	pop	XWA
 	ld	A,3

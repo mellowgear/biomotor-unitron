@@ -346,7 +346,7 @@ InitWorldMapModeTown:
 	push	A
 	ld	A,1
 	ld	(XIZ+DUNGEON_MODE),A
-	ld	A,0
+	ld	A,DUNGEON_TOWN
 	ld	(XIZ+DUNGEON_ID),A
 	pop	A
 	ret
@@ -369,9 +369,9 @@ WorldMapOpen:
 	ld	(XIZ+0x2D),A
 	ld	A,2
 	ld	(XIZ+DUNGEON_MODE),A
-	ld	XWA,0x14
+	ld	XWA,SONG_MAIN_MENU
 	call	PlayMusic
-	ld	WA,0x35
+	ld	WA,MUSIC_MAIN_MENU
 	call	SoundCommand
 	ret
 
@@ -401,7 +401,7 @@ WorldMapIntroWait.skip:
 	bit	5,A
 	jr	Z,WorldMapIntroWait.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	calr	StartWorldMapExit
@@ -426,12 +426,12 @@ WorldMapInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,WorldMapInput.skip2
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	calr	EndChildTasksIfAny
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,0
+	cp	A,DUNGEON_TOWN
 	jr	Z,WorldMapInput.skip
 	calr	StartDungeonEntrance
 	jr	WorldMapInput.done
@@ -442,7 +442,7 @@ WorldMapInput.skip2:
 	bit	5,A
 	jr	Z,WorldMapInput.skip3
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	calr	EndChildTasksIfAny
@@ -497,7 +497,7 @@ WorldMapInput.skip12:
 	cp	A,0xFF
 	jr	Z,WorldMapInput.done
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	calr	EndChildTasksIfAny
@@ -657,7 +657,7 @@ DungeonEntranceWait.skip:
 	bit	5,A
 	jr	Z,DungeonEntranceWait.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	calr	CancelDungeonEntry
@@ -690,7 +690,7 @@ WorldMapDungeonTextBox2:
 	bit	BIT_B_BUTTON,A
 	jr	Z,WorldMapDungeonTextBox2.skip
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	calr	CancelDungeonEntry
@@ -872,7 +872,7 @@ WorldMapDungeonText:
 	bit	BIT_B_BUTTON,A
 	jr	Z,WorldMapDungeonText.skip
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	calr	CancelDungeonEntry
@@ -979,7 +979,7 @@ EnterPromptInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,EnterPromptInput.skip2
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -994,7 +994,7 @@ EnterPromptInput.skip2:
 	bit	5,A
 	jr	Z,EnterPromptInput.skip3
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	calr	CancelDungeonEntry
@@ -1008,7 +1008,7 @@ EnterPromptInput.skip3:
 	cp	A,1
 	jr	NZ,EnterPromptInput.skip4
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,0
@@ -1021,7 +1021,7 @@ EnterPromptInput.skip4:
 	cp	A,0
 	jr	NZ,EnterPromptInput.done
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,1

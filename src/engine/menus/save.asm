@@ -236,7 +236,7 @@ SaveOptions.loop:
 
 c_20DC43	section	code abs=0x20DC43
 
-; [code] A = slot: 0 -> LoadOptions, else 0x26D bytes from GetSaveSlotAddr + 0x10 to wPlayerName (the counterpart of SaveGameSlot), (0x5076) = 0; callers MainMenuLoadTask, WorksLoadTask
+; [code] A = slot: 0 -> LoadOptions, else 0x26D bytes from GetSaveSlotAddr + 0x10 to wPlayerName (the counterpart of SaveGameSlot), (wUnk5076) = 0; callers MainMenuLoadTask, WorksLoadTask
 LoadGameSlot:
 	or	A,A
 	jp	Z,LoadOptions
@@ -245,7 +245,7 @@ LoadGameSlot:
 	ld	XDE,wPlayerName
 	ld	BC,0x26D
 	ldir	(XDE+),(XHL+)
-	ldw	(0x5076),0
+	ldw	(wUnk5076),0
 	ret
 
 c_20DC65	section	code abs=0x20DC65
@@ -264,7 +264,7 @@ c_20DC7C	section	code abs=0x20DC7C
 
 ; [code] wSaveMenuMode = 0 (Load), wSaveSlot = 1, ClearScr2Tilemap, DrawSaveSlotList
 InitLoadSlotList:
-	ldb	(wSaveMenuMode),0
+	ldb	(wSaveMenuMode),SAVE_MENU_LOAD
 	ldb	(wSaveSlot),1
 	call	ClearScr2Tilemap
 	calr	DrawSaveSlotList
@@ -274,7 +274,7 @@ c_20DC8E	section	code abs=0x20DC8E
 
 ; [code] wSaveMenuMode = 2 (Clear), wSaveSlot = 1, ClearScr2Tilemap, DrawSaveSlotList
 InitClearSlotList:
-	ldb	(wSaveMenuMode),2
+	ldb	(wSaveMenuMode),SAVE_MENU_CLEAR
 	ldb	(wSaveSlot),1
 	call	ClearScr2Tilemap
 	calr	DrawSaveSlotList
@@ -290,7 +290,7 @@ DrawSaveSlotList:
 	ld	E,3
 	ld	HL,(XIZ+TASK_ARG)
 	call	OpenTextBox
-	cpb	(wSaveMenuMode),1
+	cpb	(wSaveMenuMode),SAVE_MENU_SAVE
 	ld	XHL,SaveMenuLoadText
 	jr	C,DrawSaveSlotList.skip
 	ld	XHL,SaveMenuSaveText
@@ -442,10 +442,10 @@ ShowSaveConfirmBox:
 	ld	HL,(XIZ+TASK_ARG)
 	add	HL,0x98
 	call	OpenTextBox
-	cpb	(wSaveMenuMode),0
+	cpb	(wSaveMenuMode),SAVE_MENU_LOAD
 	ld	XHL,LoadOkYesNoText
 	jr	Z,ShowSaveConfirmBox.skip
-	cpb	(wSaveMenuMode),2
+	cpb	(wSaveMenuMode),SAVE_MENU_CLEAR
 	ld	XHL,ClearOkYesNoText
 	jr	Z,ShowSaveConfirmBox.skip
 	ld	A,(wSaveSlot)
@@ -471,10 +471,10 @@ ShowSaveDoneBox:
 	ld	HL,(XIZ+TASK_ARG)
 	add	HL,0x98
 	call	OpenTextBox
-	cpb	(wSaveMenuMode),0
+	cpb	(wSaveMenuMode),SAVE_MENU_LOAD
 	ld	XHL,LoadCompleteText
 	jr	Z,ShowSaveDoneBox.skip
-	cpb	(wSaveMenuMode),2
+	cpb	(wSaveMenuMode),SAVE_MENU_CLEAR
 	ld	XHL,ClearCompleteText
 	jr	Z,ShowSaveDoneBox.skip
 	ld	XHL,SaveCompleteText
@@ -516,14 +516,14 @@ SaveSlotSelectTask.skip:
 	jr	NZ,SaveSlotSelectTask.skip6
 	ret
 SaveSlotSelectTask.skip2:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	decb	1,(wSaveSlot)
 	ret	NZ
 	ldb	(wSaveSlot),3
 	ret
 SaveSlotSelectTask.skip3:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	incb	1,(wSaveSlot)
 	cpb	(wSaveSlot),4
@@ -531,21 +531,21 @@ SaveSlotSelectTask.skip3:
 	ldb	(wSaveSlot),1
 	ret
 SaveSlotSelectTask.skip4:
-	cpb	(wSaveMenuMode),1
+	cpb	(wSaveMenuMode),SAVE_MENU_SAVE
 	jr	Z,SaveSlotSelectTask.skip5
 	ld	A,(wSaveSlot)
 	call	IsSaveSlotUsed
 	jr	Z,SaveSlotSelectTask.skip5
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 	ret
 SaveSlotSelectTask.skip5:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	call	EndTask
 	ret
 SaveSlotSelectTask.skip6:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ldb	(wSaveSlot),0
 	call	EndTask
@@ -586,24 +586,24 @@ YesNoPromptInput:
 YesNoPromptInput.skip:
 	cpb	(wYesNoChoice),1
 	ret	Z
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldb	(wYesNoChoice),1
 	ret
 YesNoPromptInput.skip2:
 	cpb	(wYesNoChoice),2
 	ret	Z
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ldb	(wYesNoChoice),2
 	ret
 YesNoPromptInput.skip3:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	call	EndTask
 	ret
 YesNoPromptInput.skip4:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ldb	(wYesNoChoice),0
 	call	EndTask

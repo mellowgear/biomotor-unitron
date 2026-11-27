@@ -39,7 +39,7 @@ LoadEnemy.skip:
 	or	A,A
 	jrl	PL,LoadEnemy.skip3
 	ldb	(wEnemyScaled),0xFF
-	cpb	(wEnemyId),0x62
+	cpb	(wEnemyId),ENEMY_ALEX
 	jr	NC,LoadEnemy.skip2
 	ld	WA,0xB
 	call	RandomRange
@@ -80,7 +80,7 @@ LoadEnemy.skip2:
 	call	RandomRange
 	add	A,(XHL+0xC)
 	ld	(wEnemyLevel),A
-	cpb	(wEnemyId),0x62
+	cpb	(wEnemyId),ENEMY_ALEX
 	jr	NC,LoadEnemy.skip3
 	ld	WA,0xB
 	call	RandomRange
@@ -91,7 +91,7 @@ LoadEnemy.skip2:
 	dec	6,WA
 	add	(wEnemyMaxEP),WA
 LoadEnemy.skip3:
-	cpb	(wEnemyId),0x71
+	cpb	(wEnemyId),ENEMY_FENRIL
 	jrl	NC,LoadEnemy.done
 	ld	L,(wEnemyParts+1)
 	or	L,L
@@ -271,7 +271,7 @@ c_207C00	section	code abs=0x207C00
 
 ; [code] wBattleResult = 0xFF, StartTask(BattleStart); callers StartDungeonBattle, BossEncounter, ArenaStartBattle (their callers wait for wBattleResult != 0xFF)
 StartBattleTask:
-	ldb	(wBattleResult),0xFF
+	ldb	(wBattleResult),BATTLE_RESULT_NONE
 	ld	XHL,BattleStart
 	call	StartTask
 	ret
@@ -367,11 +367,11 @@ AddLevelGapChances:
 	add	(wEnemyFleeChance),W
 	ld	W,(XBC+A)
 	add	(wEnemyStatusChance),W
-	cpb	(wEnemyId),0x59
+	cpb	(wEnemyId),ENEMY_ENT
 	ret	C
-	cpb	(wEnemyId),0x62
+	cpb	(wEnemyId),ENEMY_ALEX
 	jr	C,AddLevelGapChances.skip
-	cpb	(wEnemyId),0x71
+	cpb	(wEnemyId),ENEMY_FENRIL
 	ret	C
 AddLevelGapChances.skip:
 	ldb	(wFleeChance),0
@@ -499,7 +499,7 @@ c_20933B	section	code abs=0x20933B
 BattleStart:
 	ld	XHL,FadeOutToBlackTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	call	InitTextBoxes
 	call	ClearTilemaps
@@ -648,7 +648,7 @@ BattleStart:
 	ld	(wSkillEnemyMPDownTurns),A
 	ld	(wEnemyFullHealUsed),A
 	ld	(wTimeStopTurns),A
-	ldb	(wBattleResult),0xFF
+	ldb	(wBattleResult),BATTLE_RESULT_NONE
 	call	ApplyBattleAccessories
 	call	AddLevelGapChances
 	ld	XHL,BattleHPEPDisplayTask
@@ -657,22 +657,22 @@ BattleStart:
 ; [code] the battle song by wEnemyId: < 0x59 song 0xA, 0x59-0x60 0xC, 0x61 0xD, 0x62-0x75 0xB, >= 0x76 0xC; SoundCommand 0x20 + song
 ; [play] seen in play: song 0xA (SoundCommand 0x2A) in a random battle (Spidey), song 0xC (0x2C) in the Ent and Kraken boss battles
 	ld	E,(wEnemyId)
-	cp	E,0x59
-	ld	WA,0xA
-	ld	BC,0x2A
+	cp	E,ENEMY_ENT
+	ld	WA,SONG_BATTLE
+	ld	BC,MUSIC_BATTLE
 	jr	C,BattleStart.skip2
-	cp	E,0x61
+	cp	E,ENEMY_UNITI
 	jr	C,BattleStart.skip
-	ld	WA,0xD
-	ld	BC,0x2D
+	ld	WA,SONG_UNITI_BATTLE
+	ld	BC,MUSIC_UNITI_BATTLE
 	jr	Z,BattleStart.skip2
-	cp	E,0x76
-	ld	WA,0xB
-	ld	BC,0x2B
+	cp	E,ENEMY_SATANA
+	ld	WA,SONG_PILOT_BATTLE
+	ld	BC,MUSIC_PILOT_BATTLE
 	jr	C,BattleStart.skip2
 BattleStart.skip:
-	ld	WA,0xC
-	ld	BC,0x2C
+	ld	WA,SONG_BOSS_BATTLE
+	ld	BC,MUSIC_BOSS_BATTLE
 BattleStart.skip2:
 	push	BC
 	call	PlayMusic
@@ -680,7 +680,7 @@ BattleStart.skip2:
 	call	SoundCommand
 	ld	XHL,FadeInFromBlackTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	ldw	(XIZ+TASK_FUNC),BattleEncounterMessage & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),BattleEncounterMessage >> 16
@@ -693,7 +693,7 @@ QuestionMarksText:
 BattleEncounterMessage:
 	ld	XHL,EnemySlideInTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 
 c_2095F3	section	code abs=0x2095F3
 	task_wait
@@ -704,7 +704,7 @@ c_2095F3	section	code abs=0x2095F3
 	task_wait
 	ld	XHL,EnemySlideOutTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	ldw	(XIZ+TASK_FUNC),DrawBattleScreen & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),DrawBattleScreen >> 16
@@ -729,7 +729,7 @@ DrawBattleScreen:
 	ldb	(wScr2ScrollY),0
 	ld	XHL,UnitSlideInTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0x14
+	ldb	(XHL+TASK_ARG),0x14
 	task_wait
 	ld	A,3
 	ld	C,4

@@ -168,11 +168,11 @@ PlaySong.loop:
 	nop
 PlaySong.skip:
 	xor	A,A
-	ld	(0x62EE:24),A
-	ld	(0x632F:24),A
+	ld	(wMusicTrackCount:24),A
+	ld	(wSfxTrackCount:24),A
 	xor	XDE,XDE
-	ld	XIX,0x62AE
-	ld	XIY,0x62EF
+	ld	XIX,wMusicTrackIds
+	ld	XIY,wSfxTrackIds
 	ld	C,0x10
 PlaySong.loop2:
 	ld	(XIX+),XDE
@@ -181,12 +181,12 @@ PlaySong.loop2:
 	ld	DE,(XHL+2)
 	extz	XDE
 	add	XDE,0x7000
-	ld	(0x633C:24),XDE
-	ld	XDE,(0x6334:24)
+	ld	(wZ80SongWrite:24),XDE
+	ld	XDE,(wZ80SongHeader:24)
 	calr	SetZ80Pointer
 	ld	BC,6
 	calr	CopyToZ80
-	ld	XDE,(0x6338:24)
+	ld	XDE,(wZ80Voices:24)
 	calr	SetZ80Pointer
 	ld	A,(XHL+)
 	or	A,A
@@ -201,10 +201,10 @@ PlaySong.loop3:
 	calr	CopyToZ80
 	pop	XHL
 	djnz	A,PlaySong.loop3
-	ld	XDE,(0x633C:24)
+	ld	XDE,(wZ80SongWrite:24)
 	calr	SetZ80Pointer
-	ld	XIX,0x62AE
-	ld	XIY,0x62EE
+	ld	XIX,wMusicTrackIds
+	ld	XIY,wMusicTrackCount
 PlaySong.loop4:
 	ld	E,(XIY)
 	cp	E,0x20
@@ -213,15 +213,15 @@ PlaySong.loop4:
 	or	XDE,XDE
 	jr	Z,PlaySong.loop5
 	ld	A,(XHL+)
-	ld	(0x6340:24),XHL
+	ld	(wSongReadPtr:24),XHL
 	ld	XHL,XDE
 	ld	DE,(XHL+)
 	cp	DE,0x7F
 	jr	C,PlaySong.skip2
-	cpb	(0x632F:24),0
+	cpb	(wSfxTrackCount:24),0
 	jr	NZ,PlaySong.skip2
-	ld	XIX,0x62EF
-	ld	XIY,0x632F
+	ld	XIX,wSfxTrackIds
+	ld	XIY,wSfxTrackCount
 PlaySong.skip2:
 	ld	(XIX+),DE
 	incb	1,(XIY)
@@ -231,20 +231,20 @@ PlaySong.skip2:
 	and	BC,0x3FFF
 	sub	BC,DE
 	sub	BC,WA
-	ld	(0x6344:24),DE
-	ex	(0x6344:24),BC
+	ld	(wSongBlockLength:24),DE
+	ex	(wSongBlockLength:24),BC
 	calr	CopyToZ80
 	lda	XHL,XHL+WA
-	ld	XDE,(0x6340:24)
-	ld	(0x6340:24),XHL
+	ld	XDE,(wSongReadPtr:24)
+	ld	(wSongReadPtr:24),XHL
 	ld	XHL,XDE
 	ld	BC,WA
 	calr	CopyToZ80
 	push	XHL
-	ld	XHL,(0x6340:24)
-	ld	BC,(0x6344:24)
+	ld	XHL,(wSongReadPtr:24)
+	ld	BC,(wSongBlockLength:24)
 	calr	CopyToZ80
-	ld	(0x633C:24),XDE
+	ld	(wZ80SongWrite:24),XDE
 	pop	XHL
 	jp	PlaySong.loop4
 PlaySong.loop5:
@@ -295,7 +295,7 @@ CheckSoundCommandBlocked.skip2:
 
 c_2002C8	section	code abs=0x2002C8
 
-; [code] WA = sound id -> A = Z80 command, C: W bit 7 set -> A as is; 0x7F -> 1; < 0x20 -> A*2 | 0xC0; else its index (WA & 0x1FF searched) in a 32-word id list that PlaySong fills -> index*4 | E: ids below 0x80 list 0x62AE, E = 3; 0x80-0x27F list 0x62EF, E = 2; 0x280 and up list 0x62EF, E = 0; NC if not found
+; [code] WA = sound id -> A = Z80 command, C: W bit 7 set -> A as is; 0x7F -> 1; < 0x20 -> A*2 | 0xC0; else its index (WA & 0x1FF searched) in a 32-word id list that PlaySong fills -> index*4 | E: ids below 0x80 list wMusicTrackIds, E = 3; 0x80-0x27F list wSfxTrackIds, E = 2; 0x280 and up list wSfxTrackIds, E = 0; NC if not found
 SoundIdToCommand:
 	bit	7,W
 	scf
@@ -316,11 +316,11 @@ SoundIdToCommand.skip2:
 	push	DE
 	push	BC
 	ld	E,3
-	ld	XIX,0x62AE
+	ld	XIX,wMusicTrackIds
 	cp	WA,0x80
 	jr	C,SoundIdToCommand.skip3
 	and	E,0xFE
-	ld	XIX,0x62EF
+	ld	XIX,wSfxTrackIds
 	cp	WA,0x280
 	jr	C,SoundIdToCommand.skip3
 	and	E,0xFD
@@ -390,7 +390,7 @@ UploadZ80Driver:
 	ld	DE,BC
 	extz	XDE
 	lda	XDE,XDE+0x7000
-	ld	(0x6334:24),XDE
+	ld	(wZ80SongHeader:24),XDE
 	calr	CopyToZ80
 	add	XDE,6
 	calr	SetZ80Pointer
@@ -400,7 +400,7 @@ UploadZ80Driver:
 	jr	Z,UploadZ80Driver.skip
 	calr	CopyToZ80
 UploadZ80Driver.skip:
-	ld	(0x6338:24),XDE
+	ld	(wZ80Voices:24),XDE
 	ret
 	db	0xFF,0xFF,0xFF,0xFF,0xFE,0xFE,0xFE,0xFE,0xFD,0xFD,0xFD,0xFD,0x01,0x04,0x0B,0x01
 	db	0x01

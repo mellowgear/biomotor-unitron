@@ -2,12 +2,12 @@
 ; BossEncounter: enemy id (tables/enemies/) for boss index GetBossIndex + 1; wAreaLevel = the floor
 ; (8 in the Crystal Mine).
 ; id: enemy
-	db	89	; 1 Ent
-	db	90	; 2 Kraken
-	db	91	; 3 Roc
-	db	92	; 4 Behemt
-	db	93	; 5 Trifid
-	db	96	; 6 Catble
-	db	94	; 7 Squidl
-	db	95	; 8 Simrug
-	db	97	; 9 Uniti
+	db	ENEMY_ENT	; 1 Ent
+	db	ENEMY_KRAKEN	; 2 Kraken
+	db	ENEMY_ROC	; 3 Roc
+	db	ENEMY_BEHEMT	; 4 Behemt
+	db	ENEMY_TRIFID	; 5 Trifid
+	db	ENEMY_CATBLE	; 6 Catble
+	db	ENEMY_SQUIDL	; 7 Squidl
+	db	ENEMY_SIMRUG	; 8 Simrug
+	db	ENEMY_UNITI	; 9 Uniti

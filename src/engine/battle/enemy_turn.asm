@@ -60,7 +60,7 @@ EnemyChooseAttack.skip4:
 	ld	XHL,AttackItemChargeText
 	call	ExpandMessage
 	call	DrawString
-	cpb	(wEnemyId),0x76
+	cpb	(wEnemyId),ENEMY_SATANA
 	jr	NZ,EnemyChooseAttack.skip5
 	ld	HL,EVENT_STAGE_ENDING
 	call	CheckEventFlag
@@ -133,7 +133,7 @@ ConfusedPlayerHitResult:
 ConfusedPlayerHitResult.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	cpb	(wCritHit),0
 	ld	XHL,ShakeScr1Amp4Task
@@ -141,7 +141,7 @@ ConfusedPlayerHitResult.skip:
 	ld	XHL,ShakeScr1Amp8Task
 ConfusedPlayerHitResult.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wCritHit),0
 	jr	Z,ConfusedPlayerHitResult.skip3
@@ -173,7 +173,7 @@ ConfusedPlayerHitResult.skip4:
 	ld	XHL,UnitHPLossTask
 	call	StartChildTask
 	ld	WA,(wPlayerDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wInflictStatus),0xFF
@@ -207,7 +207,7 @@ EnemyTurn:
 	ldb	(wScr1ScrollY),0
 	ld	XHL,EnemySlideInTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wTimeStopTurns),0
 	jr	Z,EnemyTurn.skip
@@ -634,13 +634,13 @@ c_20BA11	section	code abs=0x20BA11
 EnemyHitResult2:
 	ld	XHL,EnemySlideOutRightTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	ldb	(wScr1ScrollX),0xC0
 	ldb	(wScr1ScrollY),0
 	ld	XHL,EnemySlideInTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wEnemyHitMargin),0
 	jr	PL,EnemyHitResult2.skip
@@ -655,7 +655,7 @@ EnemyHitResult2:
 EnemyHitResult2.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	cpb	(wEnemyCritHit),0
 	ld	XHL,ShakeScr1Amp4Task
@@ -663,7 +663,7 @@ EnemyHitResult2.skip:
 	ld	XHL,ShakeScr1Amp8Task
 EnemyHitResult2.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wEnemyCritHit),0
 	jr	Z,EnemyHitResult2.skip3
@@ -695,7 +695,7 @@ EnemyHitResult2.skip4:
 	ld	XHL,UnitHPLossTask
 	call	StartChildTask
 	ld	WA,(wEnemyDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wEnemyAttackStatus),0xFF
@@ -730,7 +730,7 @@ EnemyHitResult3:
 	ldb	(wScr1ScrollY),0
 	ld	XHL,PlayNextEffect
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	ldb	(wScr2ScrollX),0x60
 	ldb	(wScr2ScrollY),0
@@ -738,7 +738,7 @@ EnemyHitResult3:
 	ldb	(wScr1ScrollY),0
 	ld	XHL,PlayNextEffect
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	cpb	(wEnemyHitMargin),0
 	jr	PL,EnemyHitResult3.skip
@@ -753,7 +753,7 @@ EnemyHitResult3:
 EnemyHitResult3.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	cpb	(wEnemyCritHit),0
 	ld	XHL,ShakeScr1Amp4Task
@@ -761,7 +761,7 @@ EnemyHitResult3.skip:
 	ld	XHL,ShakeScr1Amp8Task
 EnemyHitResult3.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wEnemyCritHit),0
 	jr	Z,EnemyHitResult3.skip3
@@ -793,7 +793,7 @@ EnemyHitResult3.skip4:
 	ld	XHL,UnitHPLossTask
 	call	StartChildTask
 	ld	WA,(wEnemyDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wEnemyAttackStatus),0xFF
@@ -839,7 +839,7 @@ EnemyHitResult4:
 EnemyHitResult4.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	cpb	(wEnemyCritHit),0
 	ld	XHL,ShakeScr1Amp4Task
@@ -847,7 +847,7 @@ EnemyHitResult4.skip:
 	ld	XHL,ShakeScr1Amp8Task
 EnemyHitResult4.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wEnemyCritHit),0
 	jr	Z,EnemyHitResult4.skip3
@@ -879,7 +879,7 @@ EnemyHitResult4.skip4:
 	ld	XHL,UnitHPLossTask
 	call	StartChildTask
 	ld	WA,(wEnemyDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wEnemyAttackStatus),0xFF
@@ -953,7 +953,7 @@ EnemyStatUpAttack:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	ld	XHL,SPWentUpText2
 	call	ShowMessage
@@ -1001,7 +1001,7 @@ EnemyCureAttack:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	ld	XHL,SStatusReturnedToText
 	call	ShowMessage
@@ -1036,7 +1036,7 @@ EnemyHealAttack:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	ld	XHL,SHPAreFullyText
 	call	ShowMessage
@@ -1045,7 +1045,7 @@ EnemyHealAttack:
 	task_wait
 	ld	XHL,EnemyHPGainTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x270F
+	ldw	(XHL+TASK_ARG),0x270F
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ld	XHL,SEPAreFullyText
@@ -1055,7 +1055,7 @@ EnemyHealAttack:
 	task_wait
 	ld	XHL,EnemyEPGainTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x270F
+	ldw	(XHL+TASK_ARG),0x270F
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ldw	(wEnemyAttackEPCost),0
@@ -1090,7 +1090,7 @@ EnemyHealGain:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	ld	HL,(XIZ+0x10)
 	calr	ShowEnemyHPGain
@@ -1101,7 +1101,7 @@ EnemyHealGain:
 	ld	XHL,EnemyHPGainTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ldw	(XIZ+TASK_FUNC),EnemyTurnEnd & 0xFFFF
@@ -1121,7 +1121,7 @@ EnemyRecharge:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),1
+	ldw	(XHL+TASK_ARG),1
 	task_wait
 	call	GetEnemyRechargeAmount
 	ld	(XIZ+0x10),WA
@@ -1134,7 +1134,7 @@ EnemyRecharge:
 	ld	XHL,EnemyEPGainTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ldw	(wEnemyAttackEPCost),0
@@ -1148,14 +1148,14 @@ c_20C4B0	section	code abs=0x20C4B0
 EnemyFleeSucceeded:
 	ld	XHL,EnemySlideOutTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	ld	XHL,EnemyFledText2
 	call	ShowMessage
 	ld	XHL,WaitBattleMessageTask
 	call	StartChildTask
 	task_wait
-	ldw	(XIZ+TASK_ARG),1
+	ldw	(XIZ+TASK_ARG),BATTLE_RESULT_ENEMY_FLED
 	ldw	(XIZ+TASK_FUNC),BattleEnd & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),BattleEnd >> 16
 	ret

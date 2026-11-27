@@ -412,14 +412,14 @@ CampItemUseMenu:
 	jrl	CampItemUseMenu.skip9
 CampItemUseMenu.skip:
 	push	WA
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 	pop	WA
 CampItemUseMenu.skip2:
 	bit	5,A
 	jr	Z,CampItemUseMenu.skip3
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,6
@@ -431,7 +431,7 @@ CampItemUseMenu.skip3:
 	cp	A,1
 	jr	NZ,CampItemUseMenu.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -448,7 +448,7 @@ CampItemUseMenu.skip5:
 	cp	A,2
 	jr	NZ,CampItemUseMenu.skip7
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -523,7 +523,7 @@ CampUseHealItem:
 	cp	WA,4
 	jr	Z,CampUseHealItem.skip
 	push	WA
-	ld	WA,0x98
+	ld	WA,SFX_HEAL
 	call	SoundCommand
 	pop	WA
 	ld	XHL,FixItHP
@@ -539,7 +539,7 @@ CampUseHealItem:
 	ld	(wUnitHP),WA
 	jr	CampUseHealItem.skip4
 CampUseHealItem.skip:
-	ld	WA,0x97
+	ld	WA,SFX_RECOVER
 	call	SoundCommand
 CampUseHealItem.skip2:
 	ld	WA,(wUnitMaxHP)
@@ -553,7 +553,7 @@ CampUseHealItem.skip3:
 	ld	(wStatusEPLeak),A
 	ld	(wStatusConfused),A
 	pop	A
-	ld	WA,0x97
+	ld	WA,SFX_RECOVER
 	call	SoundCommand
 CampUseHealItem.skip4:
 	pop	XWA
@@ -657,7 +657,7 @@ CampMenuInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,CampMenuInput.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jr	CampMenuInput.skip7
@@ -665,7 +665,7 @@ CampMenuInput.skip:
 	bit	5,A
 	jr	Z,CampMenuInput.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,3
@@ -677,7 +677,7 @@ CampMenuInput.skip2:
 	cp	A,1
 	jr	NZ,CampMenuInput.skip4
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -694,7 +694,7 @@ CampMenuInput.skip4:
 	cp	A,2
 	jr	NZ,CampMenuInput.skip6
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -735,7 +735,7 @@ CampMenuInput.skip8:
 	ld	A,0
 	ld	(wScr1ScrollX),A
 	ld	(wScr1ScrollY),A
-	ld	A,4
+	ld	A,WORKS_MODE_CAMP_STATS
 	ld	(wCampWorksMode),A
 	ld	XHL,CampWorksScreenTask
 	call	StartChildTask
@@ -781,7 +781,7 @@ CampLeavePrompt:
 	bit	BIT_A_BUTTON,A
 	jr	Z,CampLeavePrompt.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jr	CampLeavePrompt.skip8
@@ -789,7 +789,7 @@ CampLeavePrompt.skip:
 	bit	5,A
 	jr	Z,CampLeavePrompt.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -804,7 +804,7 @@ CampLeavePrompt.skip2:
 	cp	A,1
 	jr	NZ,CampLeavePrompt.skip3
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,0
@@ -817,7 +817,7 @@ CampLeavePrompt.skip3:
 	cp	A,0
 	jr	NZ,CampLeavePrompt.skip4
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -870,7 +870,7 @@ CampItemSubmenuInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,CampItemSubmenuInput.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jrl	CampItemSubmenuInput.skip9
@@ -878,7 +878,7 @@ CampItemSubmenuInput.skip:
 	bit	5,A
 	jr	Z,CampItemSubmenuInput.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,3
@@ -890,7 +890,7 @@ CampItemSubmenuInput.skip2:
 	cp	A,1
 	jr	NZ,CampItemSubmenuInput.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -913,7 +913,7 @@ CampItemSubmenuInput.skip5:
 	cp	A,2
 	jr	NZ,CampItemSubmenuInput.skip8
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -956,7 +956,7 @@ CampItemSubmenuInput.skip10:
 	ld	A,0
 	ld	(wScr1ScrollX),A
 	ld	(wScr1ScrollY),A
-	ld	A,5
+	ld	A,WORKS_MODE_CAMP_ITEMS
 	ld	(wCampWorksMode),A
 	ld	XHL,CampWorksScreenTask
 	call	StartChildTask

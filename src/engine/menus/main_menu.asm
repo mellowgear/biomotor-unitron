@@ -17,9 +17,9 @@ MainMenuSetup:
 	ld	BC,0
 	ld	DE,0
 	call	DrawPortrait
-	ld	WA,0x14
+	ld	WA,SONG_MAIN_MENU
 	call	PlayMusic
-	ld	WA,0x35
+	ld	WA,MUSIC_MAIN_MENU
 	call	SoundCommand
 	set_scroll_priority	0
 	ldw	(XIZ+TASK_FUNC),MainMenu & 0xFFFF
@@ -82,14 +82,14 @@ MainMenu.resume:
 	jr	NZ,MainMenuCancel
 	ret
 MainMenu.skip:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	decb	1,(wMainMenuCursor)
 	ret	PL
 	ldb	(wMainMenuCursor),2
 	ret
 MainMenu.skip2:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	incb	1,(wMainMenuCursor)
 	cpb	(wMainMenuCursor),3
@@ -101,7 +101,7 @@ c_20D04E	section	code abs=0x20D04E
 
 ; [code] main menu A: sound 0x81, transition, then the option task by wMainMenuCursor (table MainMenuJumps: 0 new game, 1 MainMenuLoadTask, 2 ConfigMenu)
 MainMenuConfirm:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ld	XHL,MainMenuTransitionOut
 	call	StartChildTask
@@ -121,7 +121,7 @@ c_20D091	section	code abs=0x20D091
 
 ; [code] MainMenu on B (joypad bit 5): sound 0x82, MainMenuTransitionOut, ClearScr2Tilemap, wMainMenuCursor = 0 (MainMenuTask then goes back to IntroThenMainMenu), SCROLL_PRIORITY = 0x80, EndTask
 MainMenuCancel:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ld	XHL,MainMenuTransitionOut
 	call	StartChildTask
@@ -262,14 +262,14 @@ ConfigMenu.resume:
 	jr	NZ,ConfigMenu.skip4
 	ret
 ConfigMenu.skip:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	decb	1,(wConfigCursor)
 	ret	PL
 	ldb	(wConfigCursor),2
 	ret
 ConfigMenu.skip2:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	incb	1,(wConfigCursor)
 	cpb	(wConfigCursor),3
@@ -279,7 +279,7 @@ ConfigMenu.skip2:
 ConfigMenu.skip3:
 	cpb	(wConfigCursor),2
 	ret	C
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ldw	(XIZ+TASK_FUNC),DeleteDataMenu & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),DeleteDataMenu >> 16
@@ -288,7 +288,7 @@ ConfigMenu.skip4:
 	cpb	(wConfigCursor),1
 	jr	C,ConfigMenu.skip5
 	ret	NZ
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	cpb	(wOptionAnimation),0xFF
 	ldb	(wOptionAnimation),0
@@ -296,7 +296,7 @@ ConfigMenu.skip4:
 	ldb	(wOptionAnimation),0xFF
 	ret
 ConfigMenu.skip5:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	cpb	(wOptionMessageSpeed),3
 	ldb	(wOptionMessageSpeed),1
@@ -304,7 +304,7 @@ ConfigMenu.skip5:
 	ldb	(wOptionMessageSpeed),3
 	ret
 ConfigMenu.skip6:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ld	XHL,MainMenuTransitionOut
 	call	StartChildTask
@@ -349,7 +349,7 @@ DeleteDataMenu.resume:
 	jr	NZ,DeleteDataMenu.skip4
 	ret
 DeleteDataMenu.skip:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	cpw	(XIZ+TASK_ARG),0
 	ld	XHL,DeleteAllData
@@ -359,7 +359,7 @@ DeleteDataMenu.skip2:
 	ld	(XIZ+TASK_FUNC),XHL
 	ret
 DeleteDataMenu.skip3:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ld	XHL,DeleteDataContinueText
 	ld	A,0
@@ -368,7 +368,7 @@ DeleteDataMenu.skip3:
 	ldw	(XIZ+TASK_FUNC_HI),ConfigMenu.resume >> 16
 	ret
 DeleteDataMenu.skip4:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	cpb	(XIZ+TASK_ARG),0
 	ldb	(XIZ+TASK_ARG),1
@@ -414,7 +414,7 @@ DeleteAllData.resume:
 	jr	NZ,DeleteAllData.skip4
 	ret
 DeleteAllData.skip:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	cpw	(XIZ+TASK_ARG),0
 	jr	Z,DeleteAllData.skip2
@@ -439,13 +439,13 @@ DeleteAllData.skip2:
 	ldw	(XIZ+TASK_FUNC_HI),MainMenu >> 16
 	ret
 DeleteAllData.skip3:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	ldw	(XIZ+TASK_FUNC),DeleteDataMenu & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),DeleteDataMenu >> 16
 	ret
 DeleteAllData.skip4:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	cpb	(XIZ+TASK_ARG),0
 	ldb	(XIZ+TASK_ARG),1
@@ -483,7 +483,7 @@ DeleteDataSelect.resume:
 	ldw	(XIZ+TASK_FUNC_HI),DeleteDataSelect.resume >> 16
 	ret
 DeleteDataSelect.skip:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ld	A,(wSaveSlot)
 	call	ClearSaveSlot
@@ -788,7 +788,7 @@ c_21D738	section	code abs=0x21D738
 ; [code] MainMenuTask with wMainMenuCursor 2 (after a load): wEnemyAffinity = wUnitAffinity, RunWorksScreen mode 2, CalcUnitStats, wStreetMenuChoice 0, resume at StreetTask (0x21D758)
 LoadGameEnterWorks:
 	ldw	(wEnemyAffinity),(wUnitAffinity)
-	ld	A,2
+	ld	A,WORKS_MODE_LOADED_GAME
 	call	RunWorksScreen
 	call	CalcUnitStats
 	ldb	(wStreetMenuChoice),0

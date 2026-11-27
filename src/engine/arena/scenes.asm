@@ -454,9 +454,9 @@ ArenaSceneCmdGenderScene:
 	ld	HL,0x29
 	calr	ArenaShowPicture
 	push	XWA
-	ld	XWA,4
+	ld	XWA,SONG_STORY
 	call	PlayMusic
-	ld	WA,0x24
+	ld	WA,MUSIC_STORY
 	call	SoundCommand
 	pop	XWA
 ArenaSceneCmdGenderScene.skip:
@@ -535,9 +535,9 @@ SetupArenaScreen.skip2:
 	ld	A,0
 	ld	(XIZ+0x25),A
 	push	XWA
-	ld	XWA,4
+	ld	XWA,SONG_STORY
 	call	PlayMusic
-	ld	WA,0x24
+	ld	WA,MUSIC_STORY
 	call	SoundCommand
 	pop	XWA
 	ld	A,2

@@ -32,12 +32,6 @@ SLOT_AFFINITY	equ	0x6
 SLOT_PCT	equ	0x7
 SLOT_EFFECTS	equ	0x9
 
-; task struct (RunTasks 0x206286): +0 prev, +2 next, +4 parent, +7 flags (bit 7 ended),
-; +8 function (32-bit; +0xA = its high word), +0xC children still running, +0xE argument
-TASK_FUNC	equ	0x8
-TASK_FUNC_HI	equ	0xA
-TASK_CHILDREN	equ	0xC
-TASK_ARG	equ	0xE
 
 ; dungeon task (block 0x52B0; the Crystal Mine uses 0x52DE): same fields as wGameMode..
 DUNGEON_MODE	equ	0xF

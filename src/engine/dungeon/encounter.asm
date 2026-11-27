@@ -65,9 +65,9 @@ PlayEncounterMusic:
 	push	XWA
 	ld	A,0
 	ld	(XIZ+0x2C),A
-	ld	XWA,0xE
+	ld	XWA,SONG_ENCOUNTER
 	call	PlayMusic
-	ld	WA,0x2E
+	ld	WA,MUSIC_ENCOUNTER
 	call	SoundCommand
 	pop	XWA
 	pop	XBC

@@ -42,7 +42,7 @@ PlayerTurn:
 	ld	XHL,UnitShiftRightTask
 PlayerTurn.skip:
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	ld	XHL,0
 	ld	L,(wBattleMenuCursor)
@@ -356,7 +356,7 @@ BattleRecharge:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	call	GetRechargeAmount
 	ld	(XIZ+0x10),WA
@@ -369,7 +369,7 @@ BattleRecharge:
 	ld	XHL,UnitEPGainTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ldw	(wAttackEPCost),0
@@ -381,7 +381,7 @@ c_20A308	section	code abs=0x20A308
 
 ; [code] You fled / But it chases you (event flags, Random)
 TryFlee:
-	cpb	(wEnemyId),0x76
+	cpb	(wEnemyId),ENEMY_SATANA
 	jr	NZ,TryFlee.skip
 	ld	HL,EVENT_STAGE_ENDING
 	call	CheckEventFlag
@@ -430,13 +430,13 @@ c_20A3A7	section	code abs=0x20A3A7
 PlayerHitResult1:
 	ld	XHL,UnitSlideOutLeftTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	ldb	(wScr2ScrollX),0
 	ldb	(wScr2ScrollY),0
 	ld	XHL,UnitSlideInShiftedTask
 	call	StartChildTask
-	ldb	(XHL+0xE),0xF
+	ldb	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wPlayerHitMargin),0
 	jr	PL,PlayerHitResult1.skip
@@ -451,7 +451,7 @@ PlayerHitResult1:
 PlayerHitResult1.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	cpb	(wCritHit),0
 	ld	XHL,ShakeScr2Amp4Task
@@ -459,7 +459,7 @@ PlayerHitResult1.skip:
 	ld	XHL,ShakeScr2Amp8Task
 PlayerHitResult1.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wCritHit),0
 	jr	Z,PlayerHitResult1.skip3
@@ -491,7 +491,7 @@ PlayerHitResult1.skip4:
 	ld	XHL,EnemyHPLossTask
 	call	StartChildTask
 	ld	WA,(wPlayerDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wInflictStatus),0xFF
@@ -526,7 +526,7 @@ PlayerHitResult2:
 	ldb	(wScr2ScrollY),0
 	ld	XHL,PlayNextEffect
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ldb	(wScr1ScrollX),0x60
 	ldb	(wScr1ScrollY),0
@@ -534,7 +534,7 @@ PlayerHitResult2:
 	ldb	(wScr2ScrollY),0
 	ld	XHL,PlayNextEffect
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	cpb	(wPlayerHitMargin),0
 	jr	PL,PlayerHitResult2.skip
@@ -549,7 +549,7 @@ PlayerHitResult2:
 PlayerHitResult2.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	cpb	(wCritHit),0
 	ld	XHL,ShakeScr2Amp4Task
@@ -557,7 +557,7 @@ PlayerHitResult2.skip:
 	ld	XHL,ShakeScr2Amp8Task
 PlayerHitResult2.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wCritHit),0
 	jr	Z,PlayerHitResult2.skip3
@@ -589,7 +589,7 @@ PlayerHitResult2.skip4:
 	ld	XHL,EnemyHPLossTask
 	call	StartChildTask
 	ld	WA,(wPlayerDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wInflictStatus),0xFF
@@ -635,7 +635,7 @@ PlayerHitResult3:
 PlayerHitResult3.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	cpb	(wCritHit),0
 	ld	XHL,ShakeScr2Amp4Task
@@ -643,7 +643,7 @@ PlayerHitResult3.skip:
 	ld	XHL,ShakeScr2Amp8Task
 PlayerHitResult3.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wCritHit),0
 	jr	Z,PlayerHitResult3.skip3
@@ -675,7 +675,7 @@ PlayerHitResult3.skip4:
 	ld	XHL,EnemyHPLossTask
 	call	StartChildTask
 	ld	WA,(wPlayerDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wInflictStatus),0xFF
@@ -725,7 +725,7 @@ ConfusedEnemyHitResult:
 ConfusedEnemyHitResult.skip:
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	cpb	(wEnemyCritHit),0
 	ld	XHL,ShakeScr2Amp4Task
@@ -733,7 +733,7 @@ ConfusedEnemyHitResult.skip:
 	ld	XHL,ShakeScr2Amp8Task
 ConfusedEnemyHitResult.skip2:
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	task_wait
 	cpb	(wEnemyCritHit),0
 	jr	Z,ConfusedEnemyHitResult.skip3
@@ -765,7 +765,7 @@ ConfusedEnemyHitResult.skip4:
 	ld	XHL,EnemyHPLossTask
 	call	StartChildTask
 	ld	WA,(wEnemyDamage)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	cpb	(wEnemyAttackStatus),0xFF

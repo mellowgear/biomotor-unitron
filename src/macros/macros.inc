@@ -9,7 +9,7 @@
 labels resume
 ?resume:
 	ld	XWA,?resume
-	ld	(XIZ+8),XWA
-	cpb	(XIZ+0xC),0
+	ld	(XIZ+TASK_FUNC),XWA
+	cpb	(XIZ+TASK_CHILDREN),0
 	ret	NZ
 ?endm

@@ -85,11 +85,11 @@ swp_2175FA.done:
 
 c_217603	section	code abs=0x217603
 
-; [code] wMsgBox, 0x6116, wMsgFastForward = 0, StartChildTask MessageTask, handle in 0x6111
+; [code] wMsgBox, wUnk6116, wMsgFastForward = 0, StartChildTask MessageTask, handle in 0x6111
 StartMessageTask:
 	xor	A,A
 	ld	(wMsgBox),A
-	ld	(0x6116),A
+	ld	(wUnk6116),A
 	ld	(wMsgFastForward),A
 	ld	XHL,MessageTask
 	call	StartChildTask
@@ -232,17 +232,17 @@ AskYesNo.skip3:
 	cp	(wYesNoAnswer),A
 	jr	Z,AskYesNo.loop2
 	ld	(wYesNoAnswer),A
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	CallSoundCommand
 	ld	A,(wYesNoAnswer)
 	jr	AskYesNo.loop
 AskYesNo.skip4:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	CallSoundCommand
 	ld	A,(wYesNoAnswer)
 	jr	AskYesNo.skip6
 AskYesNo.skip5:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	CallSoundCommand
 	ld	A,0xFF
 AskYesNo.skip6:
@@ -772,12 +772,12 @@ MenuCmdShowCursor.loop:
 	jp	NZ,MenuCmdShowCursor.skip6
 	jp	MenuCmdShowCursor.skip8
 MenuCmdShowCursor.skip2:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	CallSoundCommand
 	ld	A,(wMenuCursor)
 	jp	MenuCmdShowCursor.skip9
 MenuCmdShowCursor.skip3:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	CallSoundCommand
 	ld	A,0xFF
 	jp	MenuCmdShowCursor.skip9
@@ -797,7 +797,7 @@ MenuCmdShowCursor.skip6:
 	dec	1,A
 MenuCmdShowCursor.skip7:
 	ld	(wMenuCursor),A
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	CallSoundCommand
 MenuCmdShowCursor.skip8:
 	call	MenuSetCursorPos
@@ -1223,7 +1223,7 @@ ListCmdInput.skip:
 	ld	XHL,(wListAcceptHook)
 	call	CallXHL
 	jr	NC,ListCmdInput.skip2
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	CallSoundCommand
 	ld	L,(wListPage)
 	mul	HL,(wListRows)
@@ -1232,11 +1232,11 @@ ListCmdInput.skip:
 	add	WA,HL
 	jp	ListCmdInput.skip15
 ListCmdInput.skip2:
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	CallSoundCommand
 	jp	ListCmdInput.skip14
 ListCmdInput.skip3:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	CallSoundCommand
 	ld	WA,0xFFFF
 	jp	ListCmdInput.skip15
@@ -1281,7 +1281,7 @@ ListCmdInput.skip12:
 ListCmdInput.skip13:
 	ld	XHL,(wListMoveHook)
 	call	CallXHL
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	CallSoundCommand
 ListCmdInput.skip14:
 	call	ListSetCursorPos

@@ -208,7 +208,7 @@ c_21AC78	section	code abs=0x21AC78
 
 ; [code] PlayMusic 3 (CallPlayMusic); caller ShopTalk
 PlayMusic3:
-	ld	XWA,3
+	ld	XWA,SONG_SHOP
 	jp	CallPlayMusic
 
 c_21AC7E	section	code abs=0x21AC7E
@@ -235,7 +235,7 @@ ShopTalk:
 	call	PickShopClerk
 	call	PlayMusic3
 	call	DrawGP
-	ld	WA,0x23
+	ld	WA,MUSIC_SHOP
 	call	CallSoundCommand
 	call	DrawShopPicture
 	ld	A,EVENT_STAGE_WON_RANK_D
@@ -447,7 +447,7 @@ ShopMainMenu.loop3:
 	call	DrawGP
 	ld	WA,(wShopEntry)
 	call	AddItemByCategory
-	ld	WA,0x8E
+	ld	WA,SFX_PURCHASE
 	call	CallSoundCommand
 	ld	XHL,ThanksText
 	ld	XDE,ThanksText2
@@ -461,7 +461,7 @@ ShopMainMenu.skip2:
 	call	Wait30Frames
 	jp	ShopMainMenu.loop3
 ShopMainMenu.skip3:
-	ld	WA,0x8F
+	ld	WA,SFX_SHORT_OF_MONEY
 	call	CallSoundCommand
 	ld	XHL,LooksLikeYoureShortText
 	ld	XDE,UmmIThinkItsText
@@ -526,7 +526,7 @@ ShopMainMenu.loop5:
 	call	DrawGP
 	ld	WA,(wShopEntry)
 	call	AddGroupItem
-	ld	WA,0x8E
+	ld	WA,SFX_PURCHASE
 	call	CallSoundCommand
 	ld	XHL,ThanksText
 	ld	XDE,ThanksText2
@@ -540,7 +540,7 @@ ShopMainMenu.skip5:
 	call	Wait30Frames
 	jp	ShopMainMenu.loop5
 ShopMainMenu.skip6:
-	ld	WA,0x8F
+	ld	WA,SFX_SHORT_OF_MONEY
 	call	CallSoundCommand
 	ld	XHL,LooksLikeYoureShortText
 	ld	XDE,UmmIThinkItsText
@@ -623,7 +623,7 @@ ShopMainMenu.loop8:
 	call	DrawGP
 	ld	WA,(wShopEntry)
 	call	RemoveItemByCategory
-	ld	WA,0x8E
+	ld	WA,SFX_PURCHASE
 	call	CallSoundCommand
 	ld	XHL,ThanksText
 	ld	XDE,ThankYouText
@@ -691,7 +691,7 @@ ShopMainMenu.loop10:
 	call	DrawGP
 	ld	WA,(wShopEntry)
 	call	RemoveGroupItem
-	ld	WA,0x8E
+	ld	WA,SFX_PURCHASE
 	call	CallSoundCommand
 	ld	XHL,ThanksText
 	ld	XDE,ThankYouText

@@ -14,7 +14,7 @@ WorldMapTaskInit:
 	ld	(wFadeLevel),A
 	ld	A,1
 	ld	(XIZ+TASK_ARG),A
-	ld	A,0
+	ld	A,DUNGEON_TOWN
 	ld	(XIZ+DUNGEON_ID),A
 	ld	A,0xFF
 	ld	(wStreetNext),A
@@ -30,7 +30,7 @@ c_210467	section	code abs=0x210467
 CrystalMineTaskInit:
 	ld	A,3
 	ld	(XIZ+TASK_ARG),A
-	ld	A,5
+	ld	A,DUNGEON_CRYSTAL_MINE
 	ld	(XIZ+DUNGEON_ID),A
 	ld	A,0xFF
 	ld	(wArenaNext),A
@@ -77,7 +77,7 @@ DungeonTask.skip4:
 	ld	(wScr1ScrollX),A
 	ld	(wScr1ScrollY),A
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,DungeonTask.skip5
 	ld	A,(XIZ+DUNGEON_MODE)
 	ld	(wStreetNext),A
@@ -100,7 +100,7 @@ EnterDungeon:
 	call	RollFloorMaps
 	ld	A,1
 	ld	W,(XIZ+DUNGEON_ID)
-	cp	W,5
+	cp	W,DUNGEON_CRYSTAL_MINE
 	jr	Z,EnterDungeon.skip
 	ld	W,(wJoyHeld)
 	cp	W,0
@@ -142,9 +142,9 @@ c_210F39	section	code abs=0x210F39
 ; [code] DungeonStep mode 7: waits for wBattleResult != 0xFF; 3 (BattleDefeat) -> TASK_ARG 5 (leave), mode 2; else StartDungeonReturn
 DungeonWaitBattleEnd:
 	ld	A,(wBattleResult)
-	cp	A,0xFF
+	cp	A,BATTLE_RESULT_NONE
 	jr	Z,DungeonWaitBattleEnd.done
-	cp	A,3
+	cp	A,BATTLE_RESULT_LOST
 	jr	NZ,DungeonWaitBattleEnd.skip
 	ld	A,5
 	ld	(XIZ+TASK_ARG),A

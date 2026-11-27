@@ -25,7 +25,7 @@ BattleMainMenuInput.skip:
 	jr	NZ,BattleMainMenuInput.skip4
 	ret
 BattleMainMenuInput.skip2:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	call	Random
 	ld	A,(wBattleMenuCursor)
@@ -34,7 +34,7 @@ BattleMainMenuInput.skip2:
 	ld	(wBattleMenuCursor),A
 	ret
 BattleMainMenuInput.skip3:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	call	Random
 	ld	A,(wBattleMenuCursor)
@@ -43,7 +43,7 @@ BattleMainMenuInput.skip3:
 	ld	(wBattleMenuCursor),A
 	ret
 BattleMainMenuInput.skip4:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	call	Random
 	ld	A,2
@@ -148,7 +148,7 @@ BattleCommandMenuTask.skip:
 	jrl	NZ,BattleCommandMenuBack
 	ret
 BattleCommandMenuTask.skip2:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	call	Random
 	ld	WA,(wBattleChoice)
@@ -169,7 +169,7 @@ BattleCommandMenuTask.skip3:
 	ld	WA,1
 	jr	BattleCommandMenuTask.loop
 BattleCommandMenuTask.skip4:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	call	Random
 	ld	WA,(wBattleChoice)
@@ -197,7 +197,7 @@ BattleCommandMenuTask.skip6:
 	cp	(wUnitEP),WA
 	jr	C,BattleCommandMenuTask.skip7
 	ld	(wAttackEPCost),WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ld	A,2
 	call	EraseTextBox
@@ -207,7 +207,7 @@ BattleCommandMenuTask.skip6:
 	ldw	(XIZ+TASK_FUNC_HI),StartBattleRound >> 16
 	ret
 BattleCommandMenuTask.skip7:
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 	ldw	(XIZ+TASK_FUNC),ShowNotEnoughEP & 0xFFFF
 	ldw	(XIZ+TASK_FUNC_HI),ShowNotEnoughEP >> 16
@@ -230,7 +230,7 @@ c_209AE0	section	code abs=0x209AE0
 
 ; [code] B in BattleCommandMenuTask: sound 0x82, erases box 2, clears box 0, back to EnemyChooseAttack (0x20974E, the "What do you do?" menu)
 BattleCommandMenuBack:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	call	Random
 	ld	A,2
@@ -346,7 +346,7 @@ BattleItemListInput.skip:
 	jrl	NZ,BattleItemListInput.skip11
 	ret
 BattleItemListInput.skip2:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	call	Random
 	calr	GetItemListPageRow
@@ -356,7 +356,7 @@ BattleItemListInput.skip2:
 	ld	DE,5
 	jrl	SetBattleItemChoice
 BattleItemListInput.skip3:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	call	Random
 	calr	GetItemListPageRow
@@ -366,7 +366,7 @@ BattleItemListInput.skip3:
 	ld	DE,0
 	jrl	SetBattleItemChoice
 BattleItemListInput.skip4:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	calr	GetItemListPageRow
 	dec	1,WA
@@ -377,7 +377,7 @@ BattleItemListInput.skip5:
 	calr	SetBattleItemChoice
 	jrl	DrawBattleItemPage
 BattleItemListInput.skip6:
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	calr	GetItemListPageRow
 	inc	1,WA
@@ -396,11 +396,11 @@ BattleItemListInput.skip8:
 	or	A,A
 	jr	NZ,BattleItemListInput.skip10
 BattleItemListInput.skip9:
-	ld	WA,0x83
+	ld	WA,SFX_BUZZER
 	call	SoundCommand
 	ret
 BattleItemListInput.skip10:
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	ld	A,2
 	call	EraseTextBox
@@ -411,7 +411,7 @@ BattleItemListInput.skip10:
 	ldw	(XIZ+TASK_FUNC_HI),StartBattleRound >> 16
 	ret
 BattleItemListInput.skip11:
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	call	Random
 	ld	A,2

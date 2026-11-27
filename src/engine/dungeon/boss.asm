@@ -9,7 +9,7 @@ GetFloorBossBeaten:
 	push	XBC
 	push	W
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,GetFloorBossBeaten.skip
 	ld	W,(XIZ+DUNGEON_FLOOR)
 	cp	W,7
@@ -158,7 +158,7 @@ OpenBossYesNoBox:
 	ld	E,3
 	call	OpenTextBox
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	NZ,OpenBossYesNoBox.skip
 	ld	XHL,JoinYesNoText
 	jr	OpenBossYesNoBox.skip2
@@ -216,7 +216,7 @@ GetBossIndex:
 	push	XBC
 	push	W
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	NZ,GetBossIndex.skip
 	ld	W,(XIZ+DUNGEON_FLOOR)
 	sub	W,1
@@ -377,9 +377,9 @@ BossBattleIntro:
 	call	StartBattleWipe
 	ld	A,8
 	ld	(XIZ+0x2A),A
-	ld	XWA,0xE
+	ld	XWA,SONG_ENCOUNTER
 	call	PlayMusic
-	ld	WA,0x2E
+	ld	WA,MUSIC_ENCOUNTER
 	call	SoundCommand
 	pop	XWA
 	pop	XBC
@@ -454,7 +454,7 @@ BossEncounter.skip6:
 	bit	BIT_A_BUTTON,A
 	jr	Z,BossEncounter.skip8
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x20)
@@ -478,7 +478,7 @@ BossEncounter.skip8:
 	cp	A,1
 	jr	NZ,BossEncounter.skip9
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,0
@@ -491,7 +491,7 @@ BossEncounter.skip9:
 	cp	A,0
 	jr	NZ,BossEncounter.skip10
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -512,7 +512,7 @@ BossEncounter.skip13:
 	jrl	NZ,BossEncounter.skip37
 	calr	EraseDungeonBox6
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,BossEncounter.skip14
 	calr	BossBattleIntro
 	jrl	BossEncounter.skip37
@@ -531,7 +531,7 @@ BossEncounter.skip15:
 	jrl	NZ,BossEncounter.skip37
 	calr	EraseDungeonBox6
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,BossEncounter.skip16
 	call	StartDungeonExit
 	ld	A,0xB
@@ -554,7 +554,7 @@ BossEncounter.skip17:
 	ld	A,(XHL)
 	ld	XHL,0
 	ld	W,(XIZ+DUNGEON_ID)
-	cp	W,5
+	cp	W,DUNGEON_CRYSTAL_MINE
 	jr	Z,BossEncounter.skip18
 	ld	W,(XIZ+DUNGEON_FLOOR)
 	jr	BossEncounter.skip19
@@ -572,12 +572,12 @@ BossEncounter.skip20:
 	cp	A,9
 	jr	NZ,BossEncounter.skip23
 	ld	A,(wBattleResult)
-	cp	A,0xFF
+	cp	A,BATTLE_RESULT_NONE
 	jrl	Z,BossEncounter.skip37
-	cp	A,3
+	cp	A,BATTLE_RESULT_LOST
 	jr	NZ,BossEncounter.skip22
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	NZ,BossEncounter.skip21
 	ld	A,(XIZ+DUNGEON_FLOOR)
 	ld	W,(XIZ+DUNGEON_FLOOR_COUNT)
@@ -661,7 +661,7 @@ BossEncounter.skip29:
 	add	HL,WA
 	call	SetEventFlag
 	ld	A,(XIZ+DUNGEON_ID)
-	cp	A,5
+	cp	A,DUNGEON_CRYSTAL_MINE
 	jr	Z,BossEncounter.skip30
 	sub	A,1
 	extz	WA
@@ -678,8 +678,8 @@ BossEncounter.skip31:
 BossEncounter.skip32:
 	ld	XHL,ShakeScr2Amp4Task
 	call	StartChildTask
-	ldw	(XHL+0xE),0x80
-	ld	WA,0xAE
+	ldw	(XHL+TASK_ARG),0x80
+	ld	WA,SFX_BOSS_SHAKE
 	call	SoundCommand
 	ld	A,0xC
 	ld	(XIZ+0x2A),A

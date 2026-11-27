@@ -280,7 +280,7 @@ RollArenaBracket.loop2:
 	ld	W,0
 	div	WA,0xF
 	ld	A,W
-	add	A,0x62
+	add	A,ENEMY_ALEX
 	ld	B,6
 	sub	B,C
 	jr	Z,RollArenaBracket.skip
@@ -853,9 +853,9 @@ LoadArenaOpponent:
 	add	XHL,0x18
 	add	XHL,XDE
 	ld	A,(XHL)
-	cp	A,0x62
+	cp	A,ENEMY_ALEX
 	jr	C,LoadArenaOpponent.skip
-	cp	A,0x71
+	cp	A,ENEMY_FENRIL
 	jr	NC,LoadArenaOpponent.skip
 	ld	XHL,wArenaPilotParts
 	mul	XDE,6
@@ -1006,7 +1006,7 @@ ArenaFightQuitInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,ArenaFightQuitInputB
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	calr	ArenaFightQuitChoose
@@ -1025,7 +1025,7 @@ ArenaFightQuitInputB:
 	bit	5,A
 	jr	Z,ArenaFightQuitInputDPad
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -1051,7 +1051,7 @@ ArenaFightQuitInputDPad:
 	cp	A,0
 	jr	Z,ArenaFightQuitInputDPad.skip
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	dec	1,A
@@ -1066,7 +1066,7 @@ ArenaFightQuitInputDPad.skip2:
 	cp	A,1
 	jr	Z,ArenaFightQuitInputDPad.skip3
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	inc	1,A

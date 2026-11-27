@@ -300,8 +300,8 @@ DrawDevelopedArm:
 	ld	QA,0
 	ld	BC,0x1C2
 	call	FillTiles
-	ld	B,(0x6106)
-	ld	D,(0x6107)
+	ld	B,(wUnk6106)
+	ld	D,(wUnk6107)
 	ld	QB,0xC
 	ld	QD,0xB
 	ld	WA,0x7E
@@ -484,7 +484,7 @@ WorksDevelopMenu.skip3:
 	call	UpdateDevelopChanceBox
 	jp	WorksDevelopMenu.loop5
 WorksDevelopMenu.skip4:
-	ld	WA,0x88
+	ld	WA,SFX_DEVELOP_START
 	call	CallSoundCommand
 	ld	XHL,HereWeGoText
 	ld	XDE,HereWeGoText
@@ -492,11 +492,11 @@ WorksDevelopMenu.skip4:
 	call	Wait30Frames
 	ld	A,0x1E
 	call	WaitFramesOrButton
-	ld	WA,0x288
+	ld	WA,SFX_DEVELOP_START+SFX_ALT
 	call	CallSoundCommand
 	call	DevelopRoll
 	jr	NC,WorksDevelopMenu.skip6
-	ld	WA,0x89
+	ld	WA,SFX_DEVELOP_DONE
 	call	CallSoundCommand
 	call	DevelopSuccess
 	jr	C,WorksDevelopMenu.skip5
@@ -531,7 +531,7 @@ WorksDevelopMenu.loop9:
 	call	Wait30Frames
 	jr	WorksDevelopMenu.loop9
 WorksDevelopMenu.skip6:
-	ld	WA,0x8A
+	ld	WA,SFX_DEVELOP_FAIL
 	call	CallSoundCommand
 	ld	XHL,SorryItDidntWorkText
 	ld	XDE,SorryItDidntWorkText

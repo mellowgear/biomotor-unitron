@@ -9,7 +9,7 @@ ShowStatUp:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,(XIZ+0x10)
 	ld	A,(XHL+4)
@@ -72,7 +72,7 @@ ShowStatDown:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,(XIZ+0x10)
 	ld	A,(XHL+4)
@@ -131,7 +131,7 @@ ShowFullHeal:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,YourHPAreFullyText
 	call	ShowMessage
@@ -140,7 +140,7 @@ ShowFullHeal:
 	task_wait
 	ld	XHL,UnitHPGainTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x270F
+	ldw	(XHL+TASK_ARG),0x270F
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ld	XHL,YourStatusReturnedToText
@@ -170,7 +170,7 @@ SkillTimeStop:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,TimeStoppedCantMoveText
 	call	ShowMessage
@@ -204,7 +204,7 @@ SkillRecvr.skip:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,RecvrActivatedAutoRecoverText
 	call	ShowMessage
@@ -238,7 +238,7 @@ SkillAirbag.skip:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,AirbagActivatedDamageIsText
 	call	ShowMessage
@@ -272,7 +272,7 @@ SkillFullCharge.skip:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,FullyChargedEPCostsText
 	call	ShowMessage
@@ -331,7 +331,7 @@ ItemFullFx:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,YourHPAreFullyText
 	call	ShowMessage
@@ -340,7 +340,7 @@ ItemFullFx:
 	task_wait
 	ld	XHL,UnitHPGainTask
 	call	StartChildTask
-	ldw	(XHL+0xE),0x270F
+	ldw	(XHL+TASK_ARG),0x270F
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ldw	(XIZ+TASK_FUNC),PlayerTurnEnd & 0xFFFF
@@ -356,7 +356,7 @@ ItemFixItHeal:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	HL,(XIZ+0x10)
 	calr	ShowHPGain
@@ -367,7 +367,7 @@ ItemFixItHeal:
 	ld	XHL,UnitHPGainTask
 	call	StartChildTask
 	ld	WA,(XIZ+0x10)
-	ld	(XHL+0xE),WA
+	ld	(XHL+TASK_ARG),WA
 	ldw	(XHL+0x10),0xF
 	task_wait
 	ldw	(XIZ+TASK_FUNC),PlayerTurnEnd & 0xFFFF
@@ -383,7 +383,7 @@ ShowStatusCured:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,YourStatusReturnedToText
 	call	ShowMessage
@@ -408,7 +408,7 @@ ItemPowDrv:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,APWentUpText
 	call	ShowMessage
@@ -429,7 +429,7 @@ ItemEField:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,SPWentUpText
 	call	ShowMessage
@@ -450,7 +450,7 @@ ItemSitClr:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,RPWentUpText
 	call	ShowMessage
@@ -471,7 +471,7 @@ ItemTurbo:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,MPWentUpText
 	call	ShowMessage
@@ -496,7 +496,7 @@ ItemAbsorb:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,APWentDownText
 	call	ShowMessage
@@ -521,7 +521,7 @@ ItemAcidBm:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,SPWentDownText
 	call	ShowMessage
@@ -546,7 +546,7 @@ ItemJammer:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,RPWentDownText
 	call	ShowMessage
@@ -571,7 +571,7 @@ ItemMagFlr:
 	ld	(XIZ+0x14),XHL
 	ld	XHL,PlayEffectList
 	call	StartChildTask
-	ldw	(XHL+0xE),0
+	ldw	(XHL+TASK_ARG),0
 	task_wait
 	ld	XHL,MPWentDownText
 	call	ShowMessage

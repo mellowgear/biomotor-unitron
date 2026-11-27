@@ -433,7 +433,7 @@ WorksSetupMenu.skip:
 	or	WA,WA
 	jp	MI,WorksSetupMenu.loop3
 	call	ClearMessageBox
-	ld	WA,0x87
+	ld	WA,SFX_EQUIP
 	call	CallSoundCommand
 	call	EquipFromWorksList
 	call	WorksUnitStatus

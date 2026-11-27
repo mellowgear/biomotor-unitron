@@ -12,7 +12,7 @@ ArenaEntryMenuInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,ArenaEntryMenuInput.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	calr	ArenaEntryMenuChoose
@@ -21,7 +21,7 @@ ArenaEntryMenuInput.skip:
 	bit	5,A
 	jr	Z,ArenaEntryMenuInput.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -34,7 +34,7 @@ ArenaEntryMenuInput.skip2:
 	cp	A,1
 	jr	NZ,ArenaEntryMenuInput.skip4
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -51,7 +51,7 @@ ArenaEntryMenuInput.skip4:
 	cp	A,2
 	jr	NZ,ArenaEntryMenuInput.skip6
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -218,7 +218,7 @@ ArenaRankListInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,ArenaRankListInput.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	calr	ArenaRankListChoose
@@ -227,7 +227,7 @@ ArenaRankListInput.skip:
 	bit	5,A
 	jr	Z,ArenaRankListInput.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,8
@@ -240,7 +240,7 @@ ArenaRankListInput.skip2:
 	cp	A,1
 	jr	NZ,ArenaRankListInput.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -263,7 +263,7 @@ ArenaRankListInput.skip5:
 	cp	A,2
 	jr	NZ,ArenaRankListInput.skip8
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)

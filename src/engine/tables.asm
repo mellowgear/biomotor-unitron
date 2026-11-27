@@ -296,11 +296,11 @@ GetEnemyScaling.skip3:
 	ld	XHL,XBC
 	pop	XDE
 	pop	XBC
-	cpb	(wEnemyId),0x59
+	cpb	(wEnemyId),ENEMY_ENT
 	ret	C
-	cpb	(wEnemyId),0x62
+	cpb	(wEnemyId),ENEMY_ALEX
 	jr	C,GetEnemyScaling.skip4
-	cpb	(wEnemyId),0x71
+	cpb	(wEnemyId),ENEMY_FENRIL
 	ret	C
 GetEnemyScaling.skip4:
 	push	XHL

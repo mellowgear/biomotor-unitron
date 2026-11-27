@@ -170,7 +170,7 @@ HelmutPickSkill:
 	bit	BIT_A_BUTTON,A
 	jr	Z,HelmutPickSkill.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jr	HelmutPickSkill.skip8
@@ -180,7 +180,7 @@ HelmutPickSkill.skip:
 	cp	A,1
 	jr	NZ,HelmutPickSkill.skip3
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -197,7 +197,7 @@ HelmutPickSkill.skip3:
 	cp	A,2
 	jr	NZ,HelmutPickSkill.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -296,7 +296,7 @@ HelmutSkillChoice:
 	bit	BIT_A_BUTTON,A
 	jr	Z,HelmutSkillChoice.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jr	HelmutSkillChoice.skip7
@@ -304,7 +304,7 @@ HelmutSkillChoice.skip:
 	bit	5,A
 	jr	Z,HelmutSkillChoice.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,1
@@ -319,7 +319,7 @@ HelmutSkillChoice.skip2:
 	cp	A,0
 	jr	Z,HelmutSkillChoice.skip3
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	dec	1,A
@@ -334,7 +334,7 @@ HelmutSkillChoice.skip4:
 	cp	A,1
 	jr	Z,HelmutSkillChoice.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	inc	1,A

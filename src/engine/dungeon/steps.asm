@@ -326,7 +326,7 @@ CheckEncounter.skip4:
 	jr	Z,CheckEncounter.skip5
 	ld	XHL,ShakeScr1Amp4Task
 	call	StartChildTask
-	ldw	(XHL+0xE),0xF
+	ldw	(XHL+TASK_ARG),0xF
 	ld	A,0xE
 	ld	(XIZ+DUNGEON_MODE),A
 	jrl	CheckEncounter.done
@@ -349,7 +349,7 @@ CheckEncounter.skip6:
 	ld	(XIZ+0x21),A
 	calr	StartDungeonChest
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	jrl	CheckEncounter.done
@@ -357,7 +357,7 @@ CheckEncounter.skip7:
 	ld	A,(wJoyPressed)
 	bit	BIT_B_BUTTON,A
 	jr	Z,CheckEncounter.skip8
-	ld	WA,0x94
+	ld	WA,SFX_CAMP_OPEN
 	call	SoundCommand
 	calr	StartDungeonCamp
 	jrl	CheckEncounter.done
@@ -480,7 +480,7 @@ CheckEncounter.skip28:
 	cp	A,0xFF
 	jr	NZ,CheckEncounter.skip30
 CheckEncounter.skip29:
-	ld	WA,0x92
+	ld	WA,SFX_BUMP
 	call	SoundCommand
 	jr	CheckEncounter.done
 CheckEncounter.skip30:

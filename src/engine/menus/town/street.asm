@@ -12,9 +12,9 @@ StreetMenuTask:
 	ld	(XIZ+TASK_ARG),A
 	ld	XWA,StreetMenuDispatch
 	ld	(XIZ+TASK_FUNC),XWA
-	ld	WA,1
+	ld	WA,SONG_TOWN
 	call	PlayMusic
-	ld	WA,0x21
+	ld	WA,MUSIC_TOWN
 	call	SoundCommand
 	pop	XWA
 	pop	XBC
@@ -83,7 +83,7 @@ StreetMenuInput:
 	ld	A,(wJoyPressed)
 	bit	BIT_A_BUTTON,A
 	jr	Z,StreetMenuPrompt
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	calr	StreetMenuSelect
 	jr	StreetMenuDrawCursor
@@ -100,7 +100,7 @@ StreetMenuPrompt:
 	ld	A,1
 	call	GetTextBox
 	ld	(XWA+8),XHL
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	jr	StreetMenuDrawCursor
 
@@ -112,7 +112,7 @@ StreetMenuMoveCursor:
 	jr	Z,StreetMenuDrawCursor
 	cp	A,1
 	jr	NZ,StreetMenuMoveCursor.skip2
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ld	A,(wStreetMenuChoice)
 	cp	A,0
@@ -127,7 +127,7 @@ StreetMenuMoveCursor.skip:
 StreetMenuMoveCursor.skip2:
 	cp	A,2
 	jr	NZ,StreetMenuMoveCursor.skip4
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	ld	A,(wStreetMenuChoice)
 	cp	A,4
@@ -416,7 +416,7 @@ StreetGoWorks:
 	ret
 StreetGoWorks.skip:
 	ldw	(wEnemyAffinity),(wUnitAffinity)
-	ld	A,1
+	ld	A,WORKS_MODE_STREET
 	call	RunWorksScreen
 	call	CalcUnitStats
 	ldb	(wStreetMenuChoice),0
@@ -502,7 +502,7 @@ c_21D93E	section	code abs=0x21D93E
 ; [code] wStreetNext 2: wEnemyAffinity = wUnitAffinity, RunWorksScreen 3, CalcUnitStats, wStreetMenuChoice = 0, back to StreetTask. 2 is the DUNGEON_MODE a dungeon task ends with after a defeat: a lost random battle (DungeonWaitBattleEnd, wBattleResult 3), a lost boss battle (BossEncounter, except the Crystal Mine's last floor) or 0 HP from RustStepDamage (PlayerIsDeadText, DungeonStep mode 0x10); from the Crystal Mine it reaches wStreetNext through wArenaNext; [play] seen after losing a world-dungeon boss battle (Ent): the Works opens with "Whew! I'm glad to see you're all right!" (was StreetAfterBossLoss)
 StreetAfterDungeonDefeat:
 	ldw	(wEnemyAffinity),(wUnitAffinity)
-	ld	A,3
+	ld	A,WORKS_MODE_AFTER_DEFEAT
 	call	RunWorksScreen
 	call	CalcUnitStats
 	ldb	(wStreetMenuChoice),0

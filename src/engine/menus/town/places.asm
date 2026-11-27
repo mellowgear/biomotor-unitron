@@ -311,9 +311,9 @@ OpenSquareMenu:
 	call	SetupWindowIris
 	call	StartWindowAnimToA
 	call	ApplyWindowA
-	ld	XWA,1
+	ld	XWA,SONG_TOWN
 	call	PlayMusic
-	ld	WA,0x21
+	ld	WA,MUSIC_TOWN
 	call	SoundCommand
 	ret
 
@@ -325,7 +325,7 @@ SquareMenuInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,SquareMenuInput.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	calr	SquareMenuSelect
@@ -334,7 +334,7 @@ SquareMenuInput.skip:
 	bit	5,A
 	jr	Z,SquareMenuInput.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,8
@@ -347,7 +347,7 @@ SquareMenuInput.skip2:
 	cp	A,1
 	jr	NZ,SquareMenuInput.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -370,7 +370,7 @@ SquareMenuInput.skip5:
 	cp	A,2
 	jr	NZ,SquareMenuInput.skip8
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -587,7 +587,7 @@ TalkMenuInput:
 	bit	BIT_A_BUTTON,A
 	jr	Z,TalkMenuInput.skip
 	push	WA
-	ld	WA,0x81
+	ld	WA,SFX_CONFIRM
 	call	SoundCommand
 	pop	WA
 	calr	TalkMenuSelect
@@ -596,7 +596,7 @@ TalkMenuInput.skip:
 	bit	5,A
 	jr	Z,TalkMenuInput.skip2
 	push	WA
-	ld	WA,0x82
+	ld	WA,SFX_CANCEL
 	call	SoundCommand
 	pop	WA
 	ld	A,8
@@ -612,7 +612,7 @@ TalkMenuInput.skip2:
 	cp	A,1
 	jr	NZ,TalkMenuInput.skip5
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -636,7 +636,7 @@ TalkMenuInput.skip5:
 	cp	A,2
 	jr	NZ,TalkMenuInput.skip8
 	push	WA
-	ld	WA,0x80
+	ld	WA,SFX_CURSOR
 	call	SoundCommand
 	pop	WA
 	ld	A,(XIZ+0x10)
@@ -719,8 +719,8 @@ c_21624A	section	code abs=0x21624A
 WorksProtectorShakeStart:
 	ld	XHL,ShakeScr2Amp4Task
 	call	StartChildTask
-	ldw	(XHL+0xE),0x78
-	ld	WA,0x84
+	ldw	(XHL+TASK_ARG),0x78
+	ld	WA,SFX_SHAKE
 	call	SoundCommand
 	ld	A,0
 	ld	(XIZ+0x2C),A
@@ -763,9 +763,9 @@ WorksProtectorShakeToWhite.skip2:
 	ld	BC,0
 	ld	DE,0
 	call	DrawPortrait
-	ld	XWA,0
+	ld	XWA,SONG_EVENT
 	call	PlayMusic
-	ld	WA,0x20
+	ld	WA,MUSIC_EVENT
 	call	SoundCommand
 	ld	A,2
 	ld	(XIZ+0x27),A
@@ -826,9 +826,9 @@ WorksProtectorFadeOut:
 	call	PlaceBox3
 	call	ClearTextBox1
 	calr	DrawTownPlace
-	ld	XWA,2
+	ld	XWA,SONG_WORKS
 	call	PlayMusic
-	ld	WA,0x22
+	ld	WA,MUSIC_WORKS
 	call	SoundCommand
 	ld	A,5
 	ld	(XIZ+0x27),A
