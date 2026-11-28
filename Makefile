@@ -36,7 +36,7 @@ biomotor.ngp: $(PRODUCTS) $(SOURCES)
 build/src/%.asm: src/%
 	@mkdir -p $(@D)
 	@$(UNITRON) bin2db $< -o $@
-# the Z80 sound driver: Zilog source -> db lines (unitron z80 asm, docs/Z80_DRIVER.md section 3)
+# the Z80 sound driver: Zilog source -> db lines (unitron z80 asm)
 build/audio/%.z80.asm: src/audio/%.z80
 	@mkdir -p $(@D)
 	@$(UNITRON) z80 asm $< --db $@
@@ -45,7 +45,7 @@ build/%.asm: build/%
 # keep the byte products between the asset sources and their db files
 .SECONDARY:
 
-# ---- songs: tools/biosong.cpp (built with plain c++; biogfx is in gfx.mk) turns a track text (src/audio/tracks/track_XX.song, docs/SONGS.md)
+# ---- songs: tools/biosong.cpp (built with plain c++; biogfx is in gfx.mk) turns a track text (src/audio/tracks/track_XX.song)
 # into the track record's db lines
 BIOSONG := build/tools/biosong
 $(BIOSONG): tools/biosong.cpp

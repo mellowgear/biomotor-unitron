@@ -1,5 +1,5 @@
 ; audio/sound_init.asm: SoundInit (0x200E67, 31 bytes), read by PlaySong and UploadZ80Driver.
-; Format read from the code: docs/SONGS.md sections 2.1, 3.5 and 3.6.
+; Format read from the code.
 
 d_200E67	section	romdata abs=0x200E67
 ; [code] voice records, 9 bytes each. A song header's voice id k makes PlaySong copy

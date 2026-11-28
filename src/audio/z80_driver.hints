@@ -1,5 +1,5 @@
 # Trace hints used once to write src/audio/z80_driver.z80 from the original bytes (`unitron z80 dis z80_driver.bin --hints z80_driver.hints -o DIR`), from the unitron session 2026-11-25. Kept as the record; the .z80 file is the source now.
-# Jump table at 08D3: 7 entries, indexed by the low nibble of a chip command (docs/Z80_DRIVER.md 4.1)
+# Jump table at 08D3: 7 entries, indexed by the low nibble of a chip command
 code 0A24 ChipCmd0
 code 0A14 ChipCmd1
 code 08E1 ChipCmd2

@@ -516,7 +516,7 @@ IntroLogoScene.resume:
 c_20EAA6	section	code abs=0x20EAA6
 
 ; The meteor impact: 60 frames of IntroImpactMaps on scroll 2 picked by IntroImpactFrames (word stride 4, so it
-; reads past the table from frame 30, docs/BUGS.md), fading to white from frame 7 [code+play]
+; reads past the table from frame 30, a bug in the original), fading to white from frame 7 [code+play]
 IntroImpactTask:
 	ldw	(XIZ+TASK_ARG),0
 	ldw	(XIZ+0x10),0

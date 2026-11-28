@@ -1,5 +1,5 @@
 ; Track_2D: track id 0x2D (music), ROM 0x2040D1; in song 13.
-; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+; Built by tools/biosong. Command names are descriptions, not original names.
 
 	track	0x2D
 	channel	0, .ch0

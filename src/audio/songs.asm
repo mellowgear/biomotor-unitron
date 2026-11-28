@@ -1,5 +1,5 @@
 ; audio/songs.asm: SongTable and the 21 song headers (PlaySong 0x200122).
-; Format read from the code: docs/SONGS.md sections 1, 2 and 3.1; the
+; Format read from the code; the
 ; tracks themselves are in audio/tracks.asm.
 ; Song_NN: NN = the song id in decimal (PlayMusic WA). Track_XX: XX = the track id in hex
 ; (the u16 at the start of the track; game sound ids 0x20-0x7E music, >= 0x80 SFX).
@@ -26,7 +26,7 @@ SongTable:
 ;   dl  0 ends the list
 
 d_200EDE	section	romdata abs=0x200EDE
-; [code] Reset (PlaySong direct, no start), the Arena and battle callers, town; started as track 0x20 (docs/SONGS.md section 4)
+; [code] Reset (PlaySong direct, no start), the Arena and battle callers, town; started as track 0x20
 Song_00:
 	dw	0x0ABD,0x0AD8,0x0EF1
 	db	3,0,1,2	; 3 voices
@@ -45,7 +45,7 @@ Song_00:
 	dl	0
 
 d_200F12	section	romdata abs=0x200F12
-; [code] town (OpenSquareMenu ...); track 0x21 (docs/SONGS.md section 4)
+; [code] town (OpenSquareMenu ...); track 0x21
 Song_01:
 	dw	0x0ABD,0x0AD8,0x0EE9
 	db	3,0,1,2	; 3 voices
@@ -66,7 +66,7 @@ Song_01:
 	dl	0
 
 d_200F4C	section	romdata abs=0x200F4C
-; [code] shop and town callers; track 0x22 (docs/SONGS.md section 4)
+; [code] shop and town callers; track 0x22
 Song_02:
 	dw	0x0ABD,0x0AD8,0x0E3F
 	db	3,0,1,2	; 3 voices
@@ -99,7 +99,7 @@ Song_02:
 	dl	0
 
 d_200FAC	section	romdata abs=0x200FAC
-; [code] town and shop callers; track 0x23 (docs/SONGS.md section 4)
+; [code] town and shop callers; track 0x23
 Song_03:
 	dw	0x0ABD,0x0AD8,0x0F3B
 	db	3,0,1,2	; 3 voices
@@ -120,7 +120,7 @@ Song_03:
 	dl	0
 
 d_200FE7	section	romdata abs=0x200FE7
-; [code] Arena (SetupArenaScreen ...), shop, StorySceneUniticeSetup; track 0x24 (docs/SONGS.md section 4)
+; [code] Arena (SetupArenaScreen ...), shop, StorySceneUniticeSetup; track 0x24
 Song_04:
 	dw	0x0ABD,0x0AD8,0x0DD6
 	db	3,0,1,2	; 3 voices
@@ -141,7 +141,7 @@ Song_04:
 	dl	0
 
 d_201021	section	romdata abs=0x201021
-; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98) (docs/SONGS.md section 4)
+; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98)
 ; [play] seen in play: the Forest (DUNGEON_ID 1) dungeon music
 Song_05:
 	dw	0x0ABD,0x0AD8,0x0E6A
@@ -177,7 +177,7 @@ Song_05:
 	dl	0
 
 d_201085	section	romdata abs=0x201085
-; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98) (docs/SONGS.md section 4)
+; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98)
 Song_06:
 	dw	0x0ABD,0x0AD8,0x0E37
 	db	3,0,1,2	; 3 voices
@@ -212,7 +212,7 @@ Song_06:
 	dl	0
 
 d_2010E9	section	romdata abs=0x2010E9
-; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98) (docs/SONGS.md section 4)
+; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98)
 Song_07:
 	dw	0x0ABD,0x0AD8,0x0E6A
 	db	3,0,1,2	; 3 voices
@@ -247,7 +247,7 @@ Song_07:
 	dl	0
 
 d_20114D	section	romdata abs=0x20114D
-; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98) (docs/SONGS.md section 4)
+; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98)
 Song_08:
 	dw	0x0ABD,0x0AD8,0x0E65
 	db	3,0,1,2	; 3 voices
@@ -282,7 +282,7 @@ Song_08:
 	dl	0
 
 d_2011B1	section	romdata abs=0x2011B1
-; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98) (docs/SONGS.md section 4)
+; [code] PlayDungeonMusic: song 5 + (DUNGEON_ID - 1), track 0x25 + (DUNGEON_ID - 1); songs 5-9 share the dungeon SFX (0x85, 0x86, 0x92-0x98)
 Song_09:
 	dw	0x0ABD,0x0AD8,0x0E16
 	db	3,0,1,2	; 3 voices
@@ -317,7 +317,7 @@ Song_09:
 	dl	0
 
 d_201215	section	romdata abs=0x201215
-; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB (docs/SONGS.md section 4)
+; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB
 ; [play] seen in play: the normal battle song (random encounter, Spidey)
 Song_10:
 	dw	0x0ABD,0x0AD8,0x0D0C
@@ -381,7 +381,7 @@ Song_10:
 	dl	0
 
 d_2012CF	section	romdata abs=0x2012CF
-; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB (docs/SONGS.md section 4)
+; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB
 Song_11:
 	dw	0x0ABD,0x0AD8,0x0D00
 	db	3,0,1,2	; 3 voices
@@ -444,7 +444,7 @@ Song_11:
 	dl	0
 
 d_201388	section	romdata abs=0x201388
-; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB (docs/SONGS.md section 4)
+; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB
 ; [play] seen in play: the boss battle song (Ent, Kraken; BossEnemies ids 0x59-0x60)
 Song_12:
 	dw	0x0ABD,0x0AD8,0x0C8D
@@ -508,7 +508,7 @@ Song_12:
 	dl	0
 
 d_201441	section	romdata abs=0x201441
-; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB (docs/SONGS.md section 4)
+; [code] BattleStart by wEnemyId: < 0x59 -> 10, 0x59-0x60 -> 12, 0x61 -> 13, 0x62-0x75 -> 11, >= 0x76 -> 12 (track = 0x20 + song); songs 10-13 load the battle SFX 0x95-0xAB
 Song_13:
 	dw	0x0ABD,0x0AD8,0x0CF7
 	db	3,0,1,2	; 3 voices
@@ -571,7 +571,7 @@ Song_13:
 	dl	0
 
 d_2014FB	section	romdata abs=0x2014FB
-; [code] two dungeon callers; track 0x2E (docs/SONGS.md section 4)
+; [code] two dungeon callers; track 0x2E
 ; [code] PlayEncounterMusic (random encounter) and BossBattleIntro; SoundCommand 0x2E with it
 ; [play] seen in play: the encounter jingle, during the white flash and wipe before a random battle and the wipe before a boss battle
 Song_14:
@@ -590,7 +590,7 @@ Song_14:
 	dl	0
 
 d_201529	section	romdata abs=0x201529
-; [code] BattleVictory; track 0x2F (SFX 0xAC in BattleVictory.loop) (docs/SONGS.md section 4)
+; [code] BattleVictory; track 0x2F (SFX 0xAC in BattleVictory.loop)
 Song_15:
 	dw	0x0ABD,0x0AD8,0x0CA2
 	db	3,0,1,2	; 3 voices
@@ -613,7 +613,7 @@ Song_15:
 	dl	0
 
 d_20156B	section	romdata abs=0x20156B
-; [code] BattleDefeat, StorySceneTheEnd; track 0x30 (docs/SONGS.md section 4)
+; [code] BattleDefeat, StorySceneTheEnd; track 0x30
 Song_16:
 	dw	0x0ABD,0x0AD8,0x0CDE
 	db	3,0,1,2	; 3 voices
@@ -636,7 +636,7 @@ Song_16:
 	dl	0
 
 d_2015AD	section	romdata abs=0x2015AD
-; [code] IntroSequence (track 0x31, SFX 0xAF), TitleRevealSequence (track 0x32) (docs/SONGS.md section 4)
+; [code] IntroSequence (track 0x31, SFX 0xAF), TitleRevealSequence (track 0x32)
 Song_17:
 	dw	0x0ABD,0x0AD8,0x0E62
 	db	3,0,1,2	; 3 voices
@@ -657,7 +657,7 @@ Song_17:
 	dl	0
 
 d_2015E9	section	romdata abs=0x2015E9
-; [code] one caller (0x20F179); track 0x33 (docs/SONGS.md section 4)
+; [code] one caller (0x20F179); track 0x33
 Song_18:
 	dw	0x0ABD,0x0ACF,0x0ACF
 	db	2,0,2	; 2 voices
@@ -666,7 +666,7 @@ Song_18:
 	dl	0
 
 d_2015FD	section	romdata abs=0x2015FD
-; [code] CreditsScreen; track 0x34 (docs/SONGS.md section 4)
+; [code] CreditsScreen; track 0x34
 Song_19:
 	dw	0x0ABD,0x0AD8,0x0AD8
 	db	3,0,1,2	; 3 voices
@@ -675,7 +675,7 @@ Song_19:
 	dl	0
 
 d_201613	section	romdata abs=0x201613
-; [code] MainMenuSetup, SelectPlayerTask, a dungeon caller; track 0x35 (docs/SONGS.md section 4)
+; [code] MainMenuSetup, SelectPlayerTask, a dungeon caller; track 0x35
 Song_20:
 	dw	0x0ABD,0x0AD8,0x0E06
 	db	3,0,1,2	; 3 voices

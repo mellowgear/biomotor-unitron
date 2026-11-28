@@ -1,5 +1,5 @@
 ; Track_A5: track id 0xA5 (SFX), ROM 0x205D5F; in songs 10, 11, 12, 13.
-; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+; Built by tools/biosong. Command names are descriptions, not original names.
 
 	track	0xA5
 	channel	3, .ch0

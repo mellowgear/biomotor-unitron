@@ -1,5 +1,5 @@
 ; Track_8D: track id 0x8D (SFX), ROM 0x205A3C; in song 2.
-; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+; Built by tools/biosong. Command names are descriptions, not original names.
 
 	track	0x8D
 	channel	1, .ch0

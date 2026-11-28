@@ -1,4 +1,4 @@
-; constants/music.inc: song and sound ids (docs/SONGS.md sections 2.5 and 4).
+; constants/music.inc: song and sound ids.
 ; A song (SONG_*) is a SongTable entry: PlayMusic / PlaySong (XWA) load its tracks into the Z80
 ; (src/audio/songs.asm). SoundCommand (WA) then starts a music track (MUSIC_*, 0x20 + song for
 ; songs 0-17) or a sound effect (SFX_*, 0x80 up) the loaded song lists. Names come from the call

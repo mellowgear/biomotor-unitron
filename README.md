@@ -1,141 +1,41 @@
 # Biomotor Unitron (Neo Geo Pocket Color) disassembly
 
 A disassembly of *Biomotor Unitron* (Yumekobo / SNK, 1999) that rebuilds the original ROM byte for
-byte from editable source: TLCS-900 assembly, PNG graphics, text files and data tables. Its style
-and approach are heavily influenced by the awesome [pokered](https://github.com/pret/pokered): read
-how the game works, change it, rebuild.
+byte from editable source: TLCS-900 assembly, PNG graphics, text and data tables. In the spirit of
+[pokered](https://github.com/pret/pokered).
 
-This repo holds only the game. The assembler and converters are a separate, general NGPC toolchain,
-**[unitron](https://github.com/mellowgear/unitron)**.
-
-| | unitron (toolchain) | this repo (the game) |
-|---|---|---|
-| What | assembler for Toshiba's asm900 syntax, disassembler, macro preprocessor, LZSS, graphics and tile-map converters, NGPC hardware names | asm source, PNGs, text, tables, Makefile, converters for this game's own formats (`tools/`) |
-| Used by | any NGPC decomp or homebrew | Biomotor Unitron only |
-
-## Building
-
-It builds this ROM:
+The assembler and converters live in a separate NGPC toolchain,
+**[unitron](https://github.com/mellowgear/unitron)**. The ROM is not included.
 
 - Biomotor Unitron: `sha1: ff74d5877bf58164419710888923e46b9cfb415e`
 
-You need [unitron](https://github.com/mellowgear/unitron), a C++17 compiler, CMake and `make`.
-The original ROM, is not included and never will be.
+## Building
 
-### 1. unitron
-
-On macOS you need the Xcode command-line tools (`xcode-select --install`) and CMake
-(`brew install cmake`).
+You need a C++17 compiler, CMake and `make` (macOS: `xcode-select --install`, `brew install cmake`).
 
 ```sh
 git clone https://github.com/mellowgear/unitron
 cmake -S unitron -B unitron/build -DCMAKE_BUILD_TYPE=Release && cmake --build unitron/build
+
+make UNITRON=/path/to/unitron/build/unitron   # or just `make` with unitron on PATH
+make compare                                  # fail unless the SHA1 matches (CI)
 ```
 
-Put `unitron/build/unitron` on your PATH, or pass it to make each time.
-
-### 2. Build the ROM
-
-```sh
-make                                          # unitron on PATH
-make UNITRON=/path/to/unitron/build/unitron   # or point to it
-```
-
-What `make` does:
-
-1. Builds this game's own converters (`tools/biogfx`, `tools/biosong`) with plain `c++`.
-2. Converts each editable asset into the bytes the game expects: PNG -> tiles (with the game's
-   LZSS compression), map files -> map data. Each result becomes `db` lines (`unitron bin2db`),
-   since asm900 has no binary include. Palettes and numeric tables are asm900 source already (`dw`/`db` lines and
-   records), and text assembles through the charmap, so they need no step. Only what changed is rebuilt.
-3. Assembles `src/main.asm` and everything it includes into `biomotor.ngp` (`unitron asm`).
-   It is one unit of about 1,500 `$include`s. Toshiba's own asm900 allows 99 per unit, so unitron
-   prints a warning about it; the build is fine. Building with the original asm900 would need the source
-   split into separately assembled modules.
-4. Checks the SHA1 against `roms.sha1`. Unedited sources print `biomotor.ngp: OK`; after a mod a
-   mismatch is expected, so the build still succeeds. `make compare` runs the same check but fails
-   on a mismatch; CI uses it.
-
-The first build compresses every graphic (about half a minute on 8 cores; `make` runs in
-parallel by itself); after that only changed files are rebuilt.
-
-## Documentation
-
-| Doc | What it covers |
-|---|---|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | boot, the task system, the game flow, a frame, the ROM and RAM maps, flash saves, BIOS calls, the sound CPU |
-| [docs/VIDEO.md](docs/VIDEO.md) | the K2GE as the game uses it: planes, sprites, palettes (colour and mono), fades, split and shake, window, pictures, text boxes, tile numbers |
-| [docs/DATA_FORMATS.md](docs/DATA_FORMATS.md) | every table the code reads, with field offsets: parts, items, enemies, skills, dungeons, talk rows, text, compression, saves |
-| [docs/GAME_RULES.md](docs/GAME_RULES.md) | the game's rules and formulas (battle, development, shops, arena) |
-| [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) | the story and the route through it |
-| [docs/BUGS.md](docs/BUGS.md) | bugs found in the original code |
-| [docs/NAMES.md](docs/NAMES.md) | renames of routines and RAM, with the evidence |
-| [docs/ASSETS.md](docs/ASSETS.md) | how assets are declared and built |
-| [docs/FILING.md](docs/FILING.md) | which code file holds what |
-| [docs/SONGS.md](docs/SONGS.md), [docs/Z80_DRIVER.md](docs/Z80_DRIVER.md) | the song format and the Z80 sound driver |
-| src/engine/gfx/README.md, src/gfx/README.md | the graphics layer's entry points; the graphics folders |
+The first build compresses every graphic (about half a minute); later builds only redo what
+changed. unitron warns that the single unit has more than asm900's 99 `$include`s; that is expected.
 
 ## Modding
 
-Edit a PNG, a text file, a table or an assembly routine, then run `make`.
+Edit, then `make`. Every piece stays at its original address, so an edit must fit in the original
+space; the assembler names both pieces if something overlaps.
 
-- **Graphics:** `src/gfx/**.png`. Indexed PNGs; keep the palette indices. Monster PNGs also carry the
-  monster's palette.
-- **Text:** `src/text/*.asm`. Dialogue in plain words (`text`, `line`, `page`, `done`) with codes
-  like `<PLAYER>` and `<WAIT>`. `src/main.asm` loads the character map (`src/text/charmap.txt`)
-  with `$charmap`, a unitron extension to asm900.
-- **Game data:** `src/data/<subject>/` (items, parts, works, battle, player, dungeon, arena, story,
-  town, shop, graphics, help), one file per ROM part of a table, `#include`d from that subject's
-  `tables.asm`. Enemies, items, robot parts,
-  skills, development recipes, arena brackets, chests, EXP. Numbers are asm900 records (`.asm`:
-  `db`/`dw`/`dd` lines, or a record macro from `src/macros/tables.inc`), one line per id, the name
-  in a comment; prices are BCD, written `dd 0x650000` for 650000. Names and descriptions are text
-  files with a `slot 7 FF` line (fixed-size slots). Each file's header says how
-  the game reads it.
-- **Palettes:** in `src/gfx/palettes.asm` at their labels: `dw` lines of 4 colours (0x0BGR) for colour
-  palettes, `db` lines for the mono ones.
-- **Code:** `src/engine/**`. Routines by subsystem (docs/FILING.md: which file holds what), named where the code or play proves the name.
-
-Every routine and data piece stays at its original ROM address (each section is `abs=` its
-address, by design), so an edit must fit in the space of the original. If it grows too big, the
-assembler stops and names both clashing pieces.
-
-## Layout
-
-| Path | What it is |
+| What | Where |
 |---|---|
-| `src/main.asm` | Top level: constants, RAM names, then every code and data file |
-| `src/home/` | Cartridge header, system code |
-| `src/engine/` | Game code by subsystem, one level deeper: `battle/` (init, calc, menu, player_turn, enemy_turn, effects, status, tasks, end), `dungeon/` (task, floors, steps, load, map, encounter, chests, camp, boss, status_boxes, world_map), `arena/` (scenes, entry, opponents, duel), `gfx/` (display, vblank, palettes, tiles, tilemap, sprites, font, window, portraits, robot), `menus/` (main_menu, new_game, save, menu_helpers, print, `works/`, `shop/`, `town/`), and events, scenes, text, tables, player; one line per file in docs/FILING.md |
-| `src/audio/` | Sound engine (main CPU), Z80 sound driver (Z80 source, `unitron z80 asm`), song table, song headers and voice records (asm), the 70 tracks as text (`tracks/*.song`, tools/biosong; docs/SONGS.md) |
-| `src/constants/`, `src/macros/`, `src/ram/` | `.inc` files: hardware names (cited), struct fields, joypad, event flags, item ids; the `task_wait` macro and the table record macros; work-RAM names |
-| `src/gfx/` | Tile sheets, monster images, robot parts, battle-effect sheets and frames, dungeon tiles, tile maps, palettes |
-| `src/maps/dungeon/` | The 57 dungeon floor maps |
-| `src/text/` | All dialogue and menu text |
-| `src/data/<subject>/` | The game database by subject: one file per table part (asm900 records, or text in slots), `tables.asm` / `pointers.asm` per subject; also the dungeon and battle-effect containers, the save area |
-| `src/data/unknown/` | The data blocks not identified yet (`unknown.asm`: 3 blocks, 47 bytes, written out as `db`; no reader found) |
-| `tools/` | Converters for this game's own formats |
+| Graphics | `src/gfx/**.png` (indexed; keep the palette indices) |
+| Palettes | `src/gfx/palettes.asm` |
+| Text | `src/text/*.asm`, charmap `src/text/charmap.txt` |
+| Game data | `src/data/<subject>/`, each file's header says how the game reads it |
+| Music | `src/audio/tracks/*.song` (built by `tools/biosong`) |
+| Code | `src/engine/**` ([src/README.md](src/README.md)) |
 
-## How it was made
-
-- **Code:** traced statically from the cartridge entry point and the interrupt handlers it
-  installs, plus coverage from play. Unclear gaps were decoded only when they decode cleanly.
-  Routines still named `sub_`/`swp_` + address are unnamed, and `swp_` is the least certain.
-- **Data:** each format is read from the game's own loader routines and checked by rebuilding the
-  original bytes. The LZSS compressor reproduces every original stream.
-- **Names:** come only from what the code demonstrably does or what is seen on screen. Hardware
-  names follow Toshiba's TMP95C061 register header and SNK's 1998 NGPC developer manuals, cited
-  per name (via unitron).
-- **Assembly language:** Toshiba's asm900 (abs sections, `db`/`dw`/`dl`, `equ`, `$include`, the
-  `?macro` preprocessor), as unitron assembles it. One section per routine or data piece, at its
-  ROM address. Where the ROM's encoding is not the default one, the instruction carries asm900's
-  `:n` width (45 places, listed in `tools/widths.txt`).
-
-## Status
-
-- Byte-identical rebuild.
-- Unidentified data: 3 blocks, 47 bytes (`src/data/unknown/`), with no reader found in the code.
-- every piece keeps its original address (no relocation, no shifting).
-- No routine is left with an address name (`sub_`/`swp_`).
-- Work RAM: 330 names in `src/ram/wram.inc` and 32 in `src/ram/gfx.inc`; constants in 12 files under
-  `src/constants/` (487 `equ`s).
+More: [docs/ASSETS.md](docs/ASSETS.md) (how assets build).

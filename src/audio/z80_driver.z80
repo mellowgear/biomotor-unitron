@@ -1,4 +1,4 @@
-; audio/z80_driver.z80: the Z80 sound driver (ROM 0x2003B2, copied to 0x7000 by the main CPU and run from Z80 0x0000). docs/Z80_DRIVER.md.
+; audio/z80_driver.z80: the Z80 sound driver (ROM 0x2003B2, copied to 0x7000 by the main CPU and run from Z80 0x0000).
 ; First written by `unitron z80 dis z80_driver.bin --hints z80_driver.hints` (2026-11-25); edited by hand since. Zilog syntax, built by unitron z80 asm.
 	ORG	0000H
 Reset:

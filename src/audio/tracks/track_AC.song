@@ -1,5 +1,5 @@
 ; Track_AC: track id 0xAC (SFX), ROM 0x205E4D; in songs 15, 16.
-; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+; Built by tools/biosong. Command names are descriptions, not original names.
 
 	track	0xAC
 	channel	0, .ch0

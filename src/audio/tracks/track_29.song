@@ -1,5 +1,5 @@
 ; Track_29: track id 0x29 (music), ROM 0x203776; in song 9.
-; Syntax: docs/SONGS.md (built by tools/biosong). Command names are descriptions, not original names.
+; Built by tools/biosong. Command names are descriptions, not original names.
 
 	track	0x29
 	channel	0, .ch0

@@ -4,7 +4,7 @@ c_200040	section	code abs=0x200040
 
 ; Boot: stops the Z80 (0xB8 = 0xAAAA), uploads the driver, restarts it (0x5555) and starts timer 3 at rate 2000 [U2]
 InitSound:
-	ldw	(0xB8),0xAAAA	; 0xB8: AAAA = Z80 stopped, 5555 = running (docs/Z80_DRIVER.md)
+	ldw	(0xB8),0xAAAA	; 0xB8: AAAA = Z80 stopped, 5555 = running
 	nop
 	call	UploadZ80Driver
 	ldw	(0xB8),0x5555
