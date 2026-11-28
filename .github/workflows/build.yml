@@ -1,0 +1,21 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build unitron
+        run: |
+          git clone --depth 1 https://github.com/mellowgear/unitron "$RUNNER_TEMP/unitron"
+          cmake -S "$RUNNER_TEMP/unitron" -B "$RUNNER_TEMP/unitron/build" -DCMAKE_BUILD_TYPE=Release
+          cmake --build "$RUNNER_TEMP/unitron/build" -j
+          echo "$RUNNER_TEMP/unitron/build" >> "$GITHUB_PATH"
+
+      - name: Build and check the ROM
+        run: make compare

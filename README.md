@@ -1,4 +1,4 @@
-# Biomotor Unitron (Neo Geo Pocket Color) — disassembly
+# Biomotor Unitron (Neo Geo Pocket Color) disassembly
 
 A disassembly of *Biomotor Unitron* (Yumekobo / SNK, 1999) that rebuilds the original ROM byte for
 byte from editable source: TLCS-900 assembly, PNG graphics, text files and data tables. Its style
@@ -6,7 +6,7 @@ and approach are heavily influenced by the awesome [pokered](https://github.com/
 how the game works, change it, rebuild.
 
 This repo holds only the game. The assembler and converters are a separate, general NGPC toolchain,
-**unitron**.
+**[unitron](https://github.com/mellowgear/unitron)**.
 
 | | unitron (toolchain) | this repo (the game) |
 |---|---|---|
@@ -15,8 +15,12 @@ This repo holds only the game. The assembler and converters are a separate, gene
 
 ## Building
 
+It builds this ROM:
+
+- Biomotor Unitron: `sha1: ff74d5877bf58164419710888923e46b9cfb415e`
+
 You need [unitron](https://github.com/mellowgear/unitron), a C++17 compiler, CMake and `make`.
-No Python, and not the original ROM, which is not included and never will be.
+The original ROM, is not included and never will be.
 
 ### 1. unitron
 
@@ -39,33 +43,21 @@ make UNITRON=/path/to/unitron/build/unitron   # or point to it
 
 What `make` does:
 
-0. Builds this game's own converters (`tools/biogfx`, `tools/biosong`) with plain `c++`.
-1. Converts each editable asset into the bytes the game expects: PNG -> tiles (with the game's
+1. Builds this game's own converters (`tools/biogfx`, `tools/biosong`) with plain `c++`.
+2. Converts each editable asset into the bytes the game expects: PNG -> tiles (with the game's
    LZSS compression), map files -> map data. Each result becomes `db` lines (`unitron bin2db`),
    since asm900 has no binary include. Palettes and numeric tables are asm900 source already (`dw`/`db` lines and
    records), and text assembles through the charmap, so they need no step. Only what changed is rebuilt.
-2. Assembles `src/main.asm` and everything it includes into `biomotor.ngp` (`unitron asm`).
+3. Assembles `src/main.asm` and everything it includes into `biomotor.ngp` (`unitron asm`).
    It is one unit of about 1,500 `$include`s. Toshiba's own asm900 allows 99 per unit, so unitron
    prints a warning about it; the build is fine. Building with the original asm900 would need the source
    split into separately assembled modules.
-3. Compares the SHA1 with the original. Unedited sources print `biomotor.ngp: OK`; after a mod a
-   mismatch is expected.
+4. Checks the SHA1 against `roms.sha1`. Unedited sources print `biomotor.ngp: OK`; after a mod a
+   mismatch is expected, so the build still succeeds. `make compare` runs the same check but fails
+   on a mismatch; CI uses it.
 
 The first build compresses every graphic (about half a minute on 8 cores; `make` runs in
 parallel by itself); after that only changed files are rebuilt.
-
-### 3. Optional: compare with your original ROM
-
-Put your own copy of the ROM in this folder as `baserom.ngp` (`*.ngp` is ignored by git), or
-point to it:
-
-```sh
-shasum -a 1 baserom.ngp     # macOS (sha1sum on Linux); expected ff74d5877bf58164419710888923e46b9cfb415e
-make compare
-make compare BASEROM=/path/to/your/rom.ngp
-```
-
-`make compare` lists the first differing bytes (offset, original, yours) or says the two match.
 
 ## Documentation
 
@@ -143,9 +135,7 @@ assembler stops and names both clashing pieces.
 
 - Byte-identical rebuild.
 - Unidentified data: 3 blocks, 47 bytes (`src/data/unknown/`), with no reader found in the code.
-- Pinned by design: every piece keeps its original address (no relocation, no shifting).
-- Every routine has a header: 1617 of 1617 routines in 64 code files, 29,716 instructions with 2,324
-  comment lines (one per 13 instructions).
+- every piece keeps its original address (no relocation, no shifting).
 - No routine is left with an address name (`sub_`/`swp_`).
 - Work RAM: 330 names in `src/ram/wram.inc` and 32 in `src/ram/gfx.inc`; constants in 12 files under
   `src/constants/` (487 `equ`s).

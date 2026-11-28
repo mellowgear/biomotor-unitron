@@ -1,14 +1,11 @@
 # Biomotor Unitron: rebuild the ROM from source.
 #   make          build the asset products (PNG/text -> bytes -> db), assemble src/main.asm with
 #                 unitron asm, check sha1
-#   make compare  compare biomotor.ngp with your original ROM byte for byte (BASEROM)
+#   make compare  build and check sha1, failing on a mismatch (what CI runs)
 #   make UNITRON=/path/to/unitron   when unitron is not on PATH
 # src/ is the source, edited by hand (make regen / make extract are retired).
 SHA1   := $(shell command -v sha1sum >/dev/null 2>&1 && echo sha1sum || echo "shasum -a 1")
 MAKEFLAGS += -j$(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
-
-# your original ROM, only for make compare (never read by the build): make BASEROM=...
-BASEROM ?= baserom.ngp
 
 # unitron, the toolchain (https://github.com/mellowgear/unitron): on PATH, or make UNITRON=...
 UNITRON ?= unitron
@@ -66,8 +63,7 @@ regen extract:
 
 
 compare: biomotor.ngp
-	@test -f "$(BASEROM)" || { echo "no original ROM at $(BASEROM): put it there or run make compare BASEROM=/path/to/rom" >&2; exit 1; }
-	@cmp -l "$(BASEROM)" biomotor.ngp | head -20; cmp -s "$(BASEROM)" biomotor.ngp && echo "biomotor.ngp matches $(BASEROM)" || true
+	@$(SHA1) -c roms.sha1
 
 clean:
 	rm -rf build biomotor.ngp
